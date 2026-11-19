@@ -25,6 +25,7 @@ let data: DoubanDataSource | undefined
 let proxy: MediaProxy | undefined
 let closingNonce: string | undefined
 let closeTimer: ReturnType<typeof setTimeout> | undefined
+let boundsTimer: ReturnType<typeof setTimeout> | undefined
 let canClose = false
 
 function trustedUrl(raw: string): boolean {
@@ -38,23 +39,34 @@ function trusted(event: IpcMainEvent | IpcMainInvokeEvent): boolean {
 }
 function windowState() { return { maximized: mainWindow?.isMaximized() ?? false, fullscreen: mainWindow?.isFullScreen() ?? false } }
 function emitWindowState() { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('panda:window', windowState()) }
-function readBounds(): Partial<Electron.BrowserWindowConstructorOptions> {
+interface SavedWindowState {
+  bounds: Partial<Electron.BrowserWindowConstructorOptions>
+  maximized: boolean
+}
+function readBounds(): SavedWindowState {
   try {
     const value = JSON.parse(readFileSync(join(app.getPath('userData'), 'window.json'), 'utf8'))
     const { x, y, width, height } = value
-    if (![x, y, width, height].every(Number.isFinite) || width < 1000 || height < 600 || width > 10000 || height > 10000) return {}
+    if (![x, y, width, height].every(Number.isFinite) || width < 1000 || height < 600 || width > 10000 || height > 10000) return { bounds: {}, maximized: false }
     const visible = screen.getAllDisplays().some(({ workArea: a }) => x + width > a.x + 100 && x < a.x + a.width - 100 && y >= a.y && y < a.y + a.height - 100)
-    return visible ? { x, y, width, height } : {}
-  } catch { return {} }
+    return { bounds: visible ? { x, y, width, height } : {}, maximized: value.maximized === true }
+  } catch { return { bounds: {}, maximized: false } }
 }
 function saveBounds() {
+  clearTimeout(boundsTimer)
+  boundsTimer = undefined
   if (!mainWindow || mainWindow.isDestroyed() || mainWindow.isFullScreen()) return
   const path = join(app.getPath('userData'), 'window.json')
   try {
     mkdirSync(app.getPath('userData'), { recursive: true })
-    writeFileSync(path + '.tmp', JSON.stringify(mainWindow.getNormalBounds()))
+    writeFileSync(path + '.tmp', JSON.stringify({ ...mainWindow.getNormalBounds(), maximized: mainWindow.isMaximized() }))
     renameSync(path + '.tmp', path)
   } catch { /* Geometry is optional. User data writes use the error-reporting store. */ }
+}
+function scheduleSaveBounds() {
+  clearTimeout(boundsTimer)
+  boundsTimer = setTimeout(saveBounds, 250)
+  boundsTimer.unref?.()
 }
 async function finishClose() {
   if (canClose) return
@@ -105,6 +117,7 @@ async function loadRenderer(window: BrowserWindow) {
   }
 }
 async function createWindow() {
+  const restoredWindow = readBounds()
   const rules = resolveSourceRules(join(app.getPath('userData'), SOURCE_RULES_FILE), message => console.info('[media]', message))
   proxy = new MediaProxy({ rules, imageDir: join(app.getPath('userData'), 'images'), onSlowImage: report => console.info('[image]', JSON.stringify(report)), onDiagnostic: (source, result) => {
     if (result.removedSegments || ['safety-limit', 'ad-block-too-long', 'encrypted-implicit-iv', 'unclosed-ad-break'].includes(result.reason)) console.info('[media]', source, JSON.stringify(result))
@@ -134,7 +147,7 @@ async function createWindow() {
     changed: () => mainWindow?.webContents.send('panda:user', getUser().get())
   }
   mainWindow = new BrowserWindow({
-    width: 1440, height: 900, minWidth: 1080, minHeight: 640, ...readBounds(),
+    width: 1440, height: 900, minWidth: 1080, minHeight: 640, ...restoredWindow.bounds,
     frame: false, show: false, backgroundColor: '#0e0d0b',
     autoHideMenuBar: true, title: t.app.name,
     icon: join(app.getAppPath(), 'resources/app-icon.png'),
@@ -144,6 +157,7 @@ async function createWindow() {
       webSecurity: true, spellcheck: false
     }
   })
+  if (restoredWindow.maximized) mainWindow.maximize()
   mainWindow.setMenu(null)
   session.defaultSession.setPermissionRequestHandler((_contents, _permission, callback) => callback(false))
   session.defaultSession.setPermissionCheckHandler(() => false)
@@ -172,6 +186,10 @@ async function createWindow() {
   })
   mainWindow.on('maximize', emitWindowState)
   mainWindow.on('unmaximize', emitWindowState)
+  mainWindow.on('resize', scheduleSaveBounds)
+  mainWindow.on('move', scheduleSaveBounds)
+  mainWindow.on('maximize', scheduleSaveBounds)
+  mainWindow.on('unmaximize', scheduleSaveBounds)
   mainWindow.on('enter-full-screen', emitWindowState)
   mainWindow.on('leave-full-screen', emitWindowState)
   mainWindow.once('ready-to-show', () => mainWindow?.show())

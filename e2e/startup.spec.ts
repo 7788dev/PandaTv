@@ -74,3 +74,21 @@ test('startup: a second start shows the home page and its artwork from what the 
   expect(second.errors).toEqual([])
   await second.app.close()
 })
+
+test('startup: restores a maximized window after a clean restart', async () => {
+  const first = await launch()
+  try {
+    await first.page.evaluate(() => window.panda.window.maximize())
+    await expect.poll(() => first.page.evaluate(() => window.panda.window.getState())).toEqual({ maximized: true, fullscreen: false })
+    await first.app.close()
+
+    const second = await launch(first.profile)
+    try {
+      await expect.poll(() => second.app.evaluate(({ BrowserWindow }) => BrowserWindow.getAllWindows()[0]?.isMaximized())).toBe(true)
+    } finally {
+      await second.app.close()
+    }
+  } finally {
+    await first.app.close().catch(() => {})
+  }
+})
