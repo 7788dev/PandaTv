@@ -62,7 +62,10 @@ const RESOLVED_MS = 3 * 60_000
 const TRANSIENT = /网络请求失败|请求已取消|片源响应超时|（5\d\d）|媒体分片不完整|媒体分片为空/
 /** How long a source may keep failing before a search stops waiting on it for a verdict. */
 const SOURCE_GONE_AFTER = 2 * 60000
-const CATALOGUE_CONCURRENCY = 8
+// The bundled pool currently has nine enabled catalogues. Keep one slow catalogue from
+// occupying a slot needed by the last fallback source; custom rule files may add a few more
+// sources without serialising the tail of the pool behind the first batch.
+const CATALOGUE_CONCURRENCY = 12
 const SEARCH_GRACE_MS = 1_200
 
 interface ServiceOptions { proxy: MediaProxy; rules?: SourceRules; requeryDelayMs?: number; /** How long the catalogues that have not answered are waited for once the work is found. */ searchGraceMs?: number; /** Overrides FIRST_SEGMENT_GRACE_MS. */ firstSegmentGraceMs?: number; /** Overrides BETTER_PICTURE_MS. */ betterPictureMs?: number; /** Overrides TURN_MS. */ turnMs?: number; /** Told why a source's catalogue could not be read; for the main-process log only. */ onSourceFailure?: (source: string, reason: string, ms: number) => void }

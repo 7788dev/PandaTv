@@ -124,6 +124,24 @@ describe('a work only one source carries', () => {
     expect(asked).toHaveLength(2)
   })
 
+  it('starts the last bundled fallback even while the first eight catalogues are still waiting', async () => {
+    const sources = Array.from({ length: 9 }, (_, index) => source(`source-${index + 1}`, 9 - index))
+    const pool = { ...rules, sources }
+    const blocked: Array<() => void> = []
+    for (const entry of sources.slice(0, 8)) {
+      answers.set(new URL(entry.api).host, [() => new Promise<string>(resolve => blocked.push(() => resolve(empty())))])
+    }
+    answers.set(new URL(sources[8]!.api).host, [record])
+
+    const lookup = new PlaybackService({ proxy: {} as MediaProxy, rules: pool, requeryDelayMs: 0, searchGraceMs: 20 }).availability(item)
+    await new Promise(resolve => setTimeout(resolve, 30))
+    const fallbackStartedBeforeRelease = asked.includes(new URL(sources[8]!.api).host)
+    blocked.forEach(release => release())
+
+    await expect(lookup).resolves.toEqual({ episodes: 3 })
+    expect(fallbackStartedBeforeRelease).toBe(true)
+  })
+
   it('waits for every source while the work has not been found', async () => {
     const slow = () => new Promise<string>(resolve => setTimeout(() => resolve(record()), 150))
     answers.set('one.example.com', [empty])
