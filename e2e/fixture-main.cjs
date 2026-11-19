@@ -91,7 +91,7 @@ app.whenReady().then(async () => {
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   origin = 'http://127.0.0.1:' + server.address().port;
-  source = createMockSource(catalog, { asset: path => origin + '/' + path });
+  source = createMockSource(catalog, { asset: path => origin + '/' + path, pageSize: Number(process.env.PANDA_FIXTURE_PAGE_SIZE) || 30 });
   win = new BrowserWindow({ width: 1440, height: 900, frame: false, backgroundColor: '#0e0d0b', webPreferences: { sandbox: true, contextIsolation: true, nodeIntegration: false, preload: join(root, 'out/preload/index.js') } });
   win.setMenu(null);
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));

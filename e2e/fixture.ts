@@ -3,11 +3,12 @@ import { mkdir, mkdtemp } from 'node:fs/promises'
 import { join } from 'node:path'
 import { root } from './desktop'
 
-export async function launchFixture() {
+export async function launchFixture(options: { pageSize?: number } = {}) {
   await mkdir(join(root, '.tmp'), { recursive: true })
   const profile = await mkdtemp(join(root, '.tmp', 'ui-fixture-'))
   const env: Record<string, string> = Object.fromEntries(Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === 'string'))
   env.PANDA_USER_DATA_DIR = profile
+  if (options.pageSize) env.PANDA_FIXTURE_PAGE_SIZE = String(options.pageSize)
   delete env.ELECTRON_RUN_AS_NODE
   const app = await _electron.launch({ args: [join(root, 'e2e/fixture-main.cjs')], cwd: root, env })
   const page = await app.firstWindow()
