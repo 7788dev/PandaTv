@@ -1,0 +1,321 @@
+/* ════════════════════════════════════════════════════════════════════
+   布局：窗口骨架、滚动容器、页面、栏目、网格
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer tokens {
+  /* 一行放几张卡片，只由窗口宽度决定 */
+  :root {
+    --cols-poster: 6;
+    --cols-wide: 4;
+  }
+
+  @media (min-width: 1360px) {
+    :root {
+      --cols-poster: 7;
+      --cols-wide: 5;
+    }
+  }
+
+  @media (min-width: 1680px) {
+    :root {
+      --cols-poster: 8;
+    }
+  }
+
+  @media (min-width: 2000px) {
+    :root {
+      --cols-poster: 9;
+      --cols-wide: 6;
+    }
+  }
+
+  @media (min-width: 2400px) {
+    :root {
+      --cols-poster: 10;
+      --cols-wide: 7;
+    }
+  }
+
+  @media (min-width: 3000px) {
+    :root {
+      --cols-poster: 12;
+      --cols-wide: 8;
+    }
+  }
+}
+
+@layer layout {
+  /* ── 窗口骨架 ──
+     .app
+     ├─ .topbar            顶栏，悬浮在最上面
+     └─ .scroll.scroll--page   整页滚动容器（铺满窗口，顶栏盖在它上面）
+          └─ .scroll__viewport
+               └─ .page          每个路由一个                                   */
+  /* 注意：.app 不能建立层叠上下文（不要加 isolation / z-index / transform），
+     否则挂在 body 上的对话框会盖住窗口按钮。 */
+  .app {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    background: var(--c-bg);
+  }
+
+  /* ── 滚动容器（Base UI ScrollArea）：滚动条浮在内容上，不占宽度 ── */
+  .scroll {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll--page {
+    position: absolute;
+    inset: 0;
+  }
+
+  .scroll__viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  .scroll__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll__bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-sticky);
+    display: flex;
+    justify-content: center;
+    width: 12px;
+    margin: var(--sp-05);
+    opacity: 0;
+    transition: opacity var(--dur-3) var(--ease-out) 700ms;
+    touch-action: none;
+  }
+
+  .scroll--page > .scroll__bar {
+    margin-top: calc(var(--bar-h) + var(--sp-05)); /* 让开窗口按钮 */
+  }
+
+  /* 只在滚动时、或鼠标移到窗口右边缘时出现 */
+  .scroll__bar[data-scrolling],
+  .scroll__bar:hover {
+    opacity: 1;
+    transition-delay: 0ms;
+    transition-duration: var(--dur-1);
+  }
+
+  .scroll__thumb {
+    width: 6px;
+    height: var(--scroll-area-thumb-height);
+    border-radius: var(--r-full);
+    background: var(--c-fill-3);
+    transition:
+      width var(--dur-1) var(--ease-out),
+      background var(--dur-1);
+  }
+
+  .scroll__bar:hover .scroll__thumb,
+  .scroll__thumb:active {
+    width: 8px;
+    background: rgb(var(--paper-rgb) / 0.36);
+  }
+
+  /* ── 页面 ── */
+  .page {
+    position: relative;
+    min-height: 100vh; /* 等于窗口高度；不用 100%，不依赖父级有没有确定的高度 */
+    padding-top: calc(var(--bar-h) + var(--sp-6));
+    padding-bottom: var(--sp-24);
+    isolation: isolate;
+  }
+
+  /* 顶部有大图的页面（首页、详情）：内容从窗口最顶端开始 */
+  .page--bleed {
+    padding-top: 0;
+  }
+
+  .page__head {
+    display: flex;
+    gap: var(--sp-6);
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 56px;
+    padding-inline: var(--gutter);
+    margin-bottom: var(--sp-6);
+  }
+
+  .page__heading {
+    min-width: 0;
+  }
+
+  .page__kicker {
+    margin-bottom: var(--sp-1);
+    font-size: var(--fs-13);
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+
+  .page__title {
+    overflow: hidden;
+    font-family: var(--font-serif);
+    font-size: var(--fs-32);
+    font-weight: var(--fw-bold);
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .page__tools {
+    display: flex;
+    flex: none;
+    gap: var(--sp-5);
+    align-items: center;
+    min-height: var(--control-md);
+  }
+
+  /* ── 栏目：标题 + 内容。标题与内容永远和页面左右留白对齐 ── */
+  .section {
+    margin-top: var(--shelf-gap);
+  }
+
+  .section__head {
+    display: flex;
+    gap: var(--sp-4);
+    align-items: center;
+    justify-content: space-between;
+    min-height: 28px;
+    padding-inline: var(--gutter);
+    margin-bottom: var(--sp-4);
+  }
+
+  .section__title {
+    font-size: var(--fs-20);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    letter-spacing: 0.01em;
+  }
+
+  .section__body {
+    padding-inline: var(--gutter);
+  }
+
+  /* ── 网格 ── */
+  .grid {
+    display: grid;
+    gap: var(--sp-8) var(--gap);
+    padding-inline: var(--gutter);
+  }
+
+  .grid--poster {
+    grid-template-columns: repeat(var(--cols-poster), minmax(0, 1fr));
+  }
+
+  .grid--wide {
+    grid-template-columns: repeat(var(--cols-wide), minmax(0, 1fr));
+  }
+
+  /* 分组小标题（「今天」「昨天」） */
+  .group + .group {
+    margin-top: var(--sp-10);
+  }
+
+  .group__label {
+    padding-inline: var(--gutter);
+    margin-bottom: var(--sp-4);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+
+  /* ── 横向栏目：整行可左右翻页，右侧露出下一张的一角 ── */
+  .shelf {
+    --card-w: calc((100vw - 2 * var(--gutter) - (var(--cols-poster) - 1) * var(--gap)) / var(--cols-poster));
+    --media-h: calc(var(--card-w) * 1.5);
+    --nav-size: 36px;
+  }
+
+  .shelf__body {
+    position: relative;
+  }
+
+  .shelf--wide {
+    --card-w: calc((100vw - 2 * var(--gutter) - (var(--cols-wide) - 1) * var(--gap)) / var(--cols-wide));
+    --media-h: calc(var(--card-w) * 0.5625);
+  }
+
+  .shelf__track {
+    display: flex;
+    gap: var(--gap);
+    padding-inline: var(--gutter);
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+
+  .shelf__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shelf__track > * {
+    flex: 0 0 var(--card-w);
+    scroll-snap-align: start;
+  }
+
+  /* 翻页箭头：落在左右留白里，垂直居中于图片 */
+  .shelf__nav {
+    position: absolute;
+    top: calc(var(--media-h) / 2 - var(--nav-size) / 2);
+    z-index: var(--z-raised);
+    display: grid;
+    place-items: center;
+    width: var(--nav-size);
+    height: var(--nav-size);
+    color: var(--c-text);
+    background: var(--c-glass);
+    border-radius: var(--r-full);
+    box-shadow: var(--sh-2), inset 0 0 0 1px var(--c-line-2);
+    opacity: 0;
+    backdrop-filter: var(--blur-soft);
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      background var(--dur-1),
+      scale var(--dur-1) var(--ease-out);
+  }
+
+  .shelf__nav--prev {
+    left: calc((var(--gutter) - var(--nav-size)) / 2);
+  }
+
+  .shelf__nav--next {
+    right: calc((var(--gutter) - var(--nav-size)) / 2);
+  }
+
+  .shelf:hover .shelf__nav,
+  .shelf__nav:focus-visible {
+    opacity: 1;
+  }
+
+  .shelf__nav:hover {
+    background: var(--c-glass-strong);
+  }
+
+  .shelf__nav:active {
+    scale: 0.94;
+  }
+
+  .shelf[data-at-start] .shelf__nav--prev,
+  .shelf[data-at-end] .shelf__nav--next {
+    opacity: 0;
+    pointer-events: none;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-18T11:12:12.550964+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Could not move focus to '暂停'"
+    }
+  ],
+  "version": "1.0.2",
+  "apkSha256": "CF59C69BF07F68F4A8059829419C22668CD49F5C6A5E63DC9F9896248199E11C",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

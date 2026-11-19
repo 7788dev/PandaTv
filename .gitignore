@@ -1,0 +1,52 @@
+node_modules
+dist
+dist-ssr
+*.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local credentials and machine configuration
+.env
+.env.*
+!.env.example
+**/*credentials*
+**/*secrets*
+**/keystore.properties
+**/local.properties
+*.jks
+*.keystore
+*.p12
+*.pfx
+
+# Tauri
+src-tauri/target
+src-tauri/gen
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+
+# 设计工具的临时输出
+design/tools/.out
+
+# Production outputs
+out/
+release/
+test-results/
+playwright-report/
+.cache/
+.tmp/
+.vitest/
+
+# Android TV
+tv/.gradle/
+tv/.kotlin/
+tv/build/
+tv/app/build/
+tv/.keystore/
+

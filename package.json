@@ -1,0 +1,81 @@
+{
+  "name": "panda-desktop",
+  "version": "1.0.1",
+  "private": true,
+  "description": "Panda 影视桌面应用",
+  "author": "Panda",
+  "main": "out/main/index.js",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "electron-vite dev",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "npm run typecheck && electron-vite build",
+    "preview": "electron-vite preview",
+    "pack": "npm run build && electron-builder --dir",
+    "dist": "npm run build && electron-builder --win nsis --x64",
+    "test:e2e": "playwright test",
+    "verify:design": "node scripts/verify-design.mjs",
+    "audit:ads": "esbuild scripts/audit-ads.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/audit-ads.cjs && node .tmp/audit-ads.cjs",
+    "probe:filters": "esbuild scripts/probe-filters.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-filters.cjs && node .tmp/probe-filters.cjs",
+    "probe:start": "esbuild scripts/probe-start.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-start.cjs && node .tmp/probe-start.cjs",
+    "probe:sources": "esbuild scripts/probe-sources.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-sources.cjs && node .tmp/probe-sources.cjs",
+    "probe:startup": "node scripts/probe-startup.mjs"
+  },
+  "build": {
+    "appId": "com.panda.desktop",
+    "productName": "Panda",
+    "directories": {
+      "output": "release",
+      "buildResources": "resources"
+    },
+    "files": [
+      "out/**/*",
+      "resources/**/*",
+      "package.json",
+      "THIRD_PARTY_NOTICES.md",
+      "!node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "design/brand/app-icon.png",
+      "signExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "artifactName": "Panda-${version}-Setup.${ext}"
+    }
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/noto-sans-sc": "5.3.1",
+    "@fontsource-variable/noto-serif-sc": "5.3.1",
+    "hls.js": "1.7.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "5.2.0",
+    "electron": "45.3.2",
+    "electron-builder": "26.18.0",
+    "electron-vite": "6.0.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.8",
+    "vitest": "5.1.0"
+  }
+}

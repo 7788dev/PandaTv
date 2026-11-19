@@ -1,0 +1,55 @@
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+ ❯ tests/network-dns.test.ts (4 tests | 2 failed) 13ms
+   × resolves proxy FakeIP mappings to validated public addresses before connecting 7ms
+   × does not display director names as film genres when a subtitle lacks genres 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/network-dns.test.ts > resolves proxy FakeIP mappings to validated public addresses before connecting
+Error: 网络请求失败或超时
+ ❯ EventEmitter.<anonymous> src/main/playback/network.ts:52:40
+     50|     }, resolve)
+     51|     request.setTimeout(options.timeoutMs ?? 12000, () => request.destr…
+     52|     request.once('error', () => reject(new Error(options.signal?.abort…
+       |                                        ^
+     53|     request.end()
+     54|   })
+ ❯ tests/network-dns.test.ts:19:33
+ ❯ src/main/playback/network.ts:29:91
+ ❯ Object.<anonymous> tests/network-dns.test.ts:12:105
+ ❯ Object.publicLookup [as lookup] src/main/playback/network.ts:27:7
+ ❯ EventEmitter.vi.spyOn.mockImplementation.request.end tests/network-dns.test.ts:18:47
+ ❯ response src/main/playback/network.ts:53:13
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/network-dns.test.ts > does not display director names as film genres when a subtitle lacks genres
+AssertionError: expected [ 'Eeva', 'Mägi' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "Eeva",
++   "Mägi",
++ ]
+
+ ❯ tests/network-dns.test.ts:55:59
+     53|
+     54| it('does not display director names as film genres when a subtitle lac…
+     55|   expect(subtitleParts('2026 / 爱沙尼亚 / Eeva Mägi').genres).toEqual([])
+       |                                                           ^
+     56| })
+     57|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  02:45:40
+   Duration  200ms (import 49%, transform 31%, tests 16%, worker 4%)
+

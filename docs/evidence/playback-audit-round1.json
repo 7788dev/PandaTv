@@ -1,0 +1,1476 @@
+{
+  "checkedAt": "2026-11-15T17:55:46.969Z",
+  "results": [
+    {
+      "key": "dyttzy",
+      "name": "电影天堂",
+      "enabled": true,
+      "api": "https://caiji.dyttzyapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:54:56.578Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 837,
+          "returned": 2,
+          "relevant": 2,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 40510,
+          "lines": [
+            {
+              "name": "dytt",
+              "episodes": 0
+            },
+            {
+              "name": "dyttm3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 1528,
+            "playlistMs": 2477,
+            "host": "vip.dytt-live.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 2616,
+            "duration": 10461.334,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 267,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [
+              {
+                "sequence": [
+                  5.567,
+                  2.933,
+                  5.7,
+                  3.333,
+                  1.533
+                ],
+                "matches": [
+                  74,
+                  923
+                ]
+              }
+            ],
+            "hosts": [
+              "vip.dytt-live.com"
+            ],
+            "sha256": "6225dda3235e0cf2cb3907b30ef1ab1123b0c95aabea086e970b980815119808",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1226,
+                "host": "vip.dytt-live.com",
+                "signature": "474011100042f025",
+                "sha256": "4170d79241b8299c0f7fcfa42156cefcf49dd70d9198cbac5b76fa474d320be9"
+              },
+              {
+                "index": 1308,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 553,
+                "host": "vip.dytt-live.com",
+                "signature": "4740111e0042f025",
+                "sha256": "cba5cd4b79b4aa1f1be7235d3aacd9d4e056ff6af66247da6b6b3b8df77eed39"
+              },
+              {
+                "index": 2615,
+                "ok": true,
+                "status": 206,
+                "bytes": 9964,
+                "ms": 379,
+                "host": "vip.dytt-live.com",
+                "signature": "474011150042f025",
+                "sha256": "ecb9a36f11c9705027e46ed4bd05f69a85fe549959f68f53141e566010b791a0"
+              }
+            ],
+            "manifest": "manifest-dyttzy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 885,
+          "returned": 2,
+          "relevant": 2,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 8298,
+          "lines": [
+            {
+              "name": "dytt",
+              "episodes": 0
+            },
+            {
+              "name": "dyttm3u8",
+              "episodes": 200
+            }
+          ],
+          "media": {
+            "masterMs": 1472,
+            "playlistMs": 1609,
+            "host": "vip.dytt-cinema.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 306,
+            "duration": 1222.306,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 56,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [
+              {
+                "sequence": [
+                  5.567,
+                  2.933,
+                  5.7,
+                  3.333,
+                  1.533
+                ],
+                "matches": [
+                  74
+                ]
+              }
+            ],
+            "hosts": [
+              "vip.dytt-cinema.com"
+            ],
+            "sha256": "dbadd81a20b38e5e4e4ef6e009a38787423a1572763f8196cac77937ca29fdc1",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1216,
+                "host": "vip.dytt-cinema.com",
+                "signature": "474011100042f025",
+                "sha256": "8c4df2a625efbe20c7f51ef3d9d26364050d727ac1993827d57fff85f99cd315"
+              },
+              {
+                "index": 153,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1041,
+                "host": "vip.dytt-cinema.com",
+                "signature": "474011140042f025",
+                "sha256": "454782702e1767684ea9ca5cb6f2ec3244eefc26eff40b353f843913d6066c92"
+              },
+              {
+                "index": 305,
+                "ok": true,
+                "status": 206,
+                "bytes": 14100,
+                "ms": 383,
+                "host": "vip.dytt-cinema.com",
+                "signature": "4740111c0042f025",
+                "sha256": "852c6d4a7d0fb0d7effa2bee41ed378722e2c9aabbd3518e32711ba0e663d146"
+              }
+            ],
+            "manifest": "manifest-dyttzy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 364
+          }
+        }
+      ]
+    },
+    {
+      "key": "360zy",
+      "name": "360资源",
+      "enabled": true,
+      "api": "https://360zy.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:54:56.545Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 1667,
+          "returned": 1,
+          "relevant": 1,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 71142,
+          "lines": [
+            {
+              "name": "360zy",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 2723,
+            "playlistMs": 3014,
+            "host": "vod1.maowushi.com",
+            "width": 1280,
+            "height": 538,
+            "segments": 5223,
+            "duration": 10513.615,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 13,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "vod1.maowushi.com"
+            ],
+            "sha256": "c6b8e53c27bd700160b999b92d5a7a6f558aae06d1dfb8b237a37b7bc4339018",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1024,
+                "host": "vod1.maowushi.com",
+                "signature": "474011100042f025",
+                "sha256": "b38f7c2269a4f12155385238deb83fced9ba26c867698040062067648140164c"
+              },
+              {
+                "index": 2611,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 513,
+                "host": "vod1.maowushi.com",
+                "signature": "474011170042f025",
+                "sha256": "b345f0911f9c94883555e0bd70d99d43118120c29ea7ae3105faf3880081c73e"
+              },
+              {
+                "index": 5222,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 493,
+                "host": "vod1.maowushi.com",
+                "signature": "474011130042f025",
+                "sha256": "032daccfb0a487ae0397a8e5cd1e27c233a435b834b7f601062f71555ff0906e"
+              }
+            ],
+            "manifest": "manifest-360zy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 1490,
+          "returned": 11,
+          "relevant": 11,
+          "title": "凡人修仙传 慕兰之战",
+          "year": "2026",
+          "vodId": 99260,
+          "lines": [
+            {
+              "name": "360zy",
+              "episodes": 24
+            }
+          ],
+          "media": {
+            "masterMs": 494,
+            "playlistMs": 572,
+            "host": "vod1.maowushi.com",
+            "width": 1920,
+            "height": 1080,
+            "segments": 613,
+            "duration": 1245.894,
+            "encrypted": true,
+            "endlist": true,
+            "discontinuities": 3,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "vod1.maowushi.com"
+            ],
+            "sha256": "465e9b4e2e4872e99c1d6c8b6449be13e5079b6f115d109dec041641c57470c3",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 459,
+                "host": "vod1.maowushi.com",
+                "signature": "185775d783a15199",
+                "sha256": "4ba1acc6140ffe0766a573ba1ee8ac8f7d2d7e9245db9b2e86a9655d8f3c80da"
+              },
+              {
+                "index": 306,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 488,
+                "host": "vod1.maowushi.com",
+                "signature": "3c81273f99f27ad5",
+                "sha256": "5fecc9c8a3804dc530dfa6489790d03362e3f96d2942d61f47e2a038f25c3eb5"
+              },
+              {
+                "index": 612,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 449,
+                "host": "vod1.maowushi.com",
+                "signature": "474011130042f025",
+                "sha256": "032daccfb0a487ae0397a8e5cd1e27c233a435b834b7f601062f71555ff0906e"
+              }
+            ],
+            "manifest": "manifest-360zy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 476
+          }
+        }
+      ]
+    },
+    {
+      "key": "ffzy",
+      "name": "非凡资源",
+      "enabled": true,
+      "api": "https://cj.ffzyapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:54:56.579Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 1086,
+          "returned": 2,
+          "relevant": 2,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 32627,
+          "lines": [
+            {
+              "name": "feifan",
+              "episodes": 0
+            },
+            {
+              "name": "ffm3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 1547,
+            "playlistMs": 2586,
+            "host": "vip.ffzy-online2.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 2619,
+            "duration": 10478.542,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 9,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [
+              {
+                "sequence": [
+                  4.867,
+                  3.333,
+                  6.367,
+                  2.1,
+                  2.967,
+                  3.879
+                ],
+                "matches": []
+              }
+            ],
+            "hosts": [
+              "vip.ffzy-online2.com"
+            ],
+            "sha256": "518b6c83c5ce21d4795b465c020a4b6db57f866f9dfb575986679eb001939167",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1451,
+                "host": "vip.ffzy-online2.com",
+                "signature": "474011100042f025",
+                "sha256": "de467ba82e4ead1d786b1e49e30746b63c305b8267b5bff8be1adbb884379a1c"
+              },
+              {
+                "index": 1309,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 835,
+                "host": "vip.ffzy-online2.com",
+                "signature": "4740111f0042f025",
+                "sha256": "c0d4a9471121b6dc033fd920e2bbf73a40d09244b12c8fa5c607827af9a62bf3"
+              },
+              {
+                "index": 2618,
+                "ok": true,
+                "status": 206,
+                "bytes": 112988,
+                "ms": 808,
+                "host": "vip.ffzy-online2.com",
+                "signature": "474011180042f025",
+                "sha256": "98946ab550db96d1271f83ceffb06554bde27672a95076b2514e9922a1609fbe"
+              }
+            ],
+            "manifest": "manifest-ffzy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 963,
+          "returned": 3,
+          "relevant": 3,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 28356,
+          "lines": [
+            {
+              "name": "feifan",
+              "episodes": 0
+            },
+            {
+              "name": "ffm3u8",
+              "episodes": 200
+            }
+          ],
+          "media": {
+            "masterMs": 1468,
+            "playlistMs": 1658,
+            "host": "vip.ffzy-play9.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 317,
+            "duration": 1267.873,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 3,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [
+              {
+                "sequence": [
+                  4.867,
+                  3.333,
+                  6.367,
+                  2.1,
+                  2.967,
+                  3.879
+                ],
+                "matches": []
+              }
+            ],
+            "hosts": [
+              "vip.ffzy-play9.com"
+            ],
+            "sha256": "44dad69735c0add9883e952310bcc90e9b63c8a68f1e2e99d6005e62fbc4d540",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1203,
+                "host": "vip.ffzy-play9.com",
+                "signature": "474011100042f025",
+                "sha256": "4ff9ef47d632d979e324a0682a393375d593734908c2a19fd0bbeb4f7035f991"
+              },
+              {
+                "index": 158,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1073,
+                "host": "vip.ffzy-play9.com",
+                "signature": "474011190042f025",
+                "sha256": "533a8b3c2f0f2d28db18ca19c72594b3715263943c911ceb87f12b6a4f2990af"
+              },
+              {
+                "index": 316,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 564,
+                "host": "vip.ffzy-play9.com",
+                "signature": "474011170042f025",
+                "sha256": "6e595ed16a91ab247421b1238c58b47c55150ed36d0425b0a99c6fc86db27d77"
+              }
+            ],
+            "manifest": "manifest-ffzy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 370
+          }
+        }
+      ]
+    },
+    {
+      "key": "jyzy",
+      "name": "金鹰资源",
+      "enabled": true,
+      "api": "https://jyzyapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:55:12.776Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 1256,
+          "returned": 2,
+          "relevant": 2,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 40626,
+          "lines": [
+            {
+              "name": "jinyingm3u8",
+              "episodes": 1
+            },
+            {
+              "name": "jinyingyun",
+              "episodes": 0
+            }
+          ],
+          "media": {
+            "masterMs": 493,
+            "playlistMs": 493,
+            "host": "hd.kuktxu.com",
+            "segments": 2528,
+            "duration": 10391.625,
+            "encrypted": true,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "c.baisiweiting.com"
+            ],
+            "sha256": "787462ce9b98e67d879934381f07365892b9f2c4ca9d30a1fd4867ba7f73f184",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1785,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "5aa2cbab11827445",
+                "sha256": "c225dc54c363a0e4c77ff5a200fd175501be6fe58aa065a72697e9d4623428b5"
+              },
+              {
+                "index": 1264,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1783,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "5aa2cbab11827445",
+                "sha256": "f2d5d3518941cbb56b19679f49c72700bf919715f0097ab85d14d0a7032662b0"
+              },
+              {
+                "index": 2527,
+                "ok": true,
+                "status": 206,
+                "bytes": 52832,
+                "ms": 325,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "45d666a874d97ff9",
+                "sha256": "cb2eecd9d3fe4b00efacc5ea70548a82c2b7af5b0b8992ea973f26189e15b2b8"
+              }
+            ],
+            "manifest": "manifest-jyzy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 1034,
+          "returned": 5,
+          "relevant": 5,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 32192,
+          "lines": [
+            {
+              "name": "jinyingm3u8",
+              "episodes": 202
+            },
+            {
+              "name": "jinyingyun",
+              "episodes": 0
+            }
+          ],
+          "media": {
+            "masterMs": 80,
+            "playlistMs": 80,
+            "host": "hd.kuktxu.com",
+            "segments": 356,
+            "duration": 1248.292,
+            "encrypted": true,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "c.baisiweiting.com"
+            ],
+            "sha256": "43544ba7219d67f1fbbfc7aa5abae29bcac9665b25c28df0c9dd6b45e1650794",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 628,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "3377188af2f0377f",
+                "sha256": "697a36c95b53f34e26c544d33689e68455261d13b11fde3e442640ed866041d1"
+              },
+              {
+                "index": 178,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 414,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "b98e7c1959f712f6",
+                "sha256": "d57b722518388665a7a0526ee729b44922a337c6d0d848044022312edf1d0a8f"
+              },
+              {
+                "index": 355,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 346,
+                "host": "c.baisiweiting.com:18443",
+                "signature": "a05ef3490b624e78",
+                "sha256": "807d7f3782f520a491b96214be51a9ecf9fc3461f9978248799a85aea514c48c"
+              }
+            ],
+            "manifest": "manifest-jyzy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 102
+          }
+        }
+      ]
+    },
+    {
+      "key": "bfzy",
+      "name": "暴风资源",
+      "enabled": true,
+      "api": "https://bfzyapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:55:12.775Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 726,
+          "returned": 20,
+          "relevant": 3,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 48499,
+          "lines": [
+            {
+              "name": "bfzym3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 2442,
+            "playlistMs": 2442,
+            "host": "c1.rrcdnbf6.com",
+            "segments": 3490,
+            "duration": 10053.12,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 6,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 27
+            },
+            "fingerprints": [],
+            "hosts": [
+              "c1.rrcdnbf6.com"
+            ],
+            "sha256": "7bd60f7a23155912c3f7bdb042e3fe419f810561384c3f71a26f687de6b66b9d",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 2383,
+                "host": "c1.rrcdnbf6.com",
+                "signature": "474011100042f025",
+                "sha256": "1656c20b1950163fe029b059c6c1d0e773334f355555597ec84f6185bfd2b57f"
+              },
+              {
+                "index": 1745,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 688,
+                "host": "c1.rrcdnbf6.com",
+                "signature": "4740111f0042f025",
+                "sha256": "9d41dbefe53ebe4b67cdaeeabe1946123822d3a0f2009d8618c36b318451255e"
+              },
+              {
+                "index": 3489,
+                "ok": true,
+                "status": 206,
+                "bytes": 49256,
+                "ms": 475,
+                "host": "c1.rrcdnbf6.com",
+                "signature": "474011160042f025",
+                "sha256": "15382efb32103c93aed62bc476a37324b8a5bfa3d36faaa5ff93eb1105180ffe"
+              }
+            ],
+            "manifest": "manifest-bfzy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 586,
+          "returned": 20,
+          "relevant": 5,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 9145,
+          "lines": [
+            {
+              "name": "bfzym3u8",
+              "episodes": 200
+            }
+          ],
+          "media": {
+            "masterMs": 1656,
+            "playlistMs": 1656,
+            "host": "c1.ddbbffcdn.com",
+            "segments": 321,
+            "duration": 1274,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 3,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 9
+            },
+            "fingerprints": [],
+            "hosts": [
+              "c1.ddbbffcdn.com"
+            ],
+            "sha256": "87f6fe2c67f28bc4a58758a67acc05ba9c1efc0018c98492091113bc4d2de570",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 2264,
+                "host": "c1.ddbbffcdn.com",
+                "signature": "474011100042f025",
+                "sha256": "4ff9ef47d632d979e324a0682a393375d593734908c2a19fd0bbeb4f7035f991"
+              },
+              {
+                "index": 160,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1124,
+                "host": "c1.ddbbffcdn.com",
+                "signature": "474011170042f025",
+                "sha256": "cb4c4e36883243e1674c7f8168440f25f856f29afbe25f1fe8b634df46197987"
+              },
+              {
+                "index": 320,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 569,
+                "host": "c1.ddbbffcdn.com",
+                "signature": "474011170042f025",
+                "sha256": "6e595ed16a91ab247421b1238c58b47c55150ed36d0425b0a99c6fc86db27d77"
+              }
+            ],
+            "manifest": "manifest-bfzy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 377
+          }
+        }
+      ]
+    },
+    {
+      "key": "lzi",
+      "name": "量子资源",
+      "enabled": true,
+      "api": "https://cj.lziapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:55:12.774Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 893,
+          "returned": 20,
+          "relevant": 4,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 48245,
+          "lines": [
+            {
+              "name": "liangzi",
+              "episodes": 0
+            },
+            {
+              "name": "lzm3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 2184,
+            "playlistMs": 2157,
+            "host": "hd.lz-cdn18.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 2618,
+            "duration": 10468.822,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 6,
+            "ppvodMarker": true,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "hd.lz-cdn18.com"
+            ],
+            "sha256": "dd310f0bacb7263632bbb86022076636b5f3472deb410b60bdd017256cd38bbe",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1517,
+                "host": "hd.lz-cdn18.com",
+                "signature": "474011100042f025",
+                "sha256": "7a9c2e8aa5810c20882ed8a2ef388819a2b35b7628e3210b149151faac96d23d"
+              },
+              {
+                "index": 1309,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 934,
+                "host": "hd.lz-cdn18.com",
+                "signature": "474011180042f025",
+                "sha256": "382022a6e7b6ae6261699c53603933c71feb9955516af661027b6d230ab9a2bd"
+              },
+              {
+                "index": 2617,
+                "ok": true,
+                "status": 206,
+                "bytes": 113928,
+                "ms": 842,
+                "host": "hd.lz-cdn18.com",
+                "signature": "474011140042f025",
+                "sha256": "6cb27349c2068090d13a0c831c3350393d9ce775d58ccf81a292af2e228ebabb"
+              }
+            ],
+            "manifest": "manifest-lzi-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 682,
+          "returned": 20,
+          "relevant": 12,
+          "title": "凡人修仙传",
+          "year": "2025",
+          "vodId": 108324,
+          "lines": [
+            {
+              "name": "liangzi",
+              "episodes": 0
+            },
+            {
+              "name": "lzm3u8",
+              "episodes": 30
+            }
+          ],
+          "media": {
+            "masterMs": 1397,
+            "playlistMs": 1709,
+            "host": "v.lzfile26.com",
+            "width": 1080,
+            "height": 608,
+            "segments": 779,
+            "duration": 3109.52,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 4,
+            "ppvodMarker": true,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "v.lzfile26.com"
+            ],
+            "sha256": "d15f39c8d9133c9aa2b959de5603ae547f98b6f7a0338abedebe1df8a75cd028",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1314,
+                "host": "v.lzfile26.com",
+                "signature": "474011100042f025",
+                "sha256": "7e5c80a5bcff135fec2b4b9cc3115b8cf110a1e04915fc607b7899db202b7620"
+              },
+              {
+                "index": 389,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1024,
+                "host": "v.lzfile26.com",
+                "signature": "4740111e0042f025",
+                "sha256": "7e18e24ea66d4d62623518fbb5097b9175fa72280e7ec6b8e10d4e0ef7f0a27f"
+              },
+              {
+                "index": 778,
+                "ok": true,
+                "status": 206,
+                "bytes": 21244,
+                "ms": 397,
+                "host": "v.lzfile26.com",
+                "signature": "4740111c0042f025",
+                "sha256": "88674dc3eeec520b0253311c880b8948653b09514fd6b2f6d52e73ad8a9a32c8"
+              }
+            ],
+            "manifest": "manifest-lzi-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 364
+          }
+        }
+      ]
+    },
+    {
+      "key": "jszy",
+      "name": "极速资源",
+      "enabled": false,
+      "api": "https://jszyapi.com/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:55:28.541Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 1159,
+          "returned": 2,
+          "relevant": 2,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 4664,
+          "lines": [
+            {
+              "name": "jsyun",
+              "episodes": 0
+            },
+            {
+              "name": "jsm3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 1850,
+            "playlistMs": 1850,
+            "host": "vv.jisuzyv.com",
+            "segments": 2602,
+            "duration": 10404.542,
+            "encrypted": true,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "p.jisuts.com"
+            ],
+            "sha256": "aaa60cb67cc1f564736853753ad27cfb516d9087ae40da172606133d3a34e8aa",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1665,
+                "host": "p.jisuts.com:999",
+                "signature": "18683c58fe83bc48",
+                "sha256": "05677d64bddeea197652f87af01327ef5d67ee6e0a975e92b35a18ce80bbc4f8"
+              },
+              {
+                "index": 1301,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1613,
+                "host": "p.jisuts.com:999",
+                "signature": "e7b6fe22c3d0d9a2",
+                "sha256": "45f6b885adadda0d93914bc7078171687681449068484c509cf1531ba755e08e"
+              },
+              {
+                "index": 2601,
+                "ok": true,
+                "status": 206,
+                "bytes": 56976,
+                "ms": 283,
+                "host": "p.jisuts.com:999",
+                "signature": "697b829624560ea8",
+                "sha256": "7316b700b841b75ba700711fa88cdf3c60c81ae2c1cf1d454d1e56c5c609b1fd"
+              }
+            ],
+            "manifest": "manifest-jszy-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 1157,
+          "returned": 5,
+          "relevant": 5,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 1189,
+          "lines": [
+            {
+              "name": "jsyun",
+              "episodes": 0
+            },
+            {
+              "name": "jsm3u8",
+              "episodes": 202
+            }
+          ],
+          "media": {
+            "masterMs": 1027,
+            "playlistMs": 1027,
+            "host": "vv.jisuzyv.com",
+            "segments": 363,
+            "duration": 1248.292,
+            "encrypted": true,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "p.jisuts.com"
+            ],
+            "sha256": "874696d6e24f28580485989c8d1fdbc5eb044e1dc67d81d61eca5d0d4527c141",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 350,
+                "host": "p.jisuts.com:999",
+                "signature": "8c9bdc0a6f70ab57",
+                "sha256": "44585476d578fdbcc5af9000c348f3f1bb0259690a89aeee391a88e13b4e9827"
+              },
+              {
+                "index": 181,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 626,
+                "host": "p.jisuts.com:999",
+                "signature": "8539d84b92b6d4c3",
+                "sha256": "ee87404efb2affbc108d0e3505594c258987f8cfc42ec376dd0bfe04cd44eee3"
+              },
+              {
+                "index": 362,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 473,
+                "host": "p.jisuts.com:999",
+                "signature": "0a667b4e2648ae8f",
+                "sha256": "8b19799e22f7d2b440d227c9532fb50f65aef2accc388d0986a57da94c64ef2c"
+              }
+            ],
+            "manifest": "manifest-jszy-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 256
+          }
+        }
+      ]
+    },
+    {
+      "key": "piaoling2",
+      "name": "飘零资源",
+      "enabled": true,
+      "api": "https://p2100.net/api.php/provide/vod/",
+      "checkedAt": "2026-11-15T17:55:28.541Z",
+      "queries": [
+        {
+          "query": "流浪地球2",
+          "searchMs": 1676,
+          "returned": 2,
+          "relevant": 2,
+          "title": "流浪地球2",
+          "year": "2023",
+          "vodId": 45545,
+          "lines": [
+            {
+              "name": "wjm3u8",
+              "episodes": 1
+            },
+            {
+              "name": "ikm3u8",
+              "episodes": 1
+            },
+            {
+              "name": "snm3u8",
+              "episodes": 1
+            }
+          ],
+          "media": {
+            "masterMs": 1420,
+            "playlistMs": 1638,
+            "host": "v1.ppqrrs.com",
+            "width": 1280,
+            "height": 536,
+            "segments": 5196,
+            "duration": 10391.48,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "v1.adfg8.vip"
+            ],
+            "sha256": "dd6c94da3f5014c0f34a0061c9d62e1b0293ee27a17cb13f328270a832008445",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1533,
+                "host": "v1.adfg8.vip",
+                "signature": "474011100042f025",
+                "sha256": "b26230019a861029cd30d4c6f47677b5fb8a29fa51cdb268a8bae1844d8488a2"
+              },
+              {
+                "index": 2598,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1362,
+                "host": "v1.adfg8.vip",
+                "signature": "474011160042f025",
+                "sha256": "cc5864da373f1052716ee4ef42f6ae4ead6784ed6747d71e327cd5a0b83600c1"
+              },
+              {
+                "index": 5195,
+                "ok": true,
+                "status": 206,
+                "bytes": 32148,
+                "ms": 415,
+                "host": "v1.adfg8.vip",
+                "signature": "4740111b0042f025",
+                "sha256": "8b4041093b61d7d3921c2978214a7522e83ecceedb0b0cb3f83b8684aa8b3431"
+              }
+            ],
+            "manifest": "manifest-piaoling2-0.m3u8"
+          },
+          "ok": true
+        },
+        {
+          "query": "凡人修仙传",
+          "searchMs": 1303,
+          "returned": 4,
+          "relevant": 4,
+          "title": "凡人修仙传",
+          "year": "2020",
+          "vodId": 343,
+          "lines": [
+            {
+              "name": "wjm3u8",
+              "episodes": 199
+            },
+            {
+              "name": "ikm3u8",
+              "episodes": 202
+            },
+            {
+              "name": "snm3u8",
+              "episodes": 200
+            }
+          ],
+          "media": {
+            "masterMs": 1297,
+            "playlistMs": 1177,
+            "host": "v6.ppqrrs.com",
+            "width": 1280,
+            "height": 720,
+            "segments": 625,
+            "duration": 1248.24,
+            "encrypted": false,
+            "endlist": true,
+            "discontinuities": 0,
+            "ppvodMarker": false,
+            "cueOut": 0,
+            "keywordHits": {
+              "ad": 0,
+              "ads": 0,
+              "adv": 0,
+              "advert": 0,
+              "gg": 0,
+              "guanggao": 0,
+              "sponsor": 0,
+              "promo": 0,
+              "adjump": 0
+            },
+            "fingerprints": [],
+            "hosts": [
+              "v6.adfg8.vip"
+            ],
+            "sha256": "bc83f68f4602c078f6c85664b668abbbaffae0fdefbb71ab038b6c0a19f46c7c",
+            "sampled": [
+              {
+                "index": 0,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 2090,
+                "host": "v6.adfg8.vip",
+                "signature": "474011100042f025",
+                "sha256": "53f5327825043f54f792a252d0ccaf7ff45f6df884377e9fdad19d3bebb434da"
+              },
+              {
+                "index": 312,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 1646,
+                "host": "v6.adfg8.vip",
+                "signature": "4740111d0042f025",
+                "sha256": "d514d84fe6d57ca633dbee701311df7970163e902492ffe848e8da25bde57eb3"
+              },
+              {
+                "index": 624,
+                "ok": true,
+                "status": 206,
+                "bytes": 131072,
+                "ms": 554,
+                "host": "v6.adfg8.vip",
+                "signature": "474011100042f025",
+                "sha256": "437fc94a49671ac3823c6f77732ac55482a6c989edf9c0cfef0806de6a6c585b"
+              }
+            ],
+            "manifest": "manifest-piaoling2-1.m3u8"
+          },
+          "ok": true,
+          "nextEpisode": {
+            "ok": true,
+            "status": 200,
+            "ms": 1123
+          }
+        }
+      ]
+    }
+  ]
+}

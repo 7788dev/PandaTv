@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "at": "2026-11-15T19:44:04.504Z",
+    "version": "1.0.0",
+    "code": "ERR_ABORTED",
+    "errno": -3,
+    "message": "ERR_ABORTED (-3) loading 'file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/out/renderer/index.html'"
+  }
+}

@@ -1,0 +1,39 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep startup:
+
+
+Running 1 test using 1 worker
+
+(node:45340) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\startup.spec.ts:6:1 › startup: a reload during initial loading does not report application failure (691ms)
+
+
+  1) e2e\startup.spec.ts:6:1 › startup: a reload during initial loading does not report application failure 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.topbar')
+    Expected: visible
+    Error: Target page, context or browser has been closed
+
+    Call log:
+      - Expect "toBeVisible" locator('.topbar') with timeout 15000ms
+      - waiting for locator('.topbar')
+      - Target page, context or browser has been closed
+
+
+      15 |     await page.waitForURL(/\/out\/renderer\/index\.html/, { waitUntil: 'commit' })
+      16 |     await page.reload({ waitUntil: 'domcontentloaded', timeout: 10000 }).catch(() => {})
+    > 17 |     await expect(page.locator('.topbar')).toBeVisible()
+         |                                           ^
+      18 |     const failure = await readFile(join(profile, 'startup-error.json'), 'utf8').catch(() => null)
+      19 |     expect(failure).toBeNull()
+      20 |     await expect(page.locator('.hero__title')).toBeVisible()
+        at E:\dev\项目\panda\e2e\startup.spec.ts:17:43
+
+    Error Context: .tmp\e2e-results\startup-startup-a-reload-d-499aa--report-application-failure\error-context.md
+
+  1 failed
+    e2e\startup.spec.ts:6:1 › startup: a reload during initial loading does not report application failure 

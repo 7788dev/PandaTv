@@ -1,0 +1,59 @@
+{
+  "at": "2026-11-17T13:53:12.197Z",
+  "source": "lzi",
+  "title": "庆余年 第二季",
+  "id": "db-34937650",
+  "note": "CMS ad marker on a rotated CDN host",
+  "diagnostic": {
+    "removedSegments": 14,
+    "removedSeconds": 51.52,
+    "reason": "filtered",
+    "evidence": [
+      "marker"
+    ]
+  },
+  "served": {
+    "duration": 2727.0399999999995,
+    "cuts": [
+      301.84000000000003,
+      1980.680000000001
+    ],
+    "encrypted": false
+  },
+  "start": {
+    "position": 3.43806,
+    "duration": 2727.0399999999995,
+    "width": 1080,
+    "height": 608,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 88
+  },
+  "across": {
+    "position": 305.779269,
+    "duration": 2727.0399999999995,
+    "width": 1080,
+    "height": 608,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 384
+  },
+  "end": {
+    "position": 1.817209,
+    "duration": 2727.0399999999995,
+    "width": 1080,
+    "height": 608,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 456
+  }
+}

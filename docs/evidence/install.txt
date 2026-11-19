@@ -1,0 +1,57 @@
+Final installer, 2026-11-16 20:14 (after the collection-poster fix). An install made by the user at 19:23
+was already present at D:\Programs\Panda; a silent install reuses that directory, so this run is an in-place
+upgrade of it. It was not uninstalled afterwards and %APPDATA%\Panda (the user's own data) was not touched.
+
+installer: 132745719 bytes, sha256 97FAAF6984AF8158834F23E57CBDE21E05DE9F5B1CE72C1D27012E2F0E7A272E
+existing install found at D:\Programs\Panda before this run: upgraded in place, not removed afterwards
+install exit code: 0 in 11s
+install directory: D:\Programs\Panda
+installed exe exists: True
+uninstall entry: Panda 1.0.0 | 1.0.0 | Panda
+start menu shortcut: True
+desktop shortcut: True
+installed size: 371 MB in 74 files
+resources: app.asar 13937365, elevate.exe 107520
+installed exe version info: Panda | 1.0.0 | Panda; authenticode: NotSigned
+installed app.asar: 268 entries; node_modules / design mock, art, preview / fixtures / tests / e2e / scripts / source maps: 0
+installed app E2E (PANDA_E2E_EXECUTABLE=D:\Programs\Panda\Panda.exe, temporary profiles): startup.spec + live.spec + data.spec
+  5 passed in 1.7 min (startup, real movie, serial, animation, real Douban data with every home shelf's posters decoded)
+uninstall-check.ps1 on this install: refused ("an existing install is never removed by this script")
+
+Clean install -> run -> uninstall cycle, 2026-11-16 17:50, on the previous build of the same installer configuration
+(the only later change to shipped code is one line in src/main/data/normalize.ts):
+
+installer: 132745622 bytes, sha256 5EA0E92CDAD3510BB4557CE892BB46D59E10B0F556CA9C00C316C58CF8B12099
+install exit code: 0 in 7s
+installed exe exists: True
+uninstall entry: Panda 1.0.0 | 1.0.0 | Panda
+start menu shortcut: True
+desktop shortcut: True
+installed size: 371 MB in 74 files
+resources: app.asar 13937330, elevate.exe 107520
+installed exe version info: Panda | 1.0.0 | Panda; authenticode: NotSigned
+installed app.asar: 268 entries; node_modules / design mock, art, preview / fixtures / tests / e2e / scripts / source maps: 0
+installed app E2E (PANDA_E2E_EXECUTABLE=installed Panda.exe): startup.spec + live.spec 4 passed in 1.2 min (movie, serial, animation, startup)
+uninstall exit code: 0 in 5s
+program directory left: False
+uninstall entry left: False
+start menu shortcut left: False
+desktop shortcut left: False
+%APPDATA%\Panda exists after uninstall: False (the E2E runs used temporary PANDA_USER_DATA_DIR profiles)
+
+Build of 2026-11-18 04:35 (principal credits with photos and top framing, person works page), packaged and NOT installed:
+installer: release/Panda-1.0.0-Setup.exe, 132629462 bytes, sha256 4AA84BA84995E1D3090400C84F53ABBBABB90AEF8FE0B9F158A08C853325EEE8
+app.asar: 12452908 bytes, 268 entries; node_modules / design mock, art, preview / fixtures / tests / e2e / scripts / source maps / .tmp: 0
+packaged app E2E (PANDA_E2E_EXECUTABLE=release\win-unpacked\Panda.exe, temporary profiles), 04:39-04:41: 7 passed in 1.8 min
+  (startup reload, second start from what the first saved, real Douban data, real movie, serial, animation, real Douban people and person works)
+The copy installed at D:\Programs\Panda and %APPDATA%\Panda were not touched: no install, upgrade or uninstall was run
+for this build. Run release/Panda-1.0.0-Setup.exe to upgrade in place.
+
+Build of 2026-11-17 15:58 (sources v3, source choice by picture, start-up changes), packaged but NOT installed:
+installer: release/Panda-1.0.0-Setup.exe, 132627253 bytes, sha256 D9E95F5C16F9745D021E65A332E7B73EF046573339CF3AA241ACB307FF6C01E3
+app.asar: 12447245 bytes, 268 entries; node_modules / design mock, art, preview / fixtures / tests / e2e / scripts / source maps / .tmp: 0
+packaged app E2E (PANDA_E2E_EXECUTABLE=release\win-unpacked\Panda.exe, temporary profiles), 15:58-15:59: 5 passed in 1.5 min
+  (second start from what the first saved, real Douban data, real movie, serial, animation)
+startup probe on the same executable, 15:59-16:00: 24 first starts + 4 repeat starts, 0 failed -> startup-timing.json
+The copy installed at D:\Programs\Panda and %APPDATA%\Panda were not touched: no install, upgrade or uninstall was run
+for this build. install-check.ps1 / uninstall-check.ps1 were last run on the builds above.

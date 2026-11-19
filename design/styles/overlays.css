@@ -1,0 +1,272 @@
+/* ════════════════════════════════════════════════════════════════════
+   浮层：提示、菜单 / 下拉列表、对话框、轻提示
+   全部搭配 Base UI 使用：出现 / 消失的动画由 data-starting-style /
+   data-ending-style 两个属性触发，不需要任何 JS 动画库。
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  /* 定位器（Base UI 的 *.Positioner）：只负责层级 */
+  .layer-tooltip {
+    z-index: var(--z-tooltip);
+  }
+
+  .layer-popover {
+    z-index: var(--z-popover);
+  }
+
+  /* ── 提示（Tooltip.Popup）：只写"名称 + 快捷键"，不写句子 ── */
+  .tooltip {
+    display: flex;
+    gap: var(--sp-2);
+    align-items: center;
+    height: 30px;
+    padding-inline: 10px;
+    font-size: var(--fs-12);
+    line-height: 1;
+    color: var(--c-text);
+    white-space: nowrap;
+    pointer-events: none;
+    background: var(--c-raised-2);
+    border-radius: var(--r-sm);
+    box-shadow: var(--sh-2), inset 0 0 0 1px var(--c-line);
+    transform-origin: var(--transform-origin);
+    transition:
+      opacity var(--dur-1) var(--ease-out),
+      scale var(--dur-1) var(--ease-out);
+  }
+
+  .tooltip[data-starting-style],
+  .tooltip[data-ending-style] {
+    opacity: 0;
+    scale: 0.94;
+  }
+
+  .tooltip[data-instant] {
+    transition-duration: 0ms;
+  }
+
+  .tooltip .kbd {
+    height: 18px;
+    margin-right: -4px;
+    background: var(--c-fill-2);
+  }
+
+  /* ── 菜单（Menu.Popup / Select.Popup） ── */
+  .menu {
+    min-width: max(168px, var(--anchor-width, 0px));
+    max-height: min(360px, var(--available-height, 360px));
+    padding: 6px;
+    overflow: hidden auto;
+    background: var(--c-raised);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    transform-origin: var(--transform-origin);
+    scrollbar-width: none;
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      scale var(--dur-2) var(--ease-out);
+  }
+
+  .menu[data-starting-style],
+  .menu[data-ending-style] {
+    opacity: 0;
+    scale: 0.96;
+  }
+
+  .menu[data-ending-style] {
+    transition-duration: var(--dur-1);
+  }
+
+  .menu:focus-visible {
+    outline: none;
+  }
+
+  .menu__label {
+    padding: 6px 12px 4px;
+    font-size: var(--fs-12);
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+
+  .menu__item {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: center;
+    height: 36px;
+    padding: 0 10px 0 12px;
+    font-size: var(--fs-14);
+    line-height: 1;
+    color: var(--c-text-2);
+    white-space: nowrap;
+    cursor: pointer;
+    border-radius: var(--r-sm);
+    outline: none;
+  }
+
+  .menu__item[data-highlighted] {
+    color: var(--c-text);
+    background: var(--c-fill);
+  }
+
+  .menu__item[data-checked],
+  .menu__item[data-selected] {
+    font-weight: var(--fw-medium);
+    color: var(--c-text);
+  }
+
+  .menu__item[data-disabled] {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .menu__item--danger {
+    color: var(--c-danger);
+  }
+
+  .menu__item--danger[data-highlighted] {
+    color: var(--c-danger);
+    background: var(--c-danger-soft);
+  }
+
+  /* 选中项右侧的勾 */
+  .menu__check {
+    display: grid;
+    place-items: center;
+    margin-left: auto;
+    color: var(--c-accent);
+  }
+
+  .menu__sep {
+    height: 1px;
+    margin: 6px 12px;
+    background: var(--c-line);
+  }
+
+  /* ── 对话框（Dialog / AlertDialog） ── */
+  .dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-dialog);
+    background: var(--c-scrim);
+    transition: opacity var(--dur-3) var(--ease-out);
+  }
+
+  .dialog-backdrop[data-starting-style],
+  .dialog-backdrop[data-ending-style] {
+    opacity: 0;
+  }
+
+  .dialog-viewport {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-dialog);
+    display: grid;
+    place-items: center;
+    padding: var(--sp-8);
+  }
+
+  .dialog {
+    width: min(400px, 100%);
+    padding: 28px;
+    background: var(--c-raised);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sh-4), inset 0 0 0 1px var(--c-line);
+    transition:
+      opacity var(--dur-3) var(--ease-out),
+      scale var(--dur-3) var(--ease-out),
+      translate var(--dur-3) var(--ease-out);
+  }
+
+  .dialog[data-starting-style] {
+    opacity: 0;
+    translate: 0 10px;
+    scale: 0.96;
+  }
+
+  .dialog[data-ending-style] {
+    opacity: 0;
+    scale: 0.98;
+    transition-duration: var(--dur-2);
+  }
+
+  .dialog:focus-visible {
+    outline: none;
+  }
+
+  .dialog__title {
+    font-size: var(--fs-18);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+  }
+
+  .dialog__desc {
+    margin-top: var(--sp-2);
+    font-size: var(--fs-14);
+    line-height: var(--lh-normal);
+    color: var(--c-text-2);
+  }
+
+  .dialog__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 28px;
+  }
+
+  /* ── 轻提示（Toast）：底部居中，一次只显示一条 ── */
+  .toast-viewport {
+    position: fixed;
+    bottom: var(--sp-10);
+    left: 50%;
+    z-index: var(--z-toast);
+    display: grid;
+    justify-items: center;
+    pointer-events: none;
+    translate: -50% 0;
+  }
+
+  .toast {
+    display: flex;
+    grid-area: 1 / 1;
+    gap: var(--sp-4);
+    align-items: center;
+    height: 44px;
+    padding-inline: var(--sp-5);
+    font-size: var(--fs-14);
+    line-height: 1;
+    color: var(--c-text);
+    white-space: nowrap;
+    pointer-events: auto;
+    background: var(--c-glass-strong);
+    border-radius: var(--r-full);
+    box-shadow: var(--sh-3);
+    backdrop-filter: var(--blur-glass);
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      translate var(--dur-3) var(--ease-out),
+      scale var(--dur-3) var(--ease-out);
+  }
+
+  .toast[data-starting-style] {
+    opacity: 0;
+    translate: 0 14px;
+    scale: 0.96;
+  }
+
+  .toast[data-ending-style],
+  .toast[data-limited] {
+    opacity: 0;
+    scale: 0.98;
+  }
+
+  .toast__action {
+    margin-right: -6px;
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
+    color: var(--c-text);
+  }
+
+  .toast__action:hover {
+    color: var(--c-accent-hover);
+  }
+}

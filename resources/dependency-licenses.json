@@ -1,0 +1,154 @@
+[
+  {
+    "name": "@babel/runtime",
+    "version": "8.1.2",
+    "license": "MIT",
+    "files": [
+      "licenses/_babel_runtime/LICENSE"
+    ]
+  },
+  {
+    "name": "@base-ui/react",
+    "version": "1.9.0",
+    "license": "MIT",
+    "files": [
+      "licenses/_base-ui_react/LICENSE"
+    ]
+  },
+  {
+    "name": "@base-ui/utils",
+    "version": "0.5.0",
+    "license": "MIT",
+    "files": [
+      "licenses/_base-ui_utils/LICENSE"
+    ]
+  },
+  {
+    "name": "@floating-ui/core",
+    "version": "1.8.0",
+    "license": "MIT",
+    "files": [
+      "licenses/_floating-ui_core/LICENSE"
+    ]
+  },
+  {
+    "name": "@floating-ui/dom",
+    "version": "1.8.0",
+    "license": "MIT",
+    "files": [
+      "licenses/_floating-ui_dom/LICENSE"
+    ]
+  },
+  {
+    "name": "@floating-ui/react-dom",
+    "version": "2.1.9",
+    "license": "MIT",
+    "files": [
+      "licenses/_floating-ui_react-dom/LICENSE"
+    ]
+  },
+  {
+    "name": "@floating-ui/utils",
+    "version": "0.2.12",
+    "license": "MIT",
+    "files": [
+      "licenses/_floating-ui_utils/LICENSE"
+    ]
+  },
+  {
+    "name": "@fontsource-variable/inter",
+    "version": "5.3.0",
+    "license": "OFL-1.1",
+    "files": [
+      "licenses/_fontsource-variable_inter/LICENSE"
+    ]
+  },
+  {
+    "name": "@fontsource-variable/noto-sans-sc",
+    "version": "5.3.1",
+    "license": "OFL-1.1",
+    "files": [
+      "licenses/_fontsource-variable_noto-sans-sc/LICENSE"
+    ]
+  },
+  {
+    "name": "@fontsource-variable/noto-serif-sc",
+    "version": "5.3.1",
+    "license": "OFL-1.1",
+    "files": [
+      "licenses/_fontsource-variable_noto-serif-sc/LICENSE"
+    ]
+  },
+  {
+    "name": "@types/react",
+    "version": "19.3.0",
+    "license": "MIT",
+    "files": [
+      "licenses/_types_react/LICENSE"
+    ]
+  },
+  {
+    "name": "csstype",
+    "version": "3.2.3",
+    "license": "MIT",
+    "files": [
+      "licenses/csstype/LICENSE"
+    ]
+  },
+  {
+    "name": "hls.js",
+    "version": "1.7.4",
+    "license": "Apache-2.0",
+    "files": [
+      "licenses/hls.js/LICENSE"
+    ]
+  },
+  {
+    "name": "react",
+    "version": "19.3.1",
+    "license": "MIT",
+    "files": [
+      "licenses/react/LICENSE"
+    ]
+  },
+  {
+    "name": "react-dom",
+    "version": "19.3.1",
+    "license": "MIT",
+    "files": [
+      "licenses/react-dom/LICENSE"
+    ]
+  },
+  {
+    "name": "reselect",
+    "version": "5.3.0",
+    "license": "MIT",
+    "files": [
+      "licenses/reselect/LICENSE"
+    ]
+  },
+  {
+    "name": "scheduler",
+    "version": "0.28.0",
+    "license": "MIT",
+    "files": [
+      "licenses/scheduler/LICENSE"
+    ]
+  },
+  {
+    "name": "use-sync-external-store",
+    "version": "1.7.0",
+    "license": "MIT",
+    "files": [
+      "licenses/use-sync-external-store/LICENSE"
+    ]
+  },
+  {
+    "name": "electron",
+    "version": "45.3.2",
+    "license": "MIT",
+    "files": [
+      "licenses/electron/LICENSE"
+    ]
+  }
+]

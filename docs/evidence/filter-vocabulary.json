@@ -1,0 +1,8865 @@
+{
+ "at": "2026-11-16T04:35:37.441Z",
+ "method": "DoubanDataSource.channel(type, { sort: 'hot', [dimension]: term }) first page; pass = at least 6 titles",
+ "total": 738,
+ "failing": 0,
+ "askedAgain": 0,
+ "rows": [
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "剧情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "小城良方(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "爱情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "我的有罪之人(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "喜剧",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "我的有罪之人(2026)",
+    "蒸蒸日上(2026)",
+    "末路兼职(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "悬疑",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "谷雨(2026)",
+    "翠鸟谋杀案(2026)",
+    "我不是大师(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "古装",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "尚公主(2026)",
+    "兰香如故(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "都市",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蒸蒸日上(2026)",
+    "美人余(2026)",
+    "早春晴朗(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "家庭",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "兰香如故(2026)",
+    "余红旧事(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "犯罪",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "谷雨(2026)",
+    "余红旧事(2026)",
+    "醉梦(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "刑侦",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "余红旧事(2026)",
+    "醉梦(2026)",
+    "低智商犯罪(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "奇幻",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "末路兼职(2026)",
+    "怪奇物语 第一季(2016)",
+    "怪奇物语 第五季(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "科幻",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "怪奇物语 第一季(2016)",
+    "怪奇物语 第五季(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "武侠",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "武林外传(2006)",
+    "莲花楼(2023)",
+    "唐朝诡事录(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "仙侠",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "庆余年 第一季(2019)",
+    "陈情令(2019)",
+    "苍兰诀(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "玄幻",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "庆余年 第一季(2019)",
+    "苍兰诀(2022)",
+    "仙剑奇侠传三(2009)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "历史",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "伟大的长征(2026)",
+    "大明王朝1566(2007)",
+    "苦尽柑来遇见你(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "战争",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "伟大的长征(2026)",
+    "情深深雨濛濛(2001)",
+    "三国演义(1994)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "余红旧事(2026)",
+    "我不是大师(2026)",
+    "交锋(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "青春",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "今天是太阳雨(2026)",
+    "魔女嘉莉 第一季(2026)",
+    "踮起脚尖(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "校园",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "今天是太阳雨(2026)",
+    "铁拳教育(2026)",
+    "魔女嘉莉 第一季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "职场",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蒸蒸日上(2026)",
+    "早春晴朗(2026)",
+    "中头奖还是要上班(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "动作",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "终极名单 第二季(2026)",
+    "铁拳教育(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "谍战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "潜伏(2008)",
+    "交锋(2026)",
+    "觉醒年代(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "军旅",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "士兵突击(2006)",
+    "太阳的后裔(2016)",
+    "亮剑(2005)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "抗战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "伪装者(2015)",
+    "反人类暴行(2025)",
+    "亮剑(2005)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "医疗",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "小城良方(2026)",
+    "Doctor X：白色黑手党时代(2026)",
+    "非自然死亡(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "律政",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蒸蒸日上(2026)",
+    "风骚律师 第一季(2015)",
+    "无尽的尽头(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "商战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "繁花(2023)",
+    "风吹半夏(2022)",
+    "天道(2008)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "农村",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "山花烂漫时(2024)",
+    "山海情(2021)",
+    "马大帅(2004)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "宫廷",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后宫·甄嬛传(2011)",
+    "知否知否应是绿肥红瘦(2018)",
+    "还珠格格(1998)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "宫斗",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后宫·甄嬛传(2011)",
+    "延禧攻略(2018)",
+    "步步惊心(2011)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "权谋",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "兰香如故(2026)",
+    "我不是大师(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "穿越",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "想见你(2019)",
+    "庆余年 第一季(2019)",
+    "开端(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "重生",
+   "count": 29,
+   "more": false,
+   "sample": [
+    "重启人生(2023)",
+    "九重紫(2024)",
+    "死期将至(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "甜宠",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "早春晴朗(2026)",
+    "九重紫(2024)",
+    "当我飞奔向你(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "偶像",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "早春晴朗(2026)",
+    "逐玉(2026)",
+    "背着善宰跑(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "励志",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "小城良方(2026)",
+    "伟大的长征(2026)",
+    "我不是大师(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "探案",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "神探夏洛克 第一季(2010)",
+    "莲花楼(2023)",
+    "唐朝诡事录之长安(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "推理",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "余红旧事(2026)",
+    "醉梦(2026)",
+    "翠鸟谋杀案(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "惊悚",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "现在不是出轨的问题(2026)",
+    "流人 第六季(2026)",
+    "怪物：丽兹·波顿的故事(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "恐怖",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "末路兼职(2026)",
+    "魔女嘉莉 第一季(2026)",
+    "怪奇物语 第一季(2016)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "冒险",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "女巫阿加莎(2024)",
+    "西游记(1986)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "警匪",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "狂飙(2023)",
+    "信号(2016)",
+    "猎罪图鉴(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "黑帮",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "狂飙(2023)",
+    "浴血黑帮 第一季(2013)",
+    "火线 第一季(2002)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "反腐",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "狂飙(2023)",
+    "沉默的真相(2020)",
+    "人民的名义(2017)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "民国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "玉簟秋(2026)",
+    "我不是大师(2026)",
+    "潜伏(2008)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "革命",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "伟大的长征(2026)",
+    "潜伏(2008)",
+    "觉醒年代(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "神话",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "西游记(1986)",
+    "新白娘子传奇(1992)",
+    "济公(1985)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "女性",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "蒸蒸日上(2026)",
+    "兰香如故(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "婚姻",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "现在不是出轨的问题(2026)",
+    "美人余(2026)",
+    "苦尽柑来遇见你(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "亲情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "兰香如故(2026)",
+    "余红旧事(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "友情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪奇物语 第一季(2016)",
+    "请回答1988(2015)",
+    "怪奇物语 第五季(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "成长",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "小城良方(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "治愈",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "小城良方(2026)",
+    "蒸蒸日上(2026)",
+    "兰香如故(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "现实",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "小城良方(2026)",
+    "蒸蒸日上(2026)",
+    "漫长的季节(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "社会",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "小城良方(2026)",
+    "蒸蒸日上(2026)",
+    "兰香如故(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "伦理",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑镜 第一季(2011)",
+    "以家人之名(2020)",
+    "顶楼 第一季(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "复仇",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑暗荣耀(2022)",
+    "琅琊榜(2015)",
+    "黑暗荣耀 第二季(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "创业",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "风吹半夏(2022)",
+    "大江大河(2018)",
+    "梦中的那片海(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "运动",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "校园之外 第一季(2026)",
+    "后翼弃兵(2020)",
+    "棋魂(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "音乐",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "情深深雨濛濛(2001)",
+    "闪烁的西瓜(2023)",
+    "四重奏(2017)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "传记",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪物：丽兹·波顿的故事(2026)",
+    "地狱占星师(2026)",
+    "大宅门(2001)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "灾难",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "归墟(2026)",
+    "枪口彼端(2025)",
+    "放射危机(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "丧尸",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "最后生还者 第一季(2023)",
+    "王国 第一季(2019)",
+    "甜蜜家园(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "吸血鬼",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "吸血鬼日记 第一季(2009)",
+    "吸血鬼日记  第二季(2010)",
+    "吸血鬼日记 第三季(2011)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "超级英雄",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "旺达幻视(2021)",
+    "女巫阿加莎(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "政治",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "伟大的长征(2026)",
+    "流人 第六季(2026)",
+    "铁拳教育(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "西部",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "西部世界 第一季(2016)",
+    "达顿牧场 第一季(2026)",
+    "黄石 第一季(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "情景喜剧",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "旺达幻视(2021)",
+    "武林外传(2006)",
+    "老友记 第一季(1994)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "黑色幽默",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "低智商犯罪(2026)",
+    "绝命毒师 第一季(2008)",
+    "致命女人 第一季(2019)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "短剧",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "余红旧事(2026)",
+    "持械入宋：第一季(2026)",
+    "古相思曲(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "迷你剧",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "神探夏洛克 第一季(2010)",
+    "混沌少年时 第一季(2025)",
+    "后翼弃兵(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "genre",
+   "term": "小说改编",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后宫·甄嬛传(2011)",
+    "隐秘的角落(2020)",
+    "知否知否应是绿肥红瘦(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "华语",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "小城良方(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "欧美",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "翠鸟谋杀案(2026)",
+    "流人 第六季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "中国大陆",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "小城良方(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "中国香港",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "璀璨之城(2026)",
+    "玫瑰战争(2026)",
+    "地狱大状(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "中国台湾",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "急诊室的奇迹(2026)",
+    "想见你(2019)",
+    "还珠格格(1998)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "日本",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "有人刚好提起我吗？(2026)",
+    "杀死你的旅途 第二季(2026)",
+    "非自然死亡(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "韩国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "我的有罪之人(2026)",
+    "末路兼职(2026)",
+    "Doctor X：白色黑手党时代(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "美国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "流人 第六季(2026)",
+    "绝望写手 第五季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "英国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "幻视任务(2026)",
+    "翠鸟谋杀案(2026)",
+    "流人 第六季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "法国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "校园接送恋曲(2026)",
+    "保罗(2026)",
+    "骇人来电(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "德国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "暗黑 第一季(2017)",
+    "我们的父辈(2013)",
+    "巴比伦柏林 第五季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "意大利",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "欢愉的艺术(2024)",
+    "我的天才女友 第一季(2018)",
+    "我的天才女友 第二季(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "西班牙",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "纸钞屋 第一季(2017)",
+    "最后一案(2026)",
+    "无罪之最(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "印度",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "金钱骗局(2023)",
+    "佛陀(2013)",
+    "警网：西孟加拉邦篇(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "泰国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "你却爱着一个他(2026)",
+    "午夜规则(2026)",
+    "可以爱吗(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "俄罗斯",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "叶卡捷琳娜大帝 第一季(2014)",
+    "叶卡捷琳娜大帝 第二季(2017)",
+    "背叛(2015)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "加拿大",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "魔女嘉莉 第一季(2026)",
+    "槲寄生谋杀案 第一季(2024)",
+    "小丑回魂：欢迎来到德里镇 第一季(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "澳大利亚",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "都是她的错(2025)",
+    "尘落(2026)",
+    "戴洛奇小镇 第二季(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "爱尔兰",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "正常人(2020)",
+    "都铎王朝 第一季(2007)",
+    "都铎王朝 第二季(2008)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "瑞典",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "换谎夫妻(2026)",
+    "青春王室 第一季(2021)",
+    "青春王室 第二季(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "丹麦",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "寒栗 第一季(2021)",
+    "深居叵测(2025)",
+    "桥 第二季(2013)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "挪威",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "羞耻 第三季(2016)",
+    "羞耻 第一季(2015)",
+    "羞耻 第二季(2016)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "芬兰",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "窒风之中  第一季(2018)",
+    "第二故乡(1992)",
+    "冲突(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "荷兰",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "无瑕谎言(2026)",
+    "医院风云 第一季(1994)",
+    "阿姆斯特丹帝国 第一季(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "比利时",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "坏姐妹 第一季(2022)",
+    "子不雨双姝奇探 第一季(2019)",
+    "坏姐妹 第二季(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "瑞士",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "子不雨双姝奇探 第一季(2019)",
+    "子不雨双姝奇探 第二季(2021)",
+    "企鹅家族 第三季(1995)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "奥地利",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "异教峰 第一季(2019)",
+    "异教峰 第二季(2022)",
+    "第二故乡(1992)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "波兰",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "十诫(1989)",
+    "猎魔人 第一季(2019)",
+    "猎魔人 第二季(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "捷克",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "拿破仑传(2002)",
+    "从海底出击 第一季(2018)",
+    "冷杉溪 第二季(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "匈牙利",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "波吉亚家族 第一季(2011)",
+    "波吉亚家族 第二季(2012)",
+    "泰坦尼克号(2012)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "葡萄牙",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "被咒之爱(1978)",
+    "奥德修斯(2013)",
+    "舞娘情缘(2019)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "希腊",
+   "count": 45,
+   "more": true,
+   "sample": [
+    "德黑兰 第一季(2020)",
+    "2004年第28届雅典奥运会(2004)",
+    "巴尔干最后的贵族(2005)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "冰岛",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "卡特拉火山(2021)",
+    "暗冰之下(2024)",
+    "冰海缉凶(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "土耳其",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "奥德赛(1997)",
+    "相遇伊斯坦布尔 第2季(2026)",
+    "纯真博物馆(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "以色列",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "德黑兰 第一季(2020)",
+    "德黑兰 第二季(2022)",
+    "德黑兰 第三季(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "伊朗",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "我的舅舅拿破仑(1976)",
+    "赫扎尔达斯坦(1988)",
+    "Yousuf e Payambar(2008)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "新西兰",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "前任拍档(2026)",
+    "黑暗城市：清扫魔(2024)",
+    "惠灵顿灵异档案 第一季(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "新加坡",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "唐朝诡事录之西行(2024)",
+    "真命小和尚(1997)",
+    "东游记(1998)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "马来西亚",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "我的山与海(2026)",
+    "亚洲怪谈(2018)",
+    "南洋女儿情(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "越南",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "一季繁星(2024)",
+    "爱情账单(2022)",
+    "猩红山(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "菲律宾",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "血刃岛(2026)",
+    "一场西班牙的雨(2023)",
+    "游戏男孩(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "印度尼西亚",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "亚洲怪谈(2018)",
+    "红色区域(2024)",
+    "2018年雅加达亚运会(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "巴西",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "放射危机(2026)",
+    "诡术(2026)",
+    "吾生挚爱(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "墨西哥",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "吉尔莫·德尔·托罗的奇思妙想(2022)",
+    "毒枭：墨西哥 第一季(2018)",
+    "毒枭：墨西哥 第二季(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "阿根廷",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "永航员 第一季(2025)",
+    "我悲伤的逝者们(2026)",
+    "我叫古铁雷斯(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "region",
+   "term": "南非",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "海贼王(真人版) 第二季(2026)",
+    "无敌女子侦探社 第一季(2008)",
+    "海贼王(真人版) 第一季(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2026",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "嫁金钗(2026)",
+    "今天是太阳雨(2026)",
+    "小城良方(2026)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2025",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪奇物语 第五季(2025)",
+    "苦尽柑来遇见你(2025)",
+    "都是她的错(2025)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2024",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "猫头鹰谋杀案(2024)",
+    "女巫阿加莎(2024)",
+    "小巷人家(2024)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2023",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "漫长的季节(2023)",
+    "狂飙(2023)",
+    "莲花楼(2023)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2022",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "喜鹊谋杀案(2022)",
+    "黑暗荣耀(2022)",
+    "怪奇物语 第四季(2022)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2021",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "旺达幻视(2021)",
+    "觉醒年代(2021)",
+    "机智医生生活 第二季(2021)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2020",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "隐秘的角落(2020)",
+    "沉默的真相(2020)",
+    "机智医生生活(2020)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2019",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪奇物语 第三季(2019)",
+    "想见你(2019)",
+    "庆余年 第一季(2019)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2018",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "知否知否应是绿肥红瘦(2018)",
+    "非自然死亡(2018)",
+    "延禧攻略(2018)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2017",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪奇物语 第二季(2017)",
+    "人民的名义(2017)",
+    "机智牢房生活(2017)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2016",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怪奇物语 第一季(2016)",
+    "孤单又灿烂的神：鬼怪(2016)",
+    "伦敦生活 第一季(2016)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2015",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "请回答1988(2015)",
+    "琅琊榜(2015)",
+    "风骚律师 第一季(2015)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2014",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "父母爱情(2014)",
+    "神探夏洛克 第三季(2014)",
+    "真探 第一季(2014)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2013",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "来自星星的你(2013)",
+    "权力的游戏 第三季(2013)",
+    "纸牌屋 第一季(2013)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2012",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "绝命毒师  第五季(2012)",
+    "神探夏洛克  第二季(2012)",
+    "权力的游戏  第二季(2012)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2011",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "后宫·甄嬛传(2011)",
+    "权力的游戏 第一季(2011)",
+    "绝命毒师  第四季(2011)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2010",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "神探夏洛克 第一季(2010)",
+    "绝命毒师  第三季(2010)",
+    "唐顿庄园  第一季(2010)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "2000年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "潜伏(2008)",
+    "大明王朝1566(2007)",
+    "武林外传(2006)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "90年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "还珠格格(1998)",
+    "老友记 第一季(1994)",
+    "还珠格格第二部(1999)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "80年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "西游记(1986)",
+    "红楼梦(1987)",
+    "济公(1985)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "70年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "请讲普通话 第一季(1977)",
+    "杰克奥特曼(1971)",
+    "泰罗奥特曼(1973)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "60年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "奥特曼(1966)",
+    "赛文奥特曼(1967)",
+    "奥特Q(1966)"
+   ]
+  },
+  {
+   "type": "tv",
+   "dimension": "year",
+   "term": "更早",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "迷离时空(原版) 第一季(1959)",
+    "希区柯克剧场  第一季(1955)",
+    "待宰的羔羊(1958)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "剧情",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "空枪(2026)",
+    "黑球(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "喜剧",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "疯狂动物城(2016)",
+    "寻梦环游记(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "爱情",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "泰坦尼克号(1997)",
+    "霸王别姬(1993)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "动作",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "野兽之心(2026)",
+    "蜘蛛侠：崭新之日(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "科幻",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "蜘蛛侠：崭新之日(2026)",
+    "楚门的世界(1998)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "悬疑",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "心迷宫之三重罪(2026)",
+    "盗梦空间(2010)",
+    "疯狂动物城2(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "犯罪",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "空枪(2026)",
+    "肖申克的救赎(1994)",
+    "疾速追杀(2014)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "惊悚",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "野兽之心(2026)",
+    "逃出布迪秀(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "恐怖",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "逃出布迪秀(2026)",
+    "痴迷(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "冒险",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "奥德赛(2026)",
+    "野兽之心(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "奇幻",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "奥德赛(2026)",
+    "逃出布迪秀(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "动画",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "疯狂动物城(2016)",
+    "寻梦环游记(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "战争",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "欢迎来龙餐馆(2026)",
+    "南京照相馆(2025)",
+    "懦夫(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "历史",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "奥德赛(2026)",
+    "南京照相馆(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "传记",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "绿皮书(2018)",
+    "摔跤吧！爸爸(2016)",
+    "当幸福来敲门(2006)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "音乐",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "海上钢琴师(1998)",
+    "寻梦环游记(2017)",
+    "绿皮书(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "歌舞",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "三傻大闹宝莱坞(2009)",
+    "爱乐之城(2016)",
+    "冰雪奇缘(2013)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "武侠",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "杯雪·一战成名(2026)",
+    "镖人：风起大漠(2026)",
+    "倩女幽魂(1987)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "古装",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "杯雪·一战成名(2026)",
+    "敦煌英雄(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "灾难",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "泰坦尼克号(1997)",
+    "流浪地球(2019)",
+    "釜山行(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "西部",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "让子弹飞(2010)",
+    "被解救的姜戈(2012)",
+    "八恶人(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "家庭",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "给阿嬷的情书(2026)",
+    "逃出布迪秀(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "儿童",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "逃出布迪秀(2026)",
+    "欢迎来龙餐馆(2026)",
+    "生日快乐(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "运动",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "珠穆朗玛：云中彼岸(2026)",
+    "功夫女足(2026)",
+    "摔跤吧！爸爸(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "青春",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怦然心动(2010)",
+    "哈利·波特与魔法石(2001)",
+    "你的名字。(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "校园",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "夏洛特烦恼(2015)",
+    "害群之马(2025)",
+    "哈利·波特与火焰杯(2005)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "文艺",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "黑球(2026)",
+    "奥德赛(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "纪录片",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "珠穆朗玛：云中彼岸(2026)",
+    "一切如你所见(2026)",
+    "脸庞，村庄(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "短片",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "心跳声(2022)",
+    "冰雪奇缘：生日惊喜(2015)",
+    "人生七年1(1964)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "黑色幽默",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "疾速追杀(2014)",
+    "楚门的世界(1998)",
+    "我不是药神(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "公路",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "野兽之心(2026)",
+    "绿皮书(2018)",
+    "白日梦想家(2013)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "警匪",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "空枪(2026)",
+    "捕风追影(2025)",
+    "无间道(2002)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "黑帮",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "疾速追杀(2014)",
+    "无间道(2002)",
+    "周处除三害(2023)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "功夫",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "功夫女足(2026)",
+    "杯雪·一战成名(2026)",
+    "功夫(2004)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "谍战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "无间道(2002)",
+    "色，戒(2007)",
+    "惊蛰无声(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "特工",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "疾速追杀(2014)",
+    "色，戒(2007)",
+    "复仇者联盟(2012)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "间谍",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "无间道(2002)",
+    "抓特务(2026)",
+    "色，戒(2007)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "推理",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "神探之痕迹‎(2026)",
+    "捕风追影(2025)",
+    "唐人街探案(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "侦探",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "唐人街探案(2015)",
+    "唐人街探案3(2021)",
+    "唐人街探案2(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "烧脑",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "星际穿越(2014)",
+    "盗梦空间(2010)",
+    "看不见的客人(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "反转",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "你好，李焕英(2021)",
+    "寄生虫(2019)",
+    "看不见的客人(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "心理",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "野兽之心(2026)",
+    "痴迷(2025)",
+    "楚门的世界(1998)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "人性",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "空枪(2026)",
+    "奥德赛(2026)",
+    "欢迎来龙餐馆(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "社会",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "空枪(2026)",
+    "黑球(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "现实",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "空枪(2026)",
+    "欢迎来龙餐馆(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "女性",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "给阿嬷的情书(2026)",
+    "生日快乐(2025)",
+    "我们仅有一次的人生(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "励志",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "野兽之心(2026)",
+    "肖申克的救赎(1994)",
+    "海上钢琴师(1998)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "治愈",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "给阿嬷的情书(2026)",
+    "野兽之心(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "温情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "给阿嬷的情书(2026)",
+    "野兽之心(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "亲情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "给阿嬷的情书(2026)",
+    "野兽之心(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "友情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "给阿嬷的情书(2026)",
+    "生日快乐(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "成长",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "黑球(2026)",
+    "逃出布迪秀(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "浪漫",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "泰坦尼克号(1997)",
+    "这个杀手不太冷(1994)",
+    "怦然心动(2010)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "搞笑",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "疯狂动物城(2016)",
+    "我不是药神(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "魔幻",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "千与千寻(2001)",
+    "哪吒之魔童闹海(2025)",
+    "哈利·波特与魔法石(2001)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "史诗",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "奥德赛(2026)",
+    "泰坦尼克号(1997)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "神话",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "奥德赛(2026)",
+    "哪吒之魔童闹海(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "超级英雄",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蜘蛛侠：崭新之日(2026)",
+    "复仇者联盟4：终局之战(2019)",
+    "蝙蝠侠：黑暗骑士(2008)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "漫威",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蜘蛛侠：崭新之日(2026)",
+    "复仇者联盟4：终局之战(2019)",
+    "小丑(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "DC",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蝙蝠侠：黑暗骑士(2008)",
+    "小丑(2019)",
+    "泥面人(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "迪士尼",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蜘蛛侠：崭新之日(2026)",
+    "疯狂动物城(2016)",
+    "寻梦环游记(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "皮克斯",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "寻梦环游记(2017)",
+    "疯狂动物城2(2025)",
+    "飞屋环游记(2009)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "吉卜力",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "千与千寻(2001)",
+    "哈尔的移动城堡(2004)",
+    "天空之城(1986)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "丧尸",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "釜山行(2016)",
+    "生化危机(2002)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "吸血鬼",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "暮光之城(2008)",
+    "罪人(2025)",
+    "精灵旅社2(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "怪物",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "逃出布迪秀(2026)",
+    "希望(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "灵异",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "哈利·波特与魔法石(2001)",
+    "哈利·波特与密室(2002)",
+    "哈利·波特与阿兹卡班的囚徒(2004)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "外星人",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "挽救计划(2026)",
+    "阿凡达(2009)",
+    "希望(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "机器人",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "超能陆战队(2014)",
+    "钢铁侠(2008)",
+    "机器人之梦(2023)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "人工智能",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "流浪地球2(2023)",
+    "黑客帝国(1999)",
+    "银翼杀手2049(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "太空",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "星际穿越(2014)",
+    "挽救计划(2026)",
+    "流浪地球(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "末日",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后天(2004)",
+    "疯狂的麦克斯4：狂暴之路(2015)",
+    "雪国列车(2013)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "赛博朋克",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "头号玩家(2018)",
+    "黑客帝国(1999)",
+    "银翼杀手2049(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "穿越",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "你的名字。(2016)",
+    "夏洛特烦恼(2015)",
+    "你好，李焕英(2021)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "恐龙",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "逃出绝命街(2026)",
+    "侏罗纪世界(2015)",
+    "你看起来好像很好吃(2010)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "复仇",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "蜘蛛侠：崭新之日(2026)",
+    "疾速追杀(2014)",
+    "看不见的客人(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "监狱",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "肖申克的救赎(1994)",
+    "7号房的礼物(2013)",
+    "绿里奇迹(1999)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "越狱",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "肖申克的救赎(1994)",
+    "金蝉脱壳(2013)",
+    "危情三日(2010)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "律政",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "震耳欲聋(2025)",
+    "控方证人(1957)",
+    "十二怒汉(1957)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "政治",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "欢迎来龙餐馆(2026)",
+    "疯狂动物城(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "宗教",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "周处除三害(2023)",
+    "少年派的奇幻漂流(2012)",
+    "恐怖游轮(2009)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "军事",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "欢迎来龙餐馆(2026)",
+    "美丽人生(1997)",
+    "辛德勒的名单(1993)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "二战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "南京照相馆(2025)",
+    "美丽人生(1997)",
+    "辛德勒的名单(1993)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "抗战",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "南京照相馆(2025)",
+    "八佰(2020)",
+    "鬼子来了(2000)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "赛车",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "飞驰人生3(2026)",
+    "飞驰人生(2019)",
+    "飞驰人生2(2024)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "美食",
+   "count": 24,
+   "more": false,
+   "sample": [
+    "朱莉与朱莉娅(2009)",
+    "巴贝特之宴(1987)",
+    "街角洋果子店(2011)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "旅行",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "白日梦想家(2013)",
+    "蝴蝶效应(2004)",
+    "爱在黎明破晓前(1995)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "艺术",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "海上钢琴师(1998)",
+    "霸王别姬(1993)",
+    "布达佩斯大饭店(2014)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "戏曲",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "戏台(2025)",
+    "南海十三郎(1997)",
+    "椒麻堂会(2021)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "默片",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "机器人之梦(2023)",
+    "摩登时代(1936)",
+    "小羊肖恩(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "cult",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "逃出布迪秀(2026)",
+    "痴迷(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "黑色电影",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "控方证人(1957)",
+    "血迷宫(1984)",
+    "出租车司机(1976)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "独立电影",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "爱在黎明破晓前(1995)",
+    "海边的曼彻斯特(2016)",
+    "都灵之马(2011)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "小说改编",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "挽救计划(2026)",
+    "哈利·波特与魔法石(2001)",
+    "流浪地球(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "真实事件改编",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "空枪(2026)",
+    "欢迎来龙餐馆(2026)",
+    "泰坦尼克号(1997)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "经典",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "肖申克的救赎(1994)",
+    "海上钢琴师(1998)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "都市",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "好东西(2024)",
+    "我，许可(2026)",
+    "重庆森林(1994)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "农村",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "心迷宫(2014)",
+    "小森林 夏秋篇(2014)",
+    "隐入尘烟(2022)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "职场",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "年会不能停！2(2026)",
+    "长安的荔枝(2025)",
+    "年会不能停！(2023)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "医疗",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "我不是药神(2018)",
+    "突如其来(2026)",
+    "夜班(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "给阿嬷的情书(2026)",
+    "神探之痕迹‎(2026)",
+    "绿皮书(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "genre",
+   "term": "宫廷",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "末代皇帝(1987)",
+    "冬狮(1968)",
+    "满城尽带黄金甲(2006)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "华语",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "空枪(2026)",
+    "给阿嬷的情书(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "欧美",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "黑球(2026)",
+    "奥德赛(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "中国大陆",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "八仙！(2026)",
+    "空枪(2026)",
+    "给阿嬷的情书(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "中国香港",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "空枪(2026)",
+    "霸王别姬(1993)",
+    "功夫女足(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "中国台湾",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "周处除三害(2023)",
+    "少年派的奇幻漂流(2012)",
+    "血观音(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "日本",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "千与千寻(2001)",
+    "你的名字。(2016)",
+    "哈尔的移动城堡(2004)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "韩国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "釜山行(2016)",
+    "复活男(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "美国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "奥德赛(2026)",
+    "珠穆朗玛：云中彼岸(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "英国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "蜘蛛侠：崭新之日(2026)",
+    "星际穿越(2014)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "法国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "黑球(2026)",
+    "这个杀手不太冷(1994)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "德国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生化危机：爆发夜(2026)",
+    "蜘蛛侠：崭新之日(2026)",
+    "突如其来(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "意大利",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "海上钢琴师(1998)",
+    "美丽人生(1997)",
+    "末代皇帝(1987)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "西班牙",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "黑球(2026)",
+    "看不见的客人(2016)",
+    "银翼杀手2049(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "印度",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "摔跤吧！爸爸(2016)",
+    "三傻大闹宝莱坞(2009)",
+    "调音师(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "泰国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "初恋这件小事(2010)",
+    "姥姥的外孙(2024)",
+    "天才枪手(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "俄罗斯",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "波斯语课(2020)",
+    "网络谜踪(2018)",
+    "他是龙(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "加拿大",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "野兽之心(2026)",
+    "蜘蛛侠：崭新之日(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "澳大利亚",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "恐怖游轮(2009)",
+    "血战钢锯岭(2016)",
+    "查理和巧克力工厂(2005)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "爱尔兰",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "另一个妈妈(2026)",
+    "绵羊侦探团(2026)",
+    "成为简·奥斯汀(2007)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "瑞典",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "野草莓(1957)",
+    "狗镇(2003)",
+    "牺牲(1986)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "丹麦",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "狗镇(2003)",
+    "狩猎(2012)",
+    "峡湾(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "挪威",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "狗镇(2003)",
+    "峡湾(2026)",
+    "世界上最糟糕的人(2021)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "芬兰",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "狗镇(2003)",
+    "列宁格勒牛仔征美记(1989)",
+    "峡湾(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "荷兰",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "懦夫(2026)",
+    "狗镇(2003)",
+    "敦刻尔克(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "比利时",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "突如其来(2026)",
+    "懦夫(2026)",
+    "吉姆皇后(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "瑞士",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "放牛班的春天(2004)",
+    "海蒂和爷爷(2015)",
+    "爱在黎明破晓前(1995)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "奥地利",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "爱在黎明破晓前(1995)",
+    "罗斯(2026)",
+    "每时每刻(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "波兰",
+   "count": 22,
+   "more": true,
+   "sample": [
+    "钢琴家(2002)",
+    "故土(2026)",
+    "蓝白红三部曲之蓝(1993)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "捷克",
+   "count": 21,
+   "more": true,
+   "sample": [
+    "谍影重重(2002)",
+    "雪国列车(2013)",
+    "乔乔的异想世界(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "匈牙利",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "火星救援(2015)",
+    "都灵之马(2011)",
+    "仲夏夜惊魂(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "葡萄牙",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "蛛楼(2026)",
+    "夏日红炎(2026)",
+    "里斯本的故事(1994)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "希腊",
+   "count": 37,
+   "more": true,
+   "sample": [
+    "爱在午夜降临前(2013)",
+    "永恒和一日(1998)",
+    "龙虾(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "冰岛",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "巅峰猎杀(2026)",
+    "猎人克莱文(2024)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "土耳其",
+   "count": 23,
+   "more": true,
+   "sample": [
+    "007：大破天幕杀机(2012)",
+    "七号房的礼物(2019)",
+    "悲情三角(2022)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "以色列",
+   "count": 20,
+   "more": true,
+   "sample": [
+    "暗处的女儿(2021)",
+    "诉讼(2014)",
+    "是的(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "伊朗",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "何处是我朋友的家(1987)",
+    "小鞋子(1997)",
+    "一次别离(2011)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "新西兰",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "奥德赛(2026)",
+    "野兽之心(2026)",
+    "指环王1：护戒使者(2001)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "新加坡",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "画皮(2008)",
+    "星际特工：千星之城(2017)",
+    "窃听风云(2009)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "马来西亚",
+   "count": 22,
+   "more": true,
+   "sample": [
+    "如果·爱(2005)",
+    "蛊降(2026)",
+    "富都青年(2023)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "越南",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "情人(1992)",
+    "青木瓜之味(1993)",
+    "在浪中(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "菲律宾",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "极品飞车(2014)",
+    "菲律宾女孩(2026)",
+    "布兰卡和弹吉他的人(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "印度尼西亚",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "囚魂之地(2026)",
+    "韩国安格克尔病房(2026)",
+    "突袭(2011)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "巴西",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "请以你的名字呼唤我(2017)",
+    "上帝之城(2002)",
+    "灯塔(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "墨西哥",
+   "count": 22,
+   "more": true,
+   "sample": [
+    "边境杀手(2015)",
+    "地心引力(2013)",
+    "环太平洋：雷霆再起(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "阿根廷",
+   "count": 22,
+   "more": true,
+   "sample": [
+    "荒蛮故事(2014)",
+    "旅行(1992)",
+    "摩托日记(2004)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "region",
+   "term": "南非",
+   "count": 23,
+   "more": true,
+   "sample": [
+    "黑豹(2018)",
+    "生化危机：终章(2016)",
+    "卢旺达饭店(2004)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2026",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "可能的爱(2026)",
+    "八仙！(2026)",
+    "生化危机：爆发夜(2026)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2025",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "生日快乐(2025)",
+    "痴迷(2025)",
+    "哪吒之魔童闹海(2025)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2024",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "好东西(2024)",
+    "抓娃娃(2024)",
+    "热辣滚烫(2024)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2023",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "周处除三害(2023)",
+    "流浪地球2(2023)",
+    "年会不能停！(2023)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2022",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "心跳声(2022)",
+    "消失的她(2022)",
+    "人生大事(2022)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2021",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "你好，李焕英(2021)",
+    "花束般的恋爱(2021)",
+    "唐人街探案3(2021)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2020",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "心灵奇旅(2020)",
+    "八佰(2020)",
+    "真心半解(2020)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2019",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "哪吒之魔童降世(2019)",
+    "流浪地球(2019)",
+    "寄生虫(2019)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2018",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "我不是药神(2018)",
+    "绿皮书(2018)",
+    "西虹市首富(2018)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2017",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "寻梦环游记(2017)",
+    "血观音(2017)",
+    "脸庞，村庄(2017)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2016",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "疯狂动物城(2016)",
+    "摔跤吧！爸爸(2016)",
+    "你的名字。(2016)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2015",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "夏洛特烦恼(2015)",
+    "海蒂和爷爷(2015)",
+    "唐人街探案(2015)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2014",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "疾速追杀(2014)",
+    "星际穿越(2014)",
+    "超能陆战队(2014)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2013",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "冰雪奇缘(2013)",
+    "白日梦想家(2013)",
+    "疯狂原始人(2013)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2012",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "少年派的奇幻漂流(2012)",
+    "复仇者联盟(2012)",
+    "无敌破坏王(2012)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2011",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "触不可及(2011)",
+    "哈利·波特与死亡圣器(下)(2011)",
+    "熔炉(2011)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2010",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "怦然心动(2010)",
+    "盗梦空间(2010)",
+    "让子弹飞(2010)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "2000年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "千与千寻(2001)",
+    "哈利·波特与魔法石(2001)",
+    "三傻大闹宝莱坞(2009)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "90年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "肖申克的救赎(1994)",
+    "海上钢琴师(1998)",
+    "楚门的世界(1998)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "80年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "龙猫(1988)",
+    "天空之城(1986)",
+    "末代皇帝(1987)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "70年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "教父(1972)",
+    "教父2(1974)",
+    "异教徒(1973)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "60年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "音乐之声(1965)",
+    "大闹天宫(1961)",
+    "2001太空漫游(1968)"
+   ]
+  },
+  {
+   "type": "movie",
+   "dimension": "year",
+   "term": "更早",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "野草莓(1957)",
+    "太太万岁(1947)",
+    "控方证人(1957)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "热血",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "死神 千年血战篇 -祸进谭-(2026)",
+    "八仙！(2026)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "冒险",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "八仙！(2026)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "搞笑",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "八仙！(2026)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "恋爱",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "相反的你和我 第二季(2026)",
+    "天气之子(2019)",
+    "相反的你和我(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "校园",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "相反的你和我 第二季(2026)",
+    "头脑特工队2(2024)",
+    "相反的你和我(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "日常",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "相反的你和我(2026)",
+    "玉子爱情故事(2014)",
+    "葬送的芙莉莲(2023)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "治愈",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "罗小黑战记(2011)",
+    "疯狂动物城(2016)",
+    "相反的你和我 第二季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "奇幻",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "谷雨街后巷(2026)",
+    "八仙！(2026)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "科幻",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "机器人总动员(2008)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "悬疑",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "黑猫警长(1984)",
+    "疯狂动物城2(2025)",
+    "夏日重现(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "推理",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "夏日重现(2022)",
+    "未麻的部屋(1997)",
+    "奇巧计程车(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "战斗",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "鬼灭之刃：无限城篇 第一章 猗窝座再袭(2025)",
+    "死神 千年血战篇 -祸进谭-(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "动作",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "超能陆战队(2014)",
+    "死神 千年血战篇 -祸进谭-(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "机甲",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "新世纪福音战士(1995)",
+    "新世纪福音战士剧场版：Air/真心为你(1997)",
+    "灵笼 第一季(2019)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "机器人",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "爱，死亡和机器人 第三季(2022)",
+    "超能陆战队(2014)",
+    "爱，死亡和机器人 第二季(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "运动",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "强风吹拂(2018)",
+    "雄狮少年(2021)",
+    "灌篮高手(1993)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "竞技",
+   "count": 33,
+   "more": true,
+   "sample": [
+    "强风吹拂(2018)",
+    "排球少年！！垃圾场决战(2024)",
+    "排球少年(2014)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "音乐",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "孤独摇滚！(2022)",
+    "寻梦环游记(2017)",
+    "四月是你的谎言(2014)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "偶像",
+   "count": 38,
+   "more": true,
+   "sample": [
+    "迷途之子!!!!!(2023)",
+    "超时空辉夜姬！(2026)",
+    "【我推的孩子】(2023)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "魔法",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "葬送的芙莉莲(2023)",
+    "冰雪奇缘2(2019)",
+    "魔卡少女樱(1998)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "魔幻",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "鬼灭之刃(2019)",
+    "千与千寻(2001)",
+    "魔法少女小圆(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "穿越",
+   "count": 29,
+   "more": false,
+   "sample": [
+    "Re：从零开始的异世界生活 新编集版(2020)",
+    "你的名字。(2016)",
+    "无职转生：到了异世界就拿出真本事(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "历史",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "大理寺日志(2020)",
+    "长安三万里(2023)",
+    "冰海战记 第二季(2023)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "战争",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "冰海战记 第二季(2023)",
+    "萤火虫之墓(1988)",
+    "秦时明月之诸子百家(2010)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "神话",
+   "count": 31,
+   "more": false,
+   "sample": [
+    "雾山五行(2020)",
+    "八仙！(2026)",
+    "奥林匹斯星传(2002)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "武侠",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "虹猫蓝兔七侠传(2006)",
+    "画江湖之天罡(2023)",
+    "凡人修仙传：风起天南(2020)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "玄幻",
+   "count": 32,
+   "more": false,
+   "sample": [
+    "凡人修仙传：风起天南(2020)",
+    "最后的魁拔(2035)",
+    "凡人修仙传：魔道争锋(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "修仙",
+   "count": 31,
+   "more": true,
+   "sample": [
+    "凡人修仙传 年番4(2026)",
+    "仙逆剧场版 神临之战(2025)",
+    "凡人修仙传：重返天南(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "仙侠",
+   "count": 36,
+   "more": true,
+   "sample": [
+    "凡人修仙传：重返天南(2025)",
+    "八仙！(2026)",
+    "剑来 第二季(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "古风",
+   "count": 46,
+   "more": true,
+   "sample": [
+    "凡人修仙传：重返天南(2025)",
+    "白蛇：缘起(2019)",
+    "凡人修仙传：外海风云‎(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "国风",
+   "count": 38,
+   "more": false,
+   "sample": [
+    "中国奇谭(2023)",
+    "大鱼海棠(2016)",
+    "剑来 第一季(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "青春",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "死神 千年血战篇 -祸进谭-(2026)",
+    "你的名字。(2016)",
+    "咒术回战 第三季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "励志",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "葫芦兄弟(1986)",
+    "疯狂动物城(2016)",
+    "鬼灭之刃：柱训练篇(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "成长",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "八仙！(2026)",
+    "死神 千年血战篇 -祸进谭-(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "少女",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "魔卡少女樱(1998)",
+    "玉子爱情故事(2014)",
+    "孤独摇滚！(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "后宫",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "樱兰高校男公关部(2006)",
+    "刀剑神域：序列之争(2017)",
+    "Re：从零开始的异世界生活 新编集版(2020)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "百合",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "孤独摇滚！(2022)",
+    "白蛇2：青蛇劫起(2021)",
+    "魔法少女小圆(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "耽美",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "光逝去的夏天(2025)",
+    "黑执事：豪华客船篇(2017)",
+    "樱兰高校男公关部(2006)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "萌",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "罗小黑战记(2011)",
+    "疯狂动物城(2016)",
+    "间谍过家家 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "喜剧",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "八仙！(2026)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "爱情",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "相反的你和我 第二季(2026)",
+    "你的名字。(2016)",
+    "相反的你和我(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "家庭",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "寻梦环游记(2017)",
+    "哆啦A梦(1979)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "儿童",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "寻梦环游记(2017)",
+    "哆啦A梦(1979)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "少儿",
+   "count": 31,
+   "more": true,
+   "sample": [
+    "虹猫蓝兔七侠传(2006)",
+    "新灰姑娘(2018)",
+    "喜羊羊与灰太狼(2005)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "亲子",
+   "count": 29,
+   "more": false,
+   "sample": [
+    "小猪佩奇 第一季(2004)",
+    "熊出没之雪岭熊风(2015)",
+    "布鲁伊 第一季(2018)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "童话",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "舒克和贝塔(1989)",
+    "疯狂动物城(2016)",
+    "蓝精灵 第一季(1981)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "动物",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "疯狂动物城(2016)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "科普",
+   "count": 37,
+   "more": true,
+   "sample": [
+    "工作细胞(2018)",
+    "经济机器是如何运行的(2008)",
+    "石纪元(2019)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "感人",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第一季(2022)",
+    "千与千寻(2001)",
+    "鬼灭之刃(2019)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "温情",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "罗小黑战记(2011)",
+    "寻梦环游记(2017)",
+    "相反的你和我 第二季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "催泪",
+   "count": 26,
+   "more": false,
+   "sample": [
+    "紫罗兰永恒花园(2018)",
+    "萤火之森(2011)",
+    "我们仍未知道那天所看见的花的名字(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "致郁",
+   "count": 39,
+   "more": true,
+   "sample": [
+    "魔法少女小圆(2011)",
+    "萤火之森(2011)",
+    "四月是你的谎言(2014)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "恐怖",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "爱，死亡和机器人 第一季(2019)",
+    "怪兽屋(2006)",
+    "闹鬼酒店 第二季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "惊悚",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "红辣椒(2006)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "犯罪",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "疯狂动物城2(2025)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "侦探",
+   "count": 42,
+   "more": true,
+   "sample": [
+    "名侦探柯南(1996)",
+    "名侦探柯南：贝克街的亡灵(2002)",
+    "金田一少年事件簿(1997)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "吸血鬼",
+   "count": 25,
+   "more": false,
+   "sample": [
+    "怪鸭历险记 第一季(1988)",
+    "精灵旅社2(2015)",
+    "皇家国教骑士团 OVA(2006)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "妖怪",
+   "count": 33,
+   "more": false,
+   "sample": [
+    "精灵宝可梦超世代(2002)",
+    "精灵宝可梦：超梦的逆袭(1998)",
+    "精灵宝可梦 超级愿望(2010)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "忍者",
+   "count": 32,
+   "more": false,
+   "sample": [
+    "火影忍者(2002)",
+    "火影忍者剧场版：忍者之路(2012)",
+    "火影忍者 疾风传(2007)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "超能力",
+   "count": 37,
+   "more": true,
+   "sample": [
+    "间谍过家家 第一季(2022)",
+    "超人总动员(2004)",
+    "灵能百分百(2016)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "赛博朋克",
+   "count": 51,
+   "more": false,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "白蛇2：青蛇劫起(2021)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "太空",
+   "count": 38,
+   "more": false,
+   "sample": [
+    "星际牛仔(1998)",
+    "地球特派员(2025)",
+    "拾荒者统治(2023)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "游戏",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "无敌破坏王(2012)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "特摄",
+   "count": 22,
+   "more": false,
+   "sample": [
+    "东岛丹三郎想成为假面骑士(2025)",
+    "捷德奥特曼 剧场版：连接吧！心愿！！(2018)",
+    "SSSS.古立特(2018)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "漫画改编",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "咒术回战 第三季(2026)",
+    "超能陆战队(2014)",
+    "相反的你和我 第二季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "游戏改编",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "愤怒的小鸟(2016)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "原创",
+   "count": 48,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "超时空辉夜姬！(2026)",
+    "奇巧计程车(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "泡面番",
+   "count": 51,
+   "more": true,
+   "sample": [
+    "罗小黑战记(2011)",
+    "历史机关(2015)",
+    "齐木楠雄的灾难(2016)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "OVA",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "齐木楠雄的灾难 完结篇(2018)",
+    "名侦探柯南：沉默的十五分钟(2011)",
+    "辉夜大小姐想让我告白：通往大人的阶梯(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "定格动画",
+   "count": 49,
+   "more": true,
+   "sample": [
+    "阿凡提的故事(1981)",
+    "鬼妈妈(2009)",
+    "大盗贼(1989)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "3D",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "凡人修仙传：重返天南(2025)",
+    "疯狂动物城(2016)",
+    "凡人修仙传：外海风云‎(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "迪士尼",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "疯狂动物城(2016)",
+    "假如…？ 第一季(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "皮克斯",
+   "count": 44,
+   "more": true,
+   "sample": [
+    "梦境制片厂(2024)",
+    "寻梦环游记(2017)",
+    "胜与败(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "吉卜力",
+   "count": 37,
+   "more": true,
+   "sample": [
+    "红发少女安妮(1979)",
+    "千与千寻(2001)",
+    "神印王座(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "梦工厂",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "熊出没之熊熊乐园(2017)",
+    "神偷奶爸(2010)",
+    "神印王座(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "漫威",
+   "count": 48,
+   "more": true,
+   "sample": [
+    "假如…？ 第一季(2021)",
+    "蜘蛛侠：平行宇宙(2018)",
+    "蜘蛛侠 第一季(1994)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "DC",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "生物突击队 第一季(2024)",
+    "乐高大电影(2014)",
+    "哈莉·奎茵 第五季(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "高达",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "机动战士高达(1979)",
+    "机动战士高达 闪光的哈萨维 喀耳刻的魔女(2026)",
+    "机动战士高达0080 口袋里的战争(1989)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "柯南",
+   "count": 39,
+   "more": true,
+   "sample": [
+    "名侦探柯南(1996)",
+    "名侦探柯南：贝克街的亡灵(2002)",
+    "魔术快斗(2010)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "哆啦A梦",
+   "count": 35,
+   "more": true,
+   "sample": [
+    "哆啦A梦(1979)",
+    "哆啦A梦：伴我同行(2014)",
+    "哆啦A梦(2005)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "黑色幽默",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "瑞克和莫蒂 第一季(2013)",
+    "小黄人大眼萌(2015)",
+    "奇巧计程车(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "文艺",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "紫罗兰永恒花园(2018)",
+    "你的名字。(2016)",
+    "我们仍未知道那天所看见的花的名字(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "哲学",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "新世纪福音战士(1995)",
+    "心灵奇旅(2020)",
+    "瑞克和莫蒂 第三季(2017)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "genre",
+   "term": "人性",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "爱，死亡和机器人 第一季(2019)",
+    "千与千寻(2001)",
+    "新世纪福音战士(1995)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "华语",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "谷雨街后巷(2026)",
+    "八仙！(2026)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "欧美",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "疯狂动物城(2016)",
+    "猫和老鼠(1965)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "中国大陆",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "谷雨街后巷(2026)",
+    "八仙！(2026)",
+    "罗小黑战记(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "中国香港",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "成龙历险记 第一季(2000)",
+    "麦兜·我和我妈妈(2014)",
+    "成龙历险记 第二季(2001)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "中国台湾",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "神探加杰特 第一季(1983)",
+    "小美人鱼2：重返大海(2000)",
+    "魔豆传奇(2004)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "日本",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "千与千寻(2001)",
+    "死神 千年血战篇 -祸进谭-(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "韩国",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "我独自升级 第二季 -起于暗影-(2025)",
+    "精灵旅社3：疯狂假期(2018)",
+    "我独自升级 第一季(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "美国",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "疯狂动物城(2016)",
+    "猫和老鼠(1965)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "英国",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "怪鸭历险记 第一季(1988)",
+    "小羊肖恩3：怪兽来袭(2026)",
+    "神勇小白鼠(1981)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "法国",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "英雄联盟：双城之战 第一季(2021)",
+    "神偷奶爸(2010)",
+    "英雄联盟：双城之战 第二季(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "德国",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "阿甘妙世界 第一季(2011)",
+    "亚当斯一家(2019)",
+    "如果动物界都是胖子(2012)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "意大利",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "圣斗士星矢(1986)",
+    "沧海琴声(2026)",
+    "人生虚线(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "西班牙",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "倒霉熊 第一季(2006)",
+    "机器人之梦(2023)",
+    "七彩世界(2002)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "印度",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "加菲猫的幸福生活(2008)",
+    "亚当斯一家(2019)",
+    "米奇妙妙屋 第一季(2006)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "泰国",
+   "count": 46,
+   "more": true,
+   "sample": [
+    "我的恶魔(2023)",
+    "小战象(2006)",
+    "会说话的汤姆猫家族(2014)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "俄罗斯",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "螺丝钉 第一季(2010)",
+    "老人与海(1999)",
+    "金属家庭 第一季(2018)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "加拿大",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "蓝眼武士 第一季(2023)",
+    "精灵旅社2(2015)",
+    "神探加杰特 第一季(1983)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "澳大利亚",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "神奇数字马戏团(2023)",
+    "海底总动员(2003)",
+    "怪奇物语：1985故事集 第二季(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "爱尔兰",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "阿甘妙世界 第一季(2011)",
+    "海洋之歌(2014)",
+    "兔子共和国(2018)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "瑞典",
+   "count": 41,
+   "more": true,
+   "sample": [
+    "派特森与芬达猫(1999)",
+    "逃亡(2021)",
+    "Alfons Åberg(1979)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "丹麦",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "安徒生讲故事(2004)",
+    "海洋之歌(2014)",
+    "天才发明家(2003)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "挪威",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "布偶奇遇记 第一季(1983)",
+    "乐高大电影2(2019)",
+    "布偶奇遇记 第二季(1984)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "芬兰",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "姆明一族(1990)",
+    "愤怒的小鸟(2016)",
+    "姆明山谷 第三季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "荷兰",
+   "count": 50,
+   "more": true,
+   "sample": [
+    "巴巴爸爸 第一季(1974)",
+    "父与女(2001)",
+    "姆明一族(1990)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "比利时",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "蓝精灵 第一季(1981)",
+    "吉姆皇后(2026)",
+    "海底小精灵 第一季(1984)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "瑞士",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "企鹅家族第一季(1986)",
+    "西葫芦的生活(2016)",
+    "企鹅家族第二季(1991)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "奥地利",
+   "count": 38,
+   "more": true,
+   "sample": [
+    "会说话的汤姆猫家族(2014)",
+    "狐与粉月(2025)",
+    "玛亚历险记(1975)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "波兰",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "至爱梵高·星空之谜(2017)",
+    "赛博朋克：边缘行者 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "捷克",
+   "count": 32,
+   "more": true,
+   "sample": [
+    "熊猫和小鼹鼠(2016)",
+    "浮士德(1994)",
+    "萤火虫(1995)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "匈牙利",
+   "count": 45,
+   "more": true,
+   "sample": [
+    "机器人米克罗比(1975)",
+    "盗梦特攻队(2018)",
+    "火星上的小老鼠(1976)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "葡萄牙",
+   "count": 36,
+   "more": true,
+   "sample": [
+    "熊猫和卢塔(2019)",
+    "楚门之鼠(2025)",
+    "Amazing Adventures of Lost Socks(2028)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "希腊",
+   "count": 36,
+   "more": true,
+   "sample": [
+    "Dream Tan­go(2029)",
+    "少数人的晚餐(2014)",
+    "Beyond(2029)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "冰岛",
+   "count": 36,
+   "more": false,
+   "sample": [
+    "Ævintýri(2024)",
+    "我破处的那一年(2022)",
+    "Cosmic Quantum Ray(2007)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "土耳其",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "西勒小使者 2069(2024)",
+    "淘气的女孩(2017)",
+    "玩具车小队(2019)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "以色列",
+   "count": 36,
+   "more": true,
+   "sample": [
+    "小飞狗环球旅行记(2007)",
+    "未来学大会(2013)",
+    "扎克和呱呱(2012)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "伊朗",
+   "count": 35,
+   "more": true,
+   "sample": [
+    "一千零一夜(2014)",
+    "狐与粉月(2025)",
+    "Sugarland(2008)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "新西兰",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "Oscar and Friends(1996)",
+    "丁丁历险记(2011)",
+    "熊猫和奇异鸟(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "新加坡",
+   "count": 45,
+   "more": true,
+   "sample": [
+    "加菲猫的幸福生活(2008)",
+    "沧海琴声(2026)",
+    "走遍美国 少儿版(1986)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "马来西亚",
+   "count": 44,
+   "more": true,
+   "sample": [
+    "胜与败(2025)",
+    "更换电池(2013)",
+    "小猪佩奇 迷你剧 第三季(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "越南",
+   "count": 30,
+   "more": false,
+   "sample": [
+    "沃福(2019)",
+    "在浪中(2026)",
+    "鲨鱼哥 第四季(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "菲律宾",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "米奇妙妙屋 第一季(2006)",
+    "星际5555：异星梦系统秘传(2003)",
+    "米老鼠群星会 第一季(2001)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "印度尼西亚",
+   "count": 32,
+   "more": true,
+   "sample": [
+    "龙之力量：龙之力量(2023)",
+    "珍宝(2025)",
+    "比玛S(2020)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "巴西",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "乔雷尔的兄弟(2014)",
+    "男孩与世界(2013)",
+    "O Mundo (Sem Filtro) de Any Malu(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "墨西哥",
+   "count": 44,
+   "more": true,
+   "sample": [
+    "反派本色(2017)",
+    "海绵宝宝：营救大冒险(2020)",
+    "笑星和他的朋友们(1979)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "阿根廷",
+   "count": 41,
+   "more": true,
+   "sample": [
+    "克里安频率(2017)",
+    "雇佣人生(2008)",
+    "事情是这样的(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "region",
+   "term": "南非",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "面条和面包 第一季(2020)",
+    "赞鸟历险记(2012)",
+    "熊猫和小跳羚(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2026",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第二季(2026)",
+    "八仙！(2026)",
+    "谷雨街后巷(2026)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2025",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "斗破苍穹 年番4(2025)",
+    "哪吒之魔童闹海(2025)",
+    "凡人修仙传：重返天南(2025)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2024",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "鬼灭之刃：柱训练篇(2024)",
+    "头脑特工队2(2024)",
+    "英雄联盟：双城之战 第二季(2024)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2023",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "葬送的芙莉莲(2023)",
+    "长安三万里(2023)",
+    "咒术回战 第二季(2023)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2022",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "赛博朋克：边缘行者 第一季(2022)",
+    "铃芽之旅(2022)",
+    "间谍过家家 第一季(2022)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2021",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "鬼灭之刃：游郭篇(2021)",
+    "雄狮少年(2021)",
+    "鬼灭之刃：无限列车篇(2021)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2020",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "咒术回战 第一季(2020)",
+    "心灵奇旅(2020)",
+    "凡人修仙传：风起天南(2020)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2019",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "鬼灭之刃(2019)",
+    "哪吒之魔童降世(2019)",
+    "爱，死亡和机器人 第一季(2019)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2018",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "强风吹拂(2018)",
+    "蜘蛛侠：平行宇宙(2018)",
+    "JOJO的奇妙冒险 黄金之风(2018)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2017",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "瑞克和莫蒂 第三季(2017)",
+    "寻梦环游记(2017)",
+    "一人之下 第二季(2017)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2016",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "灵能百分百(2016)",
+    "疯狂动物城(2016)",
+    "JOJO的奇妙冒险 不灭钻石(2016)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2015",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "JOJO的奇妙冒险 星尘斗士 埃及篇(2015)",
+    "头脑特工队(2015)",
+    "排球少年 第二季(2015)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2014",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "排球少年(2014)",
+    "超能陆战队(2014)",
+    "JOJO的奇妙冒险 星尘斗士(2014)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2013",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "瑞克和莫蒂 第一季(2013)",
+    "冰雪奇缘(2013)",
+    "我的青春恋爱物语果然有问题(2013)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2012",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "JOJO的奇妙冒险(2012)",
+    "无敌破坏王(2012)",
+    "冰果(2012)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2011",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "罗小黑战记(2011)",
+    "萤火之森(2011)",
+    "魔法少女小圆(2011)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2010",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "四叠半神话大系(2010)",
+    "神偷奶爸(2010)",
+    "果宝特攻(2010)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "2000年代",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "虹猫蓝兔七侠传(2006)",
+    "千与千寻(2001)",
+    "钢之炼金术师FA(2009)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "90年代",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "新世纪福音战士(1995)",
+    "狮子王(1994)",
+    "灌篮高手(1993)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "80年代",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "葫芦兄弟(1986)",
+    "龙猫(1988)",
+    "黑猫警长(1984)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "70年代",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "哆啦A梦(1979)",
+    "哪吒闹海(1979)",
+    "聪明的一休(1975)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "60年代",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "猫和老鼠(1965)",
+    "大闹天宫(1961)",
+    "大力水手 第一季(1960)"
+   ]
+  },
+  {
+   "type": "anime",
+   "dimension": "year",
+   "term": "更早",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "鼹鼠的故事(1957)",
+    "白雪公主和七个小矮人(1937)",
+    "啄木鸟伍迪(1957)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "真人秀",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第四季(2026)",
+    "花儿与少年 第八季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "脱口秀",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "脱口秀和Ta的朋友们 第三季(2026)",
+    "喜剧之王单口季 第三季(2026)",
+    "喜人奇妙夜(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "音乐",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "披荆斩棘2026(2026)",
+    "乘风2026(2026)",
+    "歌手2026(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "喜剧",
+   "count": 21,
+   "more": true,
+   "sample": [
+    "喜剧之王单口季 第三季(2026)",
+    "救援高手 第一季(2013)",
+    "喜人奇妙夜(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "搞笑",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "现在就出发 第二季(2024)",
+    "花儿与少年·丝路季(2023)",
+    "喜人奇妙夜(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "旅行",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "花儿与少年 第八季(2026)",
+    "现在就出发 第三季(2025)",
+    "现在就出发 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "竞技",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "喜人奇妙夜2(2025)",
+    "喜人奇妙夜(2024)",
+    "海妖的呼唤：火之岛生存战(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "选秀",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "乘风2026(2026)",
+    "乘风破浪的姐姐 第一季(2020)",
+    "创造101(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "访谈",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "圆桌派 第八季(2025)",
+    "陈鲁豫·慢谈(2025)",
+    "圆桌派 第七季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "谈话",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "圆桌派 第八季(2025)",
+    "陈鲁豫·慢谈(2025)",
+    "圆桌派 第七季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "舞蹈",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "披荆斩棘 第四季(2024)",
+    "舞蹈风暴 第一季(2019)",
+    "这！就是街舞 第一季(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "街舞",
+   "count": 17,
+   "more": false,
+   "sample": [
+    "舞蹈风暴 第一季(2019)",
+    "这！就是街舞 第一季(2018)",
+    "这！就是街舞 第二季(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "说唱",
+   "count": 20,
+   "more": false,
+   "sample": [
+    "主咖和Ta的朋友们(2026)",
+    "说唱新世代(2020)",
+    "中国说唱巅峰对决(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "乐队",
+   "count": 13,
+   "more": false,
+   "sample": [
+    "乐队的夏天 第一季(2019)",
+    "乐队的夏天 第二季(2020)",
+    "乐队的夏天 第三季(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "嘻哈",
+   "count": 11,
+   "more": false,
+   "sample": [
+    "喜剧之王单口季 第二季(2025)",
+    "说唱新世代(2020)",
+    "中国说唱巅峰对决(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "亲子",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "爸爸去哪儿 第一季(2013)",
+    "爸爸去哪儿 第三季(2015)",
+    "爸爸去哪儿 第二季(2014)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "萌娃",
+   "count": 15,
+   "more": false,
+   "sample": [
+    "爸爸去哪儿 第四季(2016)",
+    "放开我北鼻 第二季(2017)",
+    "爸爸当家(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "恋爱",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "换乘恋爱 第二季(2022)",
+    "恋爱兄妹(2024)",
+    "换乘恋爱 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "情感",
+   "count": 14,
+   "more": false,
+   "sample": [
+    "后会友期(2026)",
+    "再见爱人 第四季(2024)",
+    "再见爱人 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "职场",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "女子推理社 第一季(2023)",
+    "令人心动的offer 第一季(2019)",
+    "令人心动的offer 第七季(2025)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "文化",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "圆桌派 第八季(2025)",
+    "陈鲁豫·慢谈(2025)",
+    "典籍里的中国 第二季(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "生活",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "花儿与少年·同心季(2025)",
+    "再见爱人 第四季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "游戏",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "现在就出发 第三季(2025)",
+    "现在就出发 第二季(2024)",
+    "奔跑吧兄弟 第一季(2014)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "推理",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "女子推理社 第二季(2024)",
+    "女子推理社 第一季(2023)",
+    "思想验证区域：The Community(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "悬疑",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "明星大侦探 第一季(2016)",
+    "明星大侦探 第二季(2017)",
+    "大侦探 第八季(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "密室",
+   "count": 24,
+   "more": false,
+   "sample": [
+    "大逃脱 第一季(2018)",
+    "密室大逃脱 第一季(2019)",
+    "密室大逃脱 第二季(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "生存",
+   "count": 17,
+   "more": false,
+   "sample": [
+    "思想验证区域：The Community(2024)",
+    "海妖的呼唤：火之岛生存战(2023)",
+    "魔鬼的计谋(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "偶像",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "偶像练习生(2018)",
+    "青春有你 第二季(2020)",
+    "创造营2020(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "明星",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "明星大侦探 第六季(2020)",
+    "台风少年行(2019)",
+    "青春环游记 第一季(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "时尚",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "麻浦帅小伙(2020)",
+    "粉雄救兵 第一季(2018)",
+    "潮流合伙人(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "运动",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "奔跑吧兄弟 第一季(2014)",
+    "海妖的呼唤：火之岛生存战(2023)",
+    "体能之巅：百人大挑战：墨西哥篇(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "体育",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "海妖的呼唤：火之岛生存战(2023)",
+    "体能之巅：百人大挑战(2023)",
+    "体能之巅3: 亚洲大挑战(2025)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "篮球",
+   "count": 11,
+   "more": false,
+   "sample": [
+    "这！就是灌篮 第二季(2019)",
+    "这！就是灌篮 第一季(2018)",
+    "NBA最前线(2013)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "足球",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "主咖和Ta的朋友们(2026)",
+    "2026年国际足联美国加拿大墨西哥世界杯(2026)",
+    "2018年俄罗斯世界杯(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "汽车",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "大世界之旅 第一季(2016)",
+    "大世界之旅 第二季(2017)",
+    "大世界之旅 第五季(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "辩论",
+   "count": 20,
+   "more": false,
+   "sample": [
+    "奇葩说 第一季(2014)",
+    "奇葩说 第六季(2019)",
+    "奇葩说 第五季(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "演讲",
+   "count": 17,
+   "more": false,
+   "sample": [
+    "一席(2012)",
+    "开讲啦(2012)",
+    "对白 第二季(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "表演",
+   "count": 16,
+   "more": false,
+   "sample": [
+    "幻乐之城(2018)",
+    "演员的诞生(2017)",
+    "我就是演员(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "演技",
+   "count": 17,
+   "more": false,
+   "sample": [
+    "幻乐之城(2018)",
+    "演员的诞生(2017)",
+    "我就是演员(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "相声",
+   "count": 13,
+   "more": false,
+   "sample": [
+    "德云斗笑社(2020)",
+    "相声有新人(2018)",
+    "斗笑社 第三季(2025)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "文学",
+   "count": 28,
+   "more": false,
+   "sample": [
+    "我在岛屿读书(2022)",
+    "宗师列传·唐宋八大家(2023)",
+    "朗读者 第一季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "诗词",
+   "count": 22,
+   "more": false,
+   "sample": [
+    "经典咏流传 第三季(2020)",
+    "中国诗词大会 第一季(2016)",
+    "中国诗词大会 第三季(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "传统文化",
+   "count": 12,
+   "more": false,
+   "sample": [
+    "少林英雄(2015)",
+    "绿水青山看中国(2017)",
+    "瑜你台上见(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "纪实",
+   "count": 26,
+   "more": false,
+   "sample": [
+    "种地吧(2023)",
+    "我在岛屿读书(2022)",
+    "十三邀 第八季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "历史",
+   "count": 22,
+   "more": true,
+   "sample": [
+    "百家讲坛：郦波-风雨张居正(2009)",
+    "典籍里的中国 第二季(2022)",
+    "国家宝藏 第一季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "艺术",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "舞蹈风暴 第一季(2019)",
+    "国家宝藏 第一季(2017)",
+    "舞蹈风暴 第二季(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "教育",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "爸爸去哪儿 第一季(2013)",
+    "爸爸去哪儿 第二季(2014)",
+    "一年级·小学季(2014)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "歌舞",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "舞蹈新风暴(2026)",
+    "舞蹈风暴 第一季(2019)",
+    "披荆斩棘 第三季(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "家庭",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "再见爱人 第四季(2024)",
+    "再见爱人 第一季(2021)",
+    "爸爸去哪儿 第一季(2013)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "爱情",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "心动的信号 第九季(2026)",
+    "再见爱人 第一季(2021)",
+    "半熟恋人 第五季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "冒险",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "思想验证区域 第二季(2026)",
+    "密室大逃脱 第八季(2026)",
+    "极限挑战 第二季(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "探险",
+   "count": 18,
+   "more": false,
+   "sample": [
+    "七十二层奇楼(2017)",
+    "荒野求生  第二季(2007)",
+    "美丽的秋天村庄 Michuli(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "自然",
+   "count": 26,
+   "more": false,
+   "sample": [
+    "向往的生活 第二季(2018)",
+    "向往的生活 第三季(2019)",
+    "亲爱的·客栈 第一季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "宠物",
+   "count": 14,
+   "more": false,
+   "sample": [
+    "宠物医院(2019)",
+    "萌宠小大人(2017)",
+    "奈娃家族的上学日记2(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "励志",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "女子推理社 第二季(2024)",
+    "极限挑战 第一季(2015)",
+    "极限挑战 第二季(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "治愈",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第三季(2025)",
+    "现在就出发 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "成长",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "披荆斩棘2026(2026)",
+    "现在就出发 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "青春",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第三季(2025)",
+    "现在就出发 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "校园",
+   "count": 10,
+   "more": false,
+   "sample": [
+    "一年级·小学季(2014)",
+    "一年级·大学季(2015)",
+    "我去上学啦 第二季(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "社会",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "思想验证区域 第二季(2026)",
+    "女子推理社 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "女性",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "花儿与少年·丝路季(2023)",
+    "女子推理社 第二季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "genre",
+   "term": "军事",
+   "count": 12,
+   "more": false,
+   "sample": [
+    "真正男子汉 第一季(2015)",
+    "真正男子汉 第二季(2016)",
+    "钢铁部队 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "华语",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第四季(2026)",
+    "花儿与少年 第八季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "欧美",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "救援高手 第一季(2013)",
+    "救援高手 第二季(2014)",
+    "救援高手 第四季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "中国大陆",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第四季(2026)",
+    "花儿与少年 第八季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "中国香港",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "试真D唷(2026)",
+    "锵锵三人行(1998)",
+    "声生不息·大湾区季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "中国台湾",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "也好吃(2026)",
+    "康熙来了(2004)",
+    "边走边唱的女子(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "日本",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "不良一族寻爱记 第二季(2026)",
+    "爆笑悲剧王：笑着笑着就哭了 第4季(2026)",
+    "爱之乡 第三季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "韩国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "思想验证区域 第二季(2026)",
+    "街头餐厅斗士(2026)",
+    "宇宙年糕店(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "美国",
+   "count": 23,
+   "more": true,
+   "sample": [
+    "救援高手 第一季(2013)",
+    "救援高手 第二季(2014)",
+    "救援高手 第四季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "英国",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "叛徒：英版（名人版） 第二季(2026)",
+    "背叛者 第四季(2026)",
+    "最后笑出声的人(英国版)：万圣节特辑 第一季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "法国",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "城市之间2005(2005)",
+    "2016法国欧洲杯(2016)",
+    "巴黎地产家族：热门豪宅 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "德国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "2006年国际足联德国世界杯(2006)",
+    "2024年欧洲足球锦标赛(2024)",
+    "白马公主 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "意大利",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "体能之巅：百人大挑战：意大利篇(2026)",
+    "叛徒：意大利版 第二季(2026)",
+    "世界一级方程式锦标赛 第七十五季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "西班牙",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "2017-2018赛季 西班牙足球甲级联赛(2017)",
+    "世界一级方程式锦标赛 第七十五季(2024)",
+    "欲罢不能：西班牙篇(2025)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "印度",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "印度媒婆 第一季(2020)",
+    "璀璨迪拜：印度名流(2026)",
+    "盛大婚礼 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "泰国",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "UNSEEN通灵者之战(2026)",
+    "Love (X)(2025)",
+    "恋上你的床(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "俄罗斯",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "2018年俄罗斯世界杯(2018)",
+    "通灵之战 第十五季(2014)",
+    "通灵之战 第一季(2007)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "加拿大",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "2026年国际足联美国加拿大墨西哥世界杯(2026)",
+    "极速前进：加拿大版 第四季(2016)",
+    "极速前进：加拿大版 第七季(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "澳大利亚",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "自闭也有爱 第一季(2019)",
+    "叛徒：澳大利亚版 第一季(2022)",
+    "乐高大师(澳洲版) 第二季(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "爱尔兰",
+   "count": 23,
+   "more": false,
+   "sample": [
+    "叛徒：爱尔兰版 第二季(2026)",
+    "叛徒：爱尔兰版 第一季(2025)",
+    "龙穴之创业投资(爱尔兰版) 第一季(2009)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "瑞典",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "2016年欧洲歌唱大赛(2016)",
+    "爱情盲选：瑞典篇(2024)",
+    "2024年欧洲歌唱大赛(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "丹麦",
+   "count": 14,
+   "more": false,
+   "sample": [
+    "乐高大师：丹麦版(2021)",
+    "今日鲜肉(2008)",
+    "潜行追踪(丹麦版)(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "挪威",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "北欧好煮意(2003)",
+    "极速前进：挪威版 第一季(2012)",
+    "Kongen Befaler(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "芬兰",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "乐高大师：芬兰版(2023)",
+    "乐高大师：芬兰版(2022)",
+    "周六夜现场（芬兰版）(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "荷兰",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "爱情盲选：荷兰篇(2026)",
+    "世界一级方程式锦标赛 第七十五季(2024)",
+    "乐高大师（荷兰语） 第二季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "比利时",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "世界一级方程式锦标赛 第七十五季(2024)",
+    "世界一级方程式锦标赛 第七十四季(2023)",
+    "蓝色疗愈室：爱的心灵战场(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "瑞士",
+   "count": 16,
+   "more": false,
+   "sample": [
+    "欧洲冠军联赛17/18赛季(2017)",
+    "2019-2020赛季 欧洲足球冠军联赛(2019)",
+    "2013-2014赛季 欧洲足球冠军联赛(2013)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "奥地利",
+   "count": 8,
+   "more": false,
+   "sample": [
+    "2015年欧洲歌唱大赛(2015)",
+    "2018-2019赛季欧洲联赛(2018)",
+    "2017-2018赛季欧洲联赛(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "波兰",
+   "count": 21,
+   "more": false,
+   "sample": [
+    "乐高大师：波兰版 第1季(2020)",
+    "爱情盲选：波兰篇 第1季(2026)",
+    "真爱不说谎：波兰篇(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "捷克",
+   "count": 15,
+   "more": false,
+   "sample": [
+    "Asia Express(2026)",
+    "2018-2019赛季欧洲联赛(2018)",
+    "2017-2018赛季欧洲联赛(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "匈牙利",
+   "count": 20,
+   "more": false,
+   "sample": [
+    "世界一级方程式锦标赛 第七十五季(2024)",
+    "世界一级方程式锦标赛 第七十四季(2023)",
+    "前任沙滩见(匈牙利版)(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "葡萄牙",
+   "count": 12,
+   "more": false,
+   "sample": [
+    "2018年欧洲歌唱大赛(2018)",
+    "2018-2019赛季欧洲联赛(2018)",
+    "18/19欧国联决赛阶段(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "希腊",
+   "count": 7,
+   "more": false,
+   "sample": [
+    "2010-2011赛季欧洲联赛(2010)",
+    "红圈来了(2016)",
+    "叛徒：希腊版(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "土耳其",
+   "count": 23,
+   "more": false,
+   "sample": [
+    "2010-2011赛季欧洲联赛(2010)",
+    "土耳其.伊斯坦布尔美食(2016)",
+    "叛徒：土耳其版(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "以色列",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "2019年欧洲歌唱大赛(2019)",
+    "Hayom BaLayla(2015)",
+    "环球小姐2021(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "新西兰",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "新西兰版幸存者(2017)",
+    "鲁保罗变装皇后秀 澳洲&新西兰版 第四季(2024)",
+    "野味厨房(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "新加坡",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "世界一级方程式锦标赛 第七十五季(2024)",
+    "2001年国际大专辩论会(2001)",
+    "极速前进：亚洲版 第一季(2006)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "马来西亚",
+   "count": 23,
+   "more": false,
+   "sample": [
+    "超能力学院(2025)",
+    "歌手2026 • 马来西亚篇(2026)",
+    "阿贤拜师(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "菲律宾",
+   "count": 20,
+   "more": false,
+   "sample": [
+    "爱情火花营 第二季(2024)",
+    "莱雅海滨幻想(2023)",
+    "爱情火花营(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "巴西",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "2021年巴西美洲杯(2021)",
+    "粉雄救兵：巴西篇(2022)",
+    "2019年巴西美洲杯(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "墨西哥",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "体能之巅：百人大挑战：墨西哥篇(2026)",
+    "2026年国际足联美国加拿大墨西哥世界杯(2026)",
+    "世界一级方程式锦标赛 第七十五季(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "阿根廷",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "2011年阿根廷美洲杯(2011)",
+    "2018年国际足联世界俱乐部杯(2018)",
+    "爱情盲选：阿根廷篇(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "region",
+   "term": "南非",
+   "count": 21,
+   "more": false,
+   "sample": [
+    "星级婚约：阿内莱与布扎(2026)",
+    "2009年国际足联南非联合会杯(2009)",
+    "南非版幸存者：菲律宾(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2026",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "后会友期(2026)",
+    "现在就出发 第四季(2026)",
+    "花儿与少年 第八季(2026)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2025",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "现在就出发 第三季(2025)",
+    "喜人奇妙夜2(2025)",
+    "花儿与少年·同心季(2025)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2024",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "现在就出发 第二季(2024)",
+    "女子推理社 第二季(2024)",
+    "思想验证区域：The Community(2024)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2023",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "花儿与少年·丝路季(2023)",
+    "女子推理社 第一季(2023)",
+    "现在就出发 第一季(2023)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2022",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "一年一度喜剧大赛 第二季(2022)",
+    "骑有此理 第一季(2022)",
+    "你好，星期六(2022)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2021",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "一年一度喜剧大赛(2021)",
+    "再见爱人 第一季(2021)",
+    "女高推理班 第一季(2021)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2020",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "乘风破浪的姐姐 第一季(2020)",
+    "明星大侦探 第六季(2020)",
+    "密室大逃脱 第二季(2020)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2019",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "明星大侦探 第五季(2019)",
+    "我们的歌 第一季(2019)",
+    "令人心动的offer 第一季(2019)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2018",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "明星大侦探 第四季(2018)",
+    "极限挑战 第四季(2018)",
+    "奔跑吧 第二季(2018)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2017",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "明星大侦探 第二季(2017)",
+    "极限挑战 第三季(2017)",
+    "明星大侦探 第三季(2017)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2016",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "极限挑战 第二季(2016)",
+    "明星大侦探 第一季(2016)",
+    "奔跑吧兄弟 第四季(2016)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2015",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "极限挑战 第一季(2015)",
+    "花儿与少年 第二季(2015)",
+    "奔跑吧兄弟 第二季(2015)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2014",
+   "count": 28,
+   "more": true,
+   "sample": [
+    "奔跑吧兄弟 第一季(2014)",
+    "救援高手 第二季(2014)",
+    "花儿与少年 第一季(2014)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2013",
+   "count": 27,
+   "more": true,
+   "sample": [
+    "救援高手 第一季(2013)",
+    "爸爸去哪儿 第一季(2013)",
+    "我是歌手 第一季(2013)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2012",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "百变大咖秀 第一季(2012)",
+    "中国好声音 第一季(2012)",
+    "今晚80后脱口秀(2012)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2011",
+   "count": 23,
+   "more": true,
+   "sample": [
+    "年代秀(2011)",
+    "特效化妆师大对决 第一季(2011)",
+    "荒野求生 第七季(2011)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2010",
+   "count": 21,
+   "more": true,
+   "sample": [
+    "Running Man(2010)",
+    "男生女生向前冲(2010)",
+    "非诚勿扰(2010)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "2000年代",
+   "count": 25,
+   "more": true,
+   "sample": [
+    "百家讲坛：郦波-风雨张居正(2009)",
+    "天天向上(2008)",
+    "康熙来了(2004)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "90年代",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "快乐大本营(1997)",
+    "锵锵三人行(1998)",
+    "大风车(1995)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "80年代",
+   "count": 26,
+   "more": true,
+   "sample": [
+    "今夜不设防(1989)",
+    "七巧板(1984)",
+    "1986年度十大劲歌金曲颁奖典礼(1987)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "70年代",
+   "count": 30,
+   "more": true,
+   "sample": [
+    "周六夜现场 第一季(1975)",
+    "彻子的房间(1976)",
+    "早安美国(1975)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "60年代",
+   "count": 11,
+   "more": false,
+   "sample": [
+    "英伦大学知识对抗赛(1962)",
+    "欢乐今宵(1967)",
+    "大卫·弗罗斯特秀(1969)"
+   ]
+  },
+  {
+   "type": "variety",
+   "dimension": "year",
+   "term": "更早",
+   "count": 8,
+   "more": false,
+   "sample": [
+    "In Melbourne Tonight(1957)",
+    "动物，蔬菜，矿石？(1952)",
+    "鲍勃·霍普雪佛兰秀(1955)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "自然",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "生命奇观2(2026)",
+    "徒手攀岩(2018)",
+    "生命奇观(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "人文",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "河西走廊(2015)",
+    "脸庞，村庄(2017)",
+    "人生一串 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "社会",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "扯淡地球史(2022)",
+    "一切如你所见(2026)",
+    "彩排 第一季(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "历史",
+   "count": 52,
+   "more": true,
+   "sample": [
+    "不止考古·我与三星堆(2022)",
+    "马斯克(2026)",
+    "玄奘之路(2011)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "美食",
+   "count": 31,
+   "more": true,
+   "sample": [
+    "人生一串 第一季(2018)",
+    "完全复原·满汉全席(2002)",
+    "人生一串 第三季(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "饮食",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "舌尖上的中国 第一季(2012)",
+    "寿司之神(2011)",
+    "人生一串 第三季(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "地理",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "河西走廊(2015)",
+    "徒手攀岩(2018)",
+    "蓝色星球 第二季(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "科学",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "蓝色星球 第一季(2001)",
+    "火山挚恋(2022)",
+    "地球脉动 第一季(2006)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "宇宙",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "七个世界，一个星球(2019)",
+    "窗外是蓝星(2025)",
+    "太阳系 第一季(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "天文",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "太阳系 第一季(2024)",
+    "阿波罗11号(2019)",
+    "宇宙时空之旅(2014)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "太空",
+   "count": 44,
+   "more": false,
+   "sample": [
+    "宇宙时空之旅(2014)",
+    "窗外是蓝星(2025)",
+    "宇宙(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "动物",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "生命奇观(2023)",
+    "重返·狼群(2017)",
+    "看见豹之地·寻护者第二季(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "植物",
+   "count": 43,
+   "more": true,
+   "sample": [
+    "绿色星球(2022)",
+    "最大的小小农场(2018)",
+    "水果传 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "海洋",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "蓝色星球 第二季(2017)",
+    "海洋(2009)",
+    "蓝色星球 第一季(2001)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "生态",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "蓝色星球 第二季(2017)",
+    "攀登梅鲁峰(2015)",
+    "蓝色星球 第一季(2001)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "环保",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "蓝色星球 第二季(2017)",
+    "海豚湾(2009)",
+    "蓝色星球 第一季(2001)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "艺术",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "但是还有书籍(2019)",
+    "脸庞，村庄(2017)",
+    "但是还有书籍 第二季(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "音乐",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "泰勒·斯威夫特：时代巡回演唱会，一个时代的结束(2025)",
+    "寻找小糖人(2012)",
+    "披头士乐队：回归(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "摇滚",
+   "count": 41,
+   "more": true,
+   "sample": [
+    "披头士精选辑(1995)",
+    "寻找小糖人(2012)",
+    "反叛者(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "舞蹈",
+   "count": 39,
+   "more": true,
+   "sample": [
+    "这！就是舞者(2018)",
+    "女人世界(2024)",
+    "决战芭蕾之巅 第一季(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "传记",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "马修·派瑞：老友最后的传记(2026)",
+    "火山挚恋(2022)",
+    "辛普森：美国制造(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "人物",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "苏东坡(2017)",
+    "大法官金斯伯格(2018)",
+    "辛普森：美国制造(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "运动",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "纳达尔(2026)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "探索新境(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "体育",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "辛普森：美国制造(2016)",
+    "徒手攀岩(2018)",
+    "若泽·穆里尼奥：特立之道(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "足球",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "若泽·穆里尼奥：特立之道(2026)",
+    "C罗(2015)",
+    "美丽的执念(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "军事",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "二次大战启示录(2009)",
+    "1950他们正年轻(2021)",
+    "复活的军团(2004)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "战争",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "从秦始皇到汉武帝(2016)",
+    "他们已不再变老(2018)",
+    "二次大战启示录(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "二战",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "二次大战启示录(2009)",
+    "二十二(2015)",
+    "伟大的卫国战争 第一季(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "考古",
+   "count": 53,
+   "more": true,
+   "sample": [
+    "不止考古·我与三星堆(2022)",
+    "忘梦洞(2010)",
+    "海昏侯(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "文物",
+   "count": 24,
+   "more": false,
+   "sample": [
+    "我在故宫修文物(2016)",
+    "我在故宫修文物(2016)",
+    "不止考古·我与三星堆(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "博物馆",
+   "count": 30,
+   "more": false,
+   "sample": [
+    "如果国宝会说话 第一季(2018)",
+    "爱丁保罗夫爷爷的博物馆奇妙夜(2014)",
+    "如果国宝会说话 第二季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "建筑",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "梁思成 林徽因(2010)",
+    "林璎：强烈而清晰的洞察力(1995)",
+    "大明宫(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "设计",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "观看之道(1972)",
+    "麦昆(2018)",
+    "艺术的力量(2006)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "摄影",
+   "count": 42,
+   "more": true,
+   "sample": [
+    "观看之道(1972)",
+    "脸庞，村庄(2017)",
+    "摄影师(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "旅行",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "航拍中国 第一季(2017)",
+    "脸庞，村庄(2017)",
+    "第三极(2015)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "探险",
+   "count": 42,
+   "more": false,
+   "sample": [
+    "探索新境 第二季(2025)",
+    "徒手攀岩(2018)",
+    "探索新境(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "犯罪",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "被夺走的女儿：娜塔莉·霍洛威失踪案(2026)",
+    "一切如你所见(2026)",
+    "辛普森：美国制造(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "医疗",
+   "count": 50,
+   "more": true,
+   "sample": [
+    "人间世 第一季(2016)",
+    "滴血成金：硅谷血检大骗局(2019)",
+    "闪闪的儿科医生 第三季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "医学",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "人间世 第一季(2016)",
+    "生门(2016)",
+    "闪闪的儿科医生 第三季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "健康",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "克里斯·海姆斯沃斯：挑战极限 第一季(2022)",
+    "一部关于糖的电影(2014)",
+    "人体奥秘(2011)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "教育",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "闪闪的儿科医生(2023)",
+    "人生七年2(1970)",
+    "人生第一次(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "经济",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "无节制消费的元凶(2014)",
+    "美国工厂(2019)",
+    "这货哪来的(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "金融",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "无节制消费的元凶(2014)",
+    "监守自盗(2010)",
+    "为什么贫穷？(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "商业",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "无节制消费的元凶(2014)",
+    "滴血成金：硅谷血检大骗局(2019)",
+    "这货哪来的(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "政治",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "辛普森：美国制造(2016)",
+    "附带伤亡(2026)",
+    "中国通史(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "科技",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "走进比尔：解码比尔·盖茨(2019)",
+    "滴血成金：硅谷血检大骗局(2019)",
+    "手术两百年(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "文化",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "河西走廊(2015)",
+    "我在故宫修文物(2016)",
+    "人生一串 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "文学",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "但是还有书籍 第三季(2025)",
+    "一直游到海水变蓝(2020)",
+    "但是还有书籍(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "生活",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "彩排 第一季(2022)",
+    "脸庞，村庄(2017)",
+    "人生一串 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "纪实",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "河西走廊(2015)",
+    "徒手攀岩(2018)",
+    "人生一串 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "真实",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "守护解放西(2019)",
+    "一切如你所见(2026)",
+    "闪闪的儿科医生(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "宗教",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "南洋大宝荐：泰国篇(2024)",
+    "天地玄黄(1992)",
+    "玄奘之路(2011)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "哲学",
+   "count": 45,
+   "more": true,
+   "sample": [
+    "宇宙时空之旅(2014)",
+    "人类(2015)",
+    "观看之道(1972)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "心理",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "彩排 第一季(2022)",
+    "人生七年9(2019)",
+    "彩排 第二季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "城市",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "奇妙之城(2021)",
+    "持摄影机的人(1929)",
+    "最后的棒棒(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "农村",
+   "count": 34,
+   "more": false,
+   "sample": [
+    "了不起的村落 第二季(2018)",
+    "一直游到海水变蓝(2020)",
+    "苹果树下(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "女性",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "但是还有书籍 第三季(2025)",
+    "一切如你所见(2026)",
+    "重返狼群——10周年纪念版(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "儿童",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "蓝色星球 第二季(2017)",
+    "蒙古草原，天气晴(2006)",
+    "蓝色星球 第一季(2001)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "家庭",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "彩排 第一季(2022)",
+    "四个春天(2017)",
+    "人生第一次(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "灾难",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "空中浩劫 第一季(2003)",
+    "南京梦魇(2005)",
+    "9月11日：美国的一天(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "生物",
+   "count": 53,
+   "more": true,
+   "sample": [
+    "生命奇观(2023)",
+    "我的章鱼老师(2020)",
+    "蓝色星球 第二季(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "人类",
+   "count": 51,
+   "more": true,
+   "sample": [
+    "七个世界，一个星球(2019)",
+    "海豚湾(2009)",
+    "人类星球(2011)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "生命",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "人间世 第一季(2016)",
+    "徒手攀岩(2018)",
+    "蓝色星球 第一季(2001)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "时尚",
+   "count": 14,
+   "more": true,
+   "sample": [
+    "街头时尚档案 第一季(2017)",
+    "香水(2011)",
+    "缪斯之旅(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "新闻",
+   "count": 38,
+   "more": true,
+   "sample": [
+    "人间世 第一季(2016)",
+    "以火书写(2021)",
+    "敦煌(2010)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "传统",
+   "count": 33,
+   "more": false,
+   "sample": [
+    "我在故宫修文物(2016)",
+    "最后的山神(1992)",
+    "寻味顺德(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "航空",
+   "count": 28,
+   "more": false,
+   "sample": [
+    "空中浩劫 第一季(2003)",
+    "窗外是蓝星(2025)",
+    "空中浩劫 第七季(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "物理",
+   "count": 42,
+   "more": false,
+   "sample": [
+    "宇宙时空之旅(2014)",
+    "万物与虚无(2011)",
+    "宇宙时空之旅：未知世界(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "BBC",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "扯淡地球史(2022)",
+    "海豚湾(2009)",
+    "蓝色星球 第三季(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "NHK",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "京都人秘密的欢愉(2015)",
+    "蒙古草原，天气晴(2006)",
+    "为什么贫穷？(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "国家地理",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "宇宙时空之旅(2014)",
+    "徒手攀岩(2018)",
+    "空中浩劫 第一季(2003)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "Netflix",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "扯淡地球史(2022)",
+    "登山家(2021)",
+    "马修·派瑞：老友最后的传记(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "HBO",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "彩排 第一季(2022)",
+    "滴血成金：硅谷血检大骗局(2019)",
+    "彩排 第二季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "PBS",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "太阳系 第一季(2024)",
+    "汉密尔顿的美国(2016)",
+    "文艺复兴教父：美第奇家族(2004)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "Discovery",
+   "count": 41,
+   "more": true,
+   "sample": [
+    "冰冻星球 第一季(2011)",
+    "与猎豹同行(2013)",
+    "北美大地(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "CCTV",
+   "count": 40,
+   "more": true,
+   "sample": [
+    "广济沧海(2026)",
+    "圆明园(2006)",
+    "教我如何不想“她”(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "genre",
+   "term": "央视",
+   "count": 34,
+   "more": true,
+   "sample": [
+    "人生第一次(2020)",
+    "吉格斯：真正红魔(2014)",
+    "航拍中国 第一季(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "华语",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "生命奇观2(2026)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "生命奇观(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "欧美",
+   "count": 52,
+   "more": true,
+   "sample": [
+    "人生七年10(2026)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "扯淡地球史(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "中国大陆",
+   "count": 60,
+   "more": true,
+   "sample": [
+    "生命奇观2(2026)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "生命奇观(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "中国香港",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "无穷之路(2021)",
+    "隐迹之书：重写自我(2025)",
+    "四海中医(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "中国台湾",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "中国电视史(1988)",
+    "五月天人生无限公司(2019)",
+    "吴哥窟之美(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "日本",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "京都人秘密的欢愉(2015)",
+    "蒙古草原，天气晴(2006)",
+    "我们的留学生活——在日本的日子(1999)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "韩国",
+   "count": 46,
+   "more": true,
+   "sample": [
+    "以幸存者之名：深入韩国惨案(2025)",
+    "亲爱的，不要跨过那条江(2014)",
+    "以神之名：信仰的背叛(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "美国",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "彩排 第一季(2022)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "彩排 第二季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "英国",
+   "count": 52,
+   "more": true,
+   "sample": [
+    "人生七年10(2026)",
+    "附带伤亡(2026)",
+    "扯淡地球史(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "法国",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "大猫(2018)",
+    "脸庞，村庄(2017)",
+    "二次大战启示录(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "德国",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "平价超市 第一季(2021)",
+    "当猪会飞(2026)",
+    "温布利一代(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "意大利",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "2026年米兰科尔蒂纳冬奥会闭幕式(2026)",
+    "地球之盐(2014)",
+    "知名画作解析(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "西班牙",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "卡洛斯·阿尔卡拉斯：我的网球之道(2025)",
+    "海洋(2009)",
+    "大骗徒(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "印度",
+   "count": 50,
+   "more": true,
+   "sample": [
+    "虎的传承(2025)",
+    "攀登梅鲁峰(2015)",
+    "生死与轮回(2015)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "泰国",
+   "count": 44,
+   "more": true,
+   "sample": [
+    "以你的心诠释我的爱 幕后花絮(2020)",
+    "正午显影(2000)",
+    "以你的心诠释我的爱 第二季 幕后花絮(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "俄罗斯",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "伟大的卫国战争 第一季(2012)",
+    "太阳之下(2015)",
+    "伟大的卫国战争 第二季(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "加拿大",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "空中浩劫 第一季(2003)",
+    "火山挚恋(2022)",
+    "空中浩劫 第七季(2009)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "澳大利亚",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "章鱼的秘密(2024)",
+    "高山上的夏尔巴人(2015)",
+    "行星旅行指南(2010)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "爱尔兰",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "香农秘境(2013)",
+    "最深的呼吸：自由潜之恋(2023)",
+    "航拍爱尔兰(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "瑞典",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "北欧之冬(2020)",
+    "寻找小糖人(2012)",
+    "没有上帝，没有主子：无政府主义的历史 第一季(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "丹麦",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "为什么贫穷？(2012)",
+    "杀戮演绎(2012)",
+    "野性泰国(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "挪威",
+   "count": 52,
+   "more": true,
+   "sample": [
+    "北欧之冬(2020)",
+    "伊贝林的非凡人生(2024)",
+    "博物馆的艺术(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "芬兰",
+   "count": 50,
+   "more": true,
+   "sample": [
+    "北欧之冬(2020)",
+    "寻找小糖人(2012)",
+    "不为人知的北极战争(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "荷兰",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "马克斯·维斯塔潘：新征途(2026)",
+    "音魂掠影(2021)",
+    "马克斯·维斯塔潘：倾尽全力(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "比利时",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "桥的世界(2020)",
+    "音魂掠影(2021)",
+    "宅家博物馆(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "瑞士",
+   "count": 51,
+   "more": true,
+   "sample": [
+    "黑衣人(2020)",
+    "海洋(2009)",
+    "桥的世界(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "奥地利",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "走进谷爱凌(2021)",
+    "黎明墙(2017)",
+    "死囚(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "波兰",
+   "count": 54,
+   "more": true,
+   "sample": [
+    "Zweiter Weltkrieg(2014)",
+    "止水之询(2026)",
+    "二次大战秘辛(2008)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "捷克",
+   "count": 43,
+   "more": true,
+   "sample": [
+    "阿富汗：伤痕之地(2020)",
+    "反对普京的无名先生(2025)",
+    "现代古文明(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "匈牙利",
+   "count": 33,
+   "more": true,
+   "sample": [
+    "隐形鸟类摄影师(2011)",
+    "匈牙利狂想曲(1986)",
+    "金牛(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "葡萄牙",
+   "count": 43,
+   "more": true,
+   "sample": [
+    "2077 - 十秒走进未来(2018)",
+    "鸟类变形记(2020)",
+    "战利品(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "希腊",
+   "count": 31,
+   "more": true,
+   "sample": [
+    "生命(2009)",
+    "性的代价(2011)",
+    "猫头鹰的遗产(1989)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "冰岛",
+   "count": 36,
+   "more": true,
+   "sample": [
+    "雷克雅未克的战争与和平(2026)",
+    "桑拿房的女性私语(2023)",
+    "Svona fólk(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "土耳其",
+   "count": 35,
+   "more": true,
+   "sample": [
+    "帝国的崛起：奥斯曼 第一季(2020)",
+    "伤心公园(2026)",
+    "帝国的崛起：奥斯曼 第二季(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "以色列",
+   "count": 43,
+   "more": true,
+   "sample": [
+    "摩萨德：以色列情报机密档案(2018)",
+    "沉默之像(2014)",
+    "晦暗真相(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "伊朗",
+   "count": 29,
+   "more": true,
+   "sample": [
+    "革命的预演(2026)",
+    "赝品(1973)",
+    "把灵魂放在掌上前行(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "新西兰",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "披头士乐队：回归(2021)",
+    "他们已不再变老(2018)",
+    "大太平洋(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "新加坡",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "女子监狱(2024)",
+    "象行记(2026)",
+    "料理的秘密(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "马来西亚",
+   "count": 44,
+   "more": true,
+   "sample": [
+    "阿贤逛巴剎(2018)",
+    "美国医生(2026)",
+    "孩子，你好吗？(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "越南",
+   "count": 24,
+   "more": true,
+   "sample": [
+    "安东尼·波登：未知之旅 第八季(2016)",
+    "迷雾中的孩子(2021)",
+    "同饮一江水(2008)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "菲律宾",
+   "count": 34,
+   "more": true,
+   "sample": [
+    "狂野日志(2014)",
+    "曦曦(2024)",
+    "寻找苏禄王(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "印度尼西亚",
+   "count": 23,
+   "more": true,
+   "sample": [
+    "RESOUND(2019)",
+    "沉默之像(2014)",
+    "Beyond the cup(2028)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "巴西",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "罗纳尔迪尼奥：独步球坛(2026)",
+    "地球之盐(2014)",
+    "内马尔：完美乱局(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "墨西哥",
+   "count": 48,
+   "more": true,
+   "sample": [
+    "落网之谜：墨西哥大毒枭的坠落(2026)",
+    "我们的土地(2025)",
+    "塔可美食纪 第一季(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "阿根廷",
+   "count": 50,
+   "more": true,
+   "sample": [
+    "成为永恒：美洲杯冠军(2022)",
+    "博尔赫斯传(2026)",
+    "Nahir, el secreto de un crimen(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "region",
+   "term": "南非",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "企鹅小镇(2021)",
+    "我的章鱼老师(2020)",
+    "极速猎杀(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2026",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "人生七年10(2026)",
+    "珠穆朗玛：云中彼岸(2026)",
+    "生命奇观2(2026)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2025",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "彩排 第二季(2025)",
+    "夫妻一场(2025)",
+    "闪闪的儿科医生 第三季(2025)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2024",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "闪闪的儿科医生 第二季(2024)",
+    "爷爷奶奶那些事(2024)",
+    "守护解放西5(2024)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2023",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "生命奇观(2023)",
+    "里斯本丸沉没(2023)",
+    "闪闪的儿科医生(2023)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2022",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "扯淡地球史(2022)",
+    "火山挚恋(2022)",
+    "彩排 第一季(2022)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2021",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "人生一串 第三季(2021)",
+    "泰国洞穴救援(2021)",
+    "重返狼群——10周年纪念版(2021)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2020",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "约翰·威尔逊的十万个怎么做 第一季(2020)",
+    "一直游到海水变蓝(2020)",
+    "守护解放西2(2020)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2019",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "守护解放西(2019)",
+    "滴血成金：硅谷血检大骗局(2019)",
+    "人生一串 第二季(2019)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2018",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "人生一串 第一季(2018)",
+    "徒手攀岩(2018)",
+    "风味人间 第一季(2018)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2017",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "蓝色星球 第二季(2017)",
+    "脸庞，村庄(2017)",
+    "航拍中国 第一季(2017)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2016",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "人间世 第一季(2016)",
+    "我在故宫修文物(2016)",
+    "地球脉动 第二季(2016)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2015",
+   "count": 56,
+   "more": true,
+   "sample": [
+    "河西走廊(2015)",
+    "二十二(2015)",
+    "第三极(2015)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2014",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "无节制消费的元凶(2014)",
+    "三十二(2014)",
+    "舌尖上的中国 第二季(2014)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2013",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "中国通史(2013)",
+    "乡村里的中国(2013)",
+    "茶，一片树叶的故事(2013)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2012",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "舌尖上的中国 第一季(2012)",
+    "人生七年8(2012)",
+    "为什么贫穷？(2012)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2011",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "玄奘之路(2011)",
+    "浮生一日(2011)",
+    "冰冻星球 第一季(2011)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2010",
+   "count": 55,
+   "more": true,
+   "sample": [
+    "梁思成 林徽因(2010)",
+    "监守自盗(2010)",
+    "敦煌(2010)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "2000年代",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "蓝色星球 第一季(2001)",
+    "海豚湾(2009)",
+    "地球脉动 第一季(2006)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "90年代",
+   "count": 59,
+   "more": true,
+   "sample": [
+    "我们的留学生活——在日本的日子(1999)",
+    "人生七年5(1991)",
+    "今日说法(1999)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "80年代",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "中国电视史(1988)",
+    "人生七年4(1984)",
+    "话说长江(1983)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "70年代",
+   "count": 58,
+   "more": true,
+   "sample": [
+    "观看之道(1972)",
+    "人生七年2(1970)",
+    "愚公移山(1976)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "60年代",
+   "count": 57,
+   "more": true,
+   "sample": [
+    "动物世界(1968)",
+    "世界残酷奇谭(1962)",
+    "文明的轨迹(1969)"
+   ]
+  },
+  {
+   "type": "doc",
+   "dimension": "year",
+   "term": "更早",
+   "count": 52,
+   "more": true,
+   "sample": [
+    "仰望夜空(1957)",
+    "持摄影机的人(1929)",
+    "海上的胜利(1952)"
+   ]
+  }
+ ]
+}

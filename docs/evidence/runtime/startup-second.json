@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-19T17:14:49.932Z",
+  "executable": "E:\\dev\\项目\\panda\\release\\win-unpacked\\Panda.exe",
+  "unit": "ms after navigation start",
+  "firstStart": {
+    "data": 442,
+    "failed": false,
+    "images": 1339,
+    "imageCount": 18
+  },
+  "secondStart": {
+    "data": 339,
+    "failed": false,
+    "images": 404,
+    "imageCount": 18
+  },
+  "imagesKept": 34
+}

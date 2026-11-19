@@ -1,0 +1,35 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep source that never starts
+
+
+Running 1 test using 1 worker
+
+(node:79868) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\fixture.spec.ts:114:1 › fixture: a source that never starts recovers within thirty-five seconds (35.1s)
+
+
+  1) e2e\fixture.spec.ts:114:1 › fixture: a source that never starts recovers within thirty-five seconds 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   0
+
+    Call Log:
+    - Timeout 35000ms exceeded while waiting on the predicate
+
+      119 |     await mode('source-hang')
+      120 |     await page.evaluate(() => { location.hash = '#/play/changye-jiangming/1' })
+    > 121 |     await expect.poll(() => page.evaluate(() => document.querySelector('video')?.currentTime ?? 0), { timeout: 35000 }).toBeGreaterThan(1)
+          |                                                                                                                         ^
+      122 |     await capture(page, 'source-recovery')
+      123 |   } finally { await app.close() }
+      124 | })
+        at E:\dev\项目\panda\e2e\fixture.spec.ts:121:121
+
+    Error Context: .tmp\e2e-results\fixture-fixture-a-source-t-613de--within-thirty-five-seconds\error-context.md
+
+  1 failed
+    e2e\fixture.spec.ts:114:1 › fixture: a source that never starts recovers within thirty-five seconds 

@@ -1,0 +1,108 @@
+
+> panda-desktop@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+ ❯ tests/network-regression.test.ts (4 tests | 3 failed) 39ms
+   × preserves suffix ranges needed by MP4 metadata readers 2ms
+   × does not shorten an anchored HLS timeline 9ms
+   × does not expose source comments to the renderer 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/network-regression.test.ts > preserves suffix ranges needed by MP4 metadata readers
+Error: 无效的媒体范围
+ ❯ normalizeRange src/main/playback/proxy.ts:18:45
+     16| export function normalizeRange(value: string | undefined): string | un…
+     17|   if (!value) return undefined
+     18|   if (!/^bytes=\d+-\d*$/.test(value)) throw new Error('无效的媒体范围')
+       |                                             ^
+     19|   const [start, end] = value.slice(6).split('-').map(Number)
+     20|   if (!Number.isSafeInteger(start) || start < 0 || (value.endsWith('-'…
+ ❯ tests/network-regression.test.ts:21:10
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/network-regression.test.ts > does not shorten an anchored HLS timeline
+AssertionError: expected '#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-PLA…' to be '#EXTM3U\n#EXT-X-START:TIME-OFFSET=120…' // Object.is equality
+
+- Expected
++ Received
+
+@@ -1,11 +1,11 @@
+  #EXTM3U
+- #EXT-X-START:TIME-OFFSET=120
+  #EXT-X-VERSION:3
+  #EXT-X-PLAYLIST-TYPE:VOD
+  #EXT-X-MEDIA-SEQUENCE:0
+  #EXT-X-TARGETDURATION:8
++ #EXT-X-START:TIME-OFFSET=120
+  #EXT-X-DISCONTINUITY
+  #EXTINF:4.000000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/3503d22b12b8f55ef14801fcc05b3164.ts
+  #EXTINF:4.000000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/101408beaf37daf20c2b5a85922bdace.ts
+@@ -181,21 +181,10 @@
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/27ae545f6c7b3cb32481799fdeb63251.ts
+  #EXTINF:3.720000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/6c5f8b2510b7d88a0711a0bba3b5a6bc.ts
+  #EXTINF:4.880000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/4e6e6b54f27a1af581b13a10aa5e1947.ts
+- #EXT-X-DISCONTINUITY
+- #EXTINF:4.866667,
+- https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/2eb590c2717e676f12be5b0299a1610f.ts
+- #EXTINF:3.333333,
+- https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/0690bbc512a2ce2cc7fa2ac27ef90ae8.ts
+- #EXTINF:5.600000,
+- https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/d9eff8f6fca15fd2efca18a4eac40921.ts
+- #EXTINF:2.866667,
+- https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/28b50ed6a028cf5770299da9e197d5cf.ts
+- #EXTINF:2.966667,
+- https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/f4c5f9e3c9b1c9dfd4d3ffefc78c739d.ts
+  #EXT-X-DISCONTINUITY
+  #EXTINF:3.120000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/51efd98997cd2235e965bb92fce1b30f.ts
+  #EXTINF:3.960000,
+  https://vip.ffzy-play9.com/20230104/32917_009575e7/2000k/hls/4d0fa789072911390f904b02bf585977.ts
+
+ ❯ tests/network-regression.test.ts:27:134
+     25|   const original = readFileSync(new URL('../docs/evidence/manifest-ffz…
+     26|   const anchored = original.replace('#EXTM3U', '#EXTM3U\n#EXT-X-START:…
+     27|   expect(filterPlaylist(anchored, new URL('https://vip.ffzy-online2.co…
+       |                                                                                                                                      ^
+     28| })
+     29| it('does not expose source comments to the renderer', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/network-regression.test.ts > does not expose source comments to the renderer
+AssertionError: expected '#EXTM3U\n# source https://private.exa…' not to contain 'token'
+
+- Expected
++ Received
+
+- token
++ #EXTM3U
++ # source https://private.example/?token=123
++ #EXTINF:2,
++ /asset/opaque
++
+
+ ❯ tests/network-regression.test.ts:31:22
+     29| it('does not expose source comments to the renderer', () => {
+     30|   const output = rewritePlaylist('#EXTM3U\n# source https://private.ex…
+     31|   expect(output).not.toContain('token')
+       |                      ^
+     32| })
+     33|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  3 failed | 46 passed (49)
+   Start at  02:35:30
+   Duration  1.87s (tests 87%, import 8%, transform 4%, worker 1%)
+

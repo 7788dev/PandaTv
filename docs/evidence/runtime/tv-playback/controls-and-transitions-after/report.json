@@ -1,0 +1,121 @@
+{
+  "at": "2026-11-18T10:05:40.848571+00:00",
+  "cases": [
+    {
+      "name": "player-focus",
+      "passed": true,
+      "initial": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "next": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            285,
+            956,
+            482,
+            1028
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          407,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "restored": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      }
+    }
+  ],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '0.0', '暂停', '下一集', '00:00 / 1:00:35', '选集', '1080P', '倍速']"
+    },
+    {
+      "name": "missing-source",
+      "error": "No source verdict within the request budget: activation={'texts': ['返回', '骑有此理 第四季', '2026 · 中国大陆 · 真人秀 · 40分钟', '导演：吴磊', '主演：吴磊', '演员吴磊的个人骑行视频IP栏目。第四季之环海南岛篇，吴磊穿行烈日海风用车轮标记环岛公路，记录一场由“未完成”展开的自我对话......', '播放', '收藏', '演职员', '吴磊', '正在查找片源'], 'clock': None, 'player': False, 'spinner': True, 'focus': {'class': 'android.widget.LinearLayout', 'bounds': (496, 552, 691, 635), 'labels': ['播放']}, 'loadingRegionMaxRgb': 145}, final={'texts': ['返回', '骑有此理 第四季', '2026 · 中国大陆 · 真人秀 · 40分钟', '导演：吴磊', '主演：吴磊', '演员吴磊的个人骑行视频IP栏目。第四季之环海南岛篇，吴磊穿行烈日海风用车轮标记环岛公路，记录一场由“未完成”展开的自我对话......', '播放', '收藏', '演职员', '吴磊', '正在查找片源'], 'clock': None, 'player': False, 'spinner': True, 'focus': {'class': 'android.widget.LinearLayout', 'bounds': (496, 552, 691, 635), 'labels': ['播放']}, 'loadingRegionMaxRgb': 145}"
+    }
+  ],
+  "version": "1.0.2",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

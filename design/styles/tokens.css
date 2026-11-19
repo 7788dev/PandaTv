@@ -1,0 +1,172 @@
+/* ════════════════════════════════════════════════════════════════════
+   Panda · 设计令牌
+   全项目唯一允许出现"具体数值"的地方。组件里只能写 var(--xxx)。
+   色值由 design/tools/palette.mjs 推导并验证过对比度，不要手改。
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer tokens {
+  :root {
+    color-scheme: dark;
+
+    /* ── 1. 原始色：只在本文件里被引用，组件一律用下面的语义色 ── */
+    --ink-950: #0e0d0b;
+    --ink-900: #151412;
+    --ink-850: #1d1c19;
+    --ink-800: #262421;
+    --ink-700: #35322f;
+    --ink-600: #4a4743;
+    --paper-100: #efeae2;
+    --paper-50: #fcfaf6;
+    --bamboo-300: #a5e6bf;
+    --bamboo-400: #79d4a1;
+    --bamboo-500: #4fb680;
+    --amber-400: #f4bd62;
+    --cinnabar-400: #f3705e;
+    --cinnabar-500: #e24a3c;
+
+    /* 带透明度时使用的 RGB 通道 */
+    --ink-rgb: 14 13 11;
+    --paper-rgb: 239 234 226;
+    --bamboo-rgb: 121 212 161;
+    --cinnabar-rgb: 243 112 94;
+
+    /* ── 2. 语义色 ── */
+    /* 背景层级：数字越大越"浮" */
+    --c-bg: var(--ink-950); /* 窗口底色 */
+    --c-surface: var(--ink-900); /* 图片占位、输入框、骨架 */
+    --c-raised: var(--ink-850); /* 菜单、弹层、对话框、提示 */
+    --c-raised-2: var(--ink-800); /* 弹层里的悬停 */
+
+    /* 填充：盖在任意背景上的半透明"纸" */
+    --c-fill: rgb(var(--paper-rgb) / 0.07); /* 悬停 */
+    --c-fill-2: rgb(var(--paper-rgb) / 0.12); /* 选中 / 按下 / 次级按钮 */
+    --c-fill-3: rgb(var(--paper-rgb) / 0.2); /* 次级按钮悬停 */
+
+    /* 线 */
+    --c-line: rgb(var(--paper-rgb) / 0.08);
+    --c-line-2: rgb(var(--paper-rgb) / 0.16);
+
+    /* 文字 */
+    --c-text: var(--paper-100); /* 标题、正文 */
+    --c-text-2: rgb(var(--paper-rgb) / 0.7); /* 次要信息 */
+    --c-text-3: rgb(var(--paper-rgb) / 0.52); /* 辅助信息、占位符 */
+    --c-text-4: rgb(var(--paper-rgb) / 0.32); /* 禁用、分隔点 */
+
+    /* 强调：只表示"状态"，不做装饰 */
+    --c-accent: var(--bamboo-400);
+    --c-accent-hover: var(--bamboo-300);
+    --c-accent-soft: rgb(var(--bamboo-rgb) / 0.14);
+    --c-on-accent: var(--ink-950);
+
+    /* 主操作：纸色实心 */
+    --c-primary: var(--paper-100);
+    --c-primary-hover: var(--paper-50);
+    --c-on-primary: var(--ink-950);
+
+    /* 专用色 */
+    --c-score: var(--amber-400); /* 只给评分数字 */
+    --c-danger: var(--cinnabar-400); /* 只给删除、错误 */
+    --c-danger-soft: rgb(var(--cinnabar-rgb) / 0.14);
+    --c-close-hover: var(--cinnabar-500); /* 只给窗口关闭按钮 */
+
+    /* 遮罩与毛玻璃 */
+    --c-scrim: rgb(var(--ink-rgb) / 0.62); /* 对话框背后 */
+    --c-glass: rgb(24 23 20 / 0.74); /* 顶栏、浮层的玻璃底 */
+    --c-glass-strong: rgb(20 19 17 / 0.9);
+    --c-media-dim: rgb(var(--ink-rgb) / 0.42); /* 图片上的小控件底 */
+    --blur-glass: blur(24px) saturate(1.5);
+    --blur-soft: blur(12px) saturate(1.3);
+
+    /* ── 3. 字体 ── */
+    --font-sans: 'Inter Variable', 'Noto Sans SC Variable', 'PingFang SC', 'Microsoft YaHei UI', 'Microsoft YaHei',
+      system-ui, sans-serif;
+    --font-serif: 'Noto Serif SC Variable', 'Songti SC', 'STSong', 'SimSun', serif;
+
+    /* 字号：只有这 11 档，没有别的 */
+    --fs-12: 12px;
+    --fs-13: 13px;
+    --fs-14: 14px;
+    --fs-15: 15px;
+    --fs-16: 16px;
+    --fs-18: 18px;
+    --fs-20: 20px;
+    --fs-24: 24px;
+    --fs-32: 32px;
+    --fs-display-2: clamp(32px, 3.2vw, 48px); /* 详情页片名 */
+    --fs-display-1: clamp(40px, 4.4vw, 68px); /* 首页主推片名 */
+
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+
+    --lh-tight: 1.16; /* 展示标题 */
+    --lh-snug: 1.4; /* 单行界面文字 */
+    --lh-normal: 1.6; /* 正文 */
+    --lh-loose: 1.8; /* 大段简介 */
+
+    /* ── 4. 间距：4px 网格 ── */
+    --sp-05: 2px;
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 20px;
+    --sp-6: 24px;
+    --sp-8: 32px;
+    --sp-10: 40px;
+    --sp-12: 48px;
+    --sp-16: 64px;
+    --sp-20: 80px;
+    --sp-24: 96px;
+
+    /* ── 5. 圆角 ── */
+    --r-xs: 6px; /* 角标、缩略图 */
+    --r-sm: 8px; /* 菜单项、选集按钮 */
+    --r-md: 12px; /* 海报、卡片 */
+    --r-lg: 16px; /* 浮层、面板 */
+    --r-xl: 24px; /* 对话框 */
+    --r-full: 999px; /* 一切可点的控件 */
+
+    /* ── 6. 阴影：深色界面里阴影只负责"浮起"，层次主要靠底色 ── */
+    --sh-1: 0 1px 2px rgb(0 0 0 / 0.32);
+    --sh-2: 0 10px 28px -10px rgb(0 0 0 / 0.56);
+    --sh-3: 0 18px 50px -14px rgb(0 0 0 / 0.66), 0 0 0 1px var(--c-line);
+    --sh-4: 0 36px 90px -24px rgb(0 0 0 / 0.78);
+    --text-shadow-media: 0 1px 2px rgb(0 0 0 / 0.36), 0 6px 30px rgb(0 0 0 / 0.34);
+
+    /* ── 7. 动效 ── */
+    --dur-1: 120ms; /* 颜色、按压 */
+    --dur-2: 200ms; /* 小元素出现：提示、菜单 */
+    --dur-3: 320ms; /* 面板、页面 */
+    --dur-4: 520ms; /* 图片缩放、主推文字入场 */
+    --dur-5: 900ms; /* 主推背景交叉淡入 */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* 入场、悬停：默认用它 */
+    --ease-in: cubic-bezier(0.5, 0, 0.9, 0.4); /* 离场 */
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* 位移 */
+    --ease-pop: cubic-bezier(0.3, 1.36, 0.5, 1); /* 只给「收藏打勾」这类小回弹 */
+
+    /* ── 8. 布局 ── */
+    --bar-h: 64px; /* 顶栏高度 */
+    --winctl-w: 138px; /* 右上角三个窗口按钮的总宽度 */
+    --gutter: clamp(32px, 3.6vw, 64px); /* 页面左右留白 */
+    --gap: 16px; /* 卡片间距 */
+    --shelf-gap: 44px; /* 栏目之间 */
+    --hero-overlap: 72px; /* 首页第一个栏目压进主推图的高度 */
+    /* 每行卡片数 --cols-poster / --cols-wide 随窗口宽度变化，定义在 layout.css */
+    --control-lg: 46px;
+    --control-md: 38px;
+    --control-sm: 32px;
+
+    /* ── 9. 层级 ── */
+    --z-raised: 1;
+    --z-sticky: 10;
+    --z-topbar: 100;
+    --z-panel: 200;
+    --z-popover: 300;
+    --z-dialog: 400;
+    --z-toast: 500;
+    --z-tooltip: 600;
+    --z-window: 700; /* 窗口按钮永远在最上面 */
+  }
+}

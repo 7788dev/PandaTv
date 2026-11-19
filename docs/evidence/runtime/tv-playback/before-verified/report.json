@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-18T08:38:46.947727+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "'NoneType' object is not subscriptable"
+    },
+    {
+      "name": "missing-source",
+      "error": "No missing-source verdict within the request budget: {'texts': ['暂时无法连接，请重试', '重试', '返回'], 'clock': None, 'player': False, 'spinner': False, 'loadingRegionMaxRgb': 143}"
+    }
+  ],
+  "version": "1.0.1",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

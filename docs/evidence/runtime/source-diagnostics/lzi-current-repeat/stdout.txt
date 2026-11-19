@@ -1,0 +1,8 @@
+[media] rules override v3 in use
+[source] lzi search: 请求已取消 / ABORT_ERR 9001ms
+[source] lzi search: 请求已取消 / ABORT_ERR 9001ms
+[failure] UNAVAILABLE 暂时无法连接，请重试
+[failure] UNAVAILABLE 暂时无法连接，请重试
+[source] lzi search: 请求已取消 / ABORT_ERR 9001ms
+[failure] UNAVAILABLE 暂时无法连接，请重试
+[failure] UNAVAILABLE 暂时无法连接，请重试

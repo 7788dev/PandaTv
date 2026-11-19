@@ -1,0 +1,153 @@
+{
+  "$comment": "界面上出现的每一个字都在这里，按出现的位置分组。花括号里是变量（例如 {n}），用 fmt() 填入。中文与数字、英文之间不要手打空格，排版引擎会自动留出间隙。应用代码里不允许再出现任何中文字面量；确实需要新增文案时写进 src/copy.extra.ts，并遵守手册〈文案〉一章。",
+
+  "app": {
+    "name": "Panda",
+    "version": "版本 {v}"
+  },
+
+  "nav": {
+    "home": "首页",
+    "tv": "剧集",
+    "movie": "电影",
+    "variety": "综艺",
+    "anime": "动漫",
+    "doc": "纪录片",
+    "me": "我的",
+    "settings": "设置"
+  },
+
+  "window": {
+    "minimize": "最小化",
+    "maximize": "最大化",
+    "restore": "还原",
+    "close": "关闭"
+  },
+
+  "action": {
+    "play": "播放",
+    "resume": "继续播放",
+    "resumeEpisode": "继续播放 第{n}{unit}",
+    "favorite": "收藏",
+    "favorited": "已收藏",
+    "detail": "详情",
+    "more": "更多",
+    "expand": "展开",
+    "collapse": "收起",
+    "retry": "重试",
+    "cancel": "取消",
+    "confirm": "确定",
+    "clear": "清空",
+    "remove": "移除",
+    "back": "返回",
+    "close": "关闭",
+    "undo": "撤销",
+    "prev": "上一页",
+    "next": "下一页",
+    "clearInput": "清除",
+    "clearFilters": "清除筛选"
+  },
+
+  "status": {
+    "episode": "第{n}{unit}",
+    "remaining": "剩余{n}分钟",
+    "finished": "已看完",
+    "minutes": "{n}分钟",
+    "range": "{a}-{b}"
+  },
+
+  "home": {
+    "continue": "继续观看"
+  },
+
+  "channel": {
+    "genre": "类型",
+    "region": "地区",
+    "year": "年份",
+    "all": "全部",
+    "sortHot": "最热",
+    "sortNew": "最新",
+    "sortScore": "高分",
+    "empty": "暂无内容",
+    "end": "没有更多了"
+  },
+
+  "detail": {
+    "episodes": "选集",
+    "cast": "演职员",
+    "related": "相关推荐",
+    "director": "导演",
+    "starring": "主演"
+  },
+
+  "search": {
+    "placeholder": "搜索片名、导演、演员",
+    "label": "搜索",
+    "recent": "最近搜索",
+    "hot": "热搜",
+    "results": "搜索结果",
+    "all": "全部",
+    "empty": "没有找到相关内容"
+  },
+
+  "me": {
+    "favorites": "收藏",
+    "history": "历史",
+    "today": "今天",
+    "yesterday": "昨天",
+    "earlier": "更早",
+    "emptyFavorites": "还没有收藏",
+    "emptyHistory": "还没有观看记录",
+    "clearHistoryTitle": "清空观看历史？"
+  },
+
+  "settings": {
+    "title": "设置",
+    "playback": "播放",
+    "autoNext": "自动播放下一集",
+    "skipIntro": "自动跳过片头片尾",
+    "quality": "默认清晰度",
+    "speed": "默认倍速",
+    "data": "数据",
+    "clearHistory": "清空观看历史",
+    "clearSearches": "清空搜索记录",
+    "about": "关于",
+    "checkUpdate": "检查更新",
+    "upToDate": "已是最新版本",
+    "clearSearchesTitle": "清空搜索记录？"
+  },
+
+  "player": {
+    "play": "播放",
+    "pause": "暂停",
+    "seek": "播放进度",
+    "volume": "音量",
+    "next": "下一集",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "pip": "画中画",
+    "fullscreen": "全屏",
+    "exitFullscreen": "退出全屏",
+    "speed": "倍速",
+    "quality": "清晰度",
+    "episodes": "选集",
+    "skipIntro": "跳过片头",
+    "upNext": "{n}秒后播放",
+    "playNow": "立即播放",
+    "error": "播放失败",
+    "seconds": "{n}秒",
+    "times": "{n}×"
+  },
+
+  "toast": {
+    "favorited": "已收藏",
+    "unfavorited": "已取消收藏",
+    "removed": "已移除",
+    "cleared": "已清空"
+  },
+
+  "state": {
+    "error": "加载失败",
+    "offline": "网络未连接"
+  }
+}

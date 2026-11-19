@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-18T09:46:19.403Z",
+  "source": "dyttzy",
+  "title": "三体",
+  "id": "db-26647087",
+  "note": "duration fingerprints on a rotated CDN host",
+  "diagnostic": {
+    "removedSegments": 5,
+    "removedSeconds": 19.067,
+    "reason": "filtered",
+    "evidence": [
+      "fingerprint"
+    ]
+  },
+  "served": {
+    "duration": 2582.2266660000005,
+    "cuts": [
+      0,
+      297.7200000000001,
+      1497.7199999999998,
+      1515.1866659999996
+    ],
+    "encrypted": false
+  },
+  "start": {
+    "position": 4.014462,
+    "duration": 2582.2266660000005,
+    "width": 1920,
+    "height": 818,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 103
+  },
+  "across": {
+    "position": 301.257836,
+    "duration": 2582.2266660000005,
+    "width": 1920,
+    "height": 818,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 334
+  },
+  "end": {
+    "position": 1.824782,
+    "duration": 2582.2266660000005,
+    "width": 1920,
+    "height": 818,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 409
+  }
+}

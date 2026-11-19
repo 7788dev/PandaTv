@@ -1,0 +1,59 @@
+{
+  "at": "2026-11-18T09:45:33.607Z",
+  "source": "bfzy",
+  "title": "漫长的季节",
+  "id": "db-35588177",
+  "note": "reserved ad path inside an implicit-IV AES-128 programme",
+  "diagnostic": {
+    "removedSegments": 18,
+    "removedSeconds": 51.52,
+    "reason": "filtered",
+    "evidence": [
+      "path"
+    ]
+  },
+  "served": {
+    "duration": 4339.720000000005,
+    "cuts": [
+      300.9599999999999,
+      2401.12
+    ],
+    "encrypted": true
+  },
+  "start": {
+    "position": 4.022493,
+    "duration": 4339.720000000005,
+    "width": 960,
+    "height": 402,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 103
+  },
+  "across": {
+    "position": 304.660685,
+    "duration": 4339.720000000005,
+    "width": 960,
+    "height": 402,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 346
+  },
+  "end": {
+    "position": 1.80997,
+    "duration": 4339.720000000005,
+    "width": 960,
+    "height": 402,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 397
+  }
+}

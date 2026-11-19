@@ -1,0 +1,507 @@
+/* ════════════════════════════════════════════════════════════════════
+   播放页：沉浸式。没有顶栏，所有控件在鼠标静止 2.5 秒后一起淡出。
+   .player
+   ├─ video.player__video
+   ├─ .player__shade                 上下两道压暗
+   ├─ .player__top                   返回 + 片名 · 集数（同时是窗口拖动区）
+   ├─ .player__center                暂停时的大播放键 / 缓冲圈 / 出错
+   ├─ .osd                           快进、音量的瞬时反馈
+   ├─ .player__skip                  跳过片头
+   ├─ .upnext                        即将播放下一集
+   ├─ .player__bottom                进度条 + 控制行
+   └─ .player__panel                 右侧滑出的选集面板
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer pages {
+  .player {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    color: var(--c-text);
+    background: #000;
+  }
+
+  .player__video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+    transition: opacity var(--dur-3) var(--ease-out);
+  }
+
+  /* 出错时把停住的画面压暗，保证「播放失败」在任何画面上都看得清 */
+  .player[data-error] .player__video {
+    opacity: 0.28;
+  }
+
+  .player__shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(to bottom, rgb(0 0 0 / 0.62) 0%, rgb(0 0 0 / 0.24) 12%, rgb(0 0 0 / 0) 26%),
+      linear-gradient(to top, rgb(0 0 0 / 0.78) 0%, rgb(0 0 0 / 0.44) 14%, rgb(0 0 0 / 0) 34%);
+    transition: opacity var(--dur-3) var(--ease-out);
+  }
+
+  .player__top {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    gap: var(--sp-3);
+    align-items: center;
+    height: var(--bar-h);
+    padding-right: calc(var(--winctl-w) + var(--sp-2));
+    padding-left: calc(var(--gutter) - var(--sp-3));
+    transition:
+      opacity var(--dur-3) var(--ease-out),
+      translate var(--dur-3) var(--ease-out);
+  }
+
+  .player__heading {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: baseline;
+    min-width: 0;
+  }
+
+  .player__title {
+    overflow: hidden;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .player__ep {
+    flex: none;
+    font-size: var(--fs-14);
+    line-height: var(--lh-snug);
+    color: var(--c-text-2);
+  }
+
+  /* ── 中央：大播放键 / 缓冲 / 出错 ── */
+  .player__center {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+
+  .player__center > * {
+    grid-area: 1 / 1;
+  }
+
+  .player__bigplay {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    color: var(--c-text);
+    pointer-events: auto;
+    background: rgb(var(--ink-rgb) / 0.5);
+    border-radius: var(--r-full);
+    box-shadow: inset 0 0 0 1px var(--c-line-2);
+    opacity: 0;
+    scale: 0.86;
+    backdrop-filter: var(--blur-soft);
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      scale var(--dur-2) var(--ease-out),
+      background var(--dur-1);
+  }
+
+  .player__bigplay .icon {
+    --icon: 32px;
+
+    translate: 2px 0;
+  }
+
+  .player__bigplay:hover {
+    background: rgb(var(--ink-rgb) / 0.7);
+  }
+
+  .player[data-paused] .player__bigplay {
+    opacity: 1;
+    scale: 1;
+  }
+
+  .player:not([data-paused]) .player__bigplay {
+    pointer-events: none;
+  }
+
+  .player .spinner {
+    width: 44px;
+    height: 44px;
+    opacity: 0;
+    transition: opacity var(--dur-2);
+  }
+
+  .player[data-waiting] .spinner {
+    opacity: 1;
+  }
+
+  .player[data-waiting] .player__bigplay {
+    opacity: 0;
+  }
+
+  .player__error {
+    display: none;
+    pointer-events: auto;
+  }
+
+  .player[data-error] .player__error {
+    display: grid;
+  }
+
+  .player[data-error] .player__bigplay,
+  .player[data-error] .spinner {
+    display: none;
+  }
+
+  /* ── 瞬时反馈 ── */
+  .osd {
+    position: absolute;
+    top: calc(var(--bar-h) + var(--sp-4));
+    left: 50%;
+    display: flex;
+    gap: var(--sp-2);
+    align-items: center;
+    height: 40px;
+    padding-inline: var(--sp-4);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    pointer-events: none;
+    background: var(--c-glass-strong);
+    border-radius: var(--r-full);
+    opacity: 0;
+    translate: -50% -6px;
+    backdrop-filter: var(--blur-glass);
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      translate var(--dur-2) var(--ease-out);
+  }
+
+  .osd[data-open] {
+    opacity: 1;
+    translate: -50% 0;
+  }
+
+  /* ── 底部控制区 ── */
+  .player__bottom {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 0 calc(var(--gutter) - var(--sp-2)) var(--sp-4);
+    transition:
+      opacity var(--dur-3) var(--ease-out),
+      translate var(--dur-3) var(--ease-out);
+  }
+
+  .player__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+    margin-top: var(--sp-1);
+  }
+
+  .player__group {
+    display: flex;
+    gap: var(--sp-1);
+    align-items: center;
+  }
+
+  .player__bar .icon-btn {
+    width: 44px;
+    height: 44px;
+    color: var(--c-text);
+  }
+
+  .player__bar .btn--ghost {
+    color: var(--c-text);
+  }
+
+  .player__play .icon {
+    --icon: 28px;
+  }
+
+  .player__time {
+    margin-left: var(--sp-3);
+    font-size: var(--fs-13);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--c-text);
+    white-space: nowrap;
+  }
+
+  .player__time span {
+    color: var(--c-text-3);
+  }
+
+  /* 音量：悬停图标时滑杆向右展开 */
+  .player__volume {
+    display: flex;
+    align-items: center;
+  }
+
+  .player__volume .slider {
+    width: 0;
+    opacity: 0;
+    transition:
+      width var(--dur-2) var(--ease-out),
+      opacity var(--dur-2),
+      margin var(--dur-2) var(--ease-out);
+  }
+
+  .player__volume:hover .slider,
+  .player__volume:focus-within .slider,
+  .player__volume .slider[data-dragging] {
+    width: 84px;
+    margin-inline: var(--sp-1) var(--sp-3);
+    opacity: 1;
+  }
+
+  /* ── 进度条：自己实现（需要缓冲段和悬停时间），位置全部用自定义属性驱动
+        --p 已播放  --b 已缓冲  --h 鼠标悬停位置（都是 0%–100%）              ── */
+  .seek {
+    position: relative;
+    height: 20px;
+    margin-inline: var(--sp-2);
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .seek__track {
+    position: absolute;
+    inset: 8px 0 auto;
+    height: 4px;
+    overflow: hidden;
+    background: rgb(var(--paper-rgb) / 0.2);
+    border-radius: var(--r-full);
+    transition: scale var(--dur-1) var(--ease-out);
+  }
+
+  .seek:hover .seek__track,
+  .seek[data-dragging] .seek__track {
+    scale: 1 1.5;
+  }
+
+  .seek__buffer,
+  .seek__played {
+    position: absolute;
+    inset: 0 auto 0 0;
+  }
+
+  .seek__buffer {
+    width: var(--b, 0%);
+    background: rgb(var(--paper-rgb) / 0.26);
+  }
+
+  .seek__played {
+    width: var(--p, 0%);
+    background: var(--c-accent);
+  }
+
+  .seek__thumb {
+    position: absolute;
+    top: 3px;
+    left: var(--p, 0%);
+    width: 14px;
+    height: 14px;
+    background: var(--paper-50);
+    border-radius: var(--r-full);
+    box-shadow: var(--sh-1);
+    translate: -50% 0;
+    scale: 0;
+    transition: scale var(--dur-1) var(--ease-out);
+  }
+
+  .seek:hover .seek__thumb,
+  .seek[data-dragging] .seek__thumb,
+  .seek:focus-visible .seek__thumb {
+    scale: 1;
+  }
+
+  .seek__tip {
+    position: absolute;
+    bottom: 24px;
+    left: clamp(24px, var(--h, 0%), calc(100% - 24px));
+    display: grid;
+    place-items: center;
+    height: 26px;
+    padding-inline: var(--sp-2);
+    font-size: var(--fs-12);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    pointer-events: none;
+    background: var(--c-raised-2);
+    border-radius: var(--r-sm);
+    box-shadow: var(--sh-2);
+    opacity: 0;
+    translate: -50% 0;
+    transition: opacity var(--dur-1);
+  }
+
+  .seek:hover .seek__tip,
+  .seek[data-dragging] .seek__tip {
+    opacity: 1;
+  }
+
+  /* ── 跳过片头 / 即将播放 ── */
+  /* 这两个都一直挂在页面上，显示 / 隐藏只切换 data-open */
+  .player__skip {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 116px;
+    visibility: hidden;
+    opacity: 0;
+    translate: 12px 0;
+    transition:
+      opacity var(--dur-2) var(--ease-out),
+      translate var(--dur-3) var(--ease-out),
+      background var(--dur-1),
+      visibility 0s linear var(--dur-3);
+  }
+
+  .player__skip[data-open] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+
+  .upnext {
+    position: absolute;
+    right: var(--gutter);
+    bottom: 116px;
+    width: 300px;
+    padding: var(--sp-5);
+    visibility: hidden;
+    background: var(--c-glass-strong);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    opacity: 0;
+    translate: 0 12px;
+    backdrop-filter: var(--blur-glass);
+    transition:
+      opacity var(--dur-3) var(--ease-out),
+      translate var(--dur-3) var(--ease-out),
+      visibility 0s linear var(--dur-3);
+  }
+
+  .upnext[data-open] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    transition-delay: 0s;
+  }
+
+  .upnext__label {
+    font-size: var(--fs-12);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+
+  .upnext__title {
+    margin-top: var(--sp-1);
+    overflow: hidden;
+    font-size: var(--fs-16);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .upnext__actions {
+    display: flex;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+  }
+
+  /* ── 选集面板 ── */
+  .player__panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: var(--z-panel);
+    display: flex;
+    flex-direction: column;
+    width: 380px;
+    padding-top: var(--bar-h);
+    background: var(--c-glass-strong);
+    border-left: 1px solid var(--c-line);
+    translate: 100% 0;
+    visibility: hidden;
+    backdrop-filter: var(--blur-glass);
+    transition:
+      translate var(--dur-3) var(--ease-out),
+      visibility 0s linear var(--dur-3);
+  }
+
+  .player__panel[data-open] {
+    translate: 0 0;
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .player__panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--sp-4) var(--sp-4) var(--sp-6);
+  }
+
+  .player__panel-title {
+    font-size: var(--fs-18);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+  }
+
+  .player__panel-body {
+    flex: 1;
+    min-height: 0;
+    padding: 0 var(--sp-6) var(--sp-6);
+    overflow: hidden auto;
+    scrollbar-width: none;
+  }
+
+  .player__panel .eps {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--sp-2);
+  }
+
+  /* ── 鼠标静止：控件淡出、光标隐藏 ── */
+  .player[data-idle] {
+    cursor: none;
+  }
+
+  .player[data-idle] .player__top {
+    pointer-events: none;
+    opacity: 0;
+    translate: 0 -8px;
+  }
+
+  .player[data-idle] .player__bottom {
+    pointer-events: none;
+    opacity: 0;
+    translate: 0 8px;
+  }
+
+  .player[data-idle] .player__shade {
+    opacity: 0;
+  }
+
+  .app:has(.player[data-idle]) .winctl {
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  /* 全屏时不需要窗口按钮。进入全屏后给 .app 加 data-fullscreen */
+  .app[data-fullscreen] .winctl {
+    display: none;
+  }
+}

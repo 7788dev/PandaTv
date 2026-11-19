@@ -1,0 +1,13 @@
+main connected
+window connected
+home populated
+fonts ready
+{
+  "url": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/out/renderer/index.html",
+  "title": "嫁金钗",
+  "loadedImages": 18,
+  "errors": [],
+  "consoleErrors": []
+}
+Debugger ending on ws://127.0.0.1:61709/ba46b956-29c1-4969-a562-3b1ee8fd689f
+For help, see: https://nodejs.org/learn/getting-started/debugging

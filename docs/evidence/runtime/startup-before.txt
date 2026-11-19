@@ -1,0 +1,11 @@
+main connected
+Debugger ending on ws://127.0.0.1:51841/4cd5ae2a-12e6-4bc6-86eb-1f701d295fba
+For help, see: https://nodejs.org/learn/getting-started/debugging
+page.reload: Timeout 30000ms exceeded.
+Call log:
+  - waiting for navigation until "load"
+
+    at E:\dev\项目\panda\e2e\smoke.cjs:20:16 {
+  log: [ '  - waiting for navigation until "load"' ],
+  name: 'TimeoutError'
+}

@@ -1,0 +1,48 @@
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+ ❯ tests/tags-regression.test.ts (3 tests | 2 failed) 742ms
+   × retains verified genre results when a single removed subject has no tags endpoint 367ms
+   × keeps the verified movie lane when the series lane is unavailable 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/tags-regression.test.ts > retains verified genre results when a single removed subject has no tags endpoint
+DataError: Metadata HTTP 404
+ ❯ DoubanHttp.request src/main/data/http.ts:135:17
+    133|           if (Number.isFinite(after) && after > 0) retryDelay = Math.m…
+    134|           await response.body?.cancel();
+    135|           throw new DataError(status === 429 ? 'RATE_LIMITED' : status…
+       |                 ^
+    136|         }
+    137|         const declared = Number(response.headers.get('content-length')…
+ ❯ DoubanHttp.json src/main/data/http.ts:77:37
+ ❯ src/main/data/douban.ts:143:22
+ ❯ src/main/data/douban.ts:141:23
+ ❯ DoubanDataSource.channel src/main/data/douban.ts:122:21
+ ❯ tests/tags-regression.test.ts:16:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/tags-regression.test.ts > keeps the verified movie lane when the series lane is unavailable
+DataError: Metadata HTTP 404
+ ❯ DoubanHttp.request src/main/data/http.ts:135:17
+    133|           if (Number.isFinite(after) && after > 0) retryDelay = Math.m…
+    134|           await response.body?.cancel();
+    135|           throw new DataError(status === 429 ? 'RATE_LIMITED' : status…
+       |                 ^
+    136|         }
+    137|         const declared = Number(response.headers.get('content-length')…
+ ❯ DoubanHttp.json src/main/data/http.ts:77:37
+ ❯ src/main/data/douban.ts:125:24
+ ❯ DoubanDataSource.channel src/main/data/douban.ts:122:21
+ ❯ tests/tags-regression.test.ts:38:18
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  03:27:31
+   Duration  915ms (tests 93%, transform 4%, import 3%)
+

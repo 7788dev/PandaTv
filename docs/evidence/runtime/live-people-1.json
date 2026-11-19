@@ -1,0 +1,137 @@
+{
+  "at": "2026-11-19T17:14:20.649Z",
+  "detail": {
+    "directors": [
+      "杨磊"
+    ],
+    "cast": [
+      {
+        "name": "张鲁一",
+        "role": "饰 汪淼"
+      },
+      {
+        "name": "于和伟",
+        "role": "饰 史强"
+      },
+      {
+        "name": "陈瑾",
+        "role": "饰 老年叶文洁"
+      },
+      {
+        "name": "王子文",
+        "role": "饰 青年叶文洁"
+      },
+      {
+        "name": "林永健",
+        "role": "饰 常伟思"
+      },
+      {
+        "name": "李小冉",
+        "role": "饰 申玉菲"
+      }
+    ],
+    "people": [
+      {
+        "id": "1321964",
+        "name": "杨磊",
+        "role": "导演",
+        "photo": true
+      },
+      {
+        "id": "1323723",
+        "name": "张鲁一",
+        "role": "饰 汪淼",
+        "photo": true
+      },
+      {
+        "id": "1313742",
+        "name": "于和伟",
+        "role": "饰 史强",
+        "photo": true
+      },
+      {
+        "id": "1309215",
+        "name": "陈瑾",
+        "role": "饰 老年叶文洁",
+        "photo": true
+      },
+      {
+        "id": "1275649",
+        "name": "王子文",
+        "role": "饰 青年叶文洁",
+        "photo": true
+      },
+      {
+        "id": "1274650",
+        "name": "林永健",
+        "role": "饰 常伟思",
+        "photo": true
+      },
+      {
+        "id": "1258893",
+        "name": "李小冉",
+        "role": "饰 申玉菲",
+        "photo": true
+      },
+      {
+        "id": "1378720",
+        "name": "田良良",
+        "role": "总编剧",
+        "photo": true
+      }
+    ]
+  },
+  "photos": [
+    {
+      "width": 540,
+      "height": 771
+    },
+    {
+      "width": 540,
+      "height": 761
+    },
+    {
+      "width": 247,
+      "height": 353
+    },
+    {
+      "width": 387,
+      "height": 553
+    },
+    {
+      "width": 540,
+      "height": 772
+    },
+    {
+      "width": 290,
+      "height": 409
+    },
+    {
+      "width": 540,
+      "height": 761
+    },
+    {
+      "width": 313,
+      "height": 447
+    }
+  ],
+  "person": {
+    "id": "1313742",
+    "name": "于和伟",
+    "firstPage": 30,
+    "firstPageMs": 3376
+  },
+  "works": {
+    "pages": [
+      30,
+      30,
+      30,
+      30,
+      14
+    ],
+    "works": 134,
+    "distinct": 134,
+    "ended": true,
+    "ms": 12670
+  }
+}

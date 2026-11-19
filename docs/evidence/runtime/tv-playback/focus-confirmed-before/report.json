@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-18T09:53:33.876388+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '0.0', '暂停', '下一集', '00:00 / 1:00:35', '选集', '1080P', '倍速']"
+    }
+  ],
+  "version": "1.0.2",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

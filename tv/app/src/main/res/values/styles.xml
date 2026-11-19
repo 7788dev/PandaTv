@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.PandaTv" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ink_950</item>
+        <item name="android:colorBackground">@color/ink_950</item>
+        <item name="android:statusBarColor">@color/ink_950</item>
+        <item name="android:navigationBarColor">@color/ink_950</item>
+        <item name="android:textColor">@color/paper_100</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

@@ -1,0 +1,64 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep real movie|real serial|real animation
+
+
+Running 3 tests using 1 worker
+
+(node:39276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+Electron connected: []
+Renderer bridge ready
+  ok 1 e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history (22.8s)
+Electron connected: []
+Renderer bridge ready
+  x  2 e2e\live.spec.ts:72:1 › real serial exposes playable episodes and decodes after switching to the next episode (1.3m)
+(node:72228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+  x  3 e2e\live.spec.ts:102:1 › real animation resolves by Douban identity and decodes its actual stream (2.9s)
+
+
+  1) e2e\live.spec.ts:72:1 › real serial exposes playable episodes and decodes after switching to the next episode 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:42
+
+      40 | }
+      41 | export async function playing(page: Page) {
+    > 42 |   await page.waitForFunction(() => {
+         |              ^
+      43 |     const video = document.querySelector('video')
+      44 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      45 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:42:14)
+        at E:\dev\项目\panda\e2e\live.spec.ts:82:11
+
+    Error Context: .tmp\e2e-results\live-real-serial-exposes-p-3853a-itching-to-the-next-episode\error-context.md
+
+  2) e2e\live.spec.ts:102:1 › real animation resolves by Douban identity and decodes its actual stream 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: "anime"
+    Received: "tv"
+
+      105 |     await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { muted: true } }))
+      106 |     const item = await page.evaluate(async () => (await window.panda.data.search('凡人修仙传')).find(item => item.title === '凡人修仙传'))
+    > 107 |     expect(item?.type).toBe('anime')
+          |                        ^
+      108 |     await page.evaluate(id => { location.hash = '#/play/' + id + '/1' }, item!.id)
+      109 |     await playing(page)
+      110 |     await capture(page, 'animation-playback', { id: item!.id, title: item!.title, ...await videoStatus(page), filterDiagnostics: logs.filter(value => value.includes('[media]')) })
+        at E:\dev\项目\panda\e2e\live.spec.ts:107:24
+
+    Error Context: .tmp\e2e-results\live-real-animation-resolv-3cd24-d-decodes-its-actual-stream\error-context.md
+
+  2 failed
+    e2e\live.spec.ts:72:1 › real serial exposes playable episodes and decodes after switching to the next episode 
+    e2e\live.spec.ts:102:1 › real animation resolves by Douban identity and decodes its actual stream 
+  1 passed (1.8m)

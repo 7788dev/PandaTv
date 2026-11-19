@@ -1,0 +1,14 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep window controls remain|fixture: player quality|fixture: search keyboard
+
+
+Running 3 tests using 1 worker
+
+(node:77920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\fixture.spec.ts:29:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus (6.4s)
+  ok 2 e2e\fixture.spec.ts:75:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls (4.9s)
+  ok 3 e2e\fixture.spec.ts:116:1 › fixture: window controls remain usable while a confirmation is open (1.5s)
+
+  3 passed (13.1s)

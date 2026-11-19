@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-18T10:32:25.562541+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "missing-source",
+      "error": "Source-less subject entered the player before an availability verdict: {'texts': ['返回', '0.0', '暂停', '下一集', '00:00 / 00:00', '选集', '线路', '清晰度', '倍速'], 'clock': '00:00 / 00:00', 'player': True, 'spinner': True, 'focus': None, 'nextTap': [406, 992], 'loadingRegionMaxRgb': 0}"
+    }
+  ],
+  "version": "1.0.1",
+  "enabledSources": [
+    "bfzy"
+  ],
+  "sourceRulesRestored": true,
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

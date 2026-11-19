@@ -1,0 +1,34 @@
+Panda playback stability delivery evidence — 2026-11-20 (UTC+8)
+Host: Windows 11 26100; Node 24; MuMu Android 15 at 127.0.0.1:16416.
+
+Implementation
+Desktop: work-scoped source backoff and previous-episode winner ordering in PlaybackService; HLS.js LoadPolicy retry policies, 90/180 second forward buffer caps, 30 second back buffer.
+Android TV: matching source ordering and work-scoped backoff; Media3 uses 10–30 second / 16 MiB buffer on low-heap devices and 12–48 second / 32 MiB on regular devices, with 1 second start and 2 second rebuffer thresholds.
+Shared parity vectors exported to tv/app/src/test/resources/golden-vectors.json (93,280 bytes).
+
+Reproduction and offline verification
+With the source-order comparator temporarily neutralized, `npm test -- --run tests/playback-start.test.ts -t "tries the previous episode winner first"` failed: it opened the slower `one` source before `two`. Restoring the comparator made the same test pass.
+One timing-sensitive race test became nondeterministic under the new scheduling order. It now asserts that a source answers before its 1 second segment completes, while allowing either of two otherwise equivalent answers. The focused test and the full offline suite pass.
+`npm run typecheck`: pass (also run as part of the final desktop build).
+`npm test`: 15 files, 234 tests passed.
+`npm run verify:design`: 206 design files unchanged.
+`node design/tools/test-contract.mjs`: 405 checks passed.
+From tv/: `gradlew.bat testDebugUnitTest lintRelease assembleRelease`: BUILD SUCCESSFUL.
+
+Live source probes
+`npm run probe:sources` at 2026-11-19 23:11: hot TV 14/14, movies 14/14, anime 14/14, variety 12/14, docs 10/14; serials 44/48, episode-range works 33/34. See source-coverage.json. Do not treat missed works as evidence against one catalogue: sources that answered did not carry them, and this probe ran from a foreign egress.
+`npm run probe:start` at 2026-11-19 23:14: 16 hot titles, 13 reached the first segment; successful total-time median 4,188 ms, worst 9,910 ms, 360zy won 13. This host exits abroad; mainland measurements remain in cn-sources.md.
+
+Windows release
+`npm run dist` completed on 2026-11-20 00:49:52.
+release/Panda-1.0.1-Setup.exe: 132,630,453 bytes; SHA-256 F5C2A3491C433949E11B4A475FE756EB9E13244BFD95A1AF7051076C9B0ADF03.
+release/win-unpacked/resources/app.asar: 12,456,895 bytes; SHA-256 52062E447221294E631AA1071C5391843159A9178B651B6F37A67898E8413A4D; 268 entries, no node_modules, design mock/art/preview, fixtures, tests, e2e, scripts or source maps.
+The final `npm run test:e2e` against release/win-unpacked ran 19 cases: 16 passed, 3 failed. Real movie, serial, animation, catalogue, UI, startup and automatic source recovery passed. The 360zy ad-removal playback case passed. The forced single-source bfzy, dyttzy and lzi ad-removal tests timed out while waiting for decoded playback. Each test has multiple playback checkpoints (initial startup and seeking), and the available failure context does not identify which checkpoint timed out. These are material failed cases for those sources on this foreign egress; this full-suite result is not all-green.
+The package was not installed, and the existing 1.0.0 installation was not changed.
+
+Android TV release
+release/Panda-TV-1.0.3.apk: 1,068,444 bytes; SHA-256 6112B93C49BA76EC9C7C22E2935564F403DEA8F5404DC3351D56F797542EDEDB; versionCode 4, versionName 1.0.3, minSdk 22.
+V1 and v2 signatures verified. Signing certificate SHA-256: d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd.
+Installed on MuMu using the bundled ADB. Full navigation passed on the second run after one intermittent D-pad focus failure on the first; search 3/3 passed. Playback focus, episode switch through episode 3, history update, and retryable missing-source case passed. User state and firewall rules were restored. Two animation rounds (four cases) had zero janky frames, p95 5 ms.
+Reports: runtime/tv-navigation/playback-stability-1.0.3-repeat/report.json; runtime/tv-navigation/playback-stability-1.0.3/report.json; runtime/tv-playback/playback-stability-1.0.3/report.json; runtime/tv-motion/playback-stability-1.0.3/report.json.
+The APK installed on MuMu matches the packaged APK SHA-256 above. Emulator evidence does not substitute for playback on the TCL Android 5.1 television.

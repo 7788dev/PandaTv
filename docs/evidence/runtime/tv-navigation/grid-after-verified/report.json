@@ -1,0 +1,155 @@
+{
+  "at": "2026-11-18T08:15:18.790027+00:00",
+  "version": "1.0.1",
+  "cases": [
+    {
+      "name": "动漫-1-fast-right",
+      "fast": true,
+      "column": 5,
+      "upPressesToHeader": 9,
+      "firstMovie": "千与千寻",
+      "trace": [
+        {
+          "title": "罗小黑战记2",
+          "labels": [
+            "8.7",
+            "罗小黑战记2",
+            "动画 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            675,
+            251,
+            947,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "头脑特工队",
+          "labels": [
+            "8.9",
+            "头脑特工队",
+            "喜剧 / 动画 / 冒险"
+          ],
+          "bounds": [
+            675,
+            251,
+            947,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "天空之城",
+          "labels": [
+            "9.2",
+            "天空之城",
+            "动画 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            969,
+            251,
+            1241,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "冰雪奇缘",
+          "labels": [
+            "8.5",
+            "冰雪奇缘",
+            "喜剧 / 动画 / 歌舞 / 奇幻"
+          ],
+          "bounds": [
+            969,
+            251,
+            1241,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "龙猫",
+          "labels": [
+            "9.2",
+            "龙猫",
+            "动画 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            969,
+            251,
+            1241,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "飞屋环游记",
+          "labels": [
+            "9.1",
+            "飞屋环游记",
+            "剧情 / 喜剧 / 动画 / 冒险"
+          ],
+          "bounds": [
+            969,
+            250,
+            1241,
+            747
+          ],
+          "focused": true
+        },
+        {
+          "title": "哪吒之魔童降世",
+          "labels": [
+            "8.4",
+            "哪吒之魔童降世",
+            "剧情 / 喜剧 / 动画 / 奇幻"
+          ],
+          "bounds": [
+            969,
+            250,
+            1241,
+            747
+          ],
+          "focused": true
+        },
+        {
+          "title": "千与千寻",
+          "labels": [
+            "9.4",
+            "千与千寻",
+            "剧情 / 动画 / 奇幻"
+          ],
+          "bounds": [
+            1263,
+            251,
+            1535,
+            748
+          ],
+          "focused": true
+        },
+        {
+          "title": "最热",
+          "labels": [
+            "最热"
+          ],
+          "bounds": [
+            202,
+            151,
+            314,
+            216
+          ],
+          "focused": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [
+    {
+      "name": "动漫-1-normal",
+      "error": "Returning up changed the movie column"
+    }
+  ]
+}

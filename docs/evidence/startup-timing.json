@@ -1,0 +1,233 @@
+{
+  "at": "2026-11-17T07:59:36.352Z",
+  "executable": "E:\\dev\\项目\\panda\\release\\win-unpacked\\Panda.exe",
+  "unit": "ms after process creation",
+  "firstStarts": [
+    {
+      "skeleton": 335,
+      "topOfPage": 584,
+      "visibleArtwork": 1143,
+      "wholePage": 1705,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 355,
+      "topOfPage": 665,
+      "visibleArtwork": 2361,
+      "wholePage": 1689,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 349,
+      "topOfPage": 692,
+      "visibleArtwork": 1183,
+      "wholePage": 2544,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 353,
+      "topOfPage": 996,
+      "visibleArtwork": 1375,
+      "wholePage": 1725,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 341,
+      "topOfPage": 633,
+      "visibleArtwork": 2450,
+      "wholePage": 1695,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 332,
+      "topOfPage": 704,
+      "visibleArtwork": 1093,
+      "wholePage": 1782,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 325,
+      "topOfPage": 597,
+      "visibleArtwork": 1088,
+      "wholePage": 1917,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 352,
+      "topOfPage": 634,
+      "visibleArtwork": 3071,
+      "wholePage": 1977,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 355,
+      "topOfPage": 998,
+      "visibleArtwork": 1434,
+      "wholePage": 1757,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 339,
+      "topOfPage": 741,
+      "visibleArtwork": 1684,
+      "wholePage": 1705,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 337,
+      "topOfPage": 573,
+      "visibleArtwork": 1052,
+      "wholePage": 1912,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 340,
+      "topOfPage": 623,
+      "visibleArtwork": 1083,
+      "wholePage": 2130,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 364,
+      "topOfPage": 781,
+      "visibleArtwork": 1287,
+      "wholePage": 1710,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 343,
+      "topOfPage": 628,
+      "visibleArtwork": 1167,
+      "wholePage": 1754,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 343,
+      "topOfPage": 1007,
+      "visibleArtwork": 1471,
+      "wholePage": 1710,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 343,
+      "topOfPage": 754,
+      "visibleArtwork": 1248,
+      "wholePage": 1760,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 344,
+      "topOfPage": 822,
+      "visibleArtwork": 1345,
+      "wholePage": 1683,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 358,
+      "topOfPage": 659,
+      "visibleArtwork": 1737,
+      "wholePage": 1737,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 351,
+      "topOfPage": 642,
+      "visibleArtwork": 1040,
+      "wholePage": 2865,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 366,
+      "topOfPage": 933,
+      "visibleArtwork": 1476,
+      "wholePage": 1949,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 376,
+      "topOfPage": 826,
+      "visibleArtwork": 1437,
+      "wholePage": 1722,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 334,
+      "topOfPage": 720,
+      "visibleArtwork": 1796,
+      "wholePage": 1628,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 357,
+      "topOfPage": 644,
+      "visibleArtwork": 1033,
+      "wholePage": 1740,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 374,
+      "topOfPage": 702,
+      "visibleArtwork": 1223,
+      "wholePage": 2650,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ],
+  "repeatStarts": [
+    {
+      "skeleton": 378,
+      "topOfPage": 521,
+      "visibleArtwork": 842,
+      "wholePage": 521,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 379,
+      "topOfPage": 511,
+      "visibleArtwork": 607,
+      "wholePage": 511,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 412,
+      "topOfPage": 539,
+      "visibleArtwork": 669,
+      "wholePage": 539,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 392,
+      "topOfPage": 526,
+      "visibleArtwork": 649,
+      "wholePage": 526,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ]
+}

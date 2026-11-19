@@ -1,0 +1,522 @@
+{
+  "at": "2026-11-18T11:28:40.806763+00:00",
+  "version": "1.0.2",
+  "cases": [
+    {
+      "name": "搜索结果回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 5,
+      "firstMovie": "三体",
+      "trace": [
+        {
+          "title": "解码三体",
+          "labels": [
+            "解码三体",
+            "脱口秀"
+          ],
+          "bounds": [
+            87,
+            364,
+            359,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "三体 第三季",
+          "labels": [
+            "三体 第三季",
+            "剧情 / 科幻 / 悬疑 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            87,
+            364,
+            359,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "三体：大史",
+          "labels": [
+            "三体：大史",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            87,
+            364,
+            359,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "三体",
+          "labels": [
+            "8.8",
+            "45分钟",
+            "三体",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            87,
+            364,
+            359,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "全部",
+          "labels": [
+            "全部"
+          ],
+          "bounds": [
+            90,
+            259,
+            206,
+            324
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "搜索末行保持列",
+      "passed": true,
+      "fast": true,
+      "column": 5,
+      "upPressesToHeader": 5,
+      "firstMovie": "三体II：黑暗森林（上）",
+      "trace": [
+        {
+          "title": "混沌链：危情三体星",
+          "labels": [
+            "混沌链：危情三体星"
+          ],
+          "bounds": [
+            1557,
+            364,
+            1829,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "三体 第二季",
+          "labels": [
+            "三体 第二季",
+            "剧情 / 科幻 / 悬疑 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            1557,
+            364,
+            1829,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "我的三体之罗辑传",
+          "labels": [
+            "9.4",
+            "我的三体之罗辑传",
+            "剧情 / 科幻 / 动画"
+          ],
+          "bounds": [
+            1557,
+            364,
+            1829,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "三体II：黑暗森林（上）",
+          "labels": [
+            "三体II：黑暗森林（上）",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            1557,
+            364,
+            1829,
+            865
+          ],
+          "focused": true
+        },
+        {
+          "title": "全部",
+          "labels": [
+            "全部"
+          ],
+          "bounds": [
+            90,
+            259,
+            206,
+            324
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "影人作品回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 6,
+      "firstMovie": "岁月",
+      "trace": [
+        {
+          "title": "与狼共舞",
+          "labels": [
+            "7.6",
+            "与狼共舞",
+            "剧情"
+          ],
+          "bounds": [
+            87,
+            229,
+            359,
+            730
+          ],
+          "focused": true
+        },
+        {
+          "title": "极：《悬崖之上》电影纪录片",
+          "labels": [
+            "7.8",
+            "极：《悬崖之上》电影纪录片",
+            "纪录片"
+          ],
+          "bounds": [
+            87,
+            229,
+            359,
+            730
+          ],
+          "focused": true
+        },
+        {
+          "title": "大军师司马懿之军师联盟",
+          "labels": [
+            "8.2",
+            "大军师司马懿之军师联盟",
+            "剧情 / 爱情 / 历史 / 战争 / 古装"
+          ],
+          "bounds": [
+            87,
+            229,
+            359,
+            730
+          ],
+          "focused": true
+        },
+        {
+          "title": "今日影评·表演者言 第二季",
+          "labels": [
+            "8.7",
+            "今日影评·表演者言 第二季",
+            "脱口秀"
+          ],
+          "bounds": [
+            87,
+            229,
+            359,
+            730
+          ],
+          "focused": true
+        },
+        {
+          "title": "岁月",
+          "labels": [
+            "9.4",
+            "岁月",
+            "剧情"
+          ],
+          "bounds": [
+            87,
+            229,
+            359,
+            730
+          ],
+          "focused": true
+        },
+        {
+          "title": "返回",
+          "labels": [
+            "返回"
+          ],
+          "bounds": [
+            89,
+            73,
+            255,
+            143
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "搜索与影人页面流程",
+      "passed": true
+    },
+    {
+      "name": "收藏列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 6,
+      "firstMovie": "美丽人生",
+      "trace": [
+        {
+          "title": "敦煌英雄",
+          "labels": [
+            "5.8",
+            "敦煌英雄",
+            "动作 / 古装"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "天启Z：新世界",
+          "labels": [
+            "5.6",
+            "天启Z：新世界",
+            "剧情"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "末世行者",
+          "labels": [
+            "6.0",
+            "末世行者",
+            "动作 / 科幻 / 惊悚"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "哈利·波特与火焰杯",
+          "labels": [
+            "8.8",
+            "哈利·波特与火焰杯",
+            "悬疑 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "美丽人生",
+          "labels": [
+            "9.5",
+            "美丽人生",
+            "剧情 / 喜剧 / 爱情 / 战争"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "收藏",
+          "labels": [
+            "收藏"
+          ],
+          "bounds": [
+            89,
+            151,
+            269,
+            227
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏详情返回位置",
+      "passed": true,
+      "movie": "天启Z：新世界"
+    },
+    {
+      "name": "历史列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 9,
+      "firstMovie": "美丽人生",
+      "trace": [
+        {
+          "title": "理智与情感",
+          "labels": [
+            "6.5",
+            "理智与情感",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "敦煌英雄",
+          "labels": [
+            "5.8",
+            "敦煌英雄",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "复活男",
+          "labels": [
+            "5.4",
+            "复活男",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "火柴盒大电影",
+          "labels": [
+            "6.1",
+            "火柴盒大电影",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "末世行者",
+          "labels": [
+            "6.0",
+            "末世行者",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "抓特务",
+          "labels": [
+            "7.2",
+            "抓特务",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "害群之马",
+          "labels": [
+            "7.5",
+            "害群之马",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "美丽人生",
+          "labels": [
+            "9.5",
+            "美丽人生",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "历史",
+          "labels": [
+            "历史"
+          ],
+          "bounds": [
+            283,
+            151,
+            463,
+            227
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏历史流程",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "apkSha256": "CF59C69BF07F68F4A8059829419C22668CD49F5C6A5E63DC9F9896248199E11C",
+  "libraryUserStateRestored": true,
+  "userStateRestored": true
+}

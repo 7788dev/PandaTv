@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-18T09:23:21.879741+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Header did not switch immediately: {'texts': ['返回', '三体', '第1集', '18.0', '暂停', '下一集', '01:05 / 1:00:35', '选集', '1080P', '倍速'], 'clock': '01:05 / 1:00:35', 'player': True, 'spinner': False, 'nextTap': [407, 992], 'loadingRegionMaxRgb': 225}"
+    },
+    {
+      "name": "missing-source",
+      "error": "No missing-source verdict within the request budget: {'texts': ['返回', '骑有此理 第四季', '2026 · 中国大陆 · 真人秀 · 40分钟', '导演：吴磊', '主演：吴磊', '演员吴磊的个人骑行视频IP栏目。第四季之环海南岛篇，吴磊穿行烈日海风用车轮标记环岛公路，记录一场由“未完成”展开的自我对话......', '播放', '收藏', '演职员', '吴磊'], 'clock': None, 'player': False, 'spinner': False, 'loadingRegionMaxRgb': 205}"
+    }
+  ],
+  "version": "1.0.1",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

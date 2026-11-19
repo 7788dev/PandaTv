@@ -1,0 +1,68 @@
+Final verification on the delivered code — 2026-11-17 / 2026-11-18 (local time UTC+8), Windows 11 26100, Node 24.
+Last change to shipped desktop code: 2026-11-17 21:30 (comments in src/main/data/douban.ts and normalize.ts;
+functional changes in douban.ts, normalize.ts, ipc.ts, preload/index.ts, shared/api.ts, copy.extra.ts,
+renderer/components.tsx, pages.tsx, App.tsx and app.css completed 20:50); test race fix in e2e/data.spec.ts at
+2026-11-18 04:39.
+Earlier logs in this directory (e2e-live.txt, e2e-data.txt, *-before.txt, baseline-*.txt) are history, not the final state.
+This host reaches the network through a local proxy that exits abroad; runs marked "Beijing" were made on a
+server in mainland China (see cn-sources.md).
+
+After the last change to shipped desktop code:
+21:50 (11-17)  npm run typecheck                     no errors (again 2026-11-18 04:39, 06:36)
+21:50 (11-17)  npm test                              15 files, 230 tests passed, 22.7 s (again 2026-11-18 06:36: 21.6 s)
+21:51 (11-17)  npm run build                         main, preload and renderer built
+21:51 (11-17)  npm run test:e2e (whole suite)        19 passed, 4.8 min: fixture 8 (states, interactions, player controls,
+                                                     a source that never starts, manual line switch, two prototype comparisons),
+                                                     startup 2, real Douban data 1, real Douban people & works 1,
+                                                     real playback 3 (movie, serial, animation),
+                                                     real ad removal 4 (bfzy, 360zy, dyttzy, lzi)
+21:56 (11-17)  npm run verify:design                 Design unchanged: 206 files (again 2026-11-18 06:36)
+21:56 (11-17)  node design/tools/test-contract.mjs   contract ok · 405 checks (again 2026-11-18 06:36)
+21:21 (11-17)  node docs/evidence/probe-people.mjs   45 titles (/credits 4-8 rows, 45/45 answered, median 52 ms; /celebrities
+                                                     4-88 people, median 24), 3 people's full works (202, 316, 134, all distinct),
+                                                     missing person 404 -> people-audit.json; portrait framing measured on 1123
+                                                     portraits (1121 faces): top-held 93.0% >= 0.9 head vs centre 20.2% -> portrait-framing.json
+04:35 (11-18)  npm run dist                          release/Panda-1.0.0-Setup.exe, 132629462 bytes,
+                                                     sha256 4AA84BA84995E1D3090400C84F53ABBBABB90AEF8FE0B9F158A08C853325EEE8
+                                                     app.asar 12452908 bytes, 268 entries, none of node_modules / design mock,
+                                                     art, preview / fixtures / tests / e2e / scripts / source maps / .tmp
+04:39 (11-18)  packaged-app E2E (release\win-unpacked\Panda.exe)   7 passed, 1.8 min (startup reload, second start,
+                                                     real Douban data, real movie, serial, animation, real Douban people & works)
+
+Android TV client (tv/, last change to shipped TV code: 2026-11-18 06:36):
+06:37 (11-18)  tv\gradlew.bat testDebugUnitTest      12 passed (GoldenParityTest 6 against golden-vectors.json exported from TS,
+                                                     RuntimeCoreTest 6), 0 failed
+06:37 (11-18)  tv\gradlew.bat lintRelease            passed, NewApi (fatal, minSdk 22) 0 errors, 0 DrawAllocation, 0 UnusedResources
+06:37 (11-18)  tv\gradlew.bat assembleRelease        release/Panda-TV-1.0.0.apk, 1053110 bytes (1.004 MiB),
+                                                     sha256 09CD7DAD8A26E22B4A5A3624A20E86390D33534CBD0D7C50F190DA336C7DA510
+                                                     v1 + v2 signed, minSdk 22, targetSdk 34, 1 DEX (10170 methods), 0 native .so libs
+06:37 (11-18)  python scripts/verify-tv-mumu.py      MuMu Android 15 at 1920x1080 @ 320dpi (960x540dp TV viewport):
+                                                     home 630 ms, 6-column channel rails 92..1828 px, filter chip Back close,
+                                                     3x13 search keypad + type filters, 8 principal cast w/ portraits -> 于和伟
+                                                     untruncated header & works (1749 ms), real playback start 1101 ms (bfzy -18 ad
+                                                     segments / 51.52 s), consecutive D-pad seek -> 00:23/42:44 w/ focus held on
+                                                     SeekBar, active line focused in panel, Continue Watching & 4-col wide History
+                                                     showing 第1集, 0 crashes -> tv-verification.json & runtime/tv/*.png
+                                                     (Not tested on physical TCL L55P2-UD Android 5.1 TV hardware.)
+
+Playback matching, ad rules, taxonomy, home feed and startup paths were not touched since the 2026-11-17 afternoon runs:
+15:41 (11-17)  npm run probe:sources                 118 live works: tv 14/14, movie 12/14, anime 14/14, variety 13/14,
+                                                     doc 9/14, six serials 44/48, runs with an episode range 32/33 -> source-coverage.json
+15:42 (11-17)  npm run audit:ads                     123 rows, 118 manifests read, 55 filtered, 22 with short blocks left in
+                                                     place (no evidence) -> ad-audit.json
+15:52 (11-17)  probe:start bundle, Beijing           32 titles, 31 played; median search 1334 ms, choice 926 ms, total 2558 ms,
+                                                     worst 8.2 s; pictures 1080P 27, 720P 3, 480P 1 -> cn-sources.md
+15:59 (11-17)  node scripts/probe-startup.mjs 24 4   28 starts, 0 failed -> startup-timing.json
+                                                     first starts (ms, median / worst): skeleton 349 / 376, top of page 702 / 1007,
+                                                     visible artwork 1345 / 3071, whole page 1754 / 2865; repeat: 526 / 539
+
+Not run on this build: the installer itself. The copy installed at D:\Programs\Panda was neither upgraded nor
+uninstalled, and %APPDATA%\Panda was not touched. The clean install -> run -> uninstall cycle was last run on
+2026-11-16 17:50 on an earlier build of the same packaging configuration (install.txt).
+Not re-run: npm run probe:filters (taxonomy.ts unchanged since 2026-11-16 12:35: 738 filters, 0 failing).
+
+Screenshot pairs from the 2026-11-17 21:51 run (docs/evidence/visual/overlay-report.json, 1440x901; share of
+pixels differing by more than 24/255 in any channel):
+  02 shelves 0.002%  05 episode list 0  05 episode ranges 0  06 search panel 0  07 suggest 0.004%
+  13 menu 0.067%  14 dialog 0.045%  19 player error 0.168%
+  15 paused 18.6%  16 episodes 47.3%  17 up next 57.0% — video picture differs; 40 control boxes within 0.97 CSS px (< 1 px).

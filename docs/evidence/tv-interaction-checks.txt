@@ -1,0 +1,812 @@
+{
+  "publishedAt": "2026-11-18T11:30:56.332944+00:00",
+  "apk": {
+    "versionCode": 3,
+    "versionName": "1.0.2",
+    "bytes": 1067997,
+    "sha256": "CF59C69BF07F68F4A8059829419C22668CD49F5C6A5E63DC9F9896248199E11C",
+    "builtAtLocal": "2026-11-18 18:56:41"
+  },
+  "androidTests": 22,
+  "navigation": {
+    "at": "2026-11-18T11:22:02.786609+00:00",
+    "passed": 23
+  },
+  "search": {
+    "at": "2026-11-18T11:21:17.369547+00:00",
+    "passed": 3
+  },
+  "stateRestorationRepeat": {
+    "at": "2026-11-18T11:28:40.806763+00:00",
+    "passed": 8
+  },
+  "motion": {
+    "at": "2026-11-18T11:06:41.766045+00:00",
+    "cases": [
+      {
+        "name": "home-1",
+        "passed": true,
+        "elapsedMs": 9139,
+        "frames": {
+          "totalFrames": 173,
+          "jankyFrames": 0,
+          "jankPct": 0.0,
+          "p90Ms": 5,
+          "p95Ms": 5
+        },
+        "heroReturnComplete": true,
+        "initialHeroCy": 559,
+        "returnedHeroCy": 552
+      },
+      {
+        "name": "channel-expanded-1",
+        "passed": true,
+        "elapsedMs": 9004,
+        "frames": {
+          "totalFrames": 219,
+          "jankyFrames": 0,
+          "jankPct": 0.0,
+          "p90Ms": 5,
+          "p95Ms": 5
+        },
+        "normalAndRapidInput": true
+      },
+      {
+        "name": "home-2",
+        "passed": true,
+        "elapsedMs": 8830,
+        "frames": {
+          "totalFrames": 170,
+          "jankyFrames": 0,
+          "jankPct": 0.0,
+          "p90Ms": 5,
+          "p95Ms": 5
+        },
+        "heroReturnComplete": true,
+        "initialHeroCy": 559,
+        "returnedHeroCy": 546
+      },
+      {
+        "name": "channel-expanded-2",
+        "passed": true,
+        "elapsedMs": 9002,
+        "frames": {
+          "totalFrames": 216,
+          "jankyFrames": 0,
+          "jankPct": 0.0,
+          "p90Ms": 5,
+          "p95Ms": 5
+        },
+        "normalAndRapidInput": true
+      }
+    ]
+  },
+  "playback": {
+    "at": "2026-11-18T11:10:16.066190+00:00",
+    "passed": 3
+  },
+  "confirmedMissing": {
+    "at": "2026-11-18T11:21:06.432646+00:00",
+    "enabledSources": [
+      "hongniu"
+    ],
+    "elapsedMs": 1639
+  }
+}
+
+Final Android unit tests, release lint and build
+Starting a Gradle Daemon, 1 incompatible and 1 stopped Daemons could not be reused, use --status for details
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:generateReleaseResources UP-TO-DATE
+> Task :app:packageReleaseResources UP-TO-DATE
+> Task :app:processReleaseNavigationResources UP-TO-DATE
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+> Task :app:generateReleaseRFile UP-TO-DATE
+> Task :app:javaPreCompileRelease UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+> Task :app:processReleaseMainManifest UP-TO-DATE
+> Task :app:mergeReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkReleaseDuplicateClasses UP-TO-DATE
+> Task :app:mergeReleaseArtProfile UP-TO-DATE
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+> Task :app:compileReleaseNavigationResources UP-TO-DATE
+> Task :app:mergeReleaseResources UP-TO-DATE
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+> Task :app:processReleaseManifest UP-TO-DATE
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+> Task :app:processReleaseResources UP-TO-DATE
+> Task :app:mergeReleaseStartupProfile UP-TO-DATE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets UP-TO-DATE
+> Task :app:compressReleaseAssets UP-TO-DATE
+> Task :app:extractReleaseVersionControlInfo UP-TO-DATE
+> Task :app:validateSigningRelease UP-TO-DATE
+> Task :app:writeReleaseAppMetadata UP-TO-DATE
+> Task :app:writeReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:compileReleaseKotlin
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:compressDebugJavaRes UP-TO-DATE
+> Task :app:compileReleaseJavaWithJavac NO-SOURCE
+> Task :app:generateReleaseLintReportModel
+> Task :app:mergeReleaseGeneratedProguardFiles UP-TO-DATE
+> Task :app:compressReleaseJavaRes UP-TO-DATE
+> Task :app:mergeReleaseJavaResource UP-TO-DATE
+> Task :app:generateReleaseLintVitalReportModel
+> Task :app:bundleDebugClassesToCompileJar
+> Task :app:bundleDebugClassesToRuntimeJar
+> Task :app:expandReleaseArtProfileWildcards
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:compressDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:extractDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:testDebugUnitTest
+> Task :app:lintAnalyzeRelease
+> Task :app:lintVitalAnalyzeRelease
+> Task :app:minifyReleaseWithR8
+> Task :app:convertShrunkResourcesToBinaryRelease UP-TO-DATE
+> Task :app:optimizeReleaseResources UP-TO-DATE
+> Task :app:compileReleaseArtProfile
+> Task :app:lintVitalReportRelease SKIPPED
+> Task :app:lintVitalRelease SKIPPED
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleRelease
+
+> Task :app:lintReportRelease
+Wrote HTML report to file:///E:/dev/项目/panda/tv/app/build/reports/lint-results-release.html
+Wrote SARIF report to file:///E:/dev/项目/panda/tv/app/build/reports/lint-results-release.sarif
+
+> Task :app:lintRelease
+
+BUILD SUCCESSFUL in 1m 57s
+69 actionable tasks: 16 executed, 53 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+
+
+APK signing and manifest
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/version-control-info.textproto not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/c2 not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/d2 not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+
+package: name='app.panda.tv' versionCode='3' versionName='1.0.2' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'22'
+targetSdkVersion:'34'
+
+
+
+Final desktop typecheck and production build
+
+> panda-desktop@1.0.0 build
+> npm run typecheck && electron-vite build
+
+
+> panda-desktop@1.0.0 typecheck
+> tsc --noEmit
+
+vite v7.3.8 building ssr environment for production...
+transforming...
+✓ 25 modules transformed.
+rendering chunks...
+out/main/index.js  156.78 kB
+✓ built in 342ms
+vite v7.3.8 building ssr environment for production...
+transforming...
+✓ 2 modules transformed.
+rendering chunks...
+out/preload/index.js  2.68 kB
+✓ built in 14ms
+vite v7.3.8 building client environment for production...
+transforming...
+✓ 455 modules transformed.
+rendering chunks...
+../../out/renderer/assets/logo-mark-BHCvyW2z.svg                                   0.63 kB
+../../out/renderer/index.html                                                      0.74 kB
+../../out/renderer/assets/noto-sans-sc-97-wght-normal-9u6Aiav-.woff2               2.07 kB
+../../out/renderer/assets/noto-serif-sc-97-wght-normal-JBL4TmZZ.woff2              2.42 kB
+../../out/renderer/assets/noto-sans-sc-98-wght-normal-BR-H2C0V.woff2               3.41 kB
+../../out/renderer/assets/noto-sans-sc-4-wght-normal-AR5bdDjz.woff2                3.76 kB
+../../out/renderer/assets/noto-serif-sc-98-wght-normal-Cb4Ymdjf.woff2              4.38 kB
+../../out/renderer/assets/noto-serif-sc-4-wght-normal-POi_Urbq.woff2               4.64 kB
+../../out/renderer/assets/noto-serif-sc-88-wght-normal-4sUXZiL0.woff2              6.89 kB
+../../out/renderer/assets/noto-sans-sc-88-wght-normal-BXYxwf2t.woff2               7.23 kB
+../../out/renderer/assets/noto-serif-sc-87-wght-normal-DYrIOgtA.woff2              7.40 kB
+../../out/renderer/assets/noto-sans-sc-87-wght-normal-DioZSHnU.woff2               7.96 kB
+../../out/renderer/assets/noto-sans-sc-latin-ext-wght-normal-DuJTpTg_.woff2        8.13 kB
+../../out/renderer/assets/noto-sans-sc-91-wght-normal-DTr9RQcS.woff2               8.62 kB
+../../out/renderer/assets/noto-sans-sc-vietnamese-wght-normal-Bi3ATJ76.woff2       8.98 kB
+../../out/renderer/assets/noto-sans-sc-90-wght-normal-BnOlPreP.woff2               9.22 kB
+../../out/renderer/assets/noto-sans-sc-99-wght-normal-BI6XPoxp.woff2               9.70 kB
+../../out/renderer/assets/noto-serif-sc-90-wght-normal-CAN9aOBC.woff2              9.74 kB
+../../out/renderer/assets/noto-sans-sc-cyrillic-wght-normal-BGmsQlw-.woff2         9.90 kB
+../../out/renderer/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2             10.25 kB
+../../out/renderer/assets/noto-serif-sc-latin-ext-wght-normal-B_BpesqA.woff2      10.33 kB
+../../out/renderer/assets/noto-serif-sc-91-wght-normal-CxdyChGp.woff2             10.64 kB
+../../out/renderer/assets/noto-sans-sc-89-wght-normal-ClMFrFaL.woff2              10.79 kB
+../../out/renderer/assets/noto-serif-sc-vietnamese-wght-normal-BDuesHz7.woff2     10.92 kB
+../../out/renderer/assets/sprite-Ds-sjZSZ.svg                                     11.09 kB
+../../out/renderer/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2              11.23 kB
+../../out/renderer/assets/noto-sans-sc-21-wght-normal-D0x9-yBt.woff2              11.28 kB
+../../out/renderer/assets/noto-sans-sc-6-wght-normal-ChnZIQfQ.woff2               11.39 kB
+../../out/renderer/assets/noto-serif-sc-89-wght-normal-BHbmppex.woff2             12.28 kB
+../../out/renderer/assets/noto-serif-sc-99-wght-normal-Dxrjm0os.woff2             12.32 kB
+../../out/renderer/assets/noto-serif-sc-cyrillic-wght-normal-CEncxE_U.woff2       14.48 kB
+../../out/renderer/assets/noto-serif-sc-6-wght-normal-zG9mG1jB.woff2              15.67 kB
+../../out/renderer/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2               18.75 kB
+../../out/renderer/assets/inter-greek-wght-normal-CkhJZR-_.woff2                  19.00 kB
+../../out/renderer/assets/noto-sans-sc-5-wght-normal-CfWugllB.woff2               20.04 kB
+../../out/renderer/assets/noto-sans-sc-latin-wght-normal-DDW8mKAR.woff2           24.88 kB
+../../out/renderer/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2           25.96 kB
+../../out/renderer/assets/noto-serif-sc-21-wght-normal-BWgIT3u9.woff2             26.04 kB
+../../out/renderer/assets/noto-sans-sc-85-wght-normal-CjI3qdxG.woff2              26.77 kB
+../../out/renderer/assets/noto-serif-sc-5-wght-normal-DfKSWjAL.woff2              27.57 kB
+../../out/renderer/assets/noto-sans-sc-80-wght-normal-Bje1Fxy1.woff2              32.45 kB
+../../out/renderer/assets/noto-sans-sc-84-wght-normal-zMBmUocm.woff2              32.52 kB
+../../out/renderer/assets/noto-serif-sc-latin-wght-normal-CynOf1RS.woff2          32.96 kB
+../../out/renderer/assets/noto-sans-sc-86-wght-normal-BHY8TVEH.woff2              33.43 kB
+../../out/renderer/assets/noto-sans-sc-41-wght-normal-Hthm7FFi.woff2              36.28 kB
+../../out/renderer/assets/noto-sans-sc-77-wght-normal-B3MVY9Ax.woff2              36.66 kB
+../../out/renderer/assets/noto-sans-sc-73-wght-normal-B1ZoOTgM.woff2              39.10 kB
+../../out/renderer/assets/noto-serif-sc-85-wght-normal-zDA9V0-4.woff2             40.44 kB
+../../out/renderer/assets/noto-sans-sc-79-wght-normal-BIoZy8fr.woff2              41.06 kB
+../../out/renderer/assets/noto-sans-sc-60-wght-normal-B7QOYsXJ.woff2              41.30 kB
+../../out/renderer/assets/noto-sans-sc-68-wght-normal-DGbCD9xu.woff2              41.38 kB
+../../out/renderer/assets/noto-sans-sc-65-wght-normal-DMPCXBvK.woff2              41.39 kB
+../../out/renderer/assets/noto-sans-sc-64-wght-normal-DVB11t7j.woff2              41.41 kB
+../../out/renderer/assets/noto-sans-sc-51-wght-normal-BlFLOjcP.woff2              41.48 kB
+../../out/renderer/assets/noto-sans-sc-36-wght-normal-CkITyjoT.woff2              41.69 kB
+../../out/renderer/assets/noto-sans-sc-70-wght-normal-RgTO941D.woff2              42.08 kB
+../../out/renderer/assets/noto-serif-sc-84-wght-normal-BqNanTR7.woff2             42.66 kB
+../../out/renderer/assets/noto-sans-sc-53-wght-normal-CwyWNT6x.woff2              43.28 kB
+../../out/renderer/assets/noto-sans-sc-83-wght-normal-99rD8YO-.woff2              43.36 kB
+../../out/renderer/assets/noto-sans-sc-75-wght-normal-Cp2wp4si.woff2              43.82 kB
+../../out/renderer/assets/noto-sans-sc-61-wght-normal-C8JjQS7w.woff2              45.10 kB
+../../out/renderer/assets/noto-serif-sc-80-wght-normal-7mf1Dpmj.woff2             45.18 kB
+../../out/renderer/assets/noto-sans-sc-42-wght-normal-eaS2gKds.woff2              45.43 kB
+../../out/renderer/assets/noto-sans-sc-50-wght-normal-DAOGW-Dr.woff2              45.72 kB
+../../out/renderer/assets/noto-sans-sc-118-wght-normal-xhBB7f6V.woff2             45.99 kB
+../../out/renderer/assets/noto-sans-sc-82-wght-normal-CUggNZi4.woff2              46.01 kB
+../../out/renderer/assets/noto-sans-sc-40-wght-normal-BQ5xpS5j.woff2              46.43 kB
+../../out/renderer/assets/noto-sans-sc-43-wght-normal-o-T53XXV.woff2              46.49 kB
+../../out/renderer/assets/noto-sans-sc-34-wght-normal-Bspba0wC.woff2              46.75 kB
+../../out/renderer/assets/noto-sans-sc-72-wght-normal-C4oWy3ul.woff2              46.92 kB
+../../out/renderer/assets/noto-sans-sc-31-wght-normal-Wfi_lutW.woff2              47.08 kB
+../../out/renderer/assets/noto-sans-sc-27-wght-normal-COFdrquJ.woff2              47.32 kB
+../../out/renderer/assets/noto-sans-sc-33-wght-normal-CUVQXNAJ.woff2              47.33 kB
+../../out/renderer/assets/noto-sans-sc-59-wght-normal-BS4Kwzxx.woff2              47.50 kB
+../../out/renderer/assets/noto-sans-sc-81-wght-normal-B2NN7Qi3.woff2              47.50 kB
+../../out/renderer/assets/noto-sans-sc-71-wght-normal-D9sG-CWv.woff2              47.77 kB
+../../out/renderer/assets/noto-serif-sc-86-wght-normal-BcoK5poM.woff2             47.82 kB
+../../out/renderer/assets/noto-sans-sc-55-wght-normal-DBK2wUOR.woff2              47.95 kB
+../../out/renderer/assets/noto-sans-sc-76-wght-normal-B494D7xS.woff2              48.24 kB
+../../out/renderer/assets/inter-latin-wght-normal-Dx4kXJAl.woff2                  48.26 kB
+../../out/renderer/assets/noto-sans-sc-78-wght-normal-5jX7iNMC.woff2              48.92 kB
+../../out/renderer/assets/noto-sans-sc-63-wght-normal-BJr8P-OB.woff2              49.05 kB
+../../out/renderer/assets/noto-sans-sc-28-wght-normal-DMgdNu1o.woff2              50.02 kB
+../../out/renderer/assets/noto-sans-sc-35-wght-normal-K8fX_YPG.woff2              50.46 kB
+../../out/renderer/assets/noto-sans-sc-48-wght-normal-BNMfTR6k.woff2              50.62 kB
+../../out/renderer/assets/noto-sans-sc-26-wght-normal-C0sF2Z2f.woff2              50.74 kB
+../../out/renderer/assets/noto-serif-sc-64-wght-normal-CjrUC92N.woff2             51.01 kB
+../../out/renderer/assets/noto-serif-sc-41-wght-normal-CVBLXKlt.woff2             51.52 kB
+../../out/renderer/assets/noto-sans-sc-39-wght-normal-BMZNLWQU.woff2              51.62 kB
+../../out/renderer/assets/noto-sans-sc-52-wght-normal-OZjrybnw.woff2              51.77 kB
+../../out/renderer/assets/noto-serif-sc-77-wght-normal-Ba02t4uH.woff2             51.78 kB
+../../out/renderer/assets/noto-sans-sc-54-wght-normal-DM0nRe18.woff2              51.82 kB
+../../out/renderer/assets/noto-sans-sc-117-wght-normal-siZzFqgK.woff2             52.23 kB
+../../out/renderer/assets/noto-sans-sc-32-wght-normal-BRJQ4PY5.woff2              52.37 kB
+../../out/renderer/assets/noto-sans-sc-67-wght-normal-Dzk7WhCR.woff2              52.46 kB
+../../out/renderer/assets/noto-sans-sc-66-wght-normal-BobaG10V.woff2              52.62 kB
+../../out/renderer/assets/noto-sans-sc-49-wght-normal-DX-0y7wg.woff2              52.77 kB
+../../out/renderer/assets/noto-sans-sc-116-wght-normal-B4HVAfHo.woff2             52.80 kB
+../../out/renderer/assets/noto-serif-sc-70-wght-normal-C1ivJfo6.woff2             53.06 kB
+../../out/renderer/assets/noto-sans-sc-56-wght-normal-C-VKK1LS.woff2              53.33 kB
+../../out/renderer/assets/noto-sans-sc-37-wght-normal-WCZ2zfEe.woff2              53.36 kB
+../../out/renderer/assets/noto-sans-sc-29-wght-normal-Cmq8em30.woff2              53.85 kB
+../../out/renderer/assets/noto-serif-sc-53-wght-normal-CVEOz2md.woff2             53.86 kB
+../../out/renderer/assets/noto-sans-sc-44-wght-normal-BJH5J4Ez.woff2              54.10 kB
+../../out/renderer/assets/noto-serif-sc-68-wght-normal-DgVKmqhJ.woff2             54.20 kB
+../../out/renderer/assets/noto-sans-sc-30-wght-normal-CZWqZ3yU.woff2              54.42 kB
+../../out/renderer/assets/noto-sans-sc-38-wght-normal-DeM7CUce.woff2              54.42 kB
+../../out/renderer/assets/noto-sans-sc-57-wght-normal-Cdbfh5kq.woff2              55.35 kB
+../../out/renderer/assets/noto-sans-sc-69-wght-normal-Ctrv1EqA.woff2              55.52 kB
+../../out/renderer/assets/noto-sans-sc-47-wght-normal-CyY7gKNX.woff2              55.97 kB
+../../out/renderer/assets/noto-serif-sc-73-wght-normal-CVaZwasb.woff2             56.04 kB
+../../out/renderer/assets/noto-sans-sc-74-wght-normal-F7dH_rZJ.woff2              56.26 kB
+../../out/renderer/assets/noto-sans-sc-115-wght-normal-BWy07H14.woff2             56.26 kB
+../../out/renderer/assets/noto-sans-sc-23-wght-normal-Du1oYWkE.woff2              56.70 kB
+../../out/renderer/assets/noto-serif-sc-51-wght-normal-D9iT-1TR.woff2             57.32 kB
+../../out/renderer/assets/noto-sans-sc-112-wght-normal-BcFuP3w6.woff2             57.46 kB
+../../out/renderer/assets/noto-sans-sc-58-wght-normal-CflMKARZ.woff2              57.47 kB
+../../out/renderer/assets/noto-sans-sc-46-wght-normal-BR_5Mu6e.woff2              57.52 kB
+../../out/renderer/assets/noto-sans-sc-114-wght-normal-CO_5Xo-i.woff2             57.74 kB
+../../out/renderer/assets/noto-serif-sc-75-wght-normal-93ee-1qL.woff2             57.82 kB
+../../out/renderer/assets/noto-serif-sc-36-wght-normal-mA1onJjc.woff2             57.85 kB
+../../out/renderer/assets/noto-sans-sc-101-wght-normal-CPkZHnw0.woff2             58.03 kB
+../../out/renderer/assets/noto-sans-sc-25-wght-normal-BFHiqilg.woff2              58.22 kB
+../../out/renderer/assets/noto-serif-sc-118-wght-normal-DxZkDLxk.woff2            58.22 kB
+../../out/renderer/assets/noto-serif-sc-43-wght-normal-C2AfGZIw.woff2             58.35 kB
+../../out/renderer/assets/noto-sans-sc-113-wght-normal-Dk932kmj.woff2             58.43 kB
+../../out/renderer/assets/noto-serif-sc-65-wght-normal-BQWoNL84.woff2             58.57 kB
+../../out/renderer/assets/noto-serif-sc-79-wght-normal-3DZZprJd.woff2             58.80 kB
+../../out/renderer/assets/noto-serif-sc-83-wght-normal-DxCiS-H8.woff2             58.81 kB
+../../out/renderer/assets/noto-sans-sc-62-wght-normal-bS4wq1Gg.woff2              58.96 kB
+../../out/renderer/assets/noto-sans-sc-109-wght-normal-Dsp-De_0.woff2             60.21 kB
+../../out/renderer/assets/noto-sans-sc-102-wght-normal-gzIulUH6.woff2             60.52 kB
+../../out/renderer/assets/noto-serif-sc-81-wght-normal-C7zVck8N.woff2             60.58 kB
+../../out/renderer/assets/noto-sans-sc-107-wght-normal-D7fvVprN.woff2             60.83 kB
+../../out/renderer/assets/noto-sans-sc-110-wght-normal-DE_6NUrb.woff2             61.19 kB
+../../out/renderer/assets/noto-serif-sc-61-wght-normal-DsFqK1wo.woff2             61.31 kB
+../../out/renderer/assets/noto-serif-sc-60-wght-normal-DAKYpn8o.woff2             61.38 kB
+../../out/renderer/assets/noto-sans-sc-104-wght-normal-B3QMglgE.woff2             61.40 kB
+../../out/renderer/assets/noto-serif-sc-55-wght-normal-CHCeRIrg.woff2             61.53 kB
+../../out/renderer/assets/noto-sans-sc-105-wght-normal-xXh_OMfk.woff2             61.61 kB
+../../out/renderer/assets/noto-serif-sc-82-wght-normal-BCQNdhXI.woff2             62.13 kB
+../../out/renderer/assets/noto-sans-sc-111-wght-normal-C4S-TlTn.woff2             62.40 kB
+../../out/renderer/assets/noto-sans-sc-106-wght-normal-B9n3jMjP.woff2             62.44 kB
+../../out/renderer/assets/noto-sans-sc-24-wght-normal-CmWjJ0gt.woff2              62.55 kB
+../../out/renderer/assets/noto-serif-sc-42-wght-normal-BuqGeHAE.woff2             62.74 kB
+../../out/renderer/assets/noto-serif-sc-71-wght-normal-CvXxbzcf.woff2             62.88 kB
+../../out/renderer/assets/noto-sans-sc-103-wght-normal-CJfSBxFo.woff2             63.73 kB
+../../out/renderer/assets/noto-serif-sc-35-wght-normal-DvRk4hqy.woff2             63.76 kB
+../../out/renderer/assets/noto-serif-sc-63-wght-normal-CMtD-Kgv.woff2             63.94 kB
+../../out/renderer/assets/noto-serif-sc-31-wght-normal-6gH0-Plj.woff2             64.26 kB
+../../out/renderer/assets/noto-sans-sc-108-wght-normal-J0_LhxVo.woff2             64.34 kB
+../../out/renderer/assets/noto-sans-sc-100-wght-normal-DluiXYzi.woff2             64.38 kB
+../../out/renderer/assets/noto-serif-sc-50-wght-normal-zkdyL1V0.woff2             64.52 kB
+../../out/renderer/assets/noto-serif-sc-48-wght-normal-DdYwMBaW.woff2             64.61 kB
+../../out/renderer/assets/noto-serif-sc-27-wght-normal-B9lzzaTa.woff2             64.66 kB
+../../out/renderer/assets/noto-serif-sc-34-wght-normal-DnkERd2u.woff2             64.72 kB
+../../out/renderer/assets/noto-sans-sc-22-wght-normal-BBUVTShg.woff2              65.22 kB
+../../out/renderer/assets/noto-serif-sc-72-wght-normal-cGdTpPsV.woff2             65.72 kB
+../../out/renderer/assets/noto-serif-sc-76-wght-normal-BLbVMqvY.woff2             65.74 kB
+../../out/renderer/assets/noto-serif-sc-33-wght-normal-imYNTNMM.woff2             66.09 kB
+../../out/renderer/assets/noto-serif-sc-40-wght-normal-BjlpL5UW.woff2             66.14 kB
+../../out/renderer/assets/noto-serif-sc-117-wght-normal-Bqk8ynpC.woff2            66.66 kB
+../../out/renderer/assets/noto-serif-sc-116-wght-normal-jvQETSjD.woff2            67.30 kB
+../../out/renderer/assets/noto-sans-sc-45-wght-normal-BKuxSCOJ.woff2              67.44 kB
+../../out/renderer/assets/noto-serif-sc-37-wght-normal-LC1yyc7m.woff2             67.83 kB
+../../out/renderer/assets/noto-serif-sc-52-wght-normal-BLDAvkY6.woff2             67.83 kB
+../../out/renderer/assets/noto-serif-sc-28-wght-normal-DpNoKRQu.woff2             67.94 kB
+../../out/renderer/assets/noto-serif-sc-32-wght-normal-BWmx-AcC.woff2             68.00 kB
+../../out/renderer/assets/noto-serif-sc-66-wght-normal-C5lNsScf.woff2             69.20 kB
+../../out/renderer/assets/noto-serif-sc-54-wght-normal-DPWdAwq4.woff2             69.32 kB
+../../out/renderer/assets/noto-serif-sc-59-wght-normal-DuU0uqw2.woff2             69.52 kB
+../../out/renderer/assets/noto-serif-sc-56-wght-normal-eKWz93j7.woff2             69.66 kB
+../../out/renderer/assets/noto-serif-sc-49-wght-normal-Cke2kJyu.woff2             70.32 kB
+../../out/renderer/assets/noto-serif-sc-78-wght-normal-8sP0MgyD.woff2             71.05 kB
+../../out/renderer/assets/noto-serif-sc-26-wght-normal-CUJJnivC.woff2             71.36 kB
+../../out/renderer/assets/noto-serif-sc-67-wght-normal-YN-qC7HW.woff2             71.68 kB
+../../out/renderer/assets/noto-serif-sc-39-wght-normal-C_Pfsj-f.woff2             72.29 kB
+../../out/renderer/assets/noto-serif-sc-44-wght-normal-Ce6e62F2.woff2             72.50 kB
+../../out/renderer/assets/noto-serif-sc-115-wght-normal-DeHFJEcQ.woff2            72.51 kB
+../../out/renderer/assets/noto-serif-sc-29-wght-normal-GaECcatV.woff2             72.78 kB
+../../out/renderer/assets/noto-serif-sc-69-wght-normal-CYLESW-L.woff2             73.59 kB
+../../out/renderer/assets/noto-serif-sc-23-wght-normal-PFb7vc5T.woff2             73.87 kB
+../../out/renderer/assets/noto-serif-sc-47-wght-normal-C0d1RTo9.woff2             74.00 kB
+../../out/renderer/assets/noto-serif-sc-57-wght-normal-Cor1Tvn4.woff2             74.03 kB
+../../out/renderer/assets/noto-serif-sc-74-wght-normal-BbF3qCor.woff2             74.58 kB
+../../out/renderer/assets/noto-serif-sc-114-wght-normal-rN6TP-iN.woff2            74.74 kB
+../../out/renderer/assets/noto-serif-sc-38-wght-normal-Da_NFf6-.woff2             75.30 kB
+../../out/renderer/assets/noto-serif-sc-113-wght-normal-DyuoesZ9.woff2            75.87 kB
+../../out/renderer/assets/noto-serif-sc-112-wght-normal-MAZT2qqq.woff2            76.00 kB
+../../out/renderer/assets/noto-sans-sc-119-wght-normal-Ck_g2FGz.woff2             76.32 kB
+../../out/renderer/assets/noto-serif-sc-30-wght-normal-BthB64Y2.woff2             76.91 kB
+../../out/renderer/assets/noto-serif-sc-46-wght-normal-zC517Lyl.woff2             77.58 kB
+../../out/renderer/assets/noto-serif-sc-101-wght-normal-D4leHYe5.woff2            77.79 kB
+../../out/renderer/assets/noto-serif-sc-25-wght-normal-CO_UFAdV.woff2             77.94 kB
+../../out/renderer/assets/noto-serif-sc-109-wght-normal-C2E3CL5Z.woff2            79.04 kB
+../../out/renderer/assets/noto-serif-sc-62-wght-normal-BetEYZyP.woff2             79.50 kB
+../../out/renderer/assets/noto-serif-sc-110-wght-normal-BIfR76rH.woff2            79.55 kB
+../../out/renderer/assets/noto-serif-sc-102-wght-normal-DaB8ctDw.woff2            79.68 kB
+../../out/renderer/assets/noto-serif-sc-107-wght-normal-ytdOPBny.woff2            79.80 kB
+../../out/renderer/assets/noto-serif-sc-104-wght-normal-DMBVgoWu.woff2            81.04 kB
+../../out/renderer/assets/noto-serif-sc-111-wght-normal-DOsFafg3.woff2            81.14 kB
+../../out/renderer/assets/noto-serif-sc-105-wght-normal-BgSod39R.woff2            81.52 kB
+../../out/renderer/assets/noto-serif-sc-106-wght-normal-BiXwOyn5.woff2            81.65 kB
+../../out/renderer/assets/noto-serif-sc-58-wght-normal-kpJ7mHnK.woff2             82.55 kB
+../../out/renderer/assets/noto-serif-sc-24-wght-normal-CLtoVuTx.woff2             82.66 kB
+../../out/renderer/assets/noto-serif-sc-108-wght-normal-BmakWj8P.woff2            83.48 kB
+../../out/renderer/assets/noto-serif-sc-103-wght-normal-BnNqUpIy.woff2            84.09 kB
+../../out/renderer/assets/noto-serif-sc-100-wght-normal-ByBOhv3z.woff2            84.70 kB
+../../out/renderer/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2              85.07 kB
+../../out/renderer/assets/noto-serif-sc-22-wght-normal-n_9gzBdK.woff2             85.29 kB
+../../out/renderer/assets/noto-serif-sc-45-wght-normal-CXgjcdJT.woff2             91.67 kB
+../../out/renderer/assets/noto-serif-sc-119-wght-normal-ihm0qo8T.woff2           104.96 kB
+../../out/renderer/assets/index-ClPdi3mu.css                                     246.75 kB
+../../out/renderer/assets/index-WaoVXwxw.js                                    1,085.05 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 5.31s
+
+
+Late warm reader failed before the fix
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileDebugNavigationResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app:compressDebugJavaRes UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin
+> Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:compressDebugUnitTestJavaRes UP-TO-DATE
+> Task :app:extractDebugUnitTestJavaRes UP-TO-DATE
+
+> Task :app:testDebugUnitTest FAILED
+
+RuntimeCoreTest > completed warm flow still delivers bytes to a reader attaching after completion FAILED
+    org.junit.ComparisonFailure at RuntimeCoreTest.kt:180
+
+8 tests completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:testDebugUnitTest'.
+> There were failing tests. See the report at: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/tv/app/build/reports/tests/testDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 3s
+25 actionable tasks: 2 executed, 23 up-to-date
+
+
+Final desktop offline tests
+
+> panda-desktop@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+
+ Test Files  15 passed (15)
+      Tests  232 passed (232)
+   Start at  18:06:28
+   Duration  21.69s (tests 97%, import 2%, transform 1%)
+
+
+
+Desktop full E2E: 18 passed, 1 source-dependent failure
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test
+
+
+Running 19 tests using 1 worker
+
+(node:64244) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+  ok  1 e2e\ads.spec.ts:35:3 › ad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decoding (26.1s)
+Electron connected: []
+Renderer bridge ready
+  ok  2 e2e\ads.spec.ts:35:3 › ad removal on 360zy: out-of-directory blocks plays, seeks across the cut and keeps decoding (19.7s)
+Electron connected: []
+Renderer bridge ready
+  ok  3 e2e\ads.spec.ts:35:3 › ad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decoding (25.9s)
+Electron connected: []
+Renderer bridge ready
+  x   4 e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding (1.1m)
+(node:62392) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+Real filter: tv 动作 30
+Real filter: tv 悬疑 30
+Real filter: tv 校园 30
+Real filter: movie 动作 29
+Real filter: movie 悬疑 29
+Real filter: movie 校园 30
+Real filter: anime 校园 60
+Real filter: anime 悬疑 60
+Real filter: anime 热血 60
+Real filter: variety 音乐 30
+Real filter: variety 真人秀 30
+Real filter: variety 旅行 30
+Real filter: doc 自然 55
+Real filter: doc 历史 53
+Real filter: doc 科学 57
+  ok  5 e2e\data.spec.ts:7:1 › real Douban metadata, detailed channel facets, suggestions, hot searches and pagination (30.2s)
+  ok  6 e2e\fixture.spec.ts:7:1 › fixture: loading, empty, error and offline surfaces remain usable (2.8s)
+  ok  7 e2e\fixture.spec.ts:29:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus (7.5s)
+  ok  8 e2e\fixture.spec.ts:78:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls (7.7s)
+  ok  9 e2e\fixture.spec.ts:133:1 › fixture: window controls remain usable while a confirmation is open (1.6s)
+  ok 10 e2e\fixture.spec.ts:154:1 › fixture: a source that never starts recovers within thirty-five seconds (18.0s)
+  ok 11 e2e\fixture.spec.ts:166:1 › fixture: another line takes over where the first one was (3.8s)
+  ok 12 e2e\fixture.spec.ts:193:1 › fixture: prototype and production share page geometry and visual tokens (10.0s)
+  ok 13 e2e\fixture.spec.ts:242:1 › fixture: overlays, episode lists and player chrome sit where the prototype puts them (20.3s)
+Electron connected: []
+Renderer bridge ready
+Electron connected: []
+Renderer bridge ready
+  ok 14 e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history (15.3s)
+Electron connected: []
+Renderer bridge ready
+  ok 15 e2e\live.spec.ts:72:1 › real serial exposes playable episodes and decodes after switching to the next episode (17.2s)
+Electron connected: []
+Renderer bridge ready
+  ok 16 e2e\live.spec.ts:102:1 › real animation resolves by Douban identity and decodes its actual stream (10.1s)
+Electron connected: []
+Renderer bridge ready
+  ok 17 e2e\people.spec.ts:9:1 › real Douban people: the few a title is known for, their photos, and everything one of them worked on (22.6s)
+  ok 18 e2e\startup.spec.ts:6:1 › startup: a reload during initial loading does not report application failure (1.4s)
+Electron connected: []
+Renderer bridge ready
+Electron connected: []
+Renderer bridge ready
+  ok 19 e2e\startup.spec.ts:49:1 › startup: a second start shows the home page and its artwork from what the first start saved (4.6s)
+
+
+  1) e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:43
+
+      41 | }
+      42 | export async function playing(page: Page) {
+    > 43 |   await page.waitForFunction(() => {
+         |              ^
+      44 |     const video = document.querySelector('video')
+      45 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      46 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:43:14)
+        at E:\dev\项目\panda\e2e\ads.spec.ts:42:13
+
+    Error Context: .tmp\e2e-results\ads-ad-removal-on-lzi-CMS--c7431--the-cut-and-keeps-decoding\error-context.md
+
+  1 failed
+    e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+  18 passed (5.2m)
+
+
+Desktop lzi-only E2E retry
+
+Running 1 test using 1 worker
+
+(node:12916) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+  x  1 e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding (1.1m)
+
+
+  1) e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:43
+
+      41 | }
+      42 | export async function playing(page: Page) {
+    > 43 |   await page.waitForFunction(() => {
+         |              ^
+      44 |     const video = document.querySelector('video')
+      45 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      46 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:43:14)
+        at E:\dev\项目\panda\e2e\ads.spec.ts:42:13
+
+    Error Context: .tmp\e2e-results\ads-ad-removal-on-lzi-CMS--c7431--the-cut-and-keeps-decoding\error-context.md
+
+  1 failed
+    e2e\ads.spec.ts:35:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+
+
+Source coverage probe
+
+> panda-desktop@1.0.0 probe:sources
+> esbuild scripts/probe-sources.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-sources.cjs && node .tmp/probe-sources.cjs 14 docs/evidence/tv-source-coverage-2026-11-18.json
+
+ok   hot:tv tv 今天是太阳雨 2026 豆瓣24集 片源24集 hls 1080P 5646ms
+ok   hot:tv tv 嫁金钗 2026 豆瓣30集 片源30集 hls 1080P 2384ms
+ok   hot:tv tv 小城良方 2026 豆瓣29集 片源29集 hls 1080P 2267ms
+ok   hot:tv tv 我的有罪之人 2026 豆瓣12集 片源10集 hls 1080P 4933ms
+ok   hot:tv tv 幻视任务 2026 豆瓣8集 片源8集 hls 1080P 2402ms
+ok   hot:tv tv 尚公主 2026 豆瓣40集 片源40集 hls 1080P 1555ms
+ok   hot:tv tv 蒸蒸日上 2026 豆瓣22集 片源22集 hls 1080P 2100ms
+ok   hot:tv tv 伟大的长征 2026 豆瓣60集 片源60集 hls 1080P 1208ms
+ok   hot:tv tv 谷雨 2026 豆瓣30集 片源30集 hls 1080P 1513ms
+ok   hot:tv tv Doctor X：白色黑手党时代 2026 豆瓣12集 片源12集 hls 1080P 1676ms
+ok   hot:tv tv 末路兼职 2026 豆瓣8集 片源8集 hls 1080P 1200ms
+ok   hot:tv tv 兰香如故 2026 豆瓣47集 片源47集 hls 1080P 1117ms
+ok   hot:tv tv 折月亮 2026 豆瓣27集 片源27集 hls 1080P 1416ms
+ok   hot:tv tv 余红旧事 2026 豆瓣34集 片源34集 hls 1080P 1187ms
+ok   hot:movie movie 可能的爱 2026 豆瓣-集 片源1集 hls 1080P 1058ms
+ok   hot:movie anime 八仙！ 2026 豆瓣-集 片源1集 hls 1080P 1172ms
+ok   hot:movie movie 空枪 2026 豆瓣-集 片源1集 hls 1080P 2055ms
+ok   hot:movie movie 生化危机：爆发夜 2026 豆瓣-集 片源1集 hls 1080P 2235ms
+ok   hot:movie movie 奥德赛 2026 豆瓣-集 片源1集 hls 1080P 1318ms
+ok   hot:movie movie 黑球 2026 豆瓣-集 片源1集 hls 1080P 1017ms
+ok   hot:movie movie 给阿嬷的情书 2026 豆瓣-集 片源1集 hls 1080P 1240ms
+ok   hot:movie movie 野兽之心 2026 豆瓣-集 片源1集 hls 1080P 1267ms
+ok   hot:movie movie 蜘蛛侠：崭新之日 2026 豆瓣-集 片源1集 hls 1080P 1353ms
+ok   hot:movie movie 欢迎来龙餐馆 2026 豆瓣-集 片源1集 hls 1080P 1266ms
+ok   hot:movie movie 逃出布迪秀 2026 豆瓣-集 片源1集 hls 1080P 1159ms
+ok   hot:movie movie 肖申克的救赎 1994 豆瓣-集 片源1集 hls 720P 2661ms
+ok   hot:movie movie 海上钢琴师 1998 豆瓣-集 片源1集 hls 1080P 2191ms
+ok   hot:movie anime 疯狂动物城 2016 豆瓣-集 片源1集 hls 1080P 2431ms
+ok   hot:anime anime 谷雨街后巷 2026 豆瓣5集 片源5集 hls 1080P 1897ms
+ok   hot:anime anime 八仙！ 2026 豆瓣-集 片源1集 hls 1080P 0ms
+ok   hot:anime anime 赛博朋克：边缘行者 第二季 2026 豆瓣10集 片源10集 hls 1080P 1345ms
+ok   hot:anime anime 疯狂动物城 2016 豆瓣-集 片源1集 hls 1080P 1ms
+ok   hot:anime anime 猫和老鼠 1965 豆瓣-集 片源185集 hls 720P 6802ms
+ok   hot:anime anime 千与千寻 2001 豆瓣-集 片源1集 hls 720P 3976ms
+ok   hot:anime anime 死神 千年血战篇 -祸进谭- 2026 豆瓣10集 片源10集 hls 1080P 3436ms
+ok   hot:anime anime 寻梦环游记 2017 豆瓣-集 片源1集 hls 1080P 5721ms
+ok   hot:anime anime 赛博朋克：边缘行者 第一季 2022 豆瓣10集 片源10集 hls 1080P 3087ms
+ok   hot:anime anime 哪吒之魔童闹海 2025 豆瓣-集 片源1集 hls 1080P 2926ms
+ok   hot:anime anime 罗小黑战记 2011 豆瓣46集 片源43集 hls 1080P 1346ms
+ok   hot:anime anime 哪吒之魔童降世 2019 豆瓣-集 片源1集 hls 480P 4716ms
+ok   hot:anime anime 凡人修仙传 年番4 2026 豆瓣52集 片源24集 hls 1080P 2421ms | 凡人修仙传 第177-228集
+ok   hot:anime anime 你的名字。 2016 豆瓣-集 片源1集 hls 480P 5434ms
+ok   hot:variety variety 后会友期 2026 豆瓣12集 片源21集 hls 480P 2453ms
+ok   hot:variety variety 现在就出发 第四季 2026 豆瓣10集 片源57集 hls 1080P 1190ms
+MISS hot:variety variety 不栩此行 2026 豆瓣-集 暂时无法连接，请重试 1346ms
+ok   hot:variety variety 花儿与少年 第八季 2026 豆瓣13集 片源53集 hls 1080P 3311ms
+ok   hot:variety variety 现在就出发 第三季 2025 豆瓣10集 片源52集 hls 1080P 2507ms
+ok   hot:variety variety 现在就出发 第二季 2024 豆瓣10集 片源49集 hls 720P 3868ms
+MISS hot:variety variety 骑有此理 第四季 2026 豆瓣3集 暂时无法连接，请重试 9221ms
+ok   hot:variety variety 脱口秀和Ta的朋友们 第三季 2026 豆瓣10集 片源121集 hls 1080P 1970ms
+ok   hot:variety variety 女子推理社 第二季 2024 豆瓣12集 片源51集 hls 720P 4939ms
+ok   hot:variety variety 女子推理社 第一季 2023 豆瓣12集 片源49集 hls 1080P 2384ms
+ok   hot:variety variety 披荆斩棘2026 2026 豆瓣13集 片源128集 hls 1080P 4682ms
+ok   hot:variety variety 花儿与少年·丝路季 2023 豆瓣15集 片源59集 hls 1080P 1781ms
+ok   hot:variety variety 思想验证区域 第二季 2026 豆瓣10集 片源11集 hls 480P 3200ms
+ok   hot:variety variety 一饭封神2 2026 豆瓣10集 片源89集 hls 1080P 3523ms
+ok   hot:doc doc 生命奇观2 2026 豆瓣3集 片源3集 hls 480P 1662ms
+MISS hot:doc doc 珠穆朗玛：云中彼岸 2026 豆瓣-集 未找到可用片源 3636ms
+MISS hot:doc doc 人生七年10 2026 豆瓣2集 未找到可用片源 1679ms
+MISS hot:doc doc 一切如你所见 2026 豆瓣-集 未找到可用片源 9278ms
+ok   hot:doc doc 生命奇观 2023 豆瓣3集 片源3集 hls 1080P 1503ms
+ok   hot:doc doc 脸庞，村庄 2017 豆瓣-集 片源1集 hls 480P 4886ms
+ok   hot:doc doc 扯淡地球史 2022 豆瓣5集 片源5集 hls 1080P 2284ms
+ok   hot:doc doc 附带伤亡 2026 豆瓣-集 片源1集 hls 1080P 2304ms
+ok   hot:doc doc 蓝色星球 第三季 2026 豆瓣6集 片源3集 hls 1080P 2551ms
+MISS hot:doc doc 爷爷奶奶那些事 2024 豆瓣-集 未找到可用片源 1748ms
+ok   hot:doc doc 人生一串 第四季 2026 豆瓣-集 片源2集 hls 1080P 2003ms
+ok   hot:doc doc 二十二 2015 豆瓣-集 片源1集 hls 1080P 4401ms
+ok   hot:doc doc 我的美食向导 第二季 2026 豆瓣12集 片源12集 hls 1080P 2095ms
+ok   hot:doc doc 徒手攀岩 2018 豆瓣-集 片源1集 hls 1080P 5441ms
+ok   serial:凡人修仙传 tv 凡人修仙传 2025 豆瓣30集 片源30集 hls 480P 3947ms
+ok   serial:凡人修仙传 anime 凡人修仙传 年番4 2026 豆瓣52集 片源24集 hls 1080P 0ms | 凡人修仙传 第177-228集
+ok   serial:凡人修仙传 anime 凡人修仙传：重返天南 2025 豆瓣24集 片源24集 hls 1080P 2815ms | 凡人修仙传 第153-176集
+ok   serial:凡人修仙传 anime 凡人修仙传：风起天南 2020 豆瓣17集 片源17集 hls 1080P 2070ms | 凡人修仙传 第1-17集
+ok   serial:凡人修仙传 anime 凡人修仙传：星海飞驰 2023 豆瓣52集 片源52集 hls 1080P 2090ms | 凡人修仙传 第73-124集
+MISS serial:凡人修仙传 anime 凡人修仙传之瀚海迷踪 2026 豆瓣-集 未找到可用片源 9397ms
+ok   serial:凡人修仙传 anime 凡人修仙传：外海风云‎ 2025 豆瓣28集 片源28集 hls 1080P 1333ms | 凡人修仙传 第125-152集
+ok   serial:凡人修仙传 anime 凡人修仙传：魔道争锋 2021 豆瓣25集 片源25集 hls 1080P 2407ms | 凡人修仙传 第22-46集
+ok   serial:斗破苍穹 tv 斗破苍穹 2018 豆瓣45集 片源42集 hls 1080P 2654ms
+ok   serial:斗破苍穹 anime 斗破苍穹 年番4 2025 豆瓣62集 片源62集 hls 1080P 1356ms | 斗破苍穹 年番 第158-219集 ; 斗破苍穹 第218-279集
+MISS serial:斗破苍穹 movie 斗破苍穹 2030 豆瓣-集 未找到可用片源 2313ms
+ok   serial:斗破苍穹 anime 斗破苍穹 年番1 2022 豆瓣52集 片源52集 hls 1080P 1832ms | 斗破苍穹年番 第1-52集 ; 斗破苍穹 第61-112集
+ok   serial:斗破苍穹 anime 斗破苍穹 第一季 2017 豆瓣12集 片源12集 hls 1080P 2580ms
+ok   serial:斗破苍穹 anime 斗破苍穹 特别篇3 2021 豆瓣13集 片源13集 hls 1080P 2984ms
+ok   serial:斗破苍穹 anime 斗破苍穹剧场版 双帝之战​ 2026 豆瓣-集 片源1集 hls 1080P 3157ms
+ok   serial:斗破苍穹 anime 斗破苍穹 第三季 2019 豆瓣12集 片源12集 hls 1080P 2469ms | 斗破苍穹 第25-36集
+ok   serial:斗罗大陆 tv 斗罗大陆 2021 豆瓣40集 片源40集 hls 1080P 1961ms
+ok   serial:斗罗大陆 anime 斗罗大陆1 第一季 2018 豆瓣26集 片源26集 hls 1080P 2555ms | 斗罗大陆1 第1-26集
+ok   serial:斗罗大陆 anime 斗罗大陆1 第五季 2021 豆瓣52集 片源52集 hls 720P 4827ms | 斗罗大陆1 第183-234集
+ok   serial:斗罗大陆 anime 斗罗大陆Ⅱ绝世唐门 年番1 2023 豆瓣52集 片源179集 hls 720P 6211ms
+ok   serial:斗罗大陆 anime 斗罗大陆1 第四季 2020 豆瓣52集 片源52集 hls 720P 4098ms | 斗罗大陆1 第131-182集
+ok   serial:斗罗大陆 anime 斗罗大陆1 第三季 2019 豆瓣52集 片源52集 hls 1080P 2176ms | 斗罗大陆1 第79-130集
+ok   serial:斗罗大陆 tv 斗罗大陆之燃魂战 2024 豆瓣38集 片源38集 hls 1080P 2832ms
+ok   serial:斗罗大陆 anime 斗罗大陆1 第六季 2022 豆瓣29集 片源29集 hls 1080P 2248ms | 斗罗大陆1 第235-263集
+ok   serial:完美世界 anime 完美世界 第一季 2021 豆瓣26集 片源26集 hls 1080P 1576ms | 完美世界 第1-26集
+ok   serial:完美世界 anime 完美世界 第三季 2022 豆瓣52集 片源52集 hls 1080P 1272ms | 完美世界 第79-130集
+ok   serial:完美世界 anime 完美世界 第六季 2025 豆瓣52集 片源52集 hls 1080P 1317ms | 完美世界 第235-286集
+ok   serial:完美世界 anime 完美世界 第七季 2026 豆瓣52集 片源2集 hls 1080P 1336ms | 完美世界 第287-338集
+ok   serial:完美世界 anime 完美世界 第二季 2021 豆瓣52集 片源52集 hls 1080P 1472ms | 完美世界 第27-78集
+ok   serial:完美世界 anime 完美世界 第四季 2023 豆瓣52集 片源52集 hls 1080P 1206ms | 完美世界 第131-182集
+ok   serial:完美世界 anime 完美世界 第五季 2024 豆瓣52集 片源52集 hls 1080P 1261ms | 完美世界 第183-234集
+ok   serial:完美世界 anime 完美世界剧场版 九劫焚天 2026 豆瓣-集 片源1集 hls 1080P 1934ms
+ok   serial:吞噬星空 anime 吞噬星空 第1季 2020 豆瓣26集 片源250集 hls 1080P 2242ms
+ok   serial:吞噬星空 anime 吞噬星空 第7季 2026 豆瓣52集 片源42集 hls 1080P 1247ms | 吞噬星空 第209-260集
+ok   serial:吞噬星空 anime 吞噬星空 第6季 2025 豆瓣52集 片源52集 hls 1080P 1475ms | 吞噬星空 第157-208集
+ok   serial:吞噬星空 anime 吞噬星空 第2季 2021 豆瓣26集 片源26集 hls 1080P 1468ms | 吞噬星空 第27-52集
+ok   serial:吞噬星空 anime 吞噬星空 第5季 2024 豆瓣26集 片源26集 hls 1080P 1436ms | 吞噬星空131-156集
+ok   serial:吞噬星空 anime 吞噬星空 第4季 2023 豆瓣45集 片源45集 hls 1080P 1364ms | 吞噬星空 第86-130集
+ok   serial:吞噬星空 anime 吞噬星空 第3季 2022 豆瓣33集 片源33集 hls 1080P 1386ms | 吞噬星空 第53-85集
+ok   serial:吞噬星空 anime 吞噬星空剧场版 决战原始星 2026 豆瓣-集 片源1集 hls 1080P 2110ms
+ok   serial:仙逆 anime 仙逆 第一季 2023 豆瓣24集 片源24集 hls 1080P 1222ms | 仙逆 第1-24集
+ok   serial:仙逆 anime 仙逆 年番3 2026 豆瓣52集 片源39集 hls 1080P 1347ms | 仙逆 第129-180集
+ok   serial:仙逆 anime 仙逆 年番1 2024 豆瓣52集 片源52集 hls 1080P 1342ms | 仙逆 第25-76集
+ok   serial:仙逆 anime 仙逆 年番2 2025 豆瓣52集 片源52集 hls 1080P 1468ms | 仙逆 第077-128集
+ok   serial:仙逆 anime 仙逆剧场版 弑仙之战 2026 豆瓣-集 片源1集 hls 1080P 2434ms
+ok   serial:仙逆 anime 仙逆剧场版 神临之战 2025 豆瓣-集 片源1集 hls 1080P 2836ms
+MISS serial:仙逆 anime 仙逆之七式斩天 2027 豆瓣-集 未找到可用片源 9254ms
+MISS serial:仙逆 anime 仙逆 年番4 2027 豆瓣52集 未找到可用片源 2974ms | 仙逆 第181-232集
+
+{"hot:tv":"14/14","hot:movie":"14/14","hot:anime":"14/14","hot:variety":"12/14","hot:doc":"10/14","serials":"44/48","serials with an episode range":"32/33"}
+
+
+Playback start probe
+
+> panda-desktop@1.0.0 probe:start
+> esbuild scripts/probe-start.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-start.cjs && node .tmp/probe-start.cjs 6
+
+{"type":"tv","sort":"hot","title":"今天是太阳雨","detail":298,"search":2761,"present":"bfzy,hongniu,360zy","behind":"","resolve":1469,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":16,"segment":4,"segmentKB":675,"midMs":682,"midKB":948,"total":4250,"failures":"jyzy search: 片源数据格式无效 1538ms | huya search: 片源数据格式无效 1711ms"}
+{"type":"tv","sort":"hot","title":"嫁金钗","detail":249,"search":1537,"present":"bfzy","behind":"","resolve":376,"won":"bfzy","carriedBy":"bfzy","quality":"1080P","removed":"","manifest":10,"segment":3,"segmentKB":682,"midMs":234,"midKB":753,"total":1926,"failures":"huya search: 片源数据格式无效 296ms"}
+{"type":"tv","sort":"hot","title":"小城良方","detail":264,"search":2936,"present":"bfzy,hongniu,360zy","behind":"","resolve":337,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":9,"segment":2,"segmentKB":529,"midMs":190,"midKB":466,"total":3284,"failures":"lzi search: 网络请求失败或超时 / ECONNRESET 2596ms | jyzy search: 片源数据格式无效 301ms | subo search: 请求已取消 / ABORT_ERR 9001ms | dyttzy search: 请求已取消 / ABORT_ERR 9000ms | lzi search: 请求已取消 / ABORT_ERR 9000ms | ffzy search: 请求已取消 / ABORT_ERR 9000ms | huya search: 片源数据格式无效 283ms | jyzy search: 片源数据格式无效 277ms"}
+{"type":"tv","sort":"hot","title":"我的有罪之人","detail":268,"search":1615,"present":"bfzy","behind":"","resolve":325,"won":"bfzy","carriedBy":"bfzy","quality":"1080P","removed":"","manifest":42,"segment":2,"segmentKB":346,"midMs":185,"midKB":406,"total":1984,"failures":"dyttzy search: 网络请求失败或超时 / ECONNRESET 2405ms"}
+{"type":"tv","sort":"hot","title":"幻视任务","detail":254,"search":5660,"present":"bfzy,hongniu,360zy","behind":"","resolve":461,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":11,"segment":15,"segmentKB":1419,"midMs":204,"midKB":581,"total":6147,"failures":"subo search: 请求已取消 / ABORT_ERR 9001ms | dyttzy search: 请求已取消 / ABORT_ERR 9001ms | ffzy search: 请求已取消 / ABORT_ERR 9000ms | subo search: 请求已取消 / ABORT_ERR 9001ms | lzi search: 请求已取消 / ABORT_ERR 9001ms | ffzy search: 请求已取消 / ABORT_ERR 9001ms"}
+{"type":"tv","sort":"hot","title":"尚公主","detail":285,"search":1153,"present":"bfzy,hongniu,360zy","behind":"","resolve":330,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":9,"segment":2,"segmentKB":538,"midMs":244,"midKB":636,"total":1494,"failures":"subo search: 请求已取消 / ABORT_ERR 9001ms | dyttzy search: 请求已取消 / ABORT_ERR 9001ms"}
+{"type":"anime","sort":"hot","title":"谷雨街后巷","detail":291,"search":390,"present":"bfzy,hongniu,360zy","behind":"","resolve":3003,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":16,"segment":290,"segmentKB":261,"midMs":535,"midKB":260,"total":3699,"failures":"lzi search: 请求已取消 / ABORT_ERR 9001ms | ffzy search: 请求已取消 / ABORT_ERR 9000ms | subo search: 请求已取消 / ABORT_ERR 9001ms"}
+{"type":"anime","sort":"hot","title":"八仙！","detail":235,"search":595,"present":"bfzy,hongniu,360zy","behind":"bfzy,hongniu,360zy","resolve":350,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":27,"segment":2,"segmentKB":564,"midMs":151,"midKB":181,"total":974,"failures":"ffzy search: 请求已取消 / ABORT_ERR 9000ms"}
+{"type":"anime","sort":"hot","title":"赛博朋克：边缘行者 第二季","detail":264,"search":404,"present":"bfzy,hongniu,360zy","behind":"hongniu,360zy","resolve":269,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":16,"segment":0,"segmentKB":9,"midMs":160,"midKB":261,"total":689}
+{"type":"anime","sort":"hot","title":"疯狂动物城","detail":739,"search":1019,"present":"bfzy,hongniu","behind":"hongniu,360zy","resolve":2759,"won":"bfzy","carriedBy":"bfzy,hongniu","quality":"1080P","removed":"","manifest":5,"segment":1,"segmentKB":7,"midMs":1510,"midKB":216,"total":3784}
+{"type":"anime","sort":"hot","title":"猫和老鼠","detail":479,"search":1505,"present":"bfzy","behind":"hongniu,360zy,bfzy","resolve":3001,"won":"bfzy","carriedBy":"bfzy","quality":"720P","removed":"","manifest":3,"segment":1041,"segmentKB":286,"midMs":496,"midKB":133,"total":5550}
+{"type":"anime","sort":"hot","title":"千与千寻","detail":482,"search":1007,"present":"bfzy,hongniu","behind":"hongniu,360zy,bfzy","resolve":2716,"won":"bfzy","carriedBy":"bfzy,hongniu","quality":"720P","removed":"","manifest":25,"segment":2,"segmentKB":183,"midMs":750,"midKB":439,"total":3750,"failures":"huya search: 片源数据格式无效 285ms | jyzy search: 片源数据格式无效 298ms"}
+{"type":"movie","sort":"hot","title":"可能的爱","detail":241,"search":477,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":287,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":27,"segment":1,"segmentKB":72,"midMs":177,"midKB":362,"total":792}
+{"type":"movie","sort":"hot","title":"空枪","detail":375,"search":345,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":354,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":35,"segment":2,"segmentKB":602,"midMs":177,"midKB":383,"total":736}
+{"type":"movie","sort":"hot","title":"生化危机：爆发夜","detail":241,"search":450,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":381,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":15,"segment":1,"segmentKB":140,"midMs":458,"midKB":493,"total":847}
+{"type":"movie","sort":"hot","title":"奥德赛","detail":239,"search":347,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":512,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":30,"segment":2,"segmentKB":323,"midMs":582,"midKB":961,"total":891}
+{"type":"movie","sort":"hot","title":"黑球","detail":360,"search":342,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":318,"won":"bfzy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":28,"segment":0,"segmentKB":56,"midMs":364,"midKB":748,"total":688}
+{"type":"movie","sort":"hot","title":"给阿嬷的情书","detail":257,"search":607,"present":"bfzy,hongniu,360zy","behind":"360zy,hongniu","resolve":1939,"won":"360zy","carriedBy":"bfzy,hongniu,360zy","quality":"1080P","removed":"","manifest":24,"segment":12,"segmentKB":424,"midMs":34,"midKB":271,"total":2582}
+{"type":"variety","sort":"hot","title":"后会友期","detail":241,"search":1552,"present":"bfzy","behind":"hongniu","resolve":376,"won":"bfzy","carriedBy":"bfzy","quality":"1080P","removed":"","manifest":55,"segment":1,"segmentKB":280,"midMs":208,"midKB":385,"total":1984}
+{"type":"variety","sort":"hot","title":"现在就出发 第四季","detail":273,"search":3875,"present":"hongniu,360zy","behind":"hongniu","resolve":1867,"won":"hongniu","carriedBy":"subo,hongniu,360zy","quality":"1080P","removed":"","manifest":6,"segment":1,"segmentKB":177,"midMs":526,"midKB":342,"total":5749,"failures":"dyttzy search: 请求已取消 / ABORT_ERR 9001ms | dyttzy search: 请求已取消 / ABORT_ERR 9000ms | lzi search: 请求已取消 / ABORT_ERR 9000ms | subo search: 请求已取消 / ABORT_ERR 9001ms | dyttzy search: 请求已取消 / ABORT_ERR 9001ms | lzi search: 请求已取消 / ABORT_ERR 9002ms"}
+{"type":"variety","sort":"hot","title":"不栩此行","detail":211,"error":"暂时无法连接，请重试","failures":"subo search: 请求已取消 / ABORT_ERR 9000ms | dyttzy search: 请求已取消 / ABORT_ERR 9000ms"}
+{"type":"variety","sort":"hot","title":"花儿与少年 第八季","detail":275,"search":1528,"present":"bfzy,ffzy","behind":"","resolve":387,"won":"bfzy","carriedBy":"bfzy,ffzy","quality":"1080P","removed":"","manifest":14,"segment":2,"segmentKB":624,"midMs":176,"midKB":273,"total":1931,"failures":"lzi search: 请求已取消 / ABORT_ERR 9001ms"}
+{"type":"variety","sort":"hot","title":"现在就出发 第三季","detail":391,"search":423,"present":"bfzy,360zy","behind":"","resolve":4375,"won":"bfzy","carriedBy":"bfzy,360zy","quality":"720P","removed":"","manifest":11,"segment":2,"segmentKB":60,"midMs":904,"midKB":275,"total":4811}
+{"type":"variety","sort":"hot","title":"现在就出发 第二季","detail":350,"search":438,"present":"bfzy,ffzy","behind":"360zy","resolve":3003,"won":"bfzy","carriedBy":"bfzy,ffzy","quality":"720P","removed":"","manifest":28,"segment":563,"segmentKB":59,"midMs":973,"midKB":282,"total":4032,"failures":"jyzy search: 片源数据格式无效 305ms | huya search: 片源数据格式无效 312ms"}
+{"at":"2026-11-18T09:50:25.464Z","titles":24,"ok":23,"median":{"search":1007,"resolve":387,"manifest":16,"segment":2,"mid":244,"total":1984},"worstTotal":6147,"wins":{"bfzy":21,"360zy":1,"hongniu":1},"fails":{"jyzy":5,"huya":5,"lzi":7,"subo":7,"dyttzy":8,"ffzy":5}}

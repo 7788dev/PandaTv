@@ -1,0 +1,13 @@
+
+> panda-desktop@1.0.0 test
+> vitest run
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+
+ Test Files  7 passed (7)
+      Tests  56 passed (56)
+   Start at  03:27:34
+   Duration  1.96s (tests 87%, import 8%, transform 5%, worker 1%)
+

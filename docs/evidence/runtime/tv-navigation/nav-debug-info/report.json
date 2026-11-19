@@ -1,0 +1,218 @@
+{
+  "at": "2026-11-18T08:58:47.404893+00:00",
+  "version": "1.0.1",
+  "cases": [
+    {
+      "name": "电影-1-normal",
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 8,
+      "firstMovie": "可能的爱",
+      "trace": [
+        {
+          "title": "哈利·波特与魔法石",
+          "labels": [
+            "9.2",
+            "哈利·波特与魔法石",
+            "奇幻 / 冒险"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "怦然心动",
+          "labels": [
+            "9.1",
+            "怦然心动",
+            "剧情 / 喜剧 / 爱情"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "霸王别姬",
+          "labels": [
+            "9.6",
+            "霸王别姬",
+            "剧情 / 爱情 / 同性"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "楚门的世界",
+          "labels": [
+            "9.4",
+            "楚门的世界",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "海上钢琴师",
+          "labels": [
+            "9.3",
+            "海上钢琴师",
+            "剧情 / 音乐"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "给阿嬷的情书",
+          "labels": [
+            "9.3",
+            "给阿嬷的情书",
+            "剧情 / 家庭"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "可能的爱",
+          "labels": [
+            "8.6",
+            "可能的爱",
+            "剧情 / 爱情"
+          ],
+          "bounds": [
+            87,
+            251,
+            359,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "最热",
+          "labels": [
+            "最热"
+          ],
+          "bounds": [
+            202,
+            151,
+            314,
+            216
+          ],
+          "focused": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "电影-1-fast-right",
+      "fast": true,
+      "column": 5,
+      "upPressesToHeader": 5,
+      "firstMovie": "黑球",
+      "trace": [
+        {
+          "title": "阿甘正传",
+          "labels": [
+            "9.5",
+            "阿甘正传",
+            "剧情 / 爱情"
+          ],
+          "bounds": [
+            1557,
+            251,
+            1829,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "生日快乐",
+          "labels": [
+            "8.9",
+            "生日快乐",
+            "剧情"
+          ],
+          "bounds": [
+            1557,
+            251,
+            1829,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "肖申克的救赎",
+          "labels": [
+            "9.7",
+            "肖申克的救赎",
+            "剧情 / 犯罪"
+          ],
+          "bounds": [
+            1557,
+            251,
+            1829,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "黑球",
+          "labels": [
+            "8.7",
+            "黑球",
+            "剧情 / 同性 / 历史"
+          ],
+          "bounds": [
+            1557,
+            251,
+            1829,
+            752
+          ],
+          "focused": true
+        },
+        {
+          "title": "最热",
+          "labels": [
+            "最热"
+          ],
+          "bounds": [
+            202,
+            151,
+            314,
+            216
+          ],
+          "focused": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,213 @@
+{
+  "at": "2026-11-18T09:06:24.096386+00:00",
+  "version": "1.0.1",
+  "cases": [
+    {
+      "name": "收藏列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 5,
+      "firstMovie": "余命一年买男人",
+      "trace": [
+        {
+          "title": "老千4：别西卜之歌",
+          "labels": [
+            "6.1",
+            "老千4：别西卜之歌",
+            "剧情 / 犯罪"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "不存在的罪人",
+          "labels": [
+            "5.7",
+            "不存在的罪人",
+            "剧情 / 悬疑 / 惊悚 / 犯罪"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "偷天父子兵",
+          "labels": [
+            "5.7",
+            "偷天父子兵",
+            "喜剧 / 动作 / 惊悚 / 犯罪"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "余命一年买男人",
+          "labels": [
+            "6.1",
+            "余命一年买男人",
+            "剧情 / 爱情"
+          ],
+          "bounds": [
+            87,
+            262,
+            359,
+            763
+          ],
+          "focused": true
+        },
+        {
+          "title": "收藏",
+          "labels": [
+            "收藏"
+          ],
+          "bounds": [
+            89,
+            151,
+            269,
+            227
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏详情返回位置",
+      "passed": true,
+      "movie": "老千4：别西卜之歌"
+    },
+    {
+      "name": "历史列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 7,
+      "firstMovie": "余命一年买男人",
+      "trace": [
+        {
+          "title": "可能的爱",
+          "labels": [
+            "8.6",
+            "可能的爱",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "大学炸弹客",
+          "labels": [
+            "6.4",
+            "大学炸弹客",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "不存在的罪人",
+          "labels": [
+            "5.7",
+            "不存在的罪人",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "人性本兽",
+          "labels": [
+            "5.8",
+            "人性本兽",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "小丑回魂：德里故事",
+          "labels": [
+            "6.0",
+            "小丑回魂：德里故事",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "余命一年买男人",
+          "labels": [
+            "6.1",
+            "余命一年买男人",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            85,
+            264,
+            506,
+            623
+          ],
+          "focused": true
+        },
+        {
+          "title": "历史",
+          "labels": [
+            "历史"
+          ],
+          "bounds": [
+            283,
+            151,
+            463,
+            227
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏历史流程",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "libraryUserStateRestored": true
+}

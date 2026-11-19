@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-18T09:35:41.843982+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Header did not switch immediately: {'texts': [], 'clock': None, 'player': False, 'spinner': False, 'loadingRegionMaxRgb': 207}"
+    },
+    {
+      "name": "missing-source",
+      "error": "No missing-source verdict within the request budget: {'texts': ['暂时无法连接，请重试', '重试', '返回'], 'clock': None, 'player': False, 'spinner': False, 'loadingRegionMaxRgb': 143}"
+    }
+  ],
+  "version": "1.0.1",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

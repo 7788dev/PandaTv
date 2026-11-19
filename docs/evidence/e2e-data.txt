@@ -1,0 +1,29 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep real Douban
+
+
+Running 1 test using 1 worker
+
+(node:3192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+Electron connected: []
+Renderer bridge ready
+Real filter: tv 动作 23
+Real filter: tv 悬疑 30
+Real filter: tv 校园 28
+Real filter: movie 动作 29
+Real filter: movie 悬疑 29
+Real filter: movie 校园 30
+Real filter: anime 校园 60
+Real filter: anime 悬疑 60
+Real filter: anime 热血 60
+Real filter: variety 音乐 30
+Real filter: variety 美食 1
+Real filter: variety 旅行 30
+Real filter: doc 自然 54
+Real filter: doc 历史 52
+Real filter: doc 科学 56
+  ok 1 e2e\data.spec.ts:7:1 › real Douban metadata, detailed channel facets, suggestions, hot searches and pagination (1.2m)
+
+  1 passed (1.2m)

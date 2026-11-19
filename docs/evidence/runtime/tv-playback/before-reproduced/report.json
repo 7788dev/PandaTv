@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-18T08:42:46.007543+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Header did not switch immediately: {'texts': ['返回', '三体', '第1集', '18.0', '暂停', '下一集', '01:06 / 1:00:35', '选集', '1080P', '倍速'], 'clock': '01:06 / 1:00:35', 'player': True, 'spinner': False, 'loadingRegionMaxRgb': 205}"
+    }
+  ],
+  "version": "1.0.1",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

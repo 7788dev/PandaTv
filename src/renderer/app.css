@@ -1,0 +1,38 @@
+/* Desktop wiring only. The visual system is the read-only design stylesheet. */
+@layer base {
+  #root { height: 100%; }
+}
+
+@layer components {
+  .topbar, .player__top { -webkit-app-region: drag; }
+  .topbar a, .topbar button, .topbar input, .topbar .search,
+  .player__top button, .winctl, .menu, .dialog, .toast { -webkit-app-region: no-drag; }
+  .search__panel .empty { padding: var(--sp-6) var(--sp-3); }
+  .search__panel .empty > .icon { width: var(--sp-6); height: var(--sp-6); }
+  .search__panel .list-loading { padding: var(--sp-4); }
+  .search__panel .empty__text { font-size: var(--fs-13); }
+  .toast[data-limited] { pointer-events: none; }
+  .filters__expand { height: var(--control-sm); padding-inline: var(--sp-3); }
+  .icon-btn:disabled { pointer-events: none; opacity: .4; }
+  .dialog-shell { position: fixed; inset: 0; display: grid; place-items: center; padding: var(--sp-8); pointer-events: none; }
+  .dialog-shell > .dialog, .dialog-shell .winctl { pointer-events: auto; }
+  /* The window-control host must not take a grid row, or the panel is centred in the upper half. */
+  .dialog-shell > :not(.dialog) { display: contents; }
+  /* People. The design draws the avatar's ring under its content, where a photo covers it:
+     with a photo the ring is drawn over it, as the poster's is. The row takes the frame's height,
+     so that the photo has the frame's size and is fitted by the rule below; left to its content,
+     the row grows to a tall photo's height. */
+  .cast__avatar:has(> .img) { position: relative; grid-template-rows: 100%; }
+  /* Portraits are taller than the frame and the head is in their upper part: the photo is held by its top
+     (measured 2026-11-17 on 1121 portraits of 170 titles: held so, nine tenths of the head show in 93 % of
+     them; held by the middle, in 20 %). */
+  .cast__avatar > .img { object-position: 50% 0; }
+  .cast__avatar:has(> .img)::after { position: absolute; inset: 0; pointer-events: none; content: ''; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--c-line); }
+  /* Someone who leads to their works behaves as a card does. */
+  a.cast__item:focus-visible { outline: none; }
+  a.cast__item:focus-visible .cast__avatar { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+  a.cast__item:hover .img { scale: 1.04; }
+  a.cast__item:hover .cast__avatar::after { box-shadow: inset 0 0 0 1px var(--c-line-2); }
+  .page__head--person { gap: var(--sp-5); align-items: center; justify-content: flex-start; }
+  .page__head--person > .cast__avatar { flex: none; margin-bottom: 0; }
+}

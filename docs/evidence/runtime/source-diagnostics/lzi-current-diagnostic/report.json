@@ -1,0 +1,657 @@
+{
+  "at": "2026-11-18T10:33:27.143Z",
+  "build": "current workspace",
+  "playing": false,
+  "item": {
+    "id": "db-34937650",
+    "title": "庆余年 第二季"
+  },
+  "elapsedMs": 63158,
+  "last": {
+    "elapsedMs": 63158,
+    "time": 0,
+    "width": 0,
+    "height": 0,
+    "readyState": 0,
+    "paused": true,
+    "playerError": true,
+    "text": "庆余年 第二季\n第1集\n\n播放失败，请重试\n\n重试\n00:00\n00:00\n选集\n倍速"
+  },
+  "observations": [
+    {
+      "elapsedMs": 7,
+      "playerError": false,
+      "text": ""
+    },
+    {
+      "elapsedMs": 1010,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 2012,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 3016,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 4019,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 5023,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 6027,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 7028,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 8032,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 9034,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 10037,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 11040,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 12042,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 13044,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 14046,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 15050,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 16051,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 17052,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 18054,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 19058,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 20060,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 21063,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 22065,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 23067,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 24069,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 25071,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 26075,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 27078,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 28081,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 29083,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 30086,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 31090,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 32092,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 33093,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 34096,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 35098,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 36099,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 37101,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 38102,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 39104,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 40106,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 41109,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 42112,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 43114,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 44115,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 45118,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 46120,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 47120,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 48122,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 49126,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 50128,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 51131,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 52134,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 53135,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 54140,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 55142,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 56144,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 57146,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 58148,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 59150,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 60152,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 61154,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 62156,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n第1集\n00:00\n00:00\n选集\n倍速"
+    },
+    {
+      "elapsedMs": 63158,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": true,
+      "text": "庆余年 第二季\n第1集\n\n播放失败，请重试\n\n重试\n00:00\n00:00\n选集\n倍速"
+    }
+  ]
+}

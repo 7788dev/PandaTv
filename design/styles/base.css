@@ -1,0 +1,274 @@
+/* ════════════════════════════════════════════════════════════════════
+   基础：重置、全局排版、焦点、图标、文字角色、工具类
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0 solid transparent;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  img,
+  a {
+    -webkit-user-drag: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    background: none;
+    border-radius: 0;
+    appearance: none;
+  }
+
+  button,
+  a,
+  [role='button'],
+  [role='tab'],
+  [role='menuitem'],
+  [role='menuitemradio'],
+  [role='option'],
+  [role='switch'] {
+    cursor: pointer;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font: inherit;
+  }
+
+  mark {
+    color: inherit;
+    background: none;
+  }
+
+  input::placeholder {
+    color: var(--c-text-3);
+    opacity: 1;
+  }
+
+  input[type='search']::-webkit-search-cancel-button,
+  input[type='search']::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer base {
+  html {
+    height: 100%;
+    overflow: hidden; /* 窗口本身不滚动，滚动交给 .scroll */
+    font-family: var(--font-sans);
+    font-size: var(--fs-14);
+    font-weight: var(--fw-regular);
+    line-height: var(--lh-normal);
+    color: var(--c-text);
+    background: var(--c-bg);
+    font-synthesis: none;
+    font-optical-sizing: auto;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    text-autospace: normal; /* 中文与英文、数字之间自动留出间隙，不要手打空格 */
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    height: 100%;
+    overflow: hidden;
+    cursor: default;
+    user-select: none; /* 桌面应用：界面文字默认不可选中 */
+    overscroll-behavior: none;
+  }
+
+  /* 焦点：只在键盘操作时出现，统一为竹青色描边 */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    color: var(--c-text);
+    background: rgb(var(--bamboo-rgb) / 0.3);
+  }
+
+  /* ── 图标：<svg class="icon"><use href="sprite.svg#name" /></svg> ── */
+  .icon {
+    flex: none;
+    width: var(--icon, 20px);
+    height: var(--icon, 20px);
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .icon--sm {
+    --icon: 16px;
+    stroke-width: 2;
+  }
+
+  .icon--lg {
+    --icon: 24px;
+    stroke-width: 1.6;
+  }
+
+  .icon--xl {
+    --icon: 44px;
+    stroke-width: 1.15;
+  }
+
+  /* ── 文字角色：页面里零散的文字只能从这 10 个里选 ── */
+  .t-display-1 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-display-1);
+    font-weight: var(--fw-bold);
+    line-height: var(--lh-tight);
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+  }
+
+  .t-display-2 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-display-2);
+    font-weight: var(--fw-bold);
+    line-height: 1.22;
+    letter-spacing: 0.02em;
+    text-wrap: balance;
+  }
+
+  .t-title-1 {
+    font-family: var(--font-serif);
+    font-size: var(--fs-32);
+    font-weight: var(--fw-bold);
+    line-height: 1.25;
+    letter-spacing: 0.02em;
+  }
+
+  .t-title-2 {
+    font-size: var(--fs-20);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+    letter-spacing: 0.01em;
+  }
+
+  .t-title-3 {
+    font-size: var(--fs-16);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-snug);
+  }
+
+  .t-body-lg {
+    font-size: var(--fs-16);
+    line-height: var(--lh-normal);
+  }
+
+  .t-body {
+    font-size: var(--fs-14);
+    line-height: var(--lh-normal);
+  }
+
+  .t-label {
+    font-size: var(--fs-14);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+  }
+
+  .t-meta {
+    font-size: var(--fs-13);
+    line-height: var(--lh-snug);
+    color: var(--c-text-2);
+  }
+
+  .t-caption {
+    font-size: var(--fs-12);
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+}
+
+@layer utilities {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .clamp-2,
+  .clamp-3 {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+  }
+
+  .clamp-2 {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  .clamp-3 {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .selectable {
+    cursor: text;
+    user-select: text;
+  }
+}

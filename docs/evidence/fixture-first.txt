@@ -1,0 +1,64 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep fixture:
+
+
+Running 5 tests using 1 worker
+
+(node:13176) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\fixture.spec.ts:7:1 › fixture: loading, empty, error and offline surfaces remain usable (3.3s)
+  x  2 e2e\fixture.spec.ts:29:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus (5.7s)
+(node:12532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 e2e\fixture.spec.ts:75:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls (7.9s)
+(node:79140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 e2e\fixture.spec.ts:114:1 › fixture: a source that never starts recovers within thirty-five seconds (27.1s)
+  ok 5 e2e\fixture.spec.ts:126:1 › fixture: prototype and production share page geometry and visual tokens (9.7s)
+
+
+  1) e2e\fixture.spec.ts:29:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.toast')
+    Expected substring: "更新服务未配置"
+    Error: strict mode violation: locator('.toast') resolved to 2 elements:
+        1) <div tabindex="0" role="dialog" class="toast" aria-modal="false" aria-labelledby="_r_v_">…</div> aka getByRole('dialog', { name: '更新服务未配置' })
+        2) <div tabindex="0" role="dialog" class="toast" aria-modal="false" data-ending-style="" aria-labelledby="_r_6_">…</div> aka getByRole('dialog', { name: '已移除' })
+
+    Call log:
+      - Expect "toContainText" locator('.toast') with timeout 15000ms
+      - waiting for locator('.toast')
+
+
+      63 |     await expect(page.getByRole('alertdialog')).not.toBeVisible()
+      64 |     await page.getByRole('button', { name: '检查更新' }).click()
+    > 65 |     await expect(page.locator('.toast')).toContainText('更新服务未配置')
+         |                                          ^
+      66 |     await user({ favorites: [], history: [] })
+      67 |     await page.evaluate(() => { location.hash = '#/me' })
+      68 |     await expect(page.locator('.empty__text')).toHaveText('还没有收藏')
+        at E:\dev\项目\panda\e2e\fixture.spec.ts:65:42
+
+    Error Context: .tmp\e2e-results\fixture-fixture-search-key-1266c-o-settings-and-dialog-focus\error-context.md
+
+  2) e2e\fixture.spec.ts:75:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls 
+
+    Error: page.evaluate: TypeError: Cannot read properties of null (reading 'volume')
+        at eval (eval at evaluate (:370:30), <anonymous>:1:38)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:370:30), <anonymous>:1:38)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at E:\dev\项目\panda\e2e\fixture.spec.ts:92:34
+        at E:\dev\项目\panda\e2e\fixture.spec.ts:92:5
+
+    Error Context: .tmp\e2e-results\fixture-fixture-player-qua-dc1cd--up-next-and-retry-controls\error-context.md
+
+  2 failed
+    e2e\fixture.spec.ts:29:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus 
+    e2e\fixture.spec.ts:75:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls 
+  3 passed (54.9s)

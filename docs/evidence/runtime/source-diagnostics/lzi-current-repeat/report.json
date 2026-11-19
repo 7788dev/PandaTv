@@ -1,0 +1,337 @@
+{
+  "at": "2026-11-18T10:37:50.407Z",
+  "build": "current workspace",
+  "playing": false,
+  "item": {
+    "id": "db-34937650",
+    "title": "庆余年 第二季"
+  },
+  "elapsedMs": 31074,
+  "last": {
+    "elapsedMs": 31074,
+    "time": 0,
+    "width": 0,
+    "height": 0,
+    "readyState": 0,
+    "paused": true,
+    "playerError": true,
+    "text": "庆余年 第二季\n\n暂时无法连接，请重试\n\n重试\n00:00\n00:00\n倍速"
+  },
+  "observations": [
+    {
+      "elapsedMs": 4,
+      "playerError": false,
+      "text": ""
+    },
+    {
+      "elapsedMs": 1007,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 2009,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 3011,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 4013,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 5015,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 6018,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 7021,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 8023,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 9024,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 10027,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 11030,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 12032,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 13034,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 14036,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 15037,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 16039,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 17041,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 18043,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 19045,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 20048,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 21049,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 22050,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 23052,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 24056,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 25059,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 26063,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 27066,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 28067,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 29069,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 30071,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": false,
+      "text": "庆余年 第二季\n00:00\n00:00\n倍速"
+    },
+    {
+      "elapsedMs": 31074,
+      "time": 0,
+      "width": 0,
+      "height": 0,
+      "readyState": 0,
+      "paused": true,
+      "playerError": true,
+      "text": "庆余年 第二季\n\n暂时无法连接，请重试\n\n重试\n00:00\n00:00\n倍速"
+    }
+  ]
+}

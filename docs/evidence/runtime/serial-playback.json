@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-19T17:13:47.672Z",
+  "episodes": {
+    "episodes": 8
+  },
+  "first": {
+    "position": 1.005582,
+    "duration": 3635.134000000003,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 31
+  },
+  "second": {
+    "position": 1.002127,
+    "duration": 3831.8880000000017,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 34
+  },
+  "third": {
+    "position": 1.001664,
+    "duration": 3209.875000000001,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 27
+  },
+  "filterDiagnostics": []
+}

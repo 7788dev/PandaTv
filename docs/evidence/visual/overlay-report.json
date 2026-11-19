@@ -1,0 +1,633 @@
+{
+ "at": "2026-11-19T17:13:08.337Z",
+ "viewport": "1440x901",
+ "tolerance": "every listed box within 1 CSS px on x, y, width and height",
+ "scenes": [
+  {
+   "name": "02-home-shelves",
+   "boxes": {
+    ".shelf >> nth=1": {
+     "production": {
+      "x": 0,
+      "y": -79.58333587646484,
+      "width": 1440,
+      "height": 358.1666793823242
+     },
+     "prototype": {
+      "x": 0,
+      "y": -79.58333587646484,
+      "width": 1440,
+      "height": 358.1666793823242
+     }
+    },
+    ".shelf >> nth=2": {
+     "production": {
+      "x": 0,
+      "y": 816.5833740234375,
+      "width": 1440,
+      "height": 358.1666259765625
+     },
+     "prototype": {
+      "x": 0,
+      "y": 816.5833740234375,
+      "width": 1440,
+      "height": 358.1666259765625
+     }
+    }
+   },
+   "pixelDifference": 0.00001
+  },
+  {
+   "name": "05-detail-episode-list",
+   "boxes": {
+    ".detail__head": {
+     "production": {
+      "x": 0,
+      "y": 0.39164233207702637,
+      "width": 1440,
+      "height": 479.1875202655792
+     },
+     "prototype": {
+      "x": 0,
+      "y": 0.7977498769760132,
+      "width": 1440,
+      "height": 479.18754065036774
+     }
+    },
+    ".eplist": {
+     "production": {
+      "x": 51.833335876464844,
+      "y": 587.4681396484375,
+      "width": 1336.3334121704102,
+      "height": 188
+     },
+     "prototype": {
+      "x": 51.833335876464844,
+      "y": 587.8446655273438,
+      "width": 1336.3334121704102,
+      "height": 188
+     }
+    },
+    ".eplist__item >> nth=3": {
+     "production": {
+      "x": 728,
+      "y": 635.438232421875,
+      "width": 672.166748046875,
+      "height": 44
+     },
+     "prototype": {
+      "x": 728,
+      "y": 635.7235717773438,
+      "width": 672.166748046875,
+      "height": 44
+     }
+    }
+   },
+   "pixelDifference": 0.00001
+  },
+  {
+   "name": "05-detail-episode-ranges",
+   "boxes": {
+    ".detail__head": {
+     "production": {
+      "x": 0,
+      "y": 0.7971720695495605,
+      "width": 1440,
+      "height": 479.1875081062317
+     },
+     "prototype": {
+      "x": 0,
+      "y": 1.5432556867599487,
+      "width": 1440,
+      "height": 479.1875182390213
+     }
+    },
+    ".eps": {
+     "production": {
+      "x": 51.833335876464844,
+      "y": 591.9846801757812,
+      "width": 1336.3334121704102,
+      "height": 206.00006103515625
+     },
+     "prototype": {
+      "x": 51.833335876464844,
+      "y": 592.252685546875,
+      "width": 1336.3334121704102,
+      "height": 206
+     }
+    },
+    ".ep >> nth=49": {
+     "production": {
+      "x": 135.9791717529297,
+      "y": 753.7222900390625,
+      "width": 74.14582824707031,
+      "height": 44
+     },
+     "prototype": {
+      "x": 135.9791717529297,
+      "y": 754.1571044921875,
+      "width": 74.14582824707031,
+      "height": 44
+     }
+    }
+   },
+   "pixelDifference": 0
+  },
+  {
+   "name": "06-search-panel",
+   "boxes": {
+    ".search": {
+     "production": {
+      "x": 802,
+      "y": 13,
+      "width": 400,
+      "height": 38
+     },
+     "prototype": {
+      "x": 802,
+      "y": 13,
+      "width": 400,
+      "height": 38
+     }
+    },
+    ".search__panel": {
+     "production": {
+      "x": 802,
+      "y": 61,
+      "width": 400,
+      "height": 332
+     },
+     "prototype": {
+      "x": 802,
+      "y": 61,
+      "width": 400,
+      "height": 332
+     }
+    },
+    ".hotlist__item >> nth=9": {
+     "production": {
+      "x": 1006,
+      "y": 345,
+      "width": 184,
+      "height": 36
+     },
+     "prototype": {
+      "x": 1006,
+      "y": 345,
+      "width": 184,
+      "height": 36
+     }
+    }
+   },
+   "pixelDifference": 0.00001
+  },
+  {
+   "name": "07-search-suggest",
+   "boxes": {
+    ".search__panel": {
+     "production": {
+      "x": 802,
+      "y": 61,
+      "width": 400,
+      "height": 64
+     },
+     "prototype": {
+      "x": 802,
+      "y": 61,
+      "width": 400,
+      "height": 64
+     }
+    },
+    ".suggest__item": {
+     "production": {
+      "x": 814,
+      "y": 73,
+      "width": 376,
+      "height": 40
+     },
+     "prototype": {
+      "x": 814,
+      "y": 73,
+      "width": 376,
+      "height": 40
+     }
+    }
+   },
+   "pixelDifference": 0.01145
+  },
+  {
+   "name": "13-menu",
+   "boxes": {
+    ".menu": {
+     "production": {
+      "x": 604.0567626953125,
+      "y": 364.997314453125,
+      "width": 167.9432373046875,
+      "height": 155.94732666015625
+     },
+     "prototype": {
+      "x": 604,
+      "y": 365,
+      "width": 168,
+      "height": 156
+     }
+    },
+    ".menu__item >> nth=0": {
+     "production": {
+      "x": 610.0263671875,
+      "y": 370.99774169921875,
+      "width": 155.974609375,
+      "height": 35.994140625
+     },
+     "prototype": {
+      "x": 610,
+      "y": 371,
+      "width": 156,
+      "height": 36
+     }
+    },
+    ".menu__item >> nth=3": {
+     "production": {
+      "x": 610.0109252929688,
+      "y": 478.9917907714844,
+      "width": 155.989501953125,
+      "height": 35.997589111328125
+     },
+     "prototype": {
+      "x": 610,
+      "y": 479,
+      "width": 156,
+      "height": 36
+     }
+    }
+   },
+   "pixelDifference": 0.00067
+  },
+  {
+   "name": "14-dialog",
+   "boxes": {
+    ".dialog": {
+     "production": {
+      "x": 520,
+      "y": 377.0625,
+      "width": 400,
+      "height": 147.19793701171875
+     },
+     "prototype": {
+      "x": 520,
+      "y": 377.0625,
+      "width": 400,
+      "height": 147.19793701171875
+     }
+    },
+    ".dialog__title": {
+     "production": {
+      "x": 548,
+      "y": 405.0625,
+      "width": 344,
+      "height": 25.19793701171875
+     },
+     "prototype": {
+      "x": 548,
+      "y": 405.0625,
+      "width": 344,
+      "height": 25.19793701171875
+     }
+    },
+    ".dialog__actions .btn >> nth=0": {
+     "production": {
+      "x": 754,
+      "y": 458.26043701171875,
+      "width": 64,
+      "height": 38
+     },
+     "prototype": {
+      "x": 754,
+      "y": 458.26043701171875,
+      "width": 64,
+      "height": 38
+     }
+    },
+    ".dialog__actions .btn >> nth=1": {
+     "production": {
+      "x": 828,
+      "y": 458.26043701171875,
+      "width": 64,
+      "height": 38
+     },
+     "prototype": {
+      "x": 828,
+      "y": 458.26043701171875,
+      "width": 64,
+      "height": 38
+     }
+    }
+   },
+   "pixelDifference": 0.00104
+  },
+  {
+   "name": "15-player-paused",
+   "boxes": {
+    ".player__top": {
+     "production": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 64
+     },
+     "prototype": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 64
+     }
+    },
+    ".player__title": {
+     "production": {
+      "x": 97.83333587646484,
+      "y": 20.80208396911621,
+      "width": 64.00000762939453,
+      "height": 22.39583396911621
+     },
+     "prototype": {
+      "x": 97.83333587646484,
+      "y": 20.80208396911621,
+      "width": 64.00000762939453,
+      "height": 22.39583396911621
+     }
+    },
+    ".player__bottom": {
+     "production": {
+      "x": 0,
+      "y": 809.3333740234375,
+      "width": 1440,
+      "height": 92
+     },
+     "prototype": {
+      "x": 0,
+      "y": 809.3333740234375,
+      "width": 1440,
+      "height": 92
+     }
+    },
+    ".seek": {
+     "production": {
+      "x": 51.833335876464844,
+      "y": 809.3333740234375,
+      "width": 1336.3334121704102,
+      "height": 20
+     },
+     "prototype": {
+      "x": 51.833335876464844,
+      "y": 809.3333740234375,
+      "width": 1336.3334121704102,
+      "height": 20
+     }
+    },
+    ".player__bar": {
+     "production": {
+      "x": 43.833335876464844,
+      "y": 833.3333740234375,
+      "width": 1352.3334121704102,
+      "height": 52
+     },
+     "prototype": {
+      "x": 43.833335876464844,
+      "y": 833.3333740234375,
+      "width": 1352.3334121704102,
+      "height": 52
+     }
+    },
+    ".player__play": {
+     "production": {
+      "x": 43.833335876464844,
+      "y": 837.3333740234375,
+      "width": 44,
+      "height": 44
+     },
+     "prototype": {
+      "x": 43.833335876464844,
+      "y": 837.3333740234375,
+      "width": 44,
+      "height": 44
+     }
+    },
+    ".player__time": {
+     "production": {
+      "x": 199.83334350585938,
+      "y": 852.8333740234375,
+      "width": 86.10415649414062,
+      "height": 13
+     },
+     "prototype": {
+      "x": 199.83334350585938,
+      "y": 852.8333740234375,
+      "width": 86.10415649414062,
+      "height": 13
+     }
+    },
+    ".player__volume": {
+     "production": {
+      "x": 139.83334350585938,
+      "y": 837.3333740234375,
+      "width": 44,
+      "height": 44
+     },
+     "prototype": {
+      "x": 139.83334350585938,
+      "y": 837.3333740234375,
+      "width": 44,
+      "height": 44
+     }
+    },
+    ".player__bigplay": {
+     "production": {
+      "x": 682.24267578125,
+      "y": 412.90936279296875,
+      "width": 75.5146484375,
+      "height": 75.51458740234375
+     },
+     "prototype": {
+      "x": 682,
+      "y": 412.66668701171875,
+      "width": 76,
+      "height": 76
+     }
+    }
+   },
+   "pixelDifference": 0.18597
+  },
+  {
+   "name": "16-player-episodes",
+   "boxes": {
+    ".player__panel": {
+     "production": {
+      "x": 1059.667236328125,
+      "y": 0,
+      "width": 380,
+      "height": 901.3333740234375
+     },
+     "prototype": {
+      "x": 1060,
+      "y": 0,
+      "width": 380,
+      "height": 901.3333740234375
+     }
+    },
+    ".player__panel-head": {
+     "production": {
+      "x": 1060.56787109375,
+      "y": 64,
+      "width": 379.333251953125,
+      "height": 54
+     },
+     "prototype": {
+      "x": 1060.666748046875,
+      "y": 64,
+      "width": 379.333251953125,
+      "height": 54
+     }
+    },
+    ".player__panel-body .ep >> nth=0": {
+     "production": {
+      "x": 1084.7979736328125,
+      "y": 118,
+      "width": 59.8646240234375,
+      "height": 44
+     },
+     "prototype": {
+      "x": 1084.666748046875,
+      "y": 118,
+      "width": 59.864501953125,
+      "height": 44
+     }
+    },
+    ".player__panel-body .ep >> nth=17": {
+     "production": {
+      "x": 1220.69384765625,
+      "y": 274,
+      "width": 59.8646240234375,
+      "height": 44
+     },
+     "prototype": {
+      "x": 1220.3958740234375,
+      "y": 274,
+      "width": 59.8646240234375,
+      "height": 44
+     }
+    }
+   },
+   "pixelDifference": 0.13883
+  },
+  {
+   "name": "17-player-up-next",
+   "boxes": {
+    ".upnext": {
+     "production": {
+      "x": 1088.166748046875,
+      "y": 654.1458740234375,
+      "width": 300,
+      "height": 131.1875
+     },
+     "prototype": {
+      "x": 1088.166748046875,
+      "y": 654.1458740234375,
+      "width": 300,
+      "height": 131.1875
+     }
+    },
+    ".upnext__title": {
+     "production": {
+      "x": 1108.166748046875,
+      "y": 694.9375,
+      "width": 260,
+      "height": 22.3958740234375
+     },
+     "prototype": {
+      "x": 1108.166748046875,
+      "y": 694.9375,
+      "width": 260,
+      "height": 22.3958740234375
+     }
+    },
+    ".upnext__actions": {
+     "production": {
+      "x": 1108.166748046875,
+      "y": 733.3333740234375,
+      "width": 260,
+      "height": 32
+     },
+     "prototype": {
+      "x": 1108.166748046875,
+      "y": 733.3333740234375,
+      "width": 260,
+      "height": 32
+     }
+    }
+   },
+   "pixelDifference": 0.19075
+  },
+  {
+   "name": "19-player-error",
+   "boxes": {
+    ".player__error": {
+     "production": {
+      "x": 636.1666870117188,
+      "y": 283.16668701171875,
+      "width": 167.66668701171875,
+      "height": 335
+     },
+     "prototype": {
+      "x": 636.1666870117188,
+      "y": 283.16668701171875,
+      "width": 167.66668701171875,
+      "height": 335
+     }
+    },
+    ".player__error .empty__text": {
+     "production": {
+      "x": 690,
+      "y": 439.16668701171875,
+      "width": 60,
+      "height": 21
+     },
+     "prototype": {
+      "x": 690,
+      "y": 439.16668701171875,
+      "width": 60,
+      "height": 21
+     }
+    },
+    ".player__error .btn": {
+     "production": {
+      "x": 688,
+      "y": 484.16668701171875,
+      "width": 64,
+      "height": 38
+     },
+     "prototype": {
+      "x": 688,
+      "y": 484.16668701171875,
+      "width": 64,
+      "height": 38
+     }
+    },
+    ".player__top": {
+     "production": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 64
+     },
+     "prototype": {
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 64
+     }
+    }
+   },
+   "pixelDifference": 0.00168
+  }
+ ]
+}

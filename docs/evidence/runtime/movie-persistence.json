@@ -1,0 +1,51 @@
+{
+  "at": "2026-11-19T17:13:09.171Z",
+  "start": {
+    "position": 1.225482,
+    "duration": 10391.625098000017,
+    "width": 1920,
+    "height": 804,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 28
+  },
+  "pause": {
+    "position": 4.236117,
+    "duration": 10391.625098000017,
+    "width": 1920,
+    "height": 804,
+    "readyState": 4,
+    "paused": true,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 103
+  },
+  "seek": {
+    "position": 501.297818,
+    "duration": 10391.625098000017,
+    "width": 1920,
+    "height": 804,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 270
+  },
+  "fullscreen": {
+    "maximized": false,
+    "fullscreen": true
+  },
+  "pictureInPicture": true,
+  "persisted": {
+    "id": "db-35267208",
+    "episode": 1,
+    "position": 523,
+    "duration": 10391.625098000017,
+    "at": 1795108426061
+  }
+}

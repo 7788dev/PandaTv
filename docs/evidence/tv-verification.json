@@ -1,0 +1,109 @@
+{
+  "at": "2026-11-18T07:01:24.326203+00:00",
+  "serial": "127.0.0.1:16416",
+  "apkPath": "e:\\dev\\项目\\panda\\release\\Panda-TV-1.0.0.apk",
+  "apkBytes": 1061660,
+  "viewport": {
+    "wmSize": "Physical size: 1080x1920",
+    "wmDensity": "Physical density: 280\nOverride density: 320",
+    "viewportDp": "960x540"
+  },
+  "androidRelease": "15",
+  "androidSdk": 35,
+  "deviceAbi": "x86_64",
+  "home": {
+    "amStartThisTimeMs": null,
+    "feedLoadMs": 1552,
+    "loadingCenteredCx": 959,
+    "topBarMaxRightPx": 1798,
+    "homeMaxFocusableRightPx": 1828,
+    "heroOrderOk": true,
+    "rankAndMoviesVisible": true,
+    "heroReturnFromBottomOk": true,
+    "initialHeroPlayCy": 559,
+    "returnedHeroPlayCy": 559,
+    "dpadBackToTopOk": true,
+    "gfxScrollStats": {
+      "totalFrames": 95,
+      "jankyFrames": 0,
+      "jankPct": 0.0,
+      "p90Ms": 5,
+      "p95Ms": 5
+    }
+  },
+  "channel": {
+    "row1Columns": 6,
+    "leftRailPx": 92,
+    "rightRailPx": 1824,
+    "chipDrawerBottomPx": 306,
+    "minCardTopDuringScrollDownPx": 332,
+    "minCardTopDuringScrollUpPx": 332,
+    "filterScrollNoOverlapOk": true,
+    "filterChipBackCloseOk": true,
+    "gfxScrollStats": {
+      "totalFrames": 43,
+      "jankyFrames": 0,
+      "jankPct": 0.0,
+      "p90Ms": 7,
+      "p95Ms": 10
+    }
+  },
+  "searchDetailPeople": {
+    "searchKeypad3x13Visible": true,
+    "searchTypeFilterTabsVisible": true,
+    "castCountVisible": 8,
+    "castPeople": [
+      "杨磊 | 导演 | 张鲁一 | 饰 汪淼 | 于和伟 | 饰 史强 | 陈瑾 | 饰 老年叶文洁 | 王子文 | 饰 青年叶文洁 | 林永健 | 饰 常伟思 | 李小冉 | 饰 申玉菲",
+      "杨磊 | 导演",
+      "张鲁一 | 饰 汪淼",
+      "于和伟 | 饰 史强",
+      "陈瑾 | 饰 老年叶文洁",
+      "王子文 | 饰 青年叶文洁",
+      "林永健 | 饰 常伟思",
+      "李小冉 | 饰 申玉菲"
+    ],
+    "personHeaderTexts": [
+      "于和伟"
+    ],
+    "personHeaderUntruncated": true,
+    "personWorksFirstPageMs": 4616,
+    "detailScrollBackToTopOk": true
+  },
+  "playback": {
+    "startMs": 1103,
+    "clockInitial": "00:00 / 43:42",
+    "clockAfterPlay": "00:04 / 43:42",
+    "clockAfterDoubleSeekRight": "00:25 / 43:42",
+    "consecutiveSeekKeptFocusOnSeekBar": true,
+    "durationSeconds": 2622,
+    "sidePanelOpened": "线路: 量子资源",
+    "activeLineFocusedByDefault": true,
+    "sourceAndAdLogs": [
+      "11-18 15:01:57.930  5098  5126 I PandaTV : [source] hongniu (9015ms): search: 片源响应超时",
+      "11-18 15:02:12.741  5098  6074 I PandaTV : [ad] lzi: filtered (-14 segs, 51.52s, [marker])",
+      "11-18 15:02:40.212  7451  7480 I PandaTV : [source] bfzy (724ms): search: Job was cancelled",
+      "11-18 15:02:40.240  7451  7474 I PandaTV : [source] lzi (751ms): search: Job was cancelled",
+      "11-18 15:02:40.294  7451  7481 I PandaTV : [source] dyttzy (806ms): search: Job was cancelled",
+      "11-18 15:02:40.349  7451  7475 I PandaTV : [source] huya (861ms): search: Job was cancelled"
+    ],
+    "crashes": []
+  },
+  "continueMeSettings": {
+    "continueWatchingWithEpisodeLabel": true,
+    "favoriteHasSanTi": true,
+    "historyWideCardWithEpisodeProgress": true,
+    "settingsRendered": true
+  },
+  "multiDpiLayout": {
+    "240dpi": {
+      "settingsRightPx": 1798,
+      "maxFocusableRightPx": 1828,
+      "noOverflow": true
+    },
+    "480dpi": {
+      "settingsRightPx": 1798,
+      "maxFocusableRightPx": 1828,
+      "noOverflow": true
+    }
+  }
+}

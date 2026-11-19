@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-18T07:48:46.386418+00:00",
+  "version": "1.0.1",
+  "cases": [],
+  "failures": [
+    {
+      "name": "动漫-1-normal",
+      "error": "Up escaped to header {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True} before reaching the first movie row; trace=[{'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True}]"
+    },
+    {
+      "name": "动漫-1-fast-right",
+      "error": "Up escaped to header {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True} before reaching the first movie row; trace=[{'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True}]"
+    }
+  ]
+}

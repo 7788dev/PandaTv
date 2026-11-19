@@ -1,0 +1,7 @@
+[source] lzi probe: 网络请求失败或超时 / ECONNRESET 862ms
+[source] lzi probe: 网络请求失败或超时 / ECONNRESET 996ms
+[failure] PLAYBACK 片源暂时无法连接，请重试
+[source] lzi probe: 网络请求失败或超时 / ECONNRESET 984ms
+[source] lzi probe: 网络请求失败或超时 / ECONNRESET 788ms
+[failure] PLAYBACK 片源暂时无法连接，请重试
+[media] lzi {"removedSegments":14,"removedSeconds":51.52,"reason":"filtered","evidence":["marker"]}

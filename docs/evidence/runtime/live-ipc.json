@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-11-15T19:06:46.862Z",
+  "startup": {
+    "title": "今天是太阳雨",
+    "loadedImages": 57
+  },
+  "search": [
+    {
+      "id": "db-35267208",
+      "title": "流浪地球2",
+      "type": "movie",
+      "year": 2023,
+      "score": 8.3
+    },
+    {
+      "id": "db-36233343",
+      "title": "流浪地球2：再次冒险",
+      "type": "doc",
+      "year": 2024,
+      "score": 8.8
+    },
+    {
+      "id": "db-26266893",
+      "title": "流浪地球",
+      "type": "movie",
+      "year": 2019,
+      "score": 7.9
+    },
+    {
+      "id": "db-36212391",
+      "title": "流浪地球3(上)",
+      "type": "movie",
+      "year": 2027
+    },
+    {
+      "id": "db-37106774",
+      "title": "流浪地球3(下)",
+      "type": "movie",
+      "year": 2028
+    },
+    {
+      "id": "db-36610198",
+      "title": "流浪地球短片集",
+      "type": "tv",
+      "year": 2027
+    },
+    {
+      "id": "db-37401936",
+      "title": "流浪地球",
+      "type": "doc",
+      "year": 2025
+    }
+  ],
+  "detail": {
+    "id": "db-35267208",
+    "title": "流浪地球2",
+    "type": "movie",
+    "year": 2023,
+    "score": 8.3,
+    "runtime": 173,
+    "genres": [
+      "科幻",
+      "冒险",
+      "灾难"
+    ],
+    "cast": 78,
+    "directors": [
+      "郭帆"
+    ],
+    "backdrop": true,
+    "synopsis": true
+  },
+  "availability": {},
+  "availabilityMs": 2,
+  "moviePlayback": {
+    "route": "#/play/db-35267208",
+    "currentTime": 16.650605,
+    "duration": 10513.615000000002,
+    "width": 1280,
+    "height": 538,
+    "paused": false,
+    "readyState": 4,
+    "decodedFrames": 400,
+    "playerError": false,
+    "body": "流浪地球2\n00:00\n00:16 / 2:55:13\n倍速"
+  }
+}

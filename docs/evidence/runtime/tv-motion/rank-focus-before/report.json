@@ -1,0 +1,304 @@
+{
+  "at": "2026-11-18T10:52:57.129675+00:00",
+  "version": "1.0.2",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [],
+  "failures": [
+    "Home focus escaped before returning to the hero"
+  ],
+  "focusTrace": [
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          447,
+          506,
+          806
+        ],
+        "labels": [
+          "8.8",
+          "三体",
+          "第1集 · 剩余60分钟"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          87,
+          401,
+          359,
+          902
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          518,
+          321,
+          610,
+          371
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "青春共体",
+          "剧情 · 2026",
+          "7.2"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "小城良方",
+          "剧情 · 2026",
+          "8.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "战争结束了！",
+          "动画 · 2023",
+          "7.2"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "你好、我是受心上人所托来做恋爱药的魔女。",
+          "爱情 · 2026",
+          "7.3"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1665,
+          31,
+          1831,
+          101
+        ],
+        "labels": [
+          "设置"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1665,
+          31,
+          1831,
+          101
+        ],
+        "labels": [
+          "设置"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1665,
+          31,
+          1831,
+          101
+        ],
+        "labels": [
+          "设置"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          1485,
+          31,
+          1651,
+          101
+        ],
+        "labels": [
+          "搜索"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          1027,
+          33,
+          1141,
+          99
+        ],
+        "labels": [
+          "我的"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          886,
+          33,
+          1027,
+          99
+        ],
+        "labels": [
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          772,
+          33,
+          886,
+          99
+        ],
+        "labels": [
+          "动漫"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          658,
+          33,
+          772,
+          99
+        ],
+        "labels": [
+          "综艺"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          658,
+          33,
+          772,
+          99
+        ],
+        "labels": [
+          "综艺"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,284 @@
+import { createCipheriv } from 'node:crypto';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import type { HistoryEntry, MediaItem, Playback, Settings } from '../design/contract/types';
+import {
+  clock, episodeHeading, episodeLabel, episodeRanges, historyRecord,
+  isFinished, metaParts, playLabel, progressPercent, progressText,
+  resumePosition, scoreText, statusText, upNextSeconds,
+} from '../design/contract/rules';
+import {
+  imageUrl, landscapePhoto, mediaType, normalize, portraitUrl,
+  principalCredits, subtitleParts,
+} from '../src/main/data/normalize';
+import { GENRES, REGIONS, matchesRegion, matchesYear, yearChoices, yearSpan } from '../src/main/data/taxonomy';
+import { combineHotQueries, hotQueries } from '../src/main/data/hot-search';
+import {
+  classifySourceType, episodeRange, issueKey, manifestVariants,
+  matchRecord, normalizedTitle, numbering, parseLines, rank,
+  referenceLine, runOf, sameIssue, searchTerms, titleKey, workTerms,
+} from '../src/main/playback/service';
+import { filterPlaylist, hasSynchronizedTracks } from '../src/main/playback/filter';
+import { clearHead, pictureOf } from '../src/main/playback/picture';
+import { loadSourceRules } from '../src/main/playback/sources';
+import { compareDelivery, compareSourceOrder, playbackMargin } from '../src/main/playback/delivery';
+
+const root = resolve(process.cwd());
+const rulesConfig = loadSourceRules(resolve(root, 'resources/play-sources.json'));
+const sourceOf = (key: string) => rulesConfig.sources.find(s => s.key === key)!;
+const fixtureManifest = (name: string) => readFileSync(resolve(root, `docs/evidence/manifest-${name}.m3u8`), 'utf8');
+const segmentHeads = JSON.parse(readFileSync(resolve(root, 'tests/fixtures/segment-heads.json'), 'utf8')) as {
+  heads: Array<{ source: string; title: string; encrypted: boolean; picture: string; head: string }>;
+};
+
+const baseItem: MediaItem = {
+  id: 'db-26647087', title: '三体', type: 'tv', year: 2023, region: '中国大陆',
+  score: 8.8, genres: ['剧情', '科幻'], episodes: 30, status: '更新至30集',
+  poster: 'https://img1.doubanio.com/a.jpg', backdrop: null,
+};
+const filmItem: MediaItem = {
+  id: 'db-1292052', title: '肖申克的救赎', type: 'movie', year: 1994, region: '美国',
+  score: 9.7, genres: ['剧情', '犯罪'], runtime: 142,
+  poster: 'https://img2.doubanio.com/b.jpg', backdrop: 'https://img2.doubanio.com/bg.jpg',
+};
+const sampleHistory: HistoryEntry = { id: 'db-26647087', episode: 5, position: 720, duration: 2700, at: 1700000000000 };
+const finishedHistory: HistoryEntry = { id: 'db-1292052', episode: 1, position: 8300, duration: 8520, at: 1700000000000 };
+
+const normalizeCases = [
+  { id: '10477598', type: 'tv', title: '罗小黑战记', year: '2011', episodes_count: 46, genres: ['剧情', '喜剧', '动作'], card_subtitle: '2011 / 中国大陆 / 剧情 喜剧 动作 动画 奇幻 / 木头 / 山新 皇贞季' },
+  { id: '37657706', type: 'movie', title: '余命一年买男人', card_subtitle: '2026 / 日本 / 剧情 爱情 / 某导演', rating: { value: 6.1 }, cover: { url: 'https://img3.doubanio.com/view/photo/m_ratio_poster/public/p2935853700.jpg' } },
+  { id: '37457082', type: 'tv', title: '凡人修仙传 年番4', year: '2026', genres: ['动画'], episodes_count: 52, aka: ['凡人修仙传 第177-228集', '凡人修仙传 年番4之慕兰之战'] },
+  { id: '1', type: 'movie', title: '恶意主机', pic: { large: 'https://img1.doubanio.com.attacker.net/image.jpg' }, rating: { value: 0 }, durations: ['45分钟'] },
+  { card: 'chart', id: '9', type: 'movie', title: '非条目卡片' },
+];
+
+const creditsSample = {
+  items: [
+    { id: '1313742', name: '于和伟', category: '演员', simple_character: '饰 史强', avatar: { normal: 'https://img1.doubanio.com/view/celebrity/raw/public/p1.jpg' } },
+    { id: '1001', name: '杨磊', category: '导演', simple_character: '导演', avatar: { normal: 'https://img1.doubanio.com/view/celebrity/raw/public/p2.jpg' } },
+    { id: '1001', name: '杨磊', category: '编剧', simple_character: '编剧', avatar: { normal: 'https://img1.doubanio.com/view/celebrity/raw/public/p2.jpg' } },
+    { id: '1002', name: '无照影人', category: '演员', simple_character: '饰 配角', avatar: { normal: 'https://img1.doubanio.com/f/movie/8dd0c794499fe925ae2ae89ee30cd225750457b4/pics/movie/celebrity-default-medium.png' } },
+  ],
+};
+
+const hotRaw = {
+  success: true,
+  data: {
+    cards: [{
+      component: 'tabImgInfoList',
+      content: [{
+        content: [
+          { title: '电影甲', Sa: 'fyb_movie', hotScore: { desc: '热搜指数', value: '500' } },
+          { title: '电影乙', Sa: 'fyb_movie', hotScore: { desc: '热搜指数', value: '900' } },
+          { title: '生活话题', Sa: 'fyb_realtime', hotScore: { desc: '热搜指数', value: '1000' } },
+        ],
+      }],
+    }],
+  },
+};
+
+const run4: MediaItem = { id: 'db-37457082', title: '凡人修仙传 年番4', year: 2026, type: 'anime', poster: null, backdrop: null, genres: [] };
+const run4Hints = { aliases: ['凡人修仙传 第177-228集', '凡人修仙传 年番4之慕兰之战', '凡人修仙传：慕兰之战', '凡人修仙传 第五季', "A Record of a Mortal's Journey to Immortality"], totalEpisodes: 52 };
+const serialNumbered = parseLines('m3u8', Array.from({ length: 200 }, (_, i) => `第${String(i + 1).padStart(2, '0')}集$https://example.com/${i + 1}.m3u8`).join('#'))[0]!;
+const extraEntries = [...Array.from({ length: 239 }, (_, i) => `第${String(i + 1).padStart(2, '0')}集`), '第240集上', '第240集下', ...Array.from({ length: 22 }, (_, i) => `第${241 + i}集`), '第263集完结', '90分钟结局', '导演剪辑版'];
+const serialWithExtras = parseLines('m3u8', extraEntries.map((title, i) => `${title}$https://example.com/${i}.m3u8`).join('#'))[0]!;
+
+const varietyRef = parseLines('m3u8', ['先导片上', '先导片下', '第20251023期', '第20251025期', '第20251026期', '第20260104期特别加更'].map((title, i) => `${title}$https://example.com/r${i}.m3u8`).join('#'))[0]!;
+const varietyOther = parseLines('m3u8', ['20251018', '20251025上', '20260104(特别加更)', '第20251018期先导片上', '第20251019期先导片下'].map((title, i) => `${title}$https://example.com/o${i}.m3u8`).join('#'))[0]!;
+
+const playlistBase = new URL('https://vip.ffzy-online2.com/main.m3u8');
+const D = '#EXT-X-DISCONTINUITY';
+const mkPlaylist = (...parts: Array<string | [number, string]>) => '#EXTM3U\n#EXT-X-TARGETDURATION:60\n' + parts.map(part => typeof part === 'string' ? part + '\n' : `#EXTINF:${part[0]},\n${part[1]}\n`).join('') + '#EXT-X-ENDLIST\n';
+const mkContent = (dir: string, count: number, from = 0): Array<[number, string]> => Array.from({ length: count }, (_, i) => [10, `https://cdn.example/${dir}/${from + i}.ts`]);
+const cuePlaylist = mkPlaylist(...mkContent('show', 10), '#EXT-X-CUE-OUT:10', [5, 'https://cdn.example/show/ad1.ts'], [5, 'https://cdn.example/show/ad2.ts'], '#EXT-X-CUE-IN', ...mkContent('show', 10, 10));
+const implicitIvPlaylist = mkPlaylist('#EXT-X-KEY:METHOD=AES-128,URI="https://cdn.example/show/key.bin"', ...mkContent('show', 20), D, [5, 'https://ads.example/x/1.ts'], [5, 'https://ads.example/x/2.ts'], D, ...mkContent('show', 20, 20));
+const explicitIvPlaylist = mkPlaylist('#EXT-X-KEY:METHOD=AES-128,URI="https://cdn.example/show/key.bin",IV=0x00000000000000000000000000000001', ...mkContent('show', 20), D, [5, 'https://ads.example/x/1.ts'], [5, 'https://ads.example/x/2.ts'], D, ...mkContent('show', 20, 20));
+const longAdBlockPlaylist = mkPlaylist(...mkContent('show', 100), '# ppvod-ad-injected v1', D, ...mkContent('ads', 10), D, ...mkContent('show', 100, 100));
+const shortPlaylist = mkPlaylist([10, 'https://cdn.example/a.ts'], [10, 'https://cdn.example/b.ts']);
+const syncTracksPlaylist = mkPlaylist('#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="g1",NAME="zh",URI="audio.m3u8"', ...mkContent('show', 10));
+
+const clearSample = Buffer.from(segmentHeads.heads[0]!.head, 'base64');
+const aesKey = Buffer.from('0123456789abcdef');
+const aesIv = Buffer.alloc(16, 9);
+const cipher = createCipheriv('aes-128-cbc', aesKey, aesIv);
+const sealedSample = Buffer.concat([cipher.update(Buffer.concat([clearSample, Buffer.alloc(5000, 1)])), cipher.final()]);
+
+const vectors = {
+  rules: {
+    scoreText: [scoreText(baseItem), scoreText({ ...baseItem, score: undefined }), scoreText({ ...baseItem, score: 0 })],
+    statusText: [statusText(baseItem), statusText(filmItem), statusText({ ...filmItem, runtime: undefined })],
+    episodeLabel: [episodeLabel(baseItem, 5), episodeLabel({ ...baseItem, unit: '期' }, 3)],
+    episodeHeading: [episodeHeading(baseItem, 5), episodeHeading(filmItem, 1)],
+    metaParts: [metaParts(baseItem, { region: true, genres: 3 }), metaParts(filmItem, { region: false, genres: 2 })],
+    isFinished: [isFinished({ position: 95, duration: 100 }), isFinished({ position: 96, duration: 100 }), isFinished({ position: 0, duration: 0 })],
+    progressPercent: [progressPercent(sampleHistory), progressPercent({ position: 0, duration: 0 })],
+    progressText: [progressText(baseItem, sampleHistory), progressText(filmItem, finishedHistory)],
+    playLabel: [playLabel(baseItem, undefined), playLabel(baseItem, sampleHistory), playLabel(filmItem, finishedHistory)],
+    resumePosition: [resumePosition(sampleHistory, 5), resumePosition(sampleHistory, 6), resumePosition(finishedHistory, 1)],
+    historyRecord: [historyRecord('db-1', 5, 2600.8, 2700, true), historyRecord('db-1', 5, 120.9, 2700, true), historyRecord('db-1', 30, 2650, 2700, false)],
+    episodeRanges: [episodeRanges(50), episodeRanges(125)],
+    clock: [clock(0), clock(307), clock(3723), clock(-5)],
+    upNextSeconds: [
+      upNextSeconds(2690.5, 2700, { hasNext: true, autoNext: true, cancelled: false }),
+      upNextSeconds(2680, 2700, { hasNext: true, autoNext: true, cancelled: false }),
+      upNextSeconds(2695, 2700, { hasNext: true, autoNext: true, cancelled: true }),
+    ],
+  },
+  normalize: {
+    imageUrl: [
+      '//img1.doubanio.com/a.jpg',
+      'https://img1.doubanio.com.attacker.net/a.jpg',
+      'http://user:pass@img1.doubanio.com/a.jpg',
+      'ftp://img1.doubanio.com/a.jpg',
+    ].map(value => ({ input: value, output: imageUrl(value) })),
+    portraitUrl: [
+      'https://img1.doubanio.com/view/celebrity/raw/public/p1.jpg',
+      'http://img1.doubanio.com/view/celebrity/raw/public/p1.jpg',
+      'https://img1.doubanio.com/f/movie/8dd0c794499fe925ae2ae89ee30cd225750457b4/pics/movie/celebrity-default-medium.png',
+    ].map(value => ({ input: value, output: portraitUrl(value) })),
+    subtitleParts: [
+      '2023 / 中国大陆 / 剧情 科幻 / 杨磊 / 张鲁一',
+      '中国大陆 / 剧情 科幻 / 杨磊',
+      '电视剧 / 日本 / 动画 悬疑',
+    ].map(value => ({ input: value, output: subtitleParts(value) })),
+    mediaType: [
+      { kind: 'tv' as const, genres: ['剧情', '动画'], isShow: false, output: mediaType('tv', ['剧情', '动画'], false) },
+      { kind: 'movie' as const, genres: ['历史', '纪录片'], isShow: false, output: mediaType('movie', ['历史', '纪录片'], false) },
+      { kind: 'tv' as const, genres: ['音乐'], isShow: true, output: mediaType('tv', ['音乐'], true) },
+      { kind: 'movie' as const, genres: ['剧情'], isShow: false, output: mediaType('movie', ['剧情'], false) },
+    ],
+    normalize: normalizeCases.map(input => ({ input, output: normalize(input) })),
+    principalCredits: principalCredits(creditsSample),
+    landscapePhoto: landscapePhoto({
+      photos: [
+        { image: { large: { url: 'https://img1.doubanio.com/small.jpg', width: 500, height: 280 } } },
+        { image: { large: { url: 'https://img1.doubanio.com/tall.jpg', width: 900, height: 1200 } } },
+        { image: { is_animated: true, large: { url: 'https://img1.doubanio.com/gif.jpg', width: 1280, height: 720 } } },
+        { image: { large: { url: 'https://img1.doubanio.com/good.jpg', width: 1280, height: 720 } } },
+      ],
+    }),
+  },
+  taxonomy: {
+    yearChoices2026: yearChoices(2026),
+    yearSpan: ['2026', '2000年代', '90年代', '更早', '1990年代', '1900'].map(input => ({ input, output: yearSpan(input) ?? null })),
+    matchesYear: [
+      { year: 1994, selected: '90年代', output: matchesYear(1994, '90年代') },
+      { year: 2000, selected: '90年代', output: matchesYear(2000, '90年代') },
+      { year: 1957, selected: '更早', output: matchesYear(1957, '更早') },
+      { year: undefined, selected: '2024', output: matchesYear(undefined, '2024') },
+    ],
+    matchesRegion: [
+      { region: '中国大陆 / 中国香港', selected: '中国香港', output: matchesRegion('中国大陆 / 中国香港', '中国香港') },
+      { region: '澳大利亚', selected: '欧美', output: matchesRegion('澳大利亚', '欧美') },
+      { region: undefined, selected: '美国', output: matchesRegion(undefined, '美国') },
+    ],
+    genreCounts: Object.fromEntries(Object.entries(GENRES).map(([k, v]) => [k, v.length])),
+    regionCounts: Object.fromEntries(Object.entries(REGIONS).map(([k, v]) => [k, v.length])),
+  },
+  hotSearch: {
+    movie: hotQueries(hotRaw, 'movie'),
+    combined: combineHotQueries([[{ title: '电影甲', score: 500 }], [{ title: '剧集乙', score: 600 }, { title: '电影甲', score: 200 }]]),
+  },
+  service: {
+    normalizedTitle: ['空枪粤语', '肖申克的救赎（国语版）', '三体\u200b'].map(input => ({ input, output: normalizedTitle(input) })),
+    titleKey: ['现在就出发 第二季', '现在就出发第2季', '一饭封神2', '怪奇物语 第十二季', '披荆斩棘2026', '1917', '空枪粤语'].map(input => ({ input, output: titleKey(input) })),
+    classifySourceType: ['剧情片', '国产剧', '大陆综艺', '国产动漫', '纪录片', '记录片', '脑洞悬疑'].map(input => ({ input, output: classifySourceType(input) ?? null })),
+    episodeRange: ['凡人修仙传 第177-228集', '吞噬星空131-156集', '凡人修仙传 第153～176集', '第1-12集', '凡人修仙传 第第五季'].map(input => ({ input, output: episodeRange(input) ?? null })),
+    runOf: {
+      slice200: runOf(serialNumbered, { name: '凡人修仙传', first: 177, last: 228 })!.episodes.map(e => ({ title: e.title, number: e.number, url: e.url })),
+      extras263: runOf(serialWithExtras, { name: '斗罗大陆1', first: 235, last: 263 })!.episodes.map(e => ({ title: e.title, number: e.number })),
+    },
+    matchRecord: [
+      { item: run4, raw: { vod_name: '凡人修仙传', vod_year: '2020', type_name: '国产动漫' }, hints: run4Hints, output: matchRecord(run4, { vod_name: '凡人修仙传', vod_year: '2020', type_name: '国产动漫' }, run4Hints) ?? null },
+      { item: run4, raw: { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, hints: run4Hints, output: matchRecord(run4, { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, run4Hints) ?? null },
+      { item: { ...filmItem, year: 2025, title: '生日快乐' }, raw: { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }, hints: {}, output: matchRecord({ ...filmItem, year: 2025, title: '生日快乐' }, { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }) ?? null },
+      { item: { id: 'db-9', title: '生命奇观', year: 2023, type: 'doc' as const, poster: null, backdrop: null, genres: [] }, raw: { vod_name: '生命奇观', vod_year: '2024', type_name: '记录片' }, hints: {}, output: matchRecord({ id: 'db-9', title: '生命奇观', year: 2023, type: 'doc', poster: null, backdrop: null, genres: [] }, { vod_name: '生命奇观', vod_year: '2024', type_name: '记录片' }) ?? null },
+    ],
+    searchTerms: ['现在就出发 第二季', 'Doctor X：白色黑手党时代', '1917'].map(input => ({ input, output: searchTerms(input) })),
+    workTerms: workTerms('凡人修仙传 年番4', run4Hints.aliases),
+    parseLines: parseLines('dyttm3u8$$$yun123$$$dytt', '第01集$https://a.com/1.m3u8#第30集已完结$https://a.com/30.m3u8#第240集上$https://a.com/240a.m3u8#预告$https://a.com/t.m3u8$$$x$https://y.com/1.m3u8$$$HD$//b.com/v.mp4'),
+    numbering: [
+      numbering(parseLines('m', '第01集$https://e/1.m3u8#第04集$https://e/4.m3u8')[0]!),
+      numbering(parseLines('m', '20241019$https://e/1.m3u8#20241024$https://e/2.m3u8')[0]!),
+      numbering(parseLines('m', '第01集$https://e/1.m3u8#特别篇01$https://e/2.m3u8')[0]!),
+    ].map(n => ({ numeric: n.numeric, titled: n.titled, count: n.count, keys: [...n.byNumber.keys()] })),
+    issueKey: ['第20251025期上', '20251025(上)', '第20260104期特别加更', '先导片上'].map(input => ({ input, output: issueKey(input) })),
+    sameIssue: [
+      { wanted: '第20251025期', found: sameIssue(varietyRef.episodes[3]!, varietyRef, varietyOther)?.title ?? null },
+      { wanted: '第20260104期特别加更', found: sameIssue(varietyRef.episodes[5]!, varietyRef, varietyOther)?.title ?? null },
+      { wanted: '先导片上', found: sameIssue(varietyRef.episodes[0]!, varietyRef, varietyOther)?.title ?? null },
+    ],
+    manifestVariants: manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n', new URL('https://cdn.example/master.m3u8')),
+    referenceLine: (() => {
+      const l1 = parseLines('m', Array.from({ length: 12 }, (_, i) => `第${i + 1}集$https://e/${i}.m3u8`).join('#'))[0]!;
+      const l2 = parseLines('m', [...Array.from({ length: 12 }, (_, i) => `第${i + 1}集`), '第特别篇01集'].map((t, i) => `${t}$https://e/${i}.m3u8`).join('#'))[0]!;
+      return referenceLine([l2, l1]) === l1;
+    })(),
+    rank: rank([
+      { source: { priority: 90 }, lines: [serialNumbered], dubbed: true, weak: false },
+      { source: { priority: 50 }, lines: [serialNumbered], dubbed: false, weak: true },
+      { source: { priority: 82 }, lines: [serialNumbered], dubbed: false, weak: false },
+      { source: { priority: 95 }, lines: [serialNumbered], dubbed: false, weak: false },
+    ]).map(r => ({ priority: r.source.priority, dubbed: r.dubbed, weak: r.weak })),
+  },
+  filter: {
+    fixtures: (['dyttzy-0', 'dyttzy-2', 'ffzy-1', 'lzi-0', 'bfzy-0', 'bfzy-3', 'bfzy-4', '360zy-0', '360zy-2', 'jyzy-0', 'lzi-3'] as const).map(name => {
+      const sourceKey = name.replace(/-\d+$/, '');
+      const text = fixtureManifest(name);
+      const result = filterPlaylist(text, playlistBase, sourceOf(sourceKey), rulesConfig);
+      return { name, sourceKey, removedSegments: result.removedSegments, removedSeconds: result.removedSeconds, reason: result.reason, evidence: result.evidence ?? [] };
+    }),
+    cases: [
+      { label: 'cue', sourceKey: 'lzi', maxDropRatio: 0.15, foreignMax: 60, preserve: false, text: cuePlaylist },
+      { label: 'implicit-iv', sourceKey: '360zy', maxDropRatio: 0.15, foreignMax: 60, preserve: false, text: implicitIvPlaylist },
+      { label: 'explicit-iv', sourceKey: '360zy', maxDropRatio: 0.15, foreignMax: 60, preserve: false, text: explicitIvPlaylist },
+      { label: 'ad-block-too-long', sourceKey: 'lzi', maxDropRatio: 0.15, foreignMax: 60, preserve: false, text: longAdBlockPlaylist },
+      { label: 'short-playlist', sourceKey: 'lzi', maxDropRatio: 0.15, foreignMax: 60, preserve: false, text: shortPlaylist },
+      { label: 'safety-limit', sourceKey: 'ffzy', maxDropRatio: 0.001, foreignMax: 60, preserve: false, text: fixtureManifest('ffzy-1') },
+      { label: 'synchronized-tracks', sourceKey: 'ffzy', maxDropRatio: 0.15, foreignMax: 60, preserve: hasSynchronizedTracks(syncTracksPlaylist), text: syncTracksPlaylist },
+    ].map(c => {
+      const r = filterPlaylist(c.text, playlistBase, sourceOf(c.sourceKey), { ...rulesConfig, maxDropRatio: c.maxDropRatio, foreignBlockMaxSeconds: c.foreignMax }, c.preserve);
+      return { ...c, expected: { removedSegments: r.removedSegments, removedSeconds: r.removedSeconds, reason: r.reason, evidence: r.evidence ?? [] } };
+    }),
+  },
+  delivery: {
+    margin: [
+      { seconds: 10, length: 2_000, received: 800, elapsedMs: 160, complete: false },
+      { seconds: 0.05, length: 2_000, received: 1_600, elapsedMs: 160, complete: false },
+      { seconds: 10, length: 2_000, received: 2_000, elapsedMs: 800, complete: true },
+      { seconds: 10, length: undefined, received: 2_000, elapsedMs: 800, complete: true },
+      { seconds: 10, length: undefined, received: 800, elapsedMs: 160, complete: false },
+      { seconds: undefined, length: 2_000, received: 800, elapsedMs: 160, complete: false },
+      { seconds: 0, length: 2_000, received: 800, elapsedMs: 160, complete: true },
+    ].map(input => ({ input, output: playbackMargin(input.seconds, input.length, input.received, input.elapsedMs, input.complete) ?? null })),
+    choices: [
+      { a: { picture: 3, margin: 0.8 }, b: { picture: 1, margin: 2 } },
+      { a: { picture: 3, margin: 2 }, b: { picture: 1, margin: 10 } },
+      { a: { picture: 3, margin: 0.4 }, b: { picture: 1, margin: 0.9 } },
+      { a: { picture: 3 }, b: { picture: 1, margin: 2 } },
+      { a: { picture: 3 }, b: { picture: 1, margin: 0.9 } },
+      { a: { picture: 3, margin: 2 }, b: { picture: 3, margin: 2 } },
+    ].map(input => ({ ...input, output: Math.sign(compareDelivery(input.a, input.b)) })),
+    sourceOrder: [
+      { label: 'work-backoff', a: { behind: true, previous: false, winner: false }, b: { behind: false, previous: false, winner: false }, retry: false },
+      { label: 'previous-episode-winner', a: { behind: false, previous: false, winner: false }, b: { behind: false, previous: false, winner: true }, retry: false },
+      { label: 'retry-uses-an-alternative', a: { behind: false, previous: true, winner: true }, b: { behind: false, previous: false, winner: false }, retry: true },
+    ].map(input => ({ ...input, output: Math.sign(compareSourceOrder(input.a, input.b, input.retry)) })),
+  },
+  picture: {
+    heads: segmentHeads.heads.map(h => ({ source: h.source, title: h.title, head: h.head, expected: pictureOf(Buffer.from(h.head, 'base64')) ?? null })),
+    nonTsExpected: pictureOf(Buffer.from('<html>not a segment</html>')) ?? null,
+    encrypted: {
+      keyHex: aesKey.toString('hex'),
+      ivHex: aesIv.toString('hex'),
+      sealedBase64: sealedSample.subarray(0, 1001).toString('base64'),
+      expectedPicture: pictureOf(clearHead(sealedSample.subarray(0, 1001), aesKey, aesIv)) ?? null,
+      shortLength: clearHead(sealedSample.subarray(0, 10), aesKey, aesIv).length,
+    },
+  },
+};
+
+const outPath = resolve(root, 'tv/app/src/test/resources/golden-vectors.json');
+mkdirSync(dirname(outPath), { recursive: true });
+writeFileSync(outPath, JSON.stringify(vectors, null, 2), 'utf8');
+console.log('Wrote golden-vectors.json bytes:', readFileSync(outPath).length);

@@ -1,0 +1,32 @@
+
+> panda-desktop@1.0.0 test:e2e
+> playwright test --grep window controls remain
+
+
+Running 1 test using 1 worker
+
+(node:43592) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\fixture.spec.ts:116:1 › fixture: window controls remain usable while a confirmation is open (6.3s)
+
+
+  1) e2e\fixture.spec.ts:116:1 › fixture: window controls remain usable while a confirmation is open 
+
+    TimeoutError: locator.click: Timeout 5000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '最大化', exact: true })
+
+
+      121 |     await page.locator('.setrow').filter({ hasText: '清空观看历史' }).getByRole('button').click()
+      122 |     await expect(page.getByRole('alertdialog')).toBeVisible()
+    > 123 |     await page.getByRole('button', { name: '最大化', exact: true }).click({ timeout: 5000 })
+          |                                                                  ^
+      124 |     await expect.poll(() => page.evaluate(() => window.panda.window.getState())).toEqual({ maximized: true, fullscreen: false })
+      125 |     await expect(page.getByRole('alertdialog')).toBeVisible()
+      126 |     await page.getByRole('button', { name: '还原', exact: true }).click()
+        at E:\dev\项目\panda\e2e\fixture.spec.ts:123:66
+
+    Error Context: .tmp\e2e-results\fixture-fixture-window-con-3bf04-hile-a-confirmation-is-open\error-context.md
+
+  1 failed
+    e2e\fixture.spec.ts:116:1 › fixture: window controls remain usable while a confirmation is open 

@@ -1,0 +1,346 @@
+/* ════════════════════════════════════════════════════════════════════
+   顶栏：标志 + 频道导航 + 搜索 + 我的 / 设置；窗口按钮单独悬浮在右上角
+   顶栏同时就是窗口标题栏（可拖动）。
+   ════════════════════════════════════════════════════════════════════ */
+
+@layer components {
+  .topbar {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: var(--z-topbar);
+    display: flex;
+    align-items: center;
+    height: var(--bar-h);
+    padding-right: calc(var(--winctl-w) + var(--sp-2));
+    padding-left: var(--gutter);
+  }
+
+  /* 玻璃底：页面滚动后才出现 */
+  .topbar::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    content: '';
+    background: var(--c-glass);
+    border-bottom: 1px solid var(--c-line);
+    opacity: 0;
+    backdrop-filter: var(--blur-glass);
+    transition: opacity var(--dur-2) var(--ease-out);
+  }
+
+  .topbar[data-scrolled]::before {
+    opacity: 1;
+  }
+
+  .topbar__logo {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: calc(var(--sp-2) * -1 + 2px);
+    border-radius: var(--r-full);
+    transition: scale var(--dur-2) var(--ease-out);
+  }
+
+  .topbar__logo img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .topbar__logo:active {
+    scale: 0.92;
+  }
+
+  /* 返回：在频道以外的页面（详情、搜索结果、我的、设置）顶替标志的位置。
+     占位与标志完全相同，导航不会因此左右跳动。写法：<button class="icon-btn topbar__back"> */
+  .topbar > .topbar__back {
+    margin-inline: -5px 1px;
+    color: var(--c-text);
+  }
+
+  .topbar__spacer {
+    flex: 1;
+    align-self: stretch;
+    min-width: var(--sp-6);
+  }
+
+  .topbar__actions {
+    display: flex;
+    flex: none;
+    gap: var(--sp-1);
+    align-items: center;
+    margin-left: var(--sp-3);
+  }
+
+  /* ── 频道导航 ── */
+  .nav {
+    position: relative;
+    display: flex;
+    flex: none;
+    align-self: stretch;
+    align-items: center;
+    margin-left: var(--sp-5);
+  }
+
+  .nav__item {
+    display: grid;
+    place-items: center;
+    height: 36px;
+    padding-inline: 14px;
+    font-size: var(--fs-15);
+    font-weight: var(--fw-medium);
+    line-height: 1;
+    color: var(--c-text-2);
+    white-space: nowrap;
+    border-radius: var(--r-full);
+    transition: color var(--dur-1);
+  }
+
+  .nav__item:hover {
+    color: var(--c-text);
+  }
+
+  .nav__item[aria-current='page'] {
+    color: var(--c-text);
+  }
+
+  /* 当前频道下方的小竹节：由代码把当前项的位置写进 --x / --w */
+  .nav__indicator {
+    position: absolute;
+    bottom: 11px;
+    left: 0;
+    width: 16px;
+    height: 3px;
+    background: var(--c-accent);
+    border-radius: var(--r-full);
+    translate: calc(var(--x, 0px) + var(--w, 0px) / 2 - 8px) 0;
+    transition:
+      translate var(--dur-3) var(--ease-out),
+      opacity var(--dur-2);
+  }
+
+  .nav:not(:has([aria-current='page'])) .nav__indicator {
+    opacity: 0;
+  }
+
+  /* ── 搜索 ── */
+  .search {
+    position: relative;
+    flex: none;
+    width: 240px;
+    transition: width var(--dur-3) var(--ease-out);
+  }
+
+  .search:focus-within,
+  .search[data-open] {
+    width: 400px;
+  }
+
+  /* 搜索面板：不用 Base UI。它一直挂在页面上，显示 / 隐藏只切换 data-open */
+  .search__panel {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 400px;
+    max-height: min(560px, calc(100vh - var(--bar-h) - var(--sp-8)));
+    padding: var(--sp-3);
+    overflow: hidden auto;
+    visibility: hidden;
+    background: var(--c-raised);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-3);
+    opacity: 0;
+    transform-origin: top right;
+    translate: 0 -6px;
+    scale: 0.98;
+    scrollbar-width: none;
+    transition:
+      opacity var(--dur-1) var(--ease-out),
+      translate var(--dur-1) var(--ease-out),
+      scale var(--dur-1) var(--ease-out),
+      visibility 0s linear var(--dur-1);
+  }
+
+  .search__panel[data-open] {
+    visibility: visible;
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+    transition-duration: var(--dur-2);
+    transition-delay: 0s;
+  }
+
+  .search__group + .search__group {
+    margin-top: var(--sp-4);
+  }
+
+  .search__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 28px;
+    padding-inline: 10px;
+    margin-bottom: var(--sp-1);
+  }
+
+  .search__label {
+    font-size: var(--fs-12);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+    color: var(--c-text-3);
+  }
+
+  .search__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    padding: var(--sp-1) 10px;
+  }
+
+  /* 热搜：两列，先上后下 */
+  .hotlist {
+    display: grid;
+    grid-template-rows: repeat(5, auto);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: column;
+    gap: var(--sp-05) var(--sp-2);
+  }
+
+  .hotlist__item,
+  .suggest__item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 36px;
+    padding-inline: 10px;
+    font-size: var(--fs-14);
+    line-height: var(--lh-snug);
+    color: var(--c-text-2);
+    border-radius: var(--r-sm);
+    transition:
+      background var(--dur-1),
+      color var(--dur-1);
+  }
+
+  .hotlist__item:hover,
+  .hotlist__item[data-highlighted],
+  .suggest__item:hover,
+  .suggest__item[data-highlighted] {
+    color: var(--c-text);
+    background: var(--c-fill);
+  }
+
+  .hotlist__rank {
+    flex: none;
+    width: 16px;
+    font-size: var(--fs-13);
+    font-weight: var(--fw-semibold);
+    font-variant-numeric: tabular-nums;
+    color: var(--c-text-4);
+    text-align: center;
+  }
+
+  .hotlist > :nth-child(-n + 3) .hotlist__rank {
+    color: var(--c-text);
+  }
+
+  .hotlist__title,
+  .suggest__text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* 搜索联想 */
+  .suggest__item {
+    gap: var(--sp-3);
+    height: 40px;
+  }
+
+  .suggest__item .icon {
+    color: var(--c-text-3);
+  }
+
+  .suggest__text {
+    flex: 1;
+  }
+
+  .suggest__text mark {
+    font-weight: var(--fw-medium);
+    color: var(--c-text);
+  }
+
+  .suggest__type {
+    flex: none;
+    font-size: var(--fs-12);
+    color: var(--c-text-3);
+  }
+
+  /* ── 窗口按钮：永远在最上层；点击区域一直延伸到窗口右上角 ── */
+  .winctl {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: var(--z-window);
+    display: flex;
+    height: var(--bar-h);
+    transition: opacity var(--dur-3) var(--ease-out);
+  }
+
+  .winctl__btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: calc(var(--winctl-w) / 3);
+    height: 100%;
+    color: var(--c-text-2);
+    transition: color var(--dur-1);
+  }
+
+  .winctl__btn::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: var(--control-sm);
+    height: var(--control-sm);
+    content: '';
+    border-radius: var(--r-full);
+    translate: -50% -50%;
+    transition: background var(--dur-1);
+  }
+
+  .winctl__btn .icon {
+    position: relative;
+  }
+
+  .winctl__btn:hover {
+    color: var(--c-text);
+  }
+
+  .winctl__btn:hover::before {
+    background: var(--c-fill-2);
+  }
+
+  .winctl__btn:active::before {
+    background: var(--c-fill-3);
+  }
+
+  .winctl__btn--close:hover {
+    color: var(--paper-50);
+  }
+
+  .winctl__btn--close:hover::before {
+    background: var(--c-close-hover);
+  }
+
+  .winctl__btn:focus-visible {
+    outline: none;
+  }
+
+  .winctl__btn:focus-visible::before {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 2px;
+  }
+}

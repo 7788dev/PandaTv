@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-18T09:30:52.916808+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Timed out after 65s; visible texts=[]"
+    }
+  ],
+  "version": "1.0.1",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

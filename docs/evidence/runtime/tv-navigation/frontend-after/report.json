@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-18T07:54:29.170058+00:00",
+  "version": "1.0.1",
+  "cases": [],
+  "failures": [
+    {
+      "name": "动漫-1-normal",
+      "error": "Up escaped to header {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True} before reaching the first movie row; trace=[{'title': '疯狂原始人', 'labels': ['8.7', '疯狂原始人', '喜剧 / 动画 / 冒险'], 'bounds': (87, 251, 359, 748), 'focused': True}, {'title': '狮子王', 'labels': ['9.1', '狮子王', '动画 / 歌舞 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '神偷奶爸', 'labels': ['8.7', '神偷奶爸', '喜剧 / 动画 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '浪浪山小妖怪', 'labels': ['8.5', '浪浪山小妖怪', '剧情 / 喜剧 / 动画 / 奇幻'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '疯狂动物城2', 'labels': ['8.3', '疯狂动物城2', '喜剧 / 动画 / 悬疑 / 犯罪 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '哪吒之魔童闹海', 'labels': ['8.4', '哪吒之魔童闹海', '剧情 / 喜剧 / 动画 / 奇幻'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '疯狂动物城', 'labels': ['9.3', '疯狂动物城', '喜剧 / 动画 / 冒险'], 'bounds': (675, 251, 947, 748), 'focused': True}, {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True}]"
+    },
+    {
+      "name": "动漫-1-fast-right",
+      "error": "Up escaped to header {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True} before reaching the first movie row; trace=[{'title': '驯龙高手', 'labels': ['8.8', '驯龙高手', '动画 / 奇幻 / 冒险'], 'bounds': (87, 251, 359, 748), 'focused': True}, {'title': '疯狂原始人', 'labels': ['8.7', '疯狂原始人', '喜剧 / 动画 / 冒险'], 'bounds': (87, 251, 359, 748), 'focused': True}, {'title': '狮子王', 'labels': ['9.1', '狮子王', '动画 / 歌舞 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '神偷奶爸', 'labels': ['8.7', '神偷奶爸', '喜剧 / 动画 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '浪浪山小妖怪', 'labels': ['8.5', '浪浪山小妖怪', '剧情 / 喜剧 / 动画 / 奇幻'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '疯狂动物城2', 'labels': ['8.3', '疯狂动物城2', '喜剧 / 动画 / 悬疑 / 犯罪 / 冒险'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '哪吒之魔童闹海', 'labels': ['8.4', '哪吒之魔童闹海', '剧情 / 喜剧 / 动画 / 奇幻'], 'bounds': (381, 251, 653, 748), 'focused': True}, {'title': '疯狂动物城', 'labels': ['9.3', '疯狂动物城', '喜剧 / 动画 / 冒险'], 'bounds': (675, 251, 947, 748), 'focused': True}, {'title': '最热', 'labels': ['最热'], 'bounds': (202, 151, 314, 216), 'focused': True}]"
+    }
+  ]
+}

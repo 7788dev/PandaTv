@@ -1,0 +1,66 @@
+{
+  "at": "2026-11-19T17:09:03.697Z",
+  "source": "360zy",
+  "title": "流浪地球2",
+  "id": "db-35267208",
+  "note": "out-of-directory blocks",
+  "diagnostic": {
+    "removedSegments": 28,
+    "removedSeconds": 122.969,
+    "reason": "filtered",
+    "evidence": [
+      "foreign"
+    ]
+  },
+  "served": {
+    "duration": 10390.645999999999,
+    "cuts": [
+      318.2600000000002,
+      1961.7870000000098,
+      2596.339000000028,
+      4658.226999999984,
+      5033.560999999939,
+      7196.021999999756,
+      7393.42399999974,
+      9144.183999999803,
+      9774.614999999914
+    ],
+    "encrypted": false
+  },
+  "start": {
+    "position": 5.052723,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 122
+  },
+  "across": {
+    "position": 321.818501,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 353
+  },
+  "end": {
+    "position": 1.810145,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 411
+  }
+}

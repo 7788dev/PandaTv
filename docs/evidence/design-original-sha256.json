@@ -1,0 +1,826 @@
+[
+  {
+    "path": "art/backdrops/anhe.webp",
+    "sha256": "4e08fae2178253f196b63a2b0a713f5bc1b6d287bf00ede5ffab1d035147530a"
+  },
+  {
+    "path": "art/backdrops/beiwei-sanshidu.webp",
+    "sha256": "9651093a096c52ac395322f8651344d59159910d772223959d49ff372cffd4f2"
+  },
+  {
+    "path": "art/backdrops/changye-jiangming.webp",
+    "sha256": "ed726d34257bbc5444a03338eb67e5d37878c03f25136024e13af541c5a5584e"
+  },
+  {
+    "path": "art/backdrops/chaoxi-zhishang.webp",
+    "sha256": "97cda02cc74bd2bcddf684685951ceee2e6ee7b43209a999396150d732438e66"
+  },
+  {
+    "path": "art/backdrops/chengshi-yewan.webp",
+    "sha256": "f66e19a3c7fb84d741eb867546aa685223d444f58382814598622af41e4ec28c"
+  },
+  {
+    "path": "art/backdrops/dengta-shouwangzhe.webp",
+    "sha256": "e6e4eb92cd647bc8b61e9b3206da02225a00dc4056f890c4aa835228df2dc343"
+  },
+  {
+    "path": "art/backdrops/dierci-chuxue.webp",
+    "sha256": "5d2844b37be16bb0205c28a20675a128f1234f0e4220bfc48b2312265e65b1ba"
+  },
+  {
+    "path": "art/backdrops/diqige-zhengren.webp",
+    "sha256": "7a5089c860df9bcb99eb3f16d35385a624998ed9ed3b5d2b26d36b5e540b072b"
+  },
+  {
+    "path": "art/backdrops/guiyan.webp",
+    "sha256": "b4e8e0d411378c25128637e9dc576bd6b894c80a238c37f36a20853a00930a48"
+  },
+  {
+    "path": "art/backdrops/huijin-zhicheng.webp",
+    "sha256": "5ea0687769c02d3bb285c0820dce97811e2a19841c4f04e6da5ef956d501dace"
+  },
+  {
+    "path": "art/backdrops/jidi-riji.webp",
+    "sha256": "d6bf874773cfbfc826473adf91af0238bad5d17f700dcf117713b2e7f04c1254"
+  },
+  {
+    "path": "art/backdrops/jinwan-kaimai.webp",
+    "sha256": "2de5116e6c2da40851299517f445d9d86ee709bab6bb3f2abfcd776ba7215534"
+  },
+  {
+    "path": "art/backdrops/jiuchong-que.webp",
+    "sha256": "d452270de402e3068a0055ec03dfacb0c493120666635a7749d384304f096130"
+  },
+  {
+    "path": "art/backdrops/jixie-zhixin.webp",
+    "sha256": "cab300fea212f6ca37d93f242f3459a2dba7a220d9a7ccf392de07c611448c36"
+  },
+  {
+    "path": "art/backdrops/kanbujian-heliu.webp",
+    "sha256": "47c75dab81f5b3341f22e1299ea4016a27dd61b0f3faeae4dc8233789ca5c6f7"
+  },
+  {
+    "path": "art/backdrops/linghao-chengke.webp",
+    "sha256": "eb99b5da96de5c5bb6f0220814d8ad80d54c47b81c05226b19d0c04fdaf30b43"
+  },
+  {
+    "path": "art/backdrops/liusha-zhixia.webp",
+    "sha256": "ef68c0fc6770c4fbe54ed869e3b8e31eedc08e8b2a5bc963031da84e3afe1ffc"
+  },
+  {
+    "path": "art/backdrops/mao-yu-bianlidian.webp",
+    "sha256": "ca81fcf3a6ad86512169a08308254eb3c7cd847f4ba3d70bdbc1a26fc540b13d"
+  },
+  {
+    "path": "art/backdrops/nifeng-xiatian.webp",
+    "sha256": "aa2969c209237f4ca039753672a1add0a4aaa75b84e2ad6ac0e21595601e9990"
+  },
+  {
+    "path": "art/backdrops/nihong-yibei.webp",
+    "sha256": "636ee2b55e00f15be3ad95fe227c05a5e3d586cb7ac78be68db3180d743c7436"
+  },
+  {
+    "path": "art/backdrops/qingci.webp",
+    "sha256": "5830ef2c49837aecd029067e4db6f9ad4050b3edfa0e80bd0dc15ad9a317d703"
+  },
+  {
+    "path": "art/backdrops/shanhai-huijuan.webp",
+    "sha256": "834dc816a834c4aad1bcc7834974703e11065800d307f49be3f020828cb8b5d1"
+  },
+  {
+    "path": "art/backdrops/shenhai-huisheng.webp",
+    "sha256": "564fd76946875f4dbc62fa6401ef26bd9acbd8cd163a8fa140f79f7709c56a66"
+  },
+  {
+    "path": "art/backdrops/shenkong-youchai.webp",
+    "sha256": "19c5f131d382c2d61765bc7940d8e45dbc903bc87ccb2e0d5ce0c57fb90ab6ac"
+  },
+  {
+    "path": "art/backdrops/shouyiren.webp",
+    "sha256": "2c9a10220526168386b1f2e21ee553c6ec82195f2670801ed501893db28a4528"
+  },
+  {
+    "path": "art/backdrops/tade-cheng.webp",
+    "sha256": "b6a3c8a9a356a4b51c06d64262871bfee85af1e7179f512d931dee3d7281c625"
+  },
+  {
+    "path": "art/backdrops/tingjian-haoshiguang.webp",
+    "sha256": "2e7ef51d0dd8589c8fb8b7e65757cc7fa066f0aaec1278260cd973daa081067b"
+  },
+  {
+    "path": "art/backdrops/tingyu-jian.webp",
+    "sha256": "63cd1db98ac6399815c1a3a4e706295f6ae1c1362005ae4055fac76ae7248bda"
+  },
+  {
+    "path": "art/backdrops/weigang-fengyun.webp",
+    "sha256": "80722aba788d0caa34781973ea119899ccf3fc1687f371e38ce491935d024462"
+  },
+  {
+    "path": "art/backdrops/wugang-laixin.webp",
+    "sha256": "ceff177f80ada0eeb019f91515c4532e64b2b3a67703384333cd7754f4a56469"
+  },
+  {
+    "path": "art/backdrops/xiangshan-erxing.webp",
+    "sha256": "8d9f39808f2056950c6bdbd20568c85b17e33d090fbedb661c724393fcf2cd87"
+  },
+  {
+    "path": "art/backdrops/xiaohuli-siji.webp",
+    "sha256": "f4b640f89715b409180a9a957150d00cac3d16b53c8115bbe34c722b62316a5e"
+  },
+  {
+    "path": "art/backdrops/xinggui-lieche.webp",
+    "sha256": "397ed0f184f4ed4f0adeb53b1e255d3836c58cfb49798ab79e5f310b734bd145"
+  },
+  {
+    "path": "art/backdrops/xueguo-laike.webp",
+    "sha256": "3e065f3371ea8953ae1309eba83b3ca74e94567b1731233efa2e155e6c93f5b8"
+  },
+  {
+    "path": "art/backdrops/yilimi-lvcheng.webp",
+    "sha256": "ef070ae8b68be75a3086a1748f6df11cd59b12746f67a014b67d1ddcc3596603"
+  },
+  {
+    "path": "art/backdrops/yueqiu-beimian.webp",
+    "sha256": "c3fff33b6f898dd6f0609310bf504c69e9615b3cbc92c1ad592a693d0cc35f04"
+  },
+  {
+    "path": "art/backdrops/yun-shenchu.webp",
+    "sha256": "9af96d2ce0a8b917abcc3f7062cb4e002242e92dca9ed0bfa9bef4df6f94a2e7"
+  },
+  {
+    "path": "art/backdrops/zhoumo-lvxingshe.webp",
+    "sha256": "ded093910a56bae820acbdc4120b00d0e15db311327e309526e1678cc09e9e63"
+  },
+  {
+    "path": "art/backdrops/zuihou-dulun.webp",
+    "sha256": "6dec733cd7cf2fd0d19988bbe5c2b0267935f4c1788ef567af2ade5c7e9c24b9"
+  },
+  {
+    "path": "art/backdrops/zuihou-xunyingren.webp",
+    "sha256": "d5f581f8a65f72b1f16a62b17b54614888b14ad939450f55100f6be6bc207190"
+  },
+  {
+    "path": "art/posters/anhe.webp",
+    "sha256": "0451bf7a0da3e199709aad639dd9cb8e56c871c2bb34534104b9737d9209be61"
+  },
+  {
+    "path": "art/posters/beiwei-sanshidu.webp",
+    "sha256": "bf314915211ec4f82dc68aaaca0d9e36277e2205c476b7a2fd31aab760450676"
+  },
+  {
+    "path": "art/posters/changye-jiangming.webp",
+    "sha256": "ea2920a2bc152716b9dc7c0f06f81068f949227bcab7a299d7f07dcb5d5cbf8e"
+  },
+  {
+    "path": "art/posters/chaoxi-zhishang.webp",
+    "sha256": "a1520512f577b68cceacc5543f76188796d8f4d3a82282e466a322886f2da046"
+  },
+  {
+    "path": "art/posters/chufangli-xiatian.webp",
+    "sha256": "4159da1c7d9a4ed13743f83b2b182efadad80460cb95f55dafe4481d64cac415"
+  },
+  {
+    "path": "art/posters/dengta-shouwangzhe.webp",
+    "sha256": "362fd64da1b7a6d1244055fe63aa6c33271b7dc2e6c6d48464c65789cd57a200"
+  },
+  {
+    "path": "art/posters/dierci-chuxue.webp",
+    "sha256": "34a0cad361268de12187aecae3f0aed8f644432bc6e005718a8374b4cb033ed8"
+  },
+  {
+    "path": "art/posters/diqige-zhengren.webp",
+    "sha256": "d8b605c66ad1670b28801af4dd34958bbbfae244d95e36f53ecc4ddd98b8b54b"
+  },
+  {
+    "path": "art/posters/guiyan.webp",
+    "sha256": "afedc1954d6aea04237e0c7759f781cff69299d40998aa817d3e6d79d037599a"
+  },
+  {
+    "path": "art/posters/huijin-zhicheng.webp",
+    "sha256": "c58c3dd12963225979b83fd54a9c3d30bae2f197276d2953a63f1202e8d0e8b4"
+  },
+  {
+    "path": "art/posters/jidi-riji.webp",
+    "sha256": "131a5ef18710b9c6e883c9d4a3d1dbf22c5f5e6dae972fa73e567379cc5f5173"
+  },
+  {
+    "path": "art/posters/jinwan-kaimai.webp",
+    "sha256": "4da2cd6022ae796cf19a573684c7bcfa1667f3af51cb76fcce304332aeb146f3"
+  },
+  {
+    "path": "art/posters/jiuchong-que.webp",
+    "sha256": "e0122816a7a063681d0ac225612dd41aca4596c904996cc13621cda9dc4cdc50"
+  },
+  {
+    "path": "art/posters/jixie-zhixin.webp",
+    "sha256": "76d77818abe031b61128060e0784b76aa6a39990ebe25aa18cc759d626847040"
+  },
+  {
+    "path": "art/posters/kanbujian-heliu.webp",
+    "sha256": "40c4d478a65638b470af6e3b67ffb432081312ed6b683c733ebd7d85c761ef04"
+  },
+  {
+    "path": "art/posters/linghao-chengke.webp",
+    "sha256": "331a545e86d242d09d305bae628984fb3be1b7dcb2a6157576674981b10599bb"
+  },
+  {
+    "path": "art/posters/liusha-zhixia.webp",
+    "sha256": "79d207f00f84d3ac85bd20642c5d31fd451109eb2ed03472aeff8ddfa6d177e0"
+  },
+  {
+    "path": "art/posters/mao-yu-bianlidian.webp",
+    "sha256": "d3b3c676c4d6d73ddbc3f06c1a61870afdf29647546be57b2f2ecee31caf5921"
+  },
+  {
+    "path": "art/posters/nifeng-xiatian.webp",
+    "sha256": "879ba95c07be6e78b1335a962f13a6fe154be166ea5afca8666e69f8026d9ef8"
+  },
+  {
+    "path": "art/posters/nihong-yibei.webp",
+    "sha256": "cce92a68da4e61619c629f54a0af7abb318e5b7a485e4b95582806a11827f856"
+  },
+  {
+    "path": "art/posters/qingci.webp",
+    "sha256": "fba4cb525855b992a5918624b5234ba8d466a957a4225cd094ca408c34e832f4"
+  },
+  {
+    "path": "art/posters/shanhai-huijuan.webp",
+    "sha256": "c7d617791679af46f582eda5b39b4c48301fb5fa0ee318104b5dccb02dcef97f"
+  },
+  {
+    "path": "art/posters/shenhai-huisheng.webp",
+    "sha256": "b400c127a4889217d69f7201bc187b5755e52fd6167adde768234ff64c6eac21"
+  },
+  {
+    "path": "art/posters/shenkong-youchai.webp",
+    "sha256": "228447a529ab62c85b040ca3ff425c5eb691c269527a37f0611f7ce3faed570f"
+  },
+  {
+    "path": "art/posters/shouyiren.webp",
+    "sha256": "ef4b284abcd9f47eb905227e49907757ad065c6f3c6db33db53effc086585e35"
+  },
+  {
+    "path": "art/posters/tade-cheng.webp",
+    "sha256": "f830bf366532a49c35c51ec830357dbe82bba35c00758747a62969a667cd558a"
+  },
+  {
+    "path": "art/posters/tingjian-haoshiguang.webp",
+    "sha256": "727fff36d48d6226db16da173c916ffcb0f263ba53c8d6af8a45cb38fb7a4c24"
+  },
+  {
+    "path": "art/posters/tingyu-jian.webp",
+    "sha256": "b1abf915b2f2a5c48ce1a927488f6c04f7e06d2c736a9f0099a1b1b90f796e4e"
+  },
+  {
+    "path": "art/posters/weigang-fengyun.webp",
+    "sha256": "b5d633361f95904252f3c55092933afff6e3a9a31b115c7b3c66837ea7a7959f"
+  },
+  {
+    "path": "art/posters/wugang-laixin.webp",
+    "sha256": "47098866a7c3429e3222558eaf90992f6ba4887bb80280dc57f588fd69eb4bfc"
+  },
+  {
+    "path": "art/posters/xiangshan-erxing.webp",
+    "sha256": "c05a4e39c6096d17831ee4b42b652c64fb87212c9354e2dbfe6dabfc42efc6cc"
+  },
+  {
+    "path": "art/posters/xiaohuli-siji.webp",
+    "sha256": "de7ceaa0de3c00d160896a40edd37e63823dc3380447a11386c7598284410886"
+  },
+  {
+    "path": "art/posters/xiaoyuan-chunqiu.webp",
+    "sha256": "9a184372760e2f89da6917690bed5684b145d39ea268b2a071da33006df28151"
+  },
+  {
+    "path": "art/posters/xinggui-lieche.webp",
+    "sha256": "98b9a63b2defcee5c1b508a40edd9ce723fad1f9fd78c86a52cffea2741060bb"
+  },
+  {
+    "path": "art/posters/xueguo-laike.webp",
+    "sha256": "95fd6e5f2c8bd10df9bef1dc953aaec433173e6d43e78c580ef854fa6b0c7afc"
+  },
+  {
+    "path": "art/posters/yilimi-lvcheng.webp",
+    "sha256": "2156c9dd5b892e32f395a95712e672dea9e665114b391f1f4cd84e84879b9309"
+  },
+  {
+    "path": "art/posters/yueqiu-beimian.webp",
+    "sha256": "9675961b46bba91dc31ee8a263d9f03bcbf40933b7961298465b89b68a14be13"
+  },
+  {
+    "path": "art/posters/yun-shenchu.webp",
+    "sha256": "d764d3252a36fd721d771ce3f9cb593fb2ff07da2f24e1f5f1940f7e6ac54345"
+  },
+  {
+    "path": "art/posters/zhoumo-lvxingshe.webp",
+    "sha256": "bcfd8ea3bcb670e4cc1deea5291313f35e31e248f7ff35aa37641da2e383b60b"
+  },
+  {
+    "path": "art/posters/zuihou-dulun.webp",
+    "sha256": "cfb93aae4557b23e66358838a1f7e0fbbfbc2385c1e210a5c85b25edd463bc1c"
+  },
+  {
+    "path": "art/posters/zuihou-xunyingren.webp",
+    "sha256": "a1d41c7fb4e8f9726bec57539e0fe93fb4bed7cd1b7edde88737f57fa76a72f5"
+  },
+  {
+    "path": "brand/app-icon.png",
+    "sha256": "cde7787da39bb29f407f6905af1c32b1ec35b5754286109c0967ab824e2868a0"
+  },
+  {
+    "path": "brand/app-icon.svg",
+    "sha256": "a79352a657e7ef2ecd73bd1bd411425506d01471794040338759fd061e64809a"
+  },
+  {
+    "path": "brand/logo-mark.png",
+    "sha256": "d7aa893ab79f10a53a24526ffb156e35afc7cca083fdcfbc61d66715c952833d"
+  },
+  {
+    "path": "brand/logo-mark.svg",
+    "sha256": "859962e4afd7d1bbba52d59048617f76949736082ba33b62944256da3f59b1e2"
+  },
+  {
+    "path": "contract/constants.ts",
+    "sha256": "9a10f3941a5fbe2f980aacecac7c56f9118d9475275cbdfe2caade73d44e23e6"
+  },
+  {
+    "path": "contract/copy.ts",
+    "sha256": "ef39cdcd875de6a17c448264ebd050b81a783f92f08d7e90e4a8c098b1d47708"
+  },
+  {
+    "path": "contract/rules.ts",
+    "sha256": "8f0049fe849cdac6e69150b84d7e5dd04c936a3072c3668901c8a330e1381040"
+  },
+  {
+    "path": "contract/types.ts",
+    "sha256": "d4d68bb059764c2d355ea7da8b05aec70bae82c24211cebcc7ac5fb97eb9b784"
+  },
+  {
+    "path": "copy/zh-CN.json",
+    "sha256": "b99d4aa24f26313cbcef5cdb991fada686c6b1cd2f0818efeddf5d0fc945ea07"
+  },
+  {
+    "path": "icons/LICENSE-lucide.txt",
+    "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+  },
+  {
+    "path": "icons/names.ts",
+    "sha256": "b7a56cbee055c0540799979f2eba8fbe048aae5de33a8401cb0d84679f898f8a"
+  },
+  {
+    "path": "icons/sprite.svg",
+    "sha256": "7d84276b77d4da81e568fb46c6f14ce93a4cfffe180318fca3a610899ee6eb7a"
+  },
+  {
+    "path": "icons/svg/alert.svg",
+    "sha256": "88821d64dacf3a91878873c4e1a87557c859c6870105f893118f69d260ee32a4"
+  },
+  {
+    "path": "icons/svg/arrow-left.svg",
+    "sha256": "15796232c3bc5d684f0bd3666795da6acdb1ed2e44bd3caf91b8946b1fa13ae0"
+  },
+  {
+    "path": "icons/svg/arrow-right.svg",
+    "sha256": "5f951b2ed71b6a8b57f7feda2150857c4890a585e8108996599ee2e1bd9a2e2a"
+  },
+  {
+    "path": "icons/svg/arrow-up.svg",
+    "sha256": "7fdba07e75ddf9ab110a26903ac7a8eea86fb8128f831c354a8def9d68871328"
+  },
+  {
+    "path": "icons/svg/bell.svg",
+    "sha256": "5eb262ae9f00aecaf53488b656711bf13a3bdc0fb0c96a706852c5895ec197b3"
+  },
+  {
+    "path": "icons/svg/bookmark.svg",
+    "sha256": "21dfcdc7aba4ea9bd3fba54f3a5881105e12f6bd474a147a1a17974ba57d19d9"
+  },
+  {
+    "path": "icons/svg/calendar.svg",
+    "sha256": "2011483384dc1368d7f6813c2201d2cc51cf184fa035f8cf242b59d722ff7b6e"
+  },
+  {
+    "path": "icons/svg/check.svg",
+    "sha256": "a9186ac7c816b08408a3fc0f3a63d487f029d1edc09a6cebe8500d10cfe52667"
+  },
+  {
+    "path": "icons/svg/chevron-down.svg",
+    "sha256": "fc469d312a2d1860b81a9079f031b760e149ef06674c33920f2c65ee4961cefd"
+  },
+  {
+    "path": "icons/svg/chevron-left.svg",
+    "sha256": "f89237b52ac9f5becb338075f17673137457b38bfba7d4b00a91be68a3f56859"
+  },
+  {
+    "path": "icons/svg/chevron-right.svg",
+    "sha256": "4dfc016cf4a51e651bf9638574f51131ab24bf5510404ae761a6cae5a2d945b7"
+  },
+  {
+    "path": "icons/svg/chevron-up.svg",
+    "sha256": "49ff30fd4d8a93af1467dac8691b57edf7c9f268701a5cec0c2027ea0d34d1a6"
+  },
+  {
+    "path": "icons/svg/clock.svg",
+    "sha256": "57400f268984630abe4f8040ee9bfb7440a5561dad8280bcca2050ec30b525c2"
+  },
+  {
+    "path": "icons/svg/close.svg",
+    "sha256": "227c754266f0a6deebc48e6512efe0fa0f71a7328409dd2086342270bdc5a828"
+  },
+  {
+    "path": "icons/svg/cloud-off.svg",
+    "sha256": "04214d97b98b970432ca81e637730060ba3aea112e18afe883b81ce8493db7cb"
+  },
+  {
+    "path": "icons/svg/copy.svg",
+    "sha256": "cd8b76aeba95a65d7a31adbd8ff0a15121f5ec3e2b7524792851f24ada5e42b4"
+  },
+  {
+    "path": "icons/svg/download.svg",
+    "sha256": "0bec17dbceca5aa1c8c95eb2a39d69dca16760894f9db792ef037b8d9ea26b32"
+  },
+  {
+    "path": "icons/svg/episodes.svg",
+    "sha256": "773b8c40a63cec193b8c1accae15bd6ffde0d909d5f7e2a43a46b67f7cd2a43f"
+  },
+  {
+    "path": "icons/svg/external.svg",
+    "sha256": "75dc4115b3984ef3df2051e96a45dce6a49bf7c79c7484fafac8e25179ec763a"
+  },
+  {
+    "path": "icons/svg/eye-off.svg",
+    "sha256": "ae6d1ce36d32a27183b5bae2351e0bc753ed8ea8fb27c5785f58d729a7da7fcb"
+  },
+  {
+    "path": "icons/svg/eye.svg",
+    "sha256": "f91f5660caa51c215f5608cde3724ac9d92e3b85e71934a84937c728eeabf023"
+  },
+  {
+    "path": "icons/svg/film.svg",
+    "sha256": "9fb9567ba22478b3365406fac73b9f807499366312f4e92807163962c6e1bb53"
+  },
+  {
+    "path": "icons/svg/filter.svg",
+    "sha256": "124b07591e046fd63194dec48c07c79bbf90c2f3ab49531b1eea645b1a313b33"
+  },
+  {
+    "path": "icons/svg/folder.svg",
+    "sha256": "eda67f04c4e73cc38de5d5c6ddcc3e1bd0ca1f35e32349aa350d7649fcae6ce9"
+  },
+  {
+    "path": "icons/svg/forward.svg",
+    "sha256": "d84e27df9d2ac6acd5d3a58dd4ef898e0f516be8cc17f77b7811ea16b802b8e7"
+  },
+  {
+    "path": "icons/svg/fullscreen-exit.svg",
+    "sha256": "ce1450d9a599f4db0cedbbdd8acb1120f25dd02373ba91221f3ec7a8a0e40a49"
+  },
+  {
+    "path": "icons/svg/fullscreen.svg",
+    "sha256": "3c85993d4cb6f0d34edae6714ff9eeff82e1b5129f01e6d1b37c446fc62b9111"
+  },
+  {
+    "path": "icons/svg/globe.svg",
+    "sha256": "8e61f9df8681813c8fe11ae3c01a09eb8e99da7cbf7dc63413e513f68df22fd0"
+  },
+  {
+    "path": "icons/svg/heart.svg",
+    "sha256": "9aa2b0a19748223cf2d9af19f06d2d02949bc01a83c04cad855191d906e3412f"
+  },
+  {
+    "path": "icons/svg/history.svg",
+    "sha256": "4360555ee5cf9614a1ddb29acddba407d7e0ebd7bfb41e21e2e3a0c982d22617"
+  },
+  {
+    "path": "icons/svg/info.svg",
+    "sha256": "e96cdf464ced6cd986ac2d19388173aa1dd0e4ac8ec77ccf9961527510160d35"
+  },
+  {
+    "path": "icons/svg/link.svg",
+    "sha256": "da6eed46b41af04880c6c308c161315e7bf80358605e541a1255c148acfacf6c"
+  },
+  {
+    "path": "icons/svg/lock.svg",
+    "sha256": "021b6f09f3ebef9a1ab936eab1c721e22e60e20f40d04286b3f9f7151759823a"
+  },
+  {
+    "path": "icons/svg/minus.svg",
+    "sha256": "0d1107039ebbbee9a61a2a13a077b36ee37fe519dcdccf89999e9a7a71bf0aea"
+  },
+  {
+    "path": "icons/svg/more.svg",
+    "sha256": "e59161df696bbc9c2843f8069dadad542b8af1e5e6d027ac594c79130be4259e"
+  },
+  {
+    "path": "icons/svg/next.svg",
+    "sha256": "b34dd4ac0d3d033eff6847dd89611b279b66e87e06834d695bf0d62aa01f3055"
+  },
+  {
+    "path": "icons/svg/pause.svg",
+    "sha256": "e99d1997dd2142b38fce0f46d7726814b1e89d06ced2cefbb9c581efaaf601cc"
+  },
+  {
+    "path": "icons/svg/pip.svg",
+    "sha256": "6c593459f599a921f44922e20beb769dff20fe21a2ae7e29a9db7f5d693de2c0"
+  },
+  {
+    "path": "icons/svg/play.svg",
+    "sha256": "86d5367392c677982302b663f6194877857ab0172bc37029c3092f9469197da5"
+  },
+  {
+    "path": "icons/svg/plus.svg",
+    "sha256": "dbfa1fec964af4309d137181ce62e1ba131b9d932acf01f2ce938a0781cb31f3"
+  },
+  {
+    "path": "icons/svg/prev.svg",
+    "sha256": "7cfa66571847b6689b1a8dcfb6b65deedef66e49da728e9adcb91ffc3a1f9098"
+  },
+  {
+    "path": "icons/svg/refresh.svg",
+    "sha256": "9b6e0ace5f942d070096e51ca0ea8116f9e100870d9f0391a2fe0cec7e9b9e70"
+  },
+  {
+    "path": "icons/svg/rewind.svg",
+    "sha256": "91667864b73a66cc8e5e608ab7a86776ac3bfc5ff8e8de0786f51d10a243d3df"
+  },
+  {
+    "path": "icons/svg/search-x.svg",
+    "sha256": "c10ffe0315fd9a6dc9a1e339ae39f7986797616032cd25d78025a88dfb5c174e"
+  },
+  {
+    "path": "icons/svg/search.svg",
+    "sha256": "5b048abc2d61e8d1feb826c332daf00648759f8a3f7a01ef1bba47e6ea7fa2fc"
+  },
+  {
+    "path": "icons/svg/settings.svg",
+    "sha256": "a83f23df31ef214d5353e7fbedeb36d05e84e5ffb1d014f46da0cd09e456a5cd"
+  },
+  {
+    "path": "icons/svg/share.svg",
+    "sha256": "b39387d5870dd3e12cdcd6bb404da910d034ccc17d53c56a85dec25e7497b146"
+  },
+  {
+    "path": "icons/svg/sliders.svg",
+    "sha256": "821228be454dcacf208c442c8532ac2fc03cf93082f28210786ca8aacdf88ea2"
+  },
+  {
+    "path": "icons/svg/sort.svg",
+    "sha256": "bd7eacb3ba18c5e097b9aabf9ef9c60addb64b959ec71dd5a426438a96a4959f"
+  },
+  {
+    "path": "icons/svg/speed.svg",
+    "sha256": "5bdb5a88921c47a8bdfe5d0325f9768052847d8b05a54431298593569c838968"
+  },
+  {
+    "path": "icons/svg/star.svg",
+    "sha256": "9698bfe851864bfe6eef8ccac4a36dff6134626ae95a6edc1af7a330f8e702d7"
+  },
+  {
+    "path": "icons/svg/subtitles.svg",
+    "sha256": "5f1bd06f6d495c0029d132fbec99396164fef063859761f00fd82f1734161cfe"
+  },
+  {
+    "path": "icons/svg/trash.svg",
+    "sha256": "78838fd59b9548e7d8c9298f530109fdb32af1d7800357dd0c5681a00b48750d"
+  },
+  {
+    "path": "icons/svg/tv.svg",
+    "sha256": "02bddde2e92edca65242400139b729ab28a990f6a92d13b162d5fb20d1449f09"
+  },
+  {
+    "path": "icons/svg/user.svg",
+    "sha256": "e1fcde00a0d4eead0045a3b7c27fbfe9bfe0648978b0b75222fe5e26ef5f49e0"
+  },
+  {
+    "path": "icons/svg/volume-low.svg",
+    "sha256": "2e86ed804a270d0c3a76d393ce0d08e5f13230907a9ee2be049bc0d258e2f657"
+  },
+  {
+    "path": "icons/svg/volume-mute.svg",
+    "sha256": "ba6569f02b99d4b82348937fb9d876a106ae4fac5fa95101606043b779ce9c7d"
+  },
+  {
+    "path": "icons/svg/volume.svg",
+    "sha256": "abd254673a810c0d46d8d57ca8b5393bd58c69827c0626a99a47b8924809fc30"
+  },
+  {
+    "path": "icons/svg/wifi-off.svg",
+    "sha256": "35a0dd651a3d6cc545d435594905711a68976afcd10ba5af57eb4bb50d649318"
+  },
+  {
+    "path": "icons/svg/win-close.svg",
+    "sha256": "ba6a796d04add58618c9f1e995c7cb84d6f1d59614465f927b43e62f3a1ea2d6"
+  },
+  {
+    "path": "icons/svg/win-max.svg",
+    "sha256": "c44372feef217e0615df403fe963a22c459bd6db5c58fbd18e9d6b981c939dab"
+  },
+  {
+    "path": "icons/svg/win-min.svg",
+    "sha256": "5f85673e15de0eda5276657e3678def607232b02dcdfbfaf434c3cdc0e1b0231"
+  },
+  {
+    "path": "icons/svg/win-restore.svg",
+    "sha256": "0d7c9cf106765a1dc8cd7dccd257955d2dae8de306d98786a78daf850cfd4c73"
+  },
+  {
+    "path": "mock/catalog.json",
+    "sha256": "85ffec7a51737e42b166a68b86c5404ef0847fc8788501384b0266e922b6c573"
+  },
+  {
+    "path": "mock/index.ts",
+    "sha256": "a2e513e83b4c61c64065c9d42ad1dbf52978793160da0a1e14aa00bd0a026036"
+  },
+  {
+    "path": "mock/source.ts",
+    "sha256": "cd0f84851dd1ba3ce035da41b5ad6bf60b116890033f53d801c616cfb2a4de0d"
+  },
+  {
+    "path": "preview/index.html",
+    "sha256": "51a5dbb76b3ba7fed18abc69f4cfb0b1a64769d02c0ba41c6a6223122bf069a0"
+  },
+  {
+    "path": "preview/kit.css",
+    "sha256": "e19973fb48ae595f60f6ccce9f8bd317c0686c5057e2332ff5191713925b672b"
+  },
+  {
+    "path": "preview/js/app.js",
+    "sha256": "47848fc83f677ec64e14f7f478cb8ff2245cb5b56f22afc3ea765af279847a84"
+  },
+  {
+    "path": "preview/js/core.js",
+    "sha256": "db084dfa17cffb9e3df3d7a7c329c5b71ce65a5464c839e8e0d3f32682f8bce3"
+  },
+  {
+    "path": "preview/js/kit.js",
+    "sha256": "9545a81884da4209c26b440a361e7b75db6de0c965849056e1fd5045b596b6c4"
+  },
+  {
+    "path": "preview/js/parts.js",
+    "sha256": "c54c64d2df428d9c44ebdf12ab007bd129acbc2afdf2165dbdfea59e5a59b1e7"
+  },
+  {
+    "path": "preview/js/player.js",
+    "sha256": "a296d7d0756b8be2868f015a6d21fd68ef7a594f21e5f46180c20dbbad0dbfe6"
+  },
+  {
+    "path": "preview/js/ui.js",
+    "sha256": "6d815b09bb216b9bc1ca2bc0bf5e33438bded147c861188a3f1b3db830a4cb5a"
+  },
+  {
+    "path": "preview/js/views.js",
+    "sha256": "3ea4d7f9365dc0090fadb7f7ab1d8aadf850b70f319f02e84876b38962335442"
+  },
+  {
+    "path": "reference/01-home.jpg",
+    "sha256": "e51ff11842cd1cd93d73e0ffef29c7419b6998d4f1f3b4823b485108dbe57f0b"
+  },
+  {
+    "path": "reference/02-home-shelves.jpg",
+    "sha256": "59ce64537452be02ff3e985ff5acbe782595a0703266827f1f24db8e6e0c8f8c"
+  },
+  {
+    "path": "reference/03-channel.jpg",
+    "sha256": "266c346ebbfdf40ab7037e4e7af1baacfe8f475eec9d21c418fc21cfc34145d0"
+  },
+  {
+    "path": "reference/04-detail.jpg",
+    "sha256": "51bd700376437a1992539e000fea30069c11a81ebeb27cca26795b2890676f97"
+  },
+  {
+    "path": "reference/05-detail-episode-list.jpg",
+    "sha256": "fb1695dfdd30d687962074407b4a8011677a8b7a9c5fc010939db1b6b5fcf08d"
+  },
+  {
+    "path": "reference/06-search-panel.jpg",
+    "sha256": "565dbc79f14bd2c9318a508df54747c10e3ab3cc34951eb64099d61bffb6906c"
+  },
+  {
+    "path": "reference/07-search-suggest.jpg",
+    "sha256": "60f8f40b5851e9a2e5f54d895517ca5129fb440b3d92f270c73d2bc0fb9c8a1b"
+  },
+  {
+    "path": "reference/08-search-results.jpg",
+    "sha256": "0570f58bbd3a11f8cfcea5bf69cec78a599e0640a575b9abf1b85699fbeb93a0"
+  },
+  {
+    "path": "reference/09-empty.jpg",
+    "sha256": "24177b72d7ad8fe3afd730c8e252b62c6a770e909e57b8fd169809d7c99d862a"
+  },
+  {
+    "path": "reference/10-me-favorites.jpg",
+    "sha256": "20247d7d785f3975a87b3ad0c042819d8169064e12776bd5fed49ff52c21b65c"
+  },
+  {
+    "path": "reference/11-me-history.jpg",
+    "sha256": "5579295ff5a82576ab6c9d6afc758577998120fd0824a4f1b533cd2ab4429790"
+  },
+  {
+    "path": "reference/12-settings.jpg",
+    "sha256": "cc76c4815df99f92bae135fa9cdbbcf55b2aa6553f6b4d3671c668396f0806bb"
+  },
+  {
+    "path": "reference/13-menu.jpg",
+    "sha256": "29b513904f514f41172a2dd1100518b11aa6a0c5ab48f4e652db728dbd02ca4c"
+  },
+  {
+    "path": "reference/14-dialog.jpg",
+    "sha256": "a82deae120b24d724aa0f10da0092c69c2266dd8f7d5d66de668d083e5df3a57"
+  },
+  {
+    "path": "reference/15-player-paused.jpg",
+    "sha256": "1290eb91e9db830e845d59f4c7e5c0bc1abc7a89c7ce2c0015b3186b036eb4b4"
+  },
+  {
+    "path": "reference/16-player-episodes.jpg",
+    "sha256": "bc9bace9ebbe3b8e48eeae79a5bb2f23aa7bb49859dfe12bdaab8612c7a948f0"
+  },
+  {
+    "path": "reference/17-player-up-next.jpg",
+    "sha256": "76187274e4e2bf225826d5835794158ee9a823c6aa4228d5ff9e6ef751266d3b"
+  },
+  {
+    "path": "reference/18-player-skip-intro.jpg",
+    "sha256": "695b04b2619ce6d81550eb82fd4bb78e03584c7d2639ac7febd4510d6c3f6f76"
+  },
+  {
+    "path": "reference/19-player-error.jpg",
+    "sha256": "29973847ebdfd45c0a46eed58a0d44f9076369947dc9e2587f474373d703be3e"
+  },
+  {
+    "path": "styles/base.css",
+    "sha256": "0594393d98bdc66c7148a3c0655f47f35e0958d7a02a750299b41df4461f832c"
+  },
+  {
+    "path": "styles/controls.css",
+    "sha256": "b8087781ddc0dd8e1d9a650a11544b8ee01f0ed0bd78201c14a65199ce66db87"
+  },
+  {
+    "path": "styles/index.css",
+    "sha256": "abc3d71fb806da5a717dad5044f2024e8641c3735d9af154be860c09ab8834c3"
+  },
+  {
+    "path": "styles/layout.css",
+    "sha256": "877a7eb7db547a3d17cbfceb0ae5944ca309e65f805e661bb14175b3de8a772d"
+  },
+  {
+    "path": "styles/media.css",
+    "sha256": "575a7e504468a2f7c0cadc3b692988624a82d14ceafbffdb9e38289a992a9179"
+  },
+  {
+    "path": "styles/motion.css",
+    "sha256": "451405bb6ae79449954c112c9c9f3c69bc697ae56f9f201605106f74aabcfafc"
+  },
+  {
+    "path": "styles/overlays.css",
+    "sha256": "82e7c5c8fe0f45d69a765603e6195a11f69d1eb890d30e2e128d2c9c1e99263a"
+  },
+  {
+    "path": "styles/pages.css",
+    "sha256": "66505e07512495136793d49e982f1e97942b203a8b6d47312afba932de3d5ad6"
+  },
+  {
+    "path": "styles/player.css",
+    "sha256": "920a1044621d68c48399f490e3f8dedec2611f79444157ac9b1c71bee026accd"
+  },
+  {
+    "path": "styles/tokens.css",
+    "sha256": "4765b4db2b44f563f79b4f7e413b3654cda0634da9af39a8d9a16f7df8ee500a"
+  },
+  {
+    "path": "styles/topbar.css",
+    "sha256": "4c5ecfdf5e620d4a8fa07adeb979794cf5629161b633dce5ae9b68cd7f954751"
+  },
+  {
+    "path": "tools/build-brand.mjs",
+    "sha256": "6b5a805900fbab4cb16e6a5892964c989a9ea41dc65fcc6bdffa871a190af430"
+  },
+  {
+    "path": "tools/build-icons.mjs",
+    "sha256": "8873849962f73c845e981e2c39b80f3d593311e9d16ac6357ac1195ea0982cb0"
+  },
+  {
+    "path": "tools/gen-art.mjs",
+    "sha256": "4d382c83ded57601f4231f20ca4121741fc5a8564c81ae1322ee691256e4b43a"
+  },
+  {
+    "path": "tools/package.json",
+    "sha256": "506a619129aeb016f486173b22f48aaf273be1bbc6bc7da6bd1c17bb6575c8c1"
+  },
+  {
+    "path": "tools/palette.mjs",
+    "sha256": "8cc763109c8af0079ae8e663409c50a94ab625533176e920428881c32ee6f01f"
+  },
+  {
+    "path": "tools/pnpm-lock.yaml",
+    "sha256": "38c54faf4b9af3fa2dd06a6e755efed3a2a19f5fdc9677c3c493de295435b894"
+  },
+  {
+    "path": "tools/serve.mjs",
+    "sha256": "a5ab1ad800ae86479cf90f37063449904ed541df81d6bec642f42f64f1b7cb4b"
+  },
+  {
+    "path": "tools/test-contract.mjs",
+    "sha256": "d994fbfcca13ea30968ad2abb80364793a2a5a1ab304b79b8393fd70f37536b4"
+  }
+]

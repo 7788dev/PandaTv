@@ -1,0 +1,10 @@
+[media] rules override v3 in use
+[source] lzi probe: 请求已取消 / ABORT_ERR 10002ms
+[source] lzi probe: 请求已取消 / ABORT_ERR 10001ms
+[failure] PLAYBACK 片源暂时无法连接，请重试
+[source] lzi probe: 请求已取消 / ABORT_ERR 10002ms
+[source] lzi probe: 请求已取消 / ABORT_ERR 10002ms
+[failure] PLAYBACK 片源暂时无法连接，请重试
+[source] lzi probe: 请求已取消 / ABORT_ERR 10001ms
+[source] lzi probe: 请求已取消 / ABORT_ERR 10002ms
+[failure] PLAYBACK 片源暂时无法连接，请重试

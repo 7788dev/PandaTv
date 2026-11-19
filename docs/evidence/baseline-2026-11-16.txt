@@ -1,0 +1,8 @@
+Before completing the existing production skeleton, 2026-11-16:
+npm run typecheck: FAIL, 8 diagnostics. Four incorrect design/copy import paths,
+dependent untyped sort indexing, missing src/renderer/Player.tsx, unknown React child.
+No src/main/index.ts or e2e directory existed.
+npm test: PASS, 2 files / 27 tests.
+node design/tools/test-contract.mjs: PASS, 405 assertions.
+npm run verify:design: PASS, 206 original files unchanged.
+All repository files were untracked; no commit or history modification was performed.
