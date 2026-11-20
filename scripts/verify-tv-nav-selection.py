@@ -39,7 +39,7 @@ def main():
 
     def capture(name):
         xml, state = nav_state()
-        (out / f'{name}.xml').write_text(xml, encoding='utf-8')
+        (out / f'{name}.xml').write_text(xml.replace('\r\n', '\n').replace('\r', '\n'), encoding='utf-8', newline='\n')
         d.screenshot(str(out / f'{name}.png'))
         return state
 
