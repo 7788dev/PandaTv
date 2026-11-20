@@ -1,7 +1,7 @@
 import { test, expect, type ElectronApplication } from '@playwright/test'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { root, capture, playing } from './desktop'
+import { evidenceRoot, capture, playing } from './desktop'
 import { launchFixture, settled } from './fixture'
 
 test('fixture: loading, empty, error and offline surfaces remain usable', async () => {
@@ -190,6 +190,160 @@ test('fixture: another line takes over where the first one was', async () => {
   } finally { await app.close() }
 })
 
+test('fixture: sustained decoder drops lower playback speed automatically', async () => {
+  const run = await launchFixture()
+  const { app, page, user } = run
+  try {
+    await page.evaluate(() => {
+      let startedAt = 0
+      Object.defineProperty(HTMLVideoElement.prototype, 'getVideoPlaybackQuality', {
+        configurable: true,
+        value() {
+          startedAt ||= Date.now()
+          const elapsed = Math.max(0, Date.now() - startedAt)
+          return { totalVideoFrames: Math.floor(elapsed / 33), droppedVideoFrames: Math.floor(elapsed / 100), corruptedVideoFrames: 0 }
+        },
+      })
+    })
+    await user({ history: [], settings: { muted: true, speed: 2 } })
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.playbackRate), { timeout: 18000 }).toBe(1.5)
+    await expect(page.getByRole('heading', { name: '已降至 1.5×，减少掉帧' })).toBeVisible()
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: a failed line switch falls back to the source pool without losing position', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('line-switch-error')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.evaluate(() => { document.querySelector('video')!.currentTime = 38 })
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    const position = await page.evaluate(() => document.querySelector('video')!.currentTime)
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentSrc)).toContain('pool=retry')
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentTime)).toBeGreaterThan(position + 1)
+    await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+    await expect(page.locator('.player')).not.toHaveAttribute('data-waiting', '')
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: changing lines while paused keeps playback paused', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('lines')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.getByRole('button', { name: '暂停', exact: true }).click()
+    await page.evaluate(() => { document.querySelector('video')!.currentTime = 38 })
+    await page.waitForFunction(() => !document.querySelector('video')!.seeking)
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    await page.waitForFunction(() => {
+      const v = document.querySelector('video')!
+      return v.currentSrc.includes('line=second') && v.readyState >= 3 && !v.seeking
+    })
+    expect(await page.evaluate(() => document.querySelector('video')!.paused)).toBe(true)
+    expect(await page.evaluate(() => document.querySelector('video')!.currentTime)).toBeGreaterThanOrEqual(37)
+    await expect(page.locator('.player__handoff')).not.toHaveAttribute('data-visible', '')
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: failed replacements preserve a paused line and its controls', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('line-switch-error-all')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.getByRole('button', { name: '暂停', exact: true }).click()
+    const oldSource = await page.evaluate(() => document.querySelector('video')!.currentSrc)
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    await page.waitForTimeout(5000)
+    expect(await page.evaluate(() => document.querySelector('video')!.currentSrc)).toBe(oldSource)
+    expect(await page.evaluate(() => document.querySelector('video')!.paused)).toBe(true)
+    await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+    await expect(page.getByRole('button', { name: '播放', exact: true }).last()).toBeEnabled()
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: if both the selected line and source pool fail, the current picture keeps playing', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('line-switch-error-all')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.evaluate(() => { document.querySelector('video')!.currentTime = 38 })
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    await expect(page.getByRole('heading', { name: '切换未成功，保留当前线路' }).first()).toBeVisible({ timeout: 20000 })
+    const position = await page.evaluate(() => document.querySelector('video')!.currentTime)
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentTime)).toBeGreaterThan(position + 1)
+    await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+    await expect(page.locator('.player')).not.toHaveAttribute('data-waiting', '')
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: a stalled replacement line keeps the last decoded frame visible', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('line-switch-stall')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.evaluate(() => { document.querySelector('video')!.currentTime = 42 })
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentSrc)).toContain('line=second')
+    await expect(page.locator('.player__handoff[data-visible]')).toBeVisible()
+    await expect.poll(() => page.locator('.player__handoff').evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0)
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: a stalled manual line falls back to the active source pool', async () => {
+  const run = await launchFixture()
+  const { app, page, mode, user } = run
+  try {
+    await user({ history: [], settings: { muted: true } })
+    await mode('line-switch-stall')
+    await page.evaluate(() => { location.hash = '#/play/changye-jiangming/2' })
+    await playing(page)
+    await page.evaluate(() => { document.querySelector('video')!.currentTime = 42 })
+    await page.mouse.move(700, 850)
+    await page.getByRole('button', { name: '线路', exact: true }).click()
+    await page.getByRole('menuitemradio', { name: '线路二', exact: true }).click()
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentSrc)).toContain('line=second')
+    await expect(page.locator('.player__handoff[data-visible]')).toBeVisible()
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentTime), { timeout: 30000 }).toBeGreaterThan(42)
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentSrc)).not.toContain('stall.mp4')
+    await expect(page.locator('.player__handoff')).not.toHaveAttribute('data-visible', '')
+    await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
 test('fixture: prototype and production share page geometry and visual tokens', async () => {
   const run = await launchFixture()
   const { app, page } = run
@@ -198,7 +352,8 @@ test('fixture: prototype and production share page geometry and visual tokens', 
     await app.evaluate(async () => { await (globalThis as any).__fixture.prototype() })
     const reference = await opened
     await reference.setViewportSize({ width: 1440, height: 901 })
-    await mkdir(join(root, 'docs/evidence/visual'), { recursive: true })
+    const visual = join(evidenceRoot, 'visual')
+    await mkdir(visual, { recursive: true })
     const scenarios = [
       { name: '01-home', route: '#/', selector: '.hero__title' },
       { name: '03-channel', route: '#/channel/tv', selector: '.filters' },
@@ -215,8 +370,8 @@ test('fixture: prototype and production share page geometry and visual tokens', 
       await expect(page.locator(scenario.selector).first()).toBeVisible()
       await expect(reference.locator(scenario.selector).first()).toBeVisible()
       await settled(page); await settled(reference)
-      await page.screenshot({ path: join(root, 'docs/evidence/visual', scenario.name + '-production.png') })
-      await reference.screenshot({ path: join(root, 'docs/evidence/visual', scenario.name + '-prototype.png') })
+      await page.screenshot({ path: join(visual, scenario.name + '-production.png') })
+      await reference.screenshot({ path: join(visual, scenario.name + '-prototype.png') })
       const selector = scenario.name === '01-home' ? '.hero__body' : scenario.name === '04-detail' ? '.detail__head' : '.page__head'
       const measured = await Promise.all([page, reference].map(view => view.locator(selector).boundingBox()))
       expect(Math.abs(measured[0]!.x - measured[1]!.x)).toBeLessThan(1)
@@ -249,7 +404,7 @@ test('fixture: overlays, episode lists and player chrome sit where the prototype
     const reference = await opened
     await reference.setViewportSize({ width: 1440, height: 901 })
     const views = [page, reference]
-    const dir = join(root, 'docs/evidence/visual')
+    const dir = join(evidenceRoot, 'visual')
     await mkdir(dir, { recursive: true })
     const report: Array<{ name: string; boxes: Record<string, { production: unknown; prototype: unknown }>; pixelDifference: number }> = []
     const go = async (route: string, referenceRoute = route) => {

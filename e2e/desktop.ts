@@ -3,7 +3,8 @@ import { mkdtemp, mkdir, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 
 export const root = resolve(__dirname, '..')
-export const evidenceDir = join(root, 'docs/evidence/runtime')
+export const evidenceRoot = resolve(root, process.env.PANDA_E2E_EVIDENCE_DIR || 'docs/evidence')
+export const evidenceDir = join(evidenceRoot, 'runtime')
 export async function launch(profile?: string): Promise<{ app: ElectronApplication; page: Page; profile: string; errors: string[]; logs: string[] }> {
   await mkdir(join(root, '.tmp'), { recursive: true })
   const userData = profile ?? await mkdtemp(join(root, '.tmp', 'desktop-'))

@@ -12,8 +12,9 @@ import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './componen
 import { errorText, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
 import { bufferedRanges, playbackHistory, resolutionQuality } from './player-model'
+import { createFrameRateState, FRAME_SAMPLE_MS, sampleFrameRate } from './playback-adaptation'
 
-const sessionPreferences: { speed?: Speed; quality?: Quality } = {}
+const sessionPreferences: { speed?: Speed; activeSpeed?: Speed; quality?: Quality } = {}
 /** The quality the player will ask for; whoever prepares an episode ahead must ask for the same. */
 export const wantedQuality = (settings: { quality: Quality }) => sessionPreferences.quality ?? settings.quality
 /** A source that has shown nothing this long after it was chosen is replaced. */
@@ -53,6 +54,16 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const notify = useNotify()
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
+  const handoff = useRef<HTMLImageElement>(null)
+  const handoffPending = useRef(false)
+  const bridgeActive = useRef(false)
+  const fallbackRequested = useRef(false)
+  const activeSource = useRef<Playback | null>(null)
+  const sourceHealthy = useRef(false)
+  const playRequested = useRef(true)
+  const notifiedSwitchFailure = useRef<number | null>(null)
+  const requestedSpeed = useRef<Speed>(sessionPreferences.speed ?? state.settings.speed)
+  const activeSpeed = useRef<Speed>(sessionPreferences.activeSpeed ?? requestedSpeed.current)
   const panel = useRef<HTMLElement>(null)
   const panelButton = useRef<HTMLButtonElement>(null)
   const hls = useRef<Hls | null>(null)
@@ -73,7 +84,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [volume, setVolumeState] = useState(state.settings.volume)
   const [muted, setMuted] = useState(state.settings.muted)
   const [request, setRequest] = useState<{ revision: number; retry: boolean; from?: string }>({ revision: 0, retry: false })
-  const playback = useRemote(() => request.from ? window.panda.data.playbackFrom(item.id, episode, request.from, quality) : (request.retry ? window.panda.data.retryPlayback : window.panda.data.playback)(item.id, episode, quality), [item.id, episode, quality, request.revision])
+  const playback = useRemote(() => request.from ? window.panda.data.playbackFrom(item.id, episode, request.from, quality) : (request.retry ? window.panda.data.retryPlayback : window.panda.data.playback)(item.id, episode, quality), [item.id, episode, quality, request.revision], true, request.revision)
   const [lines, setLines] = useState<PlaySources>()
   const [problem, setProblem] = useState<unknown>(null)
   const [resolveTries, setResolveTries] = useState(0)
@@ -103,9 +114,10 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [actualQuality, setActualQuality] = useState<Quality | undefined>()
   const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data })
   latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data }
+  const bridgingActiveLine = Boolean(bridgeActive.current && sourceHealthy.current && activeSource.current && started.current && video.current)
   const hasNext = Boolean(item.episodes && episode < item.episodes)
-  const error = (resolvingAgain ? null : playback.error) || problem
-  const busy = playback.loading || waiting || resolvingAgain
+  const error = (resolvingAgain || bridgingActiveLine ? null : playback.error) || problem
+  const busy = (!bridgingActiveLine && playback.loading) || waiting || (resolvingAgain && !bridgingActiveLine)
   const position = dragPosition ?? time.position
   const end = endPosition(playback.data ?? {}, time.duration, state.settings)
   const upNext = time.duration > 0 ? upNextSeconds(time.position, end, { hasNext, autoNext: state.settings.autoNext, cancelled }) : null
@@ -169,7 +181,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const v = video.current
     if (!v || !ready || error) return
     if (v.ended) seekTo(0)
-    if (v.paused) void v.play().catch(error => { if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') setProblem(new Error(extra.playerRetry)) })
+    playRequested.current = v.paused
+    if (playRequested.current) void v.play().catch(error => { if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') setProblem(new Error(extra.playerRetry)) })
     else v.pause()
     wake()
   }
@@ -188,15 +201,24 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const retry = (automatic = false) => {
     keepPosition()
     void save()
-    setProblem(null); setWaiting(true); setReady(false); setIdle(false)
+    const canBridge = Boolean(sourceHealthy.current && activeSource.current && started.current && video.current && video.current.readyState >= 2)
+    // A failed candidate may have no decoded frames. Keep the snapshot from the last good line.
+    handoffPending.current ||= Boolean(started.current && video.current && video.current.readyState >= 2)
+    bridgeActive.current = canBridge
+    setProblem(null); setWaiting(!canBridge); setReady(canBridge); setIdle(false)
     if (!automatic) { autoAttempts.current = 0; setResolveTries(0) }
-    setRequest(value => ({ revision: value.revision + 1, retry: true }))
+    setRequest(value => ({ revision: value.revision + 1, retry: true, from: undefined }))
   }
   const changeLine = (key: string) => {
     if (key === lines?.current) return
     keepPosition()
     void save()
-    setProblem(null); setWaiting(true); setReady(false); setIdle(false)
+    playRequested.current = video.current?.paused !== true
+    const canBridge = Boolean(sourceHealthy.current && activeSource.current && started.current && video.current && video.current.readyState >= 2)
+    handoffPending.current = canBridge
+    bridgeActive.current = canBridge
+    fallbackRequested.current = false
+    setProblem(null); setWaiting(!canBridge); setReady(canBridge); setIdle(false)
     autoAttempts.current = 0; setResolveTries(0)
     showOsd('refresh', extra.switchingLine)
     setRequest(value => ({ revision: value.revision + 1, retry: false, from: key }))
@@ -210,7 +232,11 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     setQuality(value)
   }
   const changeSpeed = (value: Speed) => {
-    sessionPreferences.speed = value; setSpeed(value)
+    sessionPreferences.speed = value
+    sessionPreferences.activeSpeed = value
+    requestedSpeed.current = value
+    activeSpeed.current = value
+    setSpeed(value)
     if (video.current) video.current.playbackRate = value
   }
   const toggleFullscreen = () => void window.panda.window.fullscreen(!fullscreen).catch(error => notify(errorText(error)))
@@ -227,6 +253,24 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   }
   const controls = useRef({ save, saveVolume, play, seekTo, mute, next, leave, toggleFullscreen, setVolume, wake })
   controls.current = { save, saveVolume, play, seekTo, mute, next, leave, toggleFullscreen, setVolume, wake }
+
+  useEffect(() => {
+    if (!bridgingActiveLine || !playback.error || resolvingAgain) return
+    if (request.from) {
+      if (!fallbackRequested.current) {
+        fallbackRequested.current = true
+        setResolveTries(0)
+        setAskedAgain(null)
+        retry(true)
+      }
+      return
+    }
+    if (notifiedSwitchFailure.current === request.revision) return
+    notifiedSwitchFailure.current = request.revision
+    setWaiting(false)
+    setReady(true)
+    notify(extra.lineSwitchFailed)
+  }, [bridgingActiveLine, playback.error, resolvingAgain, request.from, request.revision, notify])
 
   useEffect(() => {
     mounted.current = true
@@ -286,9 +330,12 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const v = video.current
     const source = playback.data
     if (!v || !source) return
+    activeSource.current = null
+    sourceHealthy.current = false
     setProblem(null); setWaiting(true); setReady(false); setPaused(true); setLevels([]); setActualQuality(source.quality)
-    v.volume = latest.current.volume; v.muted = latest.current.muted; v.playbackRate = sessionPreferences.speed ?? state.settings.speed
-    let active = true, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now(), playingSince = 0
+    v.volume = latest.current.volume; v.muted = latest.current.muted; v.playbackRate = activeSpeed.current
+    let active = true, failed = false, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now(), playingSince = 0
+    let frameState = createFrameRateState()
     const startAt = (retryPosition.current ?? resumePosition(initialHistory.current, episode)) || startPosition(source, latest.current.settings)
     intended.current = startAt
     const alive = () => { progressAt = Date.now() }
@@ -297,10 +344,13 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const refresh = () => {
       if (!active) return
       const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0
+      if (handoffPending.current && !sourceStarted) return
       setTime({ position: v.currentTime || 0, duration, buffered: bufferedRanges(v.buffered, duration) })
     }
     const fail = () => {
-      if (!active) return
+      if (!active || failed) return
+      failed = true
+      sourceHealthy.current = false
       v.pause()
       if (autoAttempts.current < 2) { autoAttempts.current++; showOsd('refresh', extra.restoringSource); retry(true) }
       else { setProblem(new Error(extra.playerRetry)); setWaiting(false); setIdle(false) }
@@ -321,16 +371,36 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         if (startAt > 0 && Math.abs(v.currentTime - startAt) > 1) v.currentTime = clamp(startAt, 0, Math.max(0, v.duration - 0.1))
       }
       refresh()
-      void v.play().catch(error => { if (error.name === 'NotAllowedError') { sourceStarted = true; setPaused(true); setWaiting(false) } else if (error.name !== 'AbortError') fail() })
+      if (playRequested.current) void v.play().catch(error => { if (error.name === 'NotAllowedError') { sourceStarted = true; setPaused(true); setWaiting(false) } else if (error.name !== 'AbortError') fail() })
     })
     on('durationchange', refresh); on('progress', () => { alive(); refresh() })
     on('play', () => { setPaused(false); wake() })
-    on('playing', () => { sourceStarted = true; started.current = true; playingSince ||= Date.now(); alive(); setPaused(false); setWaiting(false); refresh(); wake() })
-    on('pause', () => { setPaused(true); setWaiting(false); setIdle(false); void save() })
-    on('waiting', () => { if (!v.paused) setWaiting(true) })
-    on('seeking', () => { alive(); setWaiting(!v.paused); refresh() })
-    on('seeked', () => { setWaiting(false); refresh(); void save() })
-    on('canplay', () => { setWaiting(false); refresh() })
+    const takeOver = () => {
+      sourceStarted = true; started.current = true; activeSource.current = source; sourceHealthy.current = true
+      handoffPending.current = false
+      bridgeActive.current = false
+      if (handoff.current?.hasAttribute('data-visible')) {
+        handoff.current?.removeAttribute('data-visible')
+        setTimeout(() => { if (!handoff.current?.hasAttribute('data-visible')) handoff.current?.removeAttribute('src') }, 240)
+      }
+    }
+    on('playing', () => {
+      takeOver(); playingSince ||= Date.now(); alive()
+      try {
+        const quality = v.getVideoPlaybackQuality()
+        frameState = createFrameRateState()
+        frameState = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current).state
+      } catch { frameState = createFrameRateState() }
+      setPaused(false); setWaiting(false); refresh(); wake()
+    })
+    on('pause', () => { frameState = createFrameRateState(); setPaused(true); setWaiting(false); setIdle(false); void save() })
+    on('waiting', () => { frameState = createFrameRateState(); if (!v.paused) setWaiting(true) })
+    on('seeking', () => { frameState = createFrameRateState(); alive(); setWaiting(!v.paused); refresh() })
+    on('seeked', () => { frameState = createFrameRateState(); setWaiting(false); refresh(); void save() })
+    on('canplay', () => {
+      frameState = createFrameRateState(); setWaiting(false); refresh()
+      if (!playRequested.current && !v.seeking) { takeOver(); setPaused(true) }
+    })
     on('timeupdate', () => {
       refresh(); alive()
       const current = latest.current
@@ -409,9 +479,37 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       if (!sourceStarted || v.paused || v.ended || v.readyState >= 3 || latest.current.problem) alive()
       else if (Date.now() - progressAt > STALL_MS) { alive(); fail() }
     }, 2000)
+    const frameMonitor = setInterval(() => {
+      if (!active || v.paused || v.ended || v.seeking || v.readyState < 2) { frameState = createFrameRateState(); return }
+      try {
+        const quality = v.getVideoPlaybackQuality()
+        const result = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current)
+        frameState = result.state
+        if (result.rate === activeSpeed.current) return
+        const reduced = result.rate < activeSpeed.current
+        activeSpeed.current = result.rate
+        sessionPreferences.activeSpeed = result.rate
+        v.playbackRate = result.rate
+        setSpeed(result.rate)
+        notify(fmt(reduced ? extra.speedReduced : extra.speedRestored, { speed: result.rate }))
+        frameState = createFrameRateState()
+      } catch { frameState = createFrameRateState() }
+    }, 2000)
     return () => {
-      active = false; clearTimeout(startup); clearInterval(watchdog)
+      active = false; clearTimeout(startup); clearInterval(watchdog); clearInterval(frameMonitor)
       void save(v)
+      if (handoffPending.current && v.currentTime > 0) retryPosition.current = v.currentTime
+      if (handoffPending.current && v.readyState >= 2 && v.videoWidth > 0 && v.videoHeight > 0 && handoff.current) {
+        try {
+          const canvas = document.createElement('canvas')
+          const scale = Math.min(1, 1280 / v.videoWidth, 720 / v.videoHeight)
+          canvas.width = Math.max(1, Math.floor(v.videoWidth * scale))
+          canvas.height = Math.max(1, Math.floor(v.videoHeight * scale))
+          canvas.getContext('2d')?.drawImage(v, 0, 0, canvas.width, canvas.height)
+          handoff.current.src = canvas.toDataURL('image/jpeg', 0.78)
+          handoff.current.setAttribute('data-visible', '')
+        } catch { /* Some streams forbid snapshots; a failed capture does not interrupt playback. */ }
+      }
       listeners.forEach(([name, listener]) => v.removeEventListener(name, listener))
       hls.current?.destroy(); hls.current = null
       v.pause(); v.removeAttribute('src'); v.load()
@@ -431,7 +529,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     return bounds.width ? clamp((event.clientX - bounds.left) / bounds.width) : 0
   }
   return <div className="player" ref={root} data-paused={dataAttr(paused)} data-waiting={dataAttr(busy && !error)} data-error={dataAttr(error)} data-idle={dataAttr(idle && !error && !busy)} onPointerDown={wake}>
-    <video className="player__video" ref={video} playsInline preload="auto" poster={item.backdrop ?? undefined} onClick={() => panelOpen ? setPanelOpen(false) : play()} onDoubleClick={toggleFullscreen} />
+    <video className="player__video" ref={video} playsInline preload="auto" crossOrigin="anonymous" poster={item.backdrop ?? undefined} onClick={() => panelOpen ? setPanelOpen(false) : play()} onDoubleClick={toggleFullscreen} />
+    <img className="player__handoff" ref={handoff} alt="" aria-hidden="true" />
     <div className="player__shade" />
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title">{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
     <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button><span className="spinner" /><div className="player__error empty"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>

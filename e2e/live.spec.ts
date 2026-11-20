@@ -33,26 +33,28 @@ test('real movie decodes, seeks, changes speed, enters fullscreen and persists h
     evidence.seekRecoveryMs = Date.now() - seekStarted
     evidence.seek = await videoStatus(page)
     await page.getByRole('button', { name: '倍速', exact: true }).click()
-    await page.getByRole('menuitemradio', { name: '1.5×', exact: true }).click()
-    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.playbackRate)).toBe(1.5)
+    await page.getByRole('menuitemradio', { name: '2.0×', exact: true }).click()
+    await expect.poll(() => page.evaluate(() => document.querySelector('video')!.playbackRate)).toBe(2)
     const speedBefore = await videoStatus(page)
     const speedStarted = Date.now()
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(12000)
     const speedAfter = await videoStatus(page)
     const speedWallSeconds = (Date.now() - speedStarted) / 1000
     const speedMediaSeconds = speedAfter.position - speedBefore.position
     const speedFrames = speedAfter.decodedFrames - speedBefore.decodedFrames
     const speedDroppedFrames = speedAfter.droppedFrames - speedBefore.droppedFrames
     evidence.speedPlayback = {
-      requestedRate: 1.5,
+      requestedRate: 2,
+      appliedRate: speedAfter.rate,
       observedRate: speedMediaSeconds / speedWallSeconds,
       wallSeconds: speedWallSeconds,
       mediaSeconds: speedMediaSeconds,
       decodedFrames: speedFrames,
       droppedFrames: speedDroppedFrames,
-      droppedFrameRatio: speedDroppedFrames / Math.max(1, speedFrames + speedDroppedFrames),
+      droppedFrameRatio: speedDroppedFrames / Math.max(1, speedFrames),
     }
-    expect(speedMediaSeconds).toBeGreaterThan(3)
+    expect(speedMediaSeconds).toBeGreaterThan(6)
+    expect(speedAfter.rate).toBeLessThanOrEqual(2)
     await page.mouse.move(700, 840)
     await page.getByRole('button', { name: '全屏', exact: true }).click()
     await expect.poll(() => page.evaluate(() => window.panda.window.getState())).toEqual({ maximized: false, fullscreen: true })

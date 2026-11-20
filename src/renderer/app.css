@@ -12,6 +12,8 @@
   .search__panel .list-loading { padding: var(--sp-4); }
   .search__panel .empty__text { font-size: var(--fs-13); }
   .toast[data-limited] { pointer-events: none; }
+  .player__handoff { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; pointer-events: none; opacity: 0; transition: opacity var(--dur-2) var(--ease-out); }
+  .player__handoff[data-visible] { opacity: 1; transition: none; }
   .filters__expand { height: var(--control-sm); padding-inline: var(--sp-3); }
   .icon-btn:disabled { pointer-events: none; opacity: .4; }
   .dialog-shell { position: fixed; inset: 0; display: grid; place-items: center; padding: var(--sp-8); pointer-events: none; }

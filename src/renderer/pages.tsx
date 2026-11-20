@@ -199,7 +199,7 @@ export function DetailPage({ id }: { id: string }) {
   return <main className="page page--bleed">
     <div className="detail__backdrop"><MediaImage src={item.backdrop ?? item.poster} className="detail__bg" eager ambient={!item.backdrop} /><div className="detail__shade" /></div>
     <div className="detail__head"><PosterBox item={item} className="detail__poster" /><div className="detail__info"><h1 className="detail__title">{item.title}</h1>
-      {item.originalTitle && <div className="detail__orig">{item.originalTitle}</div>}<MetaRow item={item} className="detail__meta" region max={3} />
+      {item.originalTitle && item.originalTitle !== item.title && <div className="detail__orig">{item.originalTitle}</div>}<MetaRow item={item} className="detail__meta" region max={3} />
       <div className="detail__actions"><a className="btn btn--primary btn--lg" href={`#/play/${id}${history ? `/${history.episode}` : ''}`}><Icon name="play" />{playLabel(item, history)}</a><FavoriteButton id={id} /></div>
       {item.synopsis && <Synopsis text={item.synopsis} />}
       {(item.directors?.length || item.cast?.length) ? <dl className="credits">{item.directors?.length ? <div><dt>{t.detail.director}</dt><dd>{item.directors.join(' / ')}</dd></div> : null}{item.cast?.length ? <div><dt>{t.detail.starring}</dt><dd>{item.cast.map(person => person.name).join(' / ')}</dd></div> : null}</dl> : null}

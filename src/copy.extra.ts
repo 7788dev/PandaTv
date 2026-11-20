@@ -29,6 +29,9 @@ export const extra = {
   noEpisode: '未找到这一集的可用片源',
   line: '线路',
   switchingLine: '正在切换线路',
+  lineSwitchFailed: '切换未成功，保留当前线路',
+  speedReduced: '已降至 {speed}×，减少掉帧',
+  speedRestored: '已恢复 {speed}×',
   personWorks: '全部作品',
   personNotFound: '未找到这位影人',
 } as const

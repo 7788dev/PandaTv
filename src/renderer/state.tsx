@@ -52,25 +52,30 @@ export function useUser() {
   return value
 }
 
-export function useRemote<T>(loader: () => Promise<T>, dependencies: DependencyList) {
+export function useRemote<T>(loader: () => Promise<T>, dependencies: DependencyList, keepPreviousData = false, requestKey?: string | number) {
   const [data, setData] = useState<T>()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<unknown>(null)
   const [revision, setRevision] = useState(0)
+  const [settledKey, setSettledKey] = useState<string | number | undefined>()
+  const settleToken = requestKey === undefined ? undefined : `${typeof requestKey}:${requestKey}:${revision}`
   const latest = useRef(loader)
   latest.current = loader
   useEffect(() => {
     let active = true
     setLoading(true)
-    setData(undefined)
+    if (!keepPreviousData) setData(undefined)
     setError(null)
     Promise.resolve().then(() => latest.current()).then(next => {
       if (active) setData(next)
-    }, problem => { if (active) setError(problem) }).finally(() => { if (active) setLoading(false) })
+    }, problem => { if (active) setError(problem) }).finally(() => {
+      if (active) { setLoading(false); setSettledKey(settleToken) }
+    })
     return () => { active = false }
-  }, [...dependencies, revision])
+  }, [...dependencies, revision, keepPreviousData, requestKey])
   const reload = useCallback(() => setRevision(value => value + 1), [])
-  return { data, loading, error, reload }
+  const requestSettled = settleToken === undefined || settledKey === settleToken
+  return { data, loading: loading || !requestSettled, error: requestSettled ? error : null, reload }
 }
 
 export function errorText(error: unknown) {

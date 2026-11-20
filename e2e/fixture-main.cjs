@@ -36,7 +36,8 @@ let picked = '';
 async function invoke(method, args) {
   if (method.startsWith('data.')) {
     if (mode === 'loading') return new Promise(() => {});
-    if (mode === 'error' || mode === 'offline' || (mode === 'player-error' && /Playback|playback/.test(method))) throw new Error(mode === 'offline' ? copy.state.offline : copy.state.error);
+    if (mode === 'error' || mode === 'offline' || (mode === 'player-error' && /Playback|playback/.test(method)) || (mode === 'line-switch-error' && /playbackFrom/.test(method)) || (mode === 'line-switch-error-all' && /playbackFrom|retryPlayback/.test(method))) throw new Error(mode === 'offline' ? copy.state.offline : copy.state.error);
+    if (mode === 'line-switch-hang' && /playbackFrom/.test(method)) return new Promise(() => {});
     const operation = method.slice(5);
     if (operation === 'titleHints') return [];
     if (mode === 'empty') {
@@ -46,11 +47,15 @@ async function invoke(method, args) {
     }
     if (operation === 'availability') { const item = catalog.items.find(item => item.id === args[0]); return { episodes: item?.episodes, episodeTitles: item?.episodeTitles }; }
     // The prototype has one source per episode; `lines` offers two, to exercise the switch.
-    if (operation === 'sources') return mode === 'lines' ? { current: picked || 'first', list: [{ key: 'first', name: '线路一' }, { key: 'second', name: '线路二' }] } : { list: [] };
+    if (operation === 'sources') return mode === 'lines' || mode.startsWith('line-switch-') ? { current: picked || 'first', list: [{ key: 'first', name: '线路一' }, { key: 'second', name: '线路二' }] } : { list: [] };
     if (operation === 'playbackFrom') picked = args[2];
     if (operation === 'playback' || operation === 'retryPlayback' || operation === 'playbackFrom') {
       const quality = args[operation === 'playbackFrom' ? 3 : 2] === '480P' ? '480P' : '720P';
-      return { url: origin + (mode === 'source-hang' && operation === 'playback' ? '/__stall.mp4' : quality === '480P' ? '/__media-480.mp4' : '/__media-720.mp4') + (operation === 'playbackFrom' ? '?line=' + args[2] : ''), format: 'mp4', quality, qualities: ['720P', '480P'], ...(mode === 'intro' ? { intro: { start: 0, end: 90 } } : {}) };
+      const path = mode === 'source-hang' && operation === 'playback' || mode === 'line-switch-stall' && operation === 'playbackFrom'
+        ? '/__stall.mp4'
+        : quality === '480P' ? '/__media-480.mp4' : '/__media-720.mp4';
+      const query = operation === 'playbackFrom' ? '?line=' + args[2] : operation === 'retryPlayback' && mode === 'line-switch-error' ? '?pool=retry' : '';
+      return { url: origin + path + query, format: 'mp4', quality, qualities: ['720P', '480P'], ...(mode === 'intro' ? { intro: { start: 0, end: 90 } } : {}) };
     }
     return source[operation](...args);
   }
@@ -72,7 +77,10 @@ app.whenReady().then(async () => {
   server = createServer((request, response) => {
     try {
       const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
-      if (pathname === '/__stall.mp4') { response.writeHead(200, { 'Content-Type': 'video/mp4', 'Content-Length': 1000000 }); response.flushHeaders(); return; }
+      if (pathname === '/__stall.mp4') {
+        response.writeHead(200, { 'Content-Type': 'video/mp4', 'Content-Length': 1000000, 'Access-Control-Allow-Origin': '*' });
+        response.flushHeaders(); return;
+      }
       let filename;
       if (pathname.startsWith('/__media-')) filename = join(__dirname, 'fixtures', pathname.includes('480') ? 'playback-480.mp4' : 'playback-720.mp4');
       else {
