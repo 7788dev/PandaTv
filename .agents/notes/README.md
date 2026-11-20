@@ -42,5 +42,6 @@ Version 1.0.0 was delivered on 2026-11-16; the [delivery report](../../docs/deli
 | [people](implemented/architecture/2026-11-17-people.md) | Who a detail page lists (Douban's principal credits), their photos and framing, a person's works page |
 | [android-tv](implemented/architecture/2026-11-18-android-tv.md) | Native Kotlin Android TV client (`tv/`, API 22+, ~1.0 MB APK), 10-foot layout & D-pad UX, golden parity with desktop |
 | [tv-interaction](implemented/architecture/2026-11-18-tv-interaction.md) | Whole first-row return, preferred column, stale requests, admission checks, immediate episode transitions, actual control focus and late warm readers |
+| [title-initials](implemented/architecture/2026-11-20-title-initials.md) | Fresh-install initials vocabulary, verified metadata fallback, local query hints and cancellation ownership |
 
 The repeatable device workflow is [tv-runtime-regression](../skills/tv-runtime-regression/SKILL.md). It runs production APK replays sequentially and checks restoration of temporary state and network rules.

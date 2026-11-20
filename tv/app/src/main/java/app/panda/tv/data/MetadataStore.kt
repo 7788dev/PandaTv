@@ -39,6 +39,11 @@ class MetadataStore(
         return synchronized(lock) { entries[id] }
     }
 
+    fun values(): List<CatalogRecord> {
+        ensureLoaded()
+        return synchronized(lock) { entries.values.toList() }
+    }
+
     fun set(records: List<Normalized>) {
         ensureLoaded()
         val now = System.currentTimeMillis()

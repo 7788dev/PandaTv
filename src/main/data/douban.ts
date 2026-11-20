@@ -9,6 +9,8 @@ import { landscapePhoto, list, normalize, personId, portraitUrl, positive, princ
 import { MetadataStore } from './store';
 import { GENRES, LANES, REGIONS, matchesRegion, matchesYear, yearChoices, yearSpan } from './taxonomy';
 import { combineHotQueries, hotQueries } from './hot-search';
+import { initialQuery, suggestedSubjectIds } from '../../shared/title-search';
+import { SearchTitleVocabulary } from './title-search';
 
 const BASE = 'https://m.douban.com/rexxar/api/v2';
 const LIST_TTL = 10 * 60_000;
@@ -65,6 +67,9 @@ interface SourceOptions {
   onHome?: (feed: HomeFeed) => void;
   /** Pauses before reading a failed home shelf again. */
   homeRetryMs?: number[];
+  /** Installed resource directory; standalone tools and tests default to the project resources. */
+  searchTitlesDir?: string;
+  onSearchDiagnostic?: (event: { stage: string; vocabulary?: number; candidates?: number; hints?: number; identities?: number; returned?: number }) => void;
 }
 const HOME_LISTS = ['tv', 'movies', 'variety', 'anime', 'doc', 'tvRank', 'movieRank', 'animeRank'] as const;
 /** The titles the home page is composed from, with upstream image addresses. */
@@ -83,10 +88,15 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
   private homeFlight?: { top: Promise<void>; all: Promise<void>; shown: () => HomeFeed };
   private homeSave: Promise<void> = Promise.resolve();
   private readonly homeReady: Promise<void>;
+  private readonly searchTitles: SearchTitleVocabulary;
+  private readonly fallbackHttp: DoubanHttp;
+  private searchFallbackUntil = 0;
 
   constructor(private options: SourceOptions) {
     this.http = new DoubanHttp({ fetch: options.fetch });
+    this.fallbackHttp = new DoubanHttp({ fetch: options.fetch, intervalMs: 1000, burst: 1, maxConcurrent: 2, maxEntries: 64, maxBytes: 2 * 1024 * 1024 });
     this.store = new MetadataStore(options.cacheDir, value => this.warn(value));
+    this.searchTitles = new SearchTitleVocabulary(options.searchTitlesDir);
     this.homeReady = this.restoreHome();
   }
 
@@ -379,7 +389,7 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
    * chose for it (`credits`): the same eight people at most on every read, with their photos.
    * The page shows those and nobody else.
    */
-  private async loadDetail(rawId: string): Promise<Detail> {
+  private async readSubject(rawId: string): Promise<Normalized> {
     await this.store.ready;
     const known = this.store.get(`db-${rawId}`);
     const first = known?.kind ?? 'movie';
@@ -397,6 +407,10 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
       }
     }
     if (!detail) throw new DataError('NOT_FOUND', 'Douban subject not found');
+    return detail;
+  }
+  private async loadDetail(rawId: string): Promise<Detail> {
+    const detail = await this.readSubject(rawId);
     const path = `${detail.kind}/${rawId}`;
     const [credits, photos] = await Promise.allSettled([
       this.http.json(endpoint(`${path}/credits`), DETAIL_TTL, principalCredits),
@@ -475,15 +489,67 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
     if (typeof q !== 'string' || q.length > 100) throw new DataError('INVALID_INPUT', 'Invalid search query');
     return q.trim();
   }
+  private async searchRows(q: string, count: number, paginate: boolean): Promise<Normalized[]> {
+    if (this.searchFallbackUntil > Date.now()) return this.searchFallback(q, count);
+    let first: Record<string, unknown>;
+    try { first = await this.searchPage(q, 0, count); }
+    catch (error) {
+      if (!(error instanceof DataError) || error.code === 'INVALID_INPUT' || error.message === 'Search query was rejected') throw error;
+      this.searchFallbackUntil = Date.now() + 60_000;
+      this.diagnostic('search:primary', error);
+      return this.searchFallback(q, count);
+    }
+    const pages = [first];
+    const total = positive(first.total) ?? 0;
+    if (paginate && total > count) {
+      const remaining = await Promise.allSettled([count, count * 2, count * 3].filter(start => start < total).map(start => this.searchPage(q, start, count)));
+      for (const response of remaining) {
+        if (response.status === 'fulfilled') pages.push(response.value);
+        else this.diagnostic('search:page', response.reason);
+      }
+    }
+    return pages.flatMap(value => requiredArray(value, 'items')).flatMap(value => normalize(value) ?? []);
+  }
+  private async searchFallback(q: string, count: number): Promise<Normalized[]> {
+    const hints = await this.fallbackHttp.json(`https://movie.douban.com/j/subject_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value), false, 1000);
+    let ids = suggestedSubjectIds(hints).slice(0, count);
+    this.options.onSearchDiagnostic?.({ stage: 'fallback', hints: hints.length, identities: ids.length });
+    if (!ids.length) {
+      const cards = await this.fallbackHttp.json(`https://www.douban.com/j/search_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value, 'cards'), false, 1000);
+      ids = suggestedSubjectIds(cards).slice(0, count);
+      this.options.onSearchDiagnostic?.({ stage: 'global-fallback', hints: cards.length, identities: ids.length });
+    }
+    if (!ids.length) return [];
+    const replies = await Promise.allSettled(ids.map(id => this.readSubject(id)));
+    const values = replies.flatMap(reply => reply.status === 'fulfilled' ? [reply.value] : []);
+    if (!values.length) throw (replies[0] as PromiseRejectedResult).reason;
+    for (const reply of replies) if (reply.status === 'rejected') this.diagnostic('search:subject', reply.reason);
+    return values;
+  }
+  private async searchTitlesRows(q: string, suggestions: boolean): Promise<Normalized[]> {
+    const count = suggestions ? 20 : 50;
+    if (!initialQuery(q)) return this.searchRows(q, suggestions ? 8 : count, !suggestions);
+    const vocabulary = await this.searchTitles.load().catch(error => { this.diagnostic('search:initials', error); return undefined; });
+    if (!vocabulary) return this.searchRows(q, suggestions ? 8 : count, !suggestions);
+    await this.store.ready;
+    const score = (value: Normalized) => Math.min(...[value.item.title, value.item.originalTitle, ...(value.aliases ?? [])].filter((title): title is string => Boolean(title)).map(title => vocabulary.score(title, q)));
+    const saved = this.store.values().filter(value => Number.isFinite(score(value)));
+    const terms = vocabulary.terms(q, suggestions ? 4 : 6);
+    this.options.onSearchDiagnostic?.({ stage: 'initials', vocabulary: vocabulary.size, candidates: terms.length });
+    const responses = await Promise.allSettled([q, ...terms].map(term => this.searchRows(term, count, !suggestions)));
+    const values = responses.flatMap(response => response.status === 'fulfilled' ? response.value.filter(value => !terms.length || Number.isFinite(score(value))) : []);
+    this.options.onSearchDiagnostic?.({ stage: 'results', returned: values.length });
+    if (!responses.some(response => response.status === 'fulfilled') && !saved.length) throw (responses[0] as PromiseRejectedResult).reason;
+    if (saved.length && responses.every(response => response.status === 'rejected')) this.warn({ code: 'CACHED', operation: 'search:initials', message: 'Showing saved title matches while metadata queries are unavailable', at: Date.now() });
+    const merged = new Map<string, Normalized>(saved.map(value => [value.item.id, value]));
+    for (const value of values) merged.set(value.item.id, value);
+    return [...merged.values()].sort((a, b) => score(a) - score(b)).slice(0, suggestions ? 8 : 200);
+  }
   async search(query: string): Promise<MediaItem[]> {
     const q = this.searchQuery(query);
     if (!q) return [];
-    const first = await this.searchPage(q, 0, 50);
-    const pages = [first];
-    const total = positive(first.total) ?? 0;
-    if (total > 50) pages.push(...await Promise.all([50, 100, 150].filter(start => start < total).map(start => this.searchPage(q, start, 50))));
     const seen = new Set<string>();
-    return this.remember(pages.flatMap(value => requiredArray(value, 'items')).flatMap(value => normalize(value) ?? []).filter(value => {
+    return this.remember((await this.searchTitlesRows(q, false)).filter(value => {
       if (seen.has(value.item.id)) return false;
       seen.add(value.item.id); return true;
     }));
@@ -491,8 +557,12 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
   async suggest(query: string): Promise<MediaItem[]> {
     const q = this.searchQuery(query);
     if (!q) return [];
-    const value = await this.searchPage(q, 0, 8);
-    return this.remember(requiredArray(value, 'items').flatMap(value => normalize(value) ?? []).slice(0, 8));
+    return this.remember((await this.searchTitlesRows(q, true)).slice(0, 8));
+  }
+  async titleHints(query: string): Promise<string[]> {
+    const q = this.searchQuery(query);
+    if (!initialQuery(q)) return [];
+    return (await this.searchTitles.load()).hints(q);
   }
   async hotSearches(): Promise<string[]> {
     const boards = await Promise.all((['movie', 'teleplay'] as const).map(board =>

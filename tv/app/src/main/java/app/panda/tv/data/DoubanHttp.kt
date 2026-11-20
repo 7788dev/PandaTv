@@ -4,7 +4,10 @@ import app.panda.tv.model.Json
 import app.panda.tv.net.PublicNetwork
 import app.panda.tv.net.PublicNetworkException
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withLock
@@ -78,6 +81,7 @@ class DoubanHttp(
         ttlMs: Long,
         validate: (Any?) -> T,
         patient: Boolean = false,
+        emptyTtlMs: Long = ttlMs,
     ): T {
         val uri = try {
             URI(url)
@@ -108,17 +112,28 @@ class DoubanHttp(
             }
         }
         if (existing != null) {
-            return validate(existing!!.await())
+            try {
+                return validate(existing!!.await())
+            } catch (cancelled: CancellationException) {
+                // A suggestion may own this flight. Cancelling it must not cancel a
+                // newer submitted search that only joined the same URL.
+                currentCoroutineContext().ensureActive()
+                synchronized(lock) {
+                    if (flights[url] === existing) flights.remove(url)
+                }
+                return json(url, ttlMs, validate, patient, emptyTtlMs)
+            }
         }
 
         val deferred = created!!
         return try {
             val (value, bytes) = request(url, patient)
             val validated = validate(value)
-            if (bytes <= maxBytes && ttlMs > 0L) {
+            val effectiveTtl = if (validated is List<*> && validated.isEmpty()) emptyTtlMs else ttlMs
+            if (bytes <= maxBytes && effectiveTtl > 0L) {
                 synchronized(lock) {
                     removeLocked(url)
-                    cache[url] = Cached(value, System.currentTimeMillis() + ttlMs, bytes)
+                    cache[url] = Cached(value, System.currentTimeMillis() + effectiveTtl, bytes)
                     totalBytes += bytes
                     while (cache.size > maxEntries || totalBytes > maxBytes) {
                         val oldest = cache.keys.firstOrNull() ?: break
@@ -190,6 +205,8 @@ class DoubanHttp(
                     throw DataError(DataErrorCode.INVALID_RESPONSE, "Metadata returned invalid JSON")
                 }
                 return parsed to (reply.body.length * 2).coerceAtLeast(64)
+            } catch (cancelled: kotlinx.coroutines.CancellationException) {
+                throw cancelled
             } catch (e: DataError) {
                 last = e
             } catch (e: Exception) {
@@ -274,6 +291,6 @@ class DoubanHttp(
 
     companion object {
         private const val MAX_BODY = 8 * 1024 * 1024
-        private val ALLOWED_HOSTS = setOf("m.douban.com", "movie.douban.com", "top.baidu.com")
+        private val ALLOWED_HOSTS = setOf("m.douban.com", "movie.douban.com", "www.douban.com", "top.baidu.com")
     }
 }

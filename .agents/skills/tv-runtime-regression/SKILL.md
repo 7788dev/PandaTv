@@ -15,6 +15,7 @@ Read the [delivery report](../../../docs/delivery-report.md) for the current APK
    - `python -X utf8 scripts/verify-tv-navigation.py --serial <serial> --label <label> --extended --library`
    - For home More links or root navigation changes: `python -X utf8 scripts/verify-tv-nav-selection.py --serial <serial> --label <label> --repeat 2`
    - `python -X utf8 scripts/verify-tv-search-state.py --serial <serial> --label <label>`
+   - For title matching or custom-keypad changes: `python -X utf8 scripts/verify-tv-title-search.py --serial <serial> --label <label> --case all --repeat 2`
    - `python -X utf8 scripts/verify-tv-playback-transitions.py --serial <serial> --label <label> --case all`
    - `python -X utf8 scripts/verify-tv-motion.py --serial <serial> --label <label> --repeat 2`
 4. For an explicit empty-catalogue UI verdict, use `--case missing --enabled-sources <real-enabled-key> --require-missing` on the playback replay. This is a temporary subset of the real configured catalogues; keep that scope visible in the report. A retryable network result does not prove absence. Check `userStateRestored` for navigation, search and playback; check `sourceRulesRestored` and `firewallRulesRestored` when that replay changes them, and `libraryUserStateRestored` for seeded library cases. Restore the complete pre-run user state rather than retaining a replay's search history.

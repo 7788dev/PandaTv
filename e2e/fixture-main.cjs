@@ -38,6 +38,7 @@ async function invoke(method, args) {
     if (mode === 'loading') return new Promise(() => {});
     if (mode === 'error' || mode === 'offline' || (mode === 'player-error' && /Playback|playback/.test(method))) throw new Error(mode === 'offline' ? copy.state.offline : copy.state.error);
     const operation = method.slice(5);
+    if (operation === 'titleHints') return [];
     if (mode === 'empty') {
       if (operation === 'home') return { hero: [], shelves: [] };
       if (operation === 'channel') return { items: [], next: null };

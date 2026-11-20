@@ -1,4 +1,5 @@
 export const extra = {
+  searchInitialsPlaceholder: '片名 / 首字母',
   loading: '加载中',
   loadMore: '加载更多',
   updateAvailable: '发现新版本 {v}',

@@ -20,6 +20,7 @@ export class MetadataStore {
   }
 
   get(id: string) { return this.entries.get(id); }
+  values() { return [...this.entries.values()]; }
 
   set(records: Normalized[]) {
     for (const value of records) {

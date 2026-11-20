@@ -24,7 +24,7 @@ interface HttpOptions {
 }
 const wait = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
 const MAX_BODY = 8 * 1024 * 1024;
-const ALLOWED_HOSTS = new Set(['m.douban.com', 'movie.douban.com', 'top.baidu.com']);
+const ALLOWED_HOSTS = new Set(['m.douban.com', 'movie.douban.com', 'www.douban.com', 'top.baidu.com']);
 
 /** All requests are main-process only. A success is cached only after endpoint validation. */
 export class DoubanHttp {
@@ -60,7 +60,7 @@ export class DoubanHttp {
    * `patient` is for listings Douban computes on demand: one long wait instead of two short
    * ones, because a request that is abandoned and repeated starts the computation again.
    */
-  async json<T>(url: string, ttlMs: number, validate: (value: unknown) => T, patient = false): Promise<T> {
+  async json<T>(url: string, ttlMs: number, validate: (value: unknown) => T, patient = false, emptyTtlMs = ttlMs): Promise<T> {
     const parsed = new URL(url);
     if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.has(parsed.hostname) || parsed.username || parsed.password) {
       throw new DataError('INVALID_INPUT', 'Unapproved metadata origin');
@@ -75,10 +75,11 @@ export class DoubanHttp {
     const existing = this.flights.get(url);
     if (existing) return validate(structuredClone(await existing));
     const work = this.request(parsed, patient).then(value => {
-      validate(value);
+      const validated = validate(value);
       const bytes = Buffer.byteLength(JSON.stringify(value));
-      if (bytes <= this.maxBytes && ttlMs > 0) {
-        this.cache.set(url, { value, expires: Date.now() + ttlMs, bytes });
+      const effectiveTtl = Array.isArray(validated) && !validated.length ? emptyTtlMs : ttlMs;
+      if (bytes <= this.maxBytes && effectiveTtl > 0) {
+        this.cache.set(url, { value, expires: Date.now() + effectiveTtl, bytes });
         this.bytes += bytes;
         while (this.cache.size > this.maxEntries || this.bytes > this.maxBytes) this.remove(this.cache.keys().next().value!);
       }

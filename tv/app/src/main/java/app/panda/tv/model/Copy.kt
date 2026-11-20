@@ -152,6 +152,7 @@ object Copy {
     }
 
     object Extra {
+        const val SEARCH_INITIALS_PLACEHOLDER = "片名 / 首字母"
         const val LOADING = "加载中"
         const val LOAD_MORE = "加载更多"
         const val SAVE_ERROR = "保存失败"

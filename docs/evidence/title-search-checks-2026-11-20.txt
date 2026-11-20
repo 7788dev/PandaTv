@@ -1,0 +1,90 @@
+Title initials search verification
+Recorded: 2026-11-20T10:41:18.6488787Z
+
+Before: unrelated raw initials results (same offline regression)
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+ ❯ tests/search-recovery.test.ts (4 tests | 1 failed) 6091ms
+   ❯ search endpoint recovery (4)
+     × filters unrelated raw initials results while preserving ordinary English queries 56ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/search-recovery.test.ts > search endpoint recovery > filters unrelated raw initials results while preserving ordinary English queries
+AssertionError: expected [ 'db-1', 'db-9' ] to deeply equal [ 'db-1' ]
+
+- Expected
++ Received
+
+  [
+    "db-1",
++   "db-9",
+  ]
+
+ ❯ tests/search-recovery.test.ts:19:62
+     17|         : [] });
+     18|     }) });
+     19|     expect((await data.search('LBXX')).map(item => item.id)).toEqual([…
+       |                                                              ^
+     20|     expect((await data.search('Interstellar')).map(item => item.id)).t…
+     21|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+After: same regression
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  18:20:57
+   Duration  6.34s (tests 98%, transform 1%)
+
+After: full offline suite
+
+> panda-desktop@1.1.1 test
+> vitest run
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+
+ Test Files  18 passed (18)
+      Tests  248 passed (248)
+   Start at  18:22:06
+   Duration  21.35s (tests 96%, import 2%, transform 1%)
+
+TV cancelled suggestion flight: before
+> Task :app:testDebugUnitTest FAILED
+MetadataFlightTest > cancelled suggestion leader cannot cancel a submitted search follower FAILED
+    kotlinx.coroutines.JobCancellationException at JobSupport.kt:1556
+        Caused by: kotlinx.coroutines.JobCancellationException at MetadataFlightTest.kt:19
+1 test completed, 1 failed
+FAILURE: Build failed with an exception.
+Execution failed for task ':app:testDebugUnitTest'.
+BUILD FAILED in 5s
+TV cancelled suggestion flight: after
+tests=1 failures=0
+TV final release build
+> Task :app:compileReleaseArtProfile
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleRelease
+
+BUILD SUCCESSFUL in 50s
+69 actionable tasks: 15 executed, 54 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.7.1/userguide/configuration_cache_enabling.html
+TV first-keypad-row Up: before 3/3 failed, after 3/3 passed (reports preserve full traces)
+TV final release initials/re-edit replay
+PASS initials round 1
+PASS re-edit round 1
+PASS initials round 2
+PASS re-edit round 2
+PASS initials round 3
+PASS re-edit round 3
+TV APK SHA256: 3DB39556756BAD635A6E76F620E21736FBAD5F24DBAE1700872D1C779A5E6D48
+Installed Windows asar: 271 entries, zero excluded paths; bundled title index 1253287 bytes, dictionary version 1
+Installed Windows full E2E: search initials, metadata, fixture interaction and all layout cases passed. Overall 24/30; remaining six playback failures are recorded separately.

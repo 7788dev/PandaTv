@@ -42,8 +42,9 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   const notify = useNotify()
   const query = value.trim()
   useEffect(() => { const timer = setTimeout(() => setDebounced(query), query ? 220 : 0); return () => clearTimeout(timer) }, [query])
-  const results = useRemote(async (): Promise<{ suggestions?: MediaItem[]; hot?: string[] }> => {
+  const results = useRemote(async (): Promise<{ suggestions?: MediaItem[]; titles?: string[]; hot?: string[] }> => {
     if (!open) return {}
+    if (/^[a-z0-9\s]+$/i.test(debounced)) return { titles: await window.panda.data.titleHints(debounced) }
     return debounced ? { suggestions: await window.panda.data.suggest(debounced) } : { hot: await window.panda.data.hotSearches() }
   }, [open, debounced, online])
   useEffect(() => { setActive(-1) }, [value, results.data])
@@ -64,16 +65,18 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   }, [])
   const waiting = results.loading || debounced !== query
   const suggestions = results.data?.suggestions ?? []
+  const titles = results.data?.titles ?? []
   const hot = results.data?.hot ?? []
-  const hasPanel = !query || waiting || Boolean(results.error) || suggestions.length > 0
-  const targets = query ? suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
+  const hasPanel = !query || waiting || Boolean(results.error) || suggestions.length > 0 || titles.length > 0
+  const targets = query ? results.data?.titles ? titles.map(title => `/search?q=${encodeURIComponent(title)}`) : suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
   const choose = (index: number) => {
     if (query && suggestions[index]) void dispatch({ type: 'search:add', query: suggestions[index].title }).catch(error => notify(errorText(error)))
+    if (query && titles[index]) void dispatch({ type: 'search:add', query: titles[index] }).catch(error => notify(errorText(error)))
     if (targets[index]) go(targets[index])
   }
   return <div className="search" role="search" ref={root} data-open={dataAttr(open)} onBlur={event => { if (!root.current?.contains(event.relatedTarget as Node)) setOpen(false) }}>
     <label className="field" data-filled={dataAttr(value)}><Icon name="search" size="sm" className="field__icon" />
-      <input className="field__input" type="search" ref={input} value={value} placeholder={t.search.placeholder} aria-label={t.search.label} autoComplete="off" spellCheck={false}
+      <input className="field__input" type="search" ref={input} value={value} placeholder={extra.searchInitialsPlaceholder} aria-label={t.search.label} autoComplete="off" spellCheck={false}
         role="combobox" aria-expanded={open && hasPanel} aria-controls="search-suggestions" aria-activedescendant={active >= 0 ? `search-item-${active}` : undefined}
         onChange={event => { setValue(event.target.value); setOpen(true) }} onFocus={() => setOpen(true)} onKeyDown={event => {
           if (event.nativeEvent.isComposing) return
@@ -86,7 +89,7 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
       <kbd className="kbd field__hint">Ctrl K</kbd><button className="field__clear" type="button" aria-label={t.action.clearInput} tabIndex={-1} onClick={() => { setValue(''); input.current?.focus(); setOpen(true) }}><Icon name="close" size="sm" /></button>
     </label>
     <div id="search-suggestions" className="search__panel" ref={panel} data-open={dataAttr(open && hasPanel)} onMouseDown={event => event.preventDefault()} onPointerMove={() => setActive(-1)}>
-      {query ? waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : suggestions.map((item, index) => <a className="suggest__item" id={`search-item-${index}`} key={item.id} href={`#/detail/${item.id}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: item.title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text"><Highlight title={item.title} query={query} /></span><span className="suggest__type">{t.nav[item.type]}</span></a>) : <>
+      {query ? waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : results.data?.titles ? titles.map((title, index) => <a className="suggest__item" id={`search-item-${index}`} key={title} href={`#/search?q=${encodeURIComponent(title)}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text">{title}</span></a>) : suggestions.map((item, index) => <a className="suggest__item" id={`search-item-${index}`} key={item.id} href={`#/detail/${item.id}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: item.title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text"><Highlight title={item.title} query={query} /></span><span className="suggest__type">{t.nav[item.type]}</span></a>) : <>
         {state.searches.length > 0 && <div className="search__group"><div className="search__head"><span className="search__label">{t.search.recent}</span><button className="text-btn" onClick={() => { void dispatch({ type: 'search:clear' }).catch(error => notify(errorText(error))) }}>{t.action.clear}</button></div><div className="search__chips">{state.searches.map(word => <a className="chip chip--solid" key={word} href={`#/search?q=${encodeURIComponent(word)}`}>{word}</a>)}</div></div>}
         <div className="search__group"><div className="search__head"><span className="search__label">{t.search.hot}</span></div>{waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : <div className="hotlist" aria-label={extra.hotSearchSource}>{hot.map((word, index) => <a className="hotlist__item" id={`search-item-${index}`} href={`#/search?q=${encodeURIComponent(word)}`} key={word} data-highlighted={dataAttr(index === active)}><span className="hotlist__rank">{index + 1}</span><span className="hotlist__title">{word}</span></a>)}</div>}</div>
       </>}

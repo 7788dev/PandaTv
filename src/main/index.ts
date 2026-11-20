@@ -127,6 +127,8 @@ async function createWindow() {
   data = new DoubanDataSource({
     imageUrl: url => proxy!.registerImage(url),
     cacheDir: join(app.getPath('userData'), 'cache'),
+    searchTitlesDir: join(app.getAppPath(), 'resources'),
+    onSearchDiagnostic: event => console.info('[search]', JSON.stringify(event)),
     fetch: createTransport(),
     onHome: feed => mainWindow?.webContents.send('panda:home', feed),
     onWarning: warning => {

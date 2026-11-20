@@ -79,6 +79,7 @@ export async function invokeData(method: string, args: unknown[], services: Serv
       return data.byIds(args[0].map(id))
     }
     case 'data.search': return data.search(string(args[0]))
+    case 'data.titleHints': return data.titleHints(string(args[0]))
     case 'data.suggest': return data.suggest(string(args[0]))
     case 'data.hotSearches': return data.hotSearches()
     case 'data.availability': {

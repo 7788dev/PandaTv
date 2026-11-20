@@ -3,6 +3,7 @@ package app.panda.tv
 import android.app.Application
 import android.util.Log
 import app.panda.tv.data.DoubanDataSource
+import app.panda.tv.data.TitleSearchIndex
 import app.panda.tv.image.ImageLoader
 import app.panda.tv.net.TlsCompat
 import app.panda.tv.playback.PlaybackService
@@ -38,7 +39,11 @@ class PandaTvApp : Application() {
 
         val metaDir = File(filesDir, "cache").apply { mkdirs() }
         userStore = UserStore(File(filesDir, "user-state.json"))
-        douban = DoubanDataSource(cacheDir = metaDir) { w ->
+        douban = DoubanDataSource(cacheDir = metaDir, titleIndex = {
+            val dictionary = assets.open("search-initials.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
+            val titles = assets.open("search-titles.tsv").bufferedReader(Charsets.UTF_8).use { it.readText() }
+            TitleSearchIndex(dictionary, titles)
+        }, onSearchDiagnostic = { event -> Log.i("PandaTV", "[search] $event") }) { w ->
             Log.w("PandaTV", "[douban] ${w.operation}: ${w.code} (${w.message})")
         }
         sourceRules = assets.open("play-sources.json").use { stream ->

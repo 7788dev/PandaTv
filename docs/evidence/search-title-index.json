@@ -1,0 +1,255 @@
+{
+  "startedAt": "2026-11-20T09:02:28.614Z",
+  "generatedAt": "2026-11-20T09:06:10.974Z",
+  "titles": 42437,
+  "bytes": 1253287,
+  "failures": [],
+  "sources": [
+    {
+      "key": "360zy",
+      "api": "https://360zy.com/api.php/provide/vod/",
+      "requests": 415,
+      "categories": [
+        {
+          "id": 6,
+          "name": "动作片",
+          "total": 3868,
+          "pages": 39,
+          "records": 3868
+        },
+        {
+          "id": 7,
+          "name": "喜剧片",
+          "total": 4066,
+          "pages": 41,
+          "records": 4066
+        },
+        {
+          "id": 8,
+          "name": "爱情片",
+          "total": 1006,
+          "pages": 11,
+          "records": 1006
+        },
+        {
+          "id": 9,
+          "name": "科幻片",
+          "total": 721,
+          "pages": 8,
+          "records": 721
+        },
+        {
+          "id": 10,
+          "name": "恐怖片",
+          "total": 480,
+          "pages": 5,
+          "records": 480
+        },
+        {
+          "id": 11,
+          "name": "剧情片",
+          "total": 16736,
+          "pages": 168,
+          "records": 16736
+        },
+        {
+          "id": 12,
+          "name": "战争片",
+          "total": 220,
+          "pages": 3,
+          "records": 220
+        },
+        {
+          "id": 13,
+          "name": "国产剧",
+          "total": 4597,
+          "pages": 46,
+          "records": 4597
+        },
+        {
+          "id": 14,
+          "name": "香港剧",
+          "total": 100,
+          "pages": 1,
+          "records": 100
+        },
+        {
+          "id": 15,
+          "name": "韩国剧",
+          "total": 336,
+          "pages": 4,
+          "records": 336
+        },
+        {
+          "id": 16,
+          "name": "欧美剧",
+          "total": 952,
+          "pages": 10,
+          "records": 952
+        },
+        {
+          "id": 20,
+          "name": "惊悚片",
+          "total": 678,
+          "pages": 7,
+          "records": 678
+        },
+        {
+          "id": 21,
+          "name": "家庭篇",
+          "total": 47,
+          "pages": 1,
+          "records": 47
+        },
+        {
+          "id": 22,
+          "name": "古装片",
+          "total": 87,
+          "pages": 1,
+          "records": 87
+        },
+        {
+          "id": 23,
+          "name": "历史片",
+          "total": 70,
+          "pages": 1,
+          "records": 70
+        },
+        {
+          "id": 24,
+          "name": "悬疑片",
+          "total": 778,
+          "pages": 8,
+          "records": 778
+        },
+        {
+          "id": 25,
+          "name": "犯罪片",
+          "total": 651,
+          "pages": 7,
+          "records": 651
+        },
+        {
+          "id": 26,
+          "name": "灾难片",
+          "total": 10,
+          "pages": 1,
+          "records": 10
+        },
+        {
+          "id": 27,
+          "name": "纪录片",
+          "total": 672,
+          "pages": 7,
+          "records": 672
+        },
+        {
+          "id": 28,
+          "name": "短片",
+          "total": 192,
+          "pages": 2,
+          "records": 192
+        },
+        {
+          "id": 29,
+          "name": "动画片",
+          "total": 509,
+          "pages": 6,
+          "records": 509
+        },
+        {
+          "id": 30,
+          "name": "台湾剧",
+          "total": 170,
+          "pages": 2,
+          "records": 170
+        },
+        {
+          "id": 31,
+          "name": "日本剧",
+          "total": 474,
+          "pages": 5,
+          "records": 474
+        },
+        {
+          "id": 32,
+          "name": "海外剧",
+          "total": 122,
+          "pages": 2,
+          "records": 122
+        },
+        {
+          "id": 33,
+          "name": "泰国剧",
+          "total": 299,
+          "pages": 3,
+          "records": 299
+        },
+        {
+          "id": 34,
+          "name": "大陆综艺",
+          "total": 1568,
+          "pages": 16,
+          "records": 1568
+        },
+        {
+          "id": 35,
+          "name": "港台综艺",
+          "total": 50,
+          "pages": 1,
+          "records": 50
+        },
+        {
+          "id": 36,
+          "name": "日韩综艺",
+          "total": 195,
+          "pages": 2,
+          "records": 195
+        },
+        {
+          "id": 37,
+          "name": "欧美综艺",
+          "total": 12,
+          "pages": 1,
+          "records": 12
+        },
+        {
+          "id": 38,
+          "name": "国产动漫",
+          "total": 2708,
+          "pages": 28,
+          "records": 2708
+        },
+        {
+          "id": 39,
+          "name": "欧美动漫",
+          "total": 83,
+          "pages": 1,
+          "records": 83
+        },
+        {
+          "id": 40,
+          "name": "日韩动漫",
+          "total": 1427,
+          "pages": 15,
+          "records": 1427
+        },
+        {
+          "id": 43,
+          "name": "未分类",
+          "total": 19,
+          "pages": 1,
+          "records": 19
+        },
+        {
+          "id": 45,
+          "name": "西部片",
+          "total": 52,
+          "pages": 1,
+          "records": 52
+        }
+      ],
+      "rows": 43955
+    }
+  ]
+}

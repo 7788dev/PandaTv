@@ -26,6 +26,8 @@ export type AppNotice = { code: string; message: string }
 export interface PandaBridge {
   data: Omit<DataSource, 'detail'> & {
     detail(id: string): Promise<Detail>
+    /** Catalogue-derived search terms for local initials completion; no film metadata. */
+    titleHints(query: string): Promise<string[]>
     person(id: string): Promise<PersonInfo>
     /** Everything the person worked on, best rated first, a page at a time. */
     personWorks(id: string, cursor?: string): Promise<Page<MediaItem>>

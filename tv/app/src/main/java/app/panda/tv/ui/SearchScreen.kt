@@ -47,11 +47,15 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
     private val input = EditText(ctx).apply {
-        hint = Copy.Search.PLACEHOLDER
+        id = View.generateViewId()
+        hint = Copy.Extra.SEARCH_INITIALS_PLACEHOLDER
         setHintTextColor(Theme.PAPER_52)
         setTextColor(Theme.PAPER_100)
         setTextSize(TypedValue.COMPLEX_UNIT_PX, 15f * Theme.unit(ctx))
         isSingleLine = true
+        // Search uses the in-app D-pad keyboard below the field. Do not let a TV ROM
+        // replace it with its vendor/system IME when the field receives focus.
+        showSoftInputOnFocus = false
         imeOptions = EditorInfo.IME_ACTION_SEARCH
         isFocusable = true
         isFocusableInTouchMode = true
@@ -101,6 +105,12 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     private var searchJob: Job? = null
     private var searchGeneration = 0
     private var destroyed = false
+    private var keyboardShown = false
+    private var keypad: ViewGroup? = null
+    private var completedQuery: String? = null
+    private var editingSavedQuery: String? = null
+    private var searchError: Throwable? = null
+    private var restoringQuery = false
     private val suggestAdapter = ChipRowAdapter()
     private val typeFilterAdapter = TypeFilterAdapter()
     private val resultAdapter = ResultAdapter()
@@ -118,7 +128,10 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         root.addView(bodyBox, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         showDiscovery()
         loadHot()
-        input.post { input.requestFocus() }
+        input.post {
+            input.requestFocus()
+            hideIme()
+        }
     }
 
     override fun onDestroy() {
@@ -126,6 +139,25 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         suggestJob?.cancel()
         searchJob?.cancel()
         scope.cancel()
+    }
+
+    override fun onBackPressed(): Boolean {
+        val saved = editingSavedQuery ?: return false
+        if (!keyboardShown) return false
+        searchGeneration++
+        searchJob?.cancel()
+        suggestJob?.cancel()
+        editingSavedQuery = null
+        restoringQuery = true
+        input.setText(saved)
+        input.setSelection(saved.length)
+        restoringQuery = false
+        suggestFrame.visibility = View.GONE
+        val failure = searchError
+        if (failure == null) applyTypeFilter(focusGrid = false) else showSearchError(saved, failure)
+        input.requestFocus()
+        hideIme()
+        return true
     }
 
     private fun buildHeader() {
@@ -146,32 +178,36 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             } else false
         }
         input.setOnKeyListener { _, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                val q = input.text.toString().trim()
-                if (q.isNotEmpty()) {
-                    submit(q)
-                    true
-                } else false
+            if (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_DPAD_CENTER) {
+                if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) openKeyboard()
+                true
             } else false
         }
+        input.setOnClickListener { openKeyboard() }
         input.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
+                if (restoringQuery) return
                 val q = s?.toString()?.trim().orEmpty()
                 suggestJob?.cancel()
+                suggestFrame.visibility = View.GONE
                 if (q.isEmpty()) {
                     resetSearch()
                     return
                 }
+                if (!keyboardShown) openKeyboard(focusPad = false)
                 suggestJob = scope.launch {
                     delay(260L)
-                    val list = runCatching { nav.app.douban.suggest(q) }.getOrNull() ?: return@launch
-                    if (destroyed || input.text.toString().trim() != q) return@launch
-                    if (list.isEmpty()) {
+                    val titles = runCatching {
+                        if (q.matches(Regex("[a-zA-Z0-9\\s]+"))) nav.app.douban.titleHints(q)
+                        else nav.app.douban.suggest(q).map { it.title }
+                    }.getOrNull() ?: return@launch
+                    if (destroyed || !keyboardShown || input.text.toString().trim() != q) return@launch
+                    if (titles.isEmpty()) {
                         suggestFrame.visibility = View.GONE
                     } else {
-                        suggestAdapter.setItems(list.map { it.title }) { picked ->
+                        suggestAdapter.setItems(titles) { picked ->
                             input.setText(picked)
                             input.setSelection(picked.length)
                             submit(picked)
@@ -200,7 +236,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
         })
         bar.addView(Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK, padH = 16, padV = 10, sp = 14f).apply {
-            setOnClickListener { nav.back() }
+            setOnClickListener { if (!onBackPressed()) nav.back() }
         })
         headerWrap.addView(bar)
     }
@@ -210,6 +246,17 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         imm?.hideSoftInputFromWindow(input.windowToken, 0)
     }
 
+    private fun openKeyboard(focusPad: Boolean = true) {
+        hideIme()
+        if (!keyboardShown) {
+            searchGeneration++
+            searchJob?.cancel()
+            editingSavedQuery = completedQuery
+            suggestFrame.visibility = View.GONE
+        }
+        showDiscovery(focusPad)
+    }
+
     private fun resetSearch() {
         searchGeneration++
         searchJob?.cancel()
@@ -217,6 +264,9 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         allResults = emptyList()
         filteredResults = emptyList()
         activeTypeFilter = null
+        completedQuery = null
+        editingSavedQuery = null
+        searchError = null
         suggestFrame.visibility = View.GONE
         typeFilterFrame.visibility = View.GONE
         showDiscovery()
@@ -229,6 +279,11 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             return
         }
         hideIme()
+        keyboardShown = false
+        keypad = null
+        editingSavedQuery = null
+        completedQuery = null
+        searchError = null
         suggestJob?.cancel()
         suggestFrame.visibility = View.GONE
         nav.app.userStore.dispatch(StateAction.AddSearch(q))
@@ -243,19 +298,24 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 val found = nav.app.douban.search(q)
                 if (destroyed || generation != searchGeneration || input.text.toString().trim() != q) return@launch
                 allResults = found
+                completedQuery = q
                 applyTypeFilter(focusGrid = true)
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (t: Throwable) {
                 if (!destroyed && generation == searchGeneration && input.text.toString().trim() == q) {
-                    bodyBox.removeAllViews()
-                    bodyBox.addView(Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY) { submit(q) })
+                    completedQuery = q
+                    allResults = emptyList()
+                    searchError = t
+                    showSearchError(q, t)
                 }
             }
         }
     }
 
     private fun applyTypeFilter(focusGrid: Boolean) {
+        keyboardShown = false
+        keypad = null
         val presentTypes = MediaType.entries.filter { tp -> allResults.any { it.type == tp } }
         if (presentTypes.size > 1) {
             val choices: List<MediaType?> = listOf(null) + presentTypes
@@ -285,6 +345,13 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         }
     }
 
+    private fun showSearchError(query: String, error: Throwable) {
+        keyboardShown = false
+        keypad = null
+        bodyBox.removeAllViews()
+        bodyBox.addView(Theme.emptyOrErrorBox(ctx, Copy.errorText(error), Copy.Action.RETRY) { submit(query) })
+    }
+
     private fun loadHot() {
         scope.launch {
             val loaded = runCatching { nav.app.douban.hotSearches() }.getOrNull() ?: return@launch
@@ -295,7 +362,9 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         }
     }
 
-    private fun showDiscovery() {
+    private fun showDiscovery(focusPad: Boolean = false) {
+        val focusedKey = keypad?.findFocus()?.tag as? String
+        keyboardShown = true
         typeFilterFrame.visibility = View.GONE
         bodyBox.removeAllViews()
         val scroll = ScrollView(ctx).apply {
@@ -370,6 +439,17 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 val keyText = rowKeys[kIdx]
                 val isGo = keyText == Copy.Search.LABEL
                 val cell = TextView(ctx).apply {
+                    id = View.generateViewId()
+                    if (rIdx == 0) nextFocusUpId = input.id
+                    if (rIdx == 0) setOnKeyListener { _, code, event ->
+                        if (code == KeyEvent.KEYCODE_DPAD_UP) {
+                            // ScrollView's arrow navigation searches only inside its
+                            // descendants; an external nextFocusUpId is insufficient.
+                            if (event.action == KeyEvent.ACTION_DOWN) input.requestFocus()
+                            true
+                        } else false
+                    }
+                    tag = "pad:$keyText"
                     text = keyText
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, 13.5f * Theme.unit(ctx))
                     typeface = android.graphics.Typeface.DEFAULT_BOLD
@@ -410,10 +490,15 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
             padBox.addView(line)
         }
+        keypad = padBox
         col.addView(padBox)
 
         scroll.addView(col, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT))
         bodyBox.addView(scroll, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        val focusTag = focusedKey ?: if (focusPad) "pad:A" else null
+        if (focusTag != null) padBox.post {
+            if (!destroyed && keyboardShown && keypad === padBox) padBox.findViewWithTag<View>(focusTag)?.requestFocus()
+        }
     }
 
     private fun chipGridRow(terms: List<String>): FrameLayout {

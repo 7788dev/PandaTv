@@ -22,8 +22,15 @@ import { filterPlaylist, hasSynchronizedTracks } from '../src/main/playback/filt
 import { clearHead, pictureOf } from '../src/main/playback/picture';
 import { loadSourceRules } from '../src/main/playback/sources';
 import { compareDelivery, compareSourceOrder, playbackMargin } from '../src/main/playback/delivery';
+import { TitleSearchIndex, initialQuery, titleSearchScore, suggestedSubjectIds, type InitialsDictionary } from '../src/shared/title-search';
 
 const root = resolve(process.cwd());
+const initialsDictionary = JSON.parse(readFileSync(resolve(root, 'resources/search-initials.json'), 'utf8')) as InitialsDictionary;
+const titleVocabulary = readFileSync(resolve(root, 'resources/search-titles.tsv'), 'utf8');
+const titleIndex = new TitleSearchIndex(initialsDictionary, titleVocabulary);
+for (const name of ['search-initials.json', 'search-titles.tsv', 'LICENSE-pinyin-pro.txt']) {
+  writeFileSync(resolve(root, 'tv/app/src/main/assets', name), readFileSync(resolve(root, 'resources', name)));
+}
 const rulesConfig = loadSourceRules(resolve(root, 'resources/play-sources.json'));
 const sourceOf = (key: string) => rulesConfig.sources.find(s => s.key === key)!;
 const fixtureManifest = (name: string) => readFileSync(resolve(root, `docs/evidence/manifest-${name}.m3u8`), 'utf8');
@@ -104,6 +111,30 @@ const cipher = createCipheriv('aes-128-cbc', aesKey, aesIv);
 const sealedSample = Buffer.concat([cipher.update(Buffer.concat([clearSample, Buffer.alloc(5000, 1)])), cipher.final()]);
 
 const vectors = {
+  titleSearch: {
+    suggestions: [
+      [
+        { id: '1431683', type: 'movie', url: 'https://movie.douban.com/subject/1431683/?suggest=title' },
+        { id: '1431683', type: 'movie', url: 'https://movie.douban.com/subject/1431683/' },
+        { id: '2', type: 'celebrity', url: 'https://movie.douban.com/subject/2/' },
+        { id: '3', type: 'movie', url: 'https://movie.douban.com.attacker.invalid/subject/3/' },
+        { id: '4', type: 'movie', url: 'https://movie.douban.com/subject/5/' },
+        { id: '6', type: 'movie', url: 'HTTPS://MOVIE.DOUBAN.COM/subject/6' },
+        { type: 'movie', url: 'https://movie.douban.com/subject/1306506/' },
+        { type: 'book', url: 'https://book.douban.com/subject/1088065/' },
+      ],
+      null,
+    ].map(value => ({ input: value, ids: suggestedSubjectIds(value) })),
+    queries: ['LBXX', 'lbxx', 'L B X X', 'ＣＱＳＬ', 'ZHC', 'AQZC', 'BBSMX', 'ST', 'XSKDJS', '三体', 'x'].map(query => ({ query, initial: initialQuery(query) ?? null, terms: titleIndex.terms(query) })),
+    matches: [
+      { title: '蜡笔小新', query: 'LBXX' }, { title: '蜡筆小新：剧场版', query: 'lbxx' },
+      { title: '蜡笔小新：好别致的影分身', query: 'LBXX' }, { title: '重庆森林', query: 'CQSL' },
+      { title: '甄嬛传', query: 'ZHC' }, { title: '阿Q正传', query: 'AQZC' },
+      { title: '爱情公寓', query: 'AQGY' }, { title: '海绵宝宝 第十二季', query: 'HMBB' },
+      { title: '你好，李焕英', query: 'LHY' }, { title: '星际穿越', query: '蜡笔小新' },
+      { title: '蜡笔小新', query: 'lxx' }, { title: 'B超', query: 'BC' },
+    ].map(input => ({ ...input, score: Number.isFinite(titleSearchScore(input.title, input.query, initialsDictionary)) ? titleSearchScore(input.title, input.query, initialsDictionary) : null })),
+  },
   rules: {
     scoreText: [scoreText(baseItem), scoreText({ ...baseItem, score: undefined }), scoreText({ ...baseItem, score: 0 })],
     statusText: [statusText(baseItem), statusText(filmItem), statusText({ ...filmItem, runtime: undefined })],

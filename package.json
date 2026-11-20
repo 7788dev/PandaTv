@@ -1,6 +1,6 @@
 {
   "name": "panda-desktop",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Panda 影视桌面应用",
   "author": "Panda",
@@ -22,7 +22,8 @@
     "probe:filters": "esbuild scripts/probe-filters.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-filters.cjs && node .tmp/probe-filters.cjs",
     "probe:start": "esbuild scripts/probe-start.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-start.cjs && node .tmp/probe-start.cjs",
     "probe:sources": "esbuild scripts/probe-sources.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-sources.cjs && node .tmp/probe-sources.cjs",
-    "probe:startup": "node scripts/probe-startup.mjs"
+    "probe:startup": "node scripts/probe-startup.mjs",
+    "sync:search-titles": "esbuild scripts/sync-search-titles.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/sync-search-titles.cjs && node .tmp/sync-search-titles.cjs"
   },
   "build": {
     "appId": "com.panda.desktop",
@@ -74,6 +75,7 @@
     "electron": "45.3.2",
     "electron-builder": "26.18.0",
     "electron-vite": "6.0.0",
+    "pinyin-pro": "3.29.5",
     "typescript": "5.9.3",
     "vite": "7.3.8",
     "vitest": "5.1.0"

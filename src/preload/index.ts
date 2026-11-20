@@ -16,6 +16,7 @@ const bridge: PandaBridge = {
     person: id => call('data.person', id), personWorks: (id, cursor) => call('data.personWorks', id, cursor),
     byIds: ids => call('data.byIds', ids), search: q => call('data.search', q),
     suggest: q => call('data.suggest', q), hotSearches: () => call('data.hotSearches'),
+    titleHints: q => call('data.titleHints', q),
     playback: (id, episode, quality) => call('data.playback', id, episode, quality),
     retryPlayback: (id, episode, quality) => call('data.retryPlayback', id, episode, quality),
     availability: id => call('data.availability', id),

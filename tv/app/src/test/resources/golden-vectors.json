@@ -1,4 +1,205 @@
 {
+  "titleSearch": {
+    "suggestions": [
+      {
+        "input": [
+          {
+            "id": "1431683",
+            "type": "movie",
+            "url": "https://movie.douban.com/subject/1431683/?suggest=title"
+          },
+          {
+            "id": "1431683",
+            "type": "movie",
+            "url": "https://movie.douban.com/subject/1431683/"
+          },
+          {
+            "id": "2",
+            "type": "celebrity",
+            "url": "https://movie.douban.com/subject/2/"
+          },
+          {
+            "id": "3",
+            "type": "movie",
+            "url": "https://movie.douban.com.attacker.invalid/subject/3/"
+          },
+          {
+            "id": "4",
+            "type": "movie",
+            "url": "https://movie.douban.com/subject/5/"
+          },
+          {
+            "id": "6",
+            "type": "movie",
+            "url": "HTTPS://MOVIE.DOUBAN.COM/subject/6"
+          },
+          {
+            "type": "movie",
+            "url": "https://movie.douban.com/subject/1306506/"
+          },
+          {
+            "type": "book",
+            "url": "https://book.douban.com/subject/1088065/"
+          }
+        ],
+        "ids": [
+          "1431683",
+          "6",
+          "1306506"
+        ]
+      },
+      {
+        "input": null,
+        "ids": []
+      }
+    ],
+    "queries": [
+      {
+        "query": "LBXX",
+        "initial": "lbxx",
+        "terms": [
+          "蜡笔小新"
+        ]
+      },
+      {
+        "query": "lbxx",
+        "initial": "lbxx",
+        "terms": [
+          "蜡笔小新"
+        ]
+      },
+      {
+        "query": "L B X X",
+        "initial": "lbxx",
+        "terms": [
+          "蜡笔小新"
+        ]
+      },
+      {
+        "query": "ＣＱＳＬ",
+        "initial": "cqsl",
+        "terms": [
+          "重庆森林",
+          "春恰时来"
+        ]
+      },
+      {
+        "query": "ZHC",
+        "initial": "zhc",
+        "terms": [
+          "醉红尘",
+          "藏海传",
+          "甄嬛传",
+          "坐火车",
+          "再会沉",
+          "再会长"
+        ]
+      },
+      {
+        "query": "AQZC",
+        "initial": "aqzc",
+        "terms": [
+          "阿Q正传"
+        ]
+      },
+      {
+        "query": "BBSMX",
+        "initial": "bbsmx",
+        "terms": []
+      },
+      {
+        "query": "ST",
+        "initial": "st",
+        "terms": [
+          "双兔",
+          "鲨滩",
+          "三体",
+          "渗透",
+          "双探",
+          "神探"
+        ]
+      },
+      {
+        "query": "XSKDJS",
+        "initial": "xskdjs",
+        "terms": [
+          "肖申克的救赎"
+        ]
+      },
+      {
+        "query": "三体",
+        "initial": null,
+        "terms": []
+      },
+      {
+        "query": "x",
+        "initial": null,
+        "terms": []
+      }
+    ],
+    "matches": [
+      {
+        "title": "蜡笔小新",
+        "query": "LBXX",
+        "score": 0
+      },
+      {
+        "title": "蜡筆小新：剧场版",
+        "query": "lbxx",
+        "score": 10.003
+      },
+      {
+        "title": "蜡笔小新：好别致的影分身",
+        "query": "LBXX",
+        "score": 10.007
+      },
+      {
+        "title": "重庆森林",
+        "query": "CQSL",
+        "score": 2
+      },
+      {
+        "title": "甄嬛传",
+        "query": "ZHC",
+        "score": 2
+      },
+      {
+        "title": "阿Q正传",
+        "query": "AQZC",
+        "score": 0
+      },
+      {
+        "title": "爱情公寓",
+        "query": "AQGY",
+        "score": 0
+      },
+      {
+        "title": "海绵宝宝 第十二季",
+        "query": "HMBB",
+        "score": 10.004
+      },
+      {
+        "title": "你好，李焕英",
+        "query": "LHY",
+        "score": 42.002
+      },
+      {
+        "title": "星际穿越",
+        "query": "蜡笔小新",
+        "score": null
+      },
+      {
+        "title": "蜡笔小新",
+        "query": "lxx",
+        "score": null
+      },
+      {
+        "title": "B超",
+        "query": "BC",
+        "score": 0
+      }
+    ]
+  },
   "rules": {
     "scoreText": [
       "8.8",

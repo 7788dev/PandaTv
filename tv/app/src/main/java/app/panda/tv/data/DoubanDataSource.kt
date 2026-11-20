@@ -15,6 +15,7 @@ import app.panda.tv.model.RankBoard
 import app.panda.tv.model.Shelf
 import app.panda.tv.playback.WorkHints
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,6 +23,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.URLEncoder
@@ -36,14 +38,19 @@ class DoubanDataSource(
     fetcher: MetadataFetcher? = null,
     private val partialWaitMs: Long = 800L,
     private val homeRetryMs: List<Long> = listOf(2000L, 6000L),
+    private val titleIndex: (() -> TitleSearchIndex)? = null,
+    private val onSearchDiagnostic: (String) -> Unit = {},
     private val onWarning: (DataWarning) -> Unit = {},
 ) {
     private val http = DoubanHttp(fetcher = fetcher)
+    private val fallbackHttp = DoubanHttp(fetcher = fetcher, intervalMs = 1000L, burst = 1, maxConcurrent = 2, maxEntries = 64, maxBytes = 2 * 1024 * 1024)
     private val store = MetadataStore(cacheDir, ::warn)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val lock = Any()
     private val warnings = ArrayList<DataWarning>()
     private val flights = HashMap<String, CompletableDeferred<MediaItem>>()
+    private val searchTitles by lazy { titleIndex?.invoke() }
+    @Volatile private var searchFallbackUntil = 0L
 
     @Volatile
     private var homeState: CachedHome? = null
@@ -579,7 +586,7 @@ class DoubanDataSource(
         }
     }
 
-    private suspend fun loadDetail(rawId: String): MediaItem = coroutineScope {
+    private suspend fun readSubject(rawId: String): Normalized {
         val known = store.get("db-$rawId")
         val first = known?.kind ?: "movie"
         val kinds = listOf(first, if (first == "movie") "tv" else "movie")
@@ -598,7 +605,11 @@ class DoubanDataSource(
                 if (e.code != DataErrorCode.NOT_FOUND || kind != first) throw e
             }
         }
-        val norm = detail ?: throw DataError(DataErrorCode.NOT_FOUND, "Douban subject not found")
+        return detail ?: throw DataError(DataErrorCode.NOT_FOUND, "Douban subject not found")
+    }
+
+    private suspend fun loadDetail(rawId: String): MediaItem = coroutineScope {
+        val norm = readSubject(rawId)
         val path = "${norm.kind}/$rawId"
         val creditsTask = async {
             runCatching {
@@ -719,34 +730,100 @@ class DoubanDataSource(
         })
     }
 
+    private suspend fun searchRows(q: String, count: Int, paginate: Boolean): List<Normalized> {
+        if (searchFallbackUntil > System.currentTimeMillis()) return searchFallback(q, count)
+        val first = try { searchPage(q, 0, count) }
+        catch (cancelled: CancellationException) { throw cancelled }
+        catch (e: DataError) {
+            if (e.code == DataErrorCode.INVALID_INPUT || e.message == "Search query was rejected") throw e
+            searchFallbackUntil = System.currentTimeMillis() + 60_000L
+            diagnostic("search:primary", e)
+            return searchFallback(q, count)
+        }
+        val total = Json.positiveInt(first["total"]) ?: 0
+        val extraStarts = if (paginate) listOf(count, count * 2, count * 3).filter { it < total } else emptyList()
+        val pages = if (extraStarts.isEmpty()) {
+            listOf(first)
+        } else {
+            val rest = supervisorScope {
+                extraStarts.map { s -> async {
+                    try { Result.success(searchPage(q, s, count)) }
+                    catch (cancelled: CancellationException) { throw cancelled }
+                    catch (e: Exception) { Result.failure<Map<String, Any?>>(e) }
+                } }.map { it.await() }
+            }
+            for (reply in rest) reply.exceptionOrNull()?.let { diagnostic("search:page", it) }
+            listOf(first) + rest.mapNotNull { it.getOrNull() }
+        }
+        return pages.flatMap { Normalize.requiredArray(it, "items") }.mapNotNull { Normalize.normalize(it) }
+    }
+
+    private suspend fun searchFallback(q: String, count: Int): List<Normalized> {
+        val hints = fallbackHttp.json("https://movie.douban.com/j/subject_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it) }, emptyTtlMs = 1000L)
+        var ids = TitleSearchIndex.suggestedSubjectIds(hints).take(count)
+        onSearchDiagnostic("fallback hints=${hints.size} identities=${ids.size}")
+        if (ids.isEmpty()) {
+            val cards = fallbackHttp.json("https://www.douban.com/j/search_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it, "cards") }, emptyTtlMs = 1000L)
+            ids = TitleSearchIndex.suggestedSubjectIds(cards).take(count)
+            onSearchDiagnostic("global-fallback hints=${cards.size} identities=${ids.size}")
+        }
+        if (ids.isEmpty()) return emptyList()
+        val replies = supervisorScope {
+            ids.map { id -> async {
+                try { Result.success(readSubject(id)) }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (e: Exception) { Result.failure<Normalized>(e) }
+            } }.map { it.await() }
+        }
+        val values = replies.mapNotNull { it.getOrNull() }
+        if (values.isEmpty()) throw requireNotNull(replies.first().exceptionOrNull())
+        for (reply in replies) reply.exceptionOrNull()?.let { diagnostic("search:subject", it) }
+        return values
+    }
+
+    private suspend fun searchTitlesRows(q: String, suggestions: Boolean): List<Normalized> = withContext(Dispatchers.IO) {
+        val count = if (suggestions) 20 else 50
+        if (TitleSearchIndex.initialQuery(q) == null) return@withContext searchRows(q, if (suggestions) 8 else count, !suggestions)
+        val vocabulary = try { searchTitles } catch (e: Exception) { diagnostic("search:initials", e); null }
+        if (vocabulary == null) return@withContext searchRows(q, if (suggestions) 8 else count, !suggestions)
+        fun score(value: Normalized): Double = (listOfNotNull(value.item.title, value.item.originalTitle) + value.aliases.orEmpty()).minOf { vocabulary.score(it, q) }
+        val saved = store.values().map { Normalized(it.item, it.kind, it.totalEpisodes, it.tags, it.aliases) }.filter { score(it).isFinite() }
+        val terms = vocabulary.terms(q, if (suggestions) 4 else 6)
+        onSearchDiagnostic("initials vocabulary=${vocabulary.size} candidates=${terms.size}")
+        val responses = supervisorScope {
+            (listOf(q) + terms).map { term -> async {
+                try { Result.success(searchRows(term, count, !suggestions)) }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (e: Exception) { Result.failure<List<Normalized>>(e) }
+            } }.map { it.await() }
+        }
+        val values = responses.flatMap { response -> response.getOrNull().orEmpty().filter { terms.isEmpty() || score(it).isFinite() } }
+        onSearchDiagnostic("results returned=${values.size}")
+        if (responses.all { it.isFailure } && saved.isEmpty()) throw requireNotNull(responses.first().exceptionOrNull())
+        if (saved.isNotEmpty() && responses.all { it.isFailure }) warn(DataWarning("CACHED", "search:initials", "Showing saved title matches while metadata queries are unavailable", System.currentTimeMillis()))
+        val merged = LinkedHashMap<String, Normalized>()
+        for (value in saved + values) merged[value.item.id] = value
+        merged.values.sortedBy { score(it) }.take(if (suggestions) 8 else 200)
+    }
+
     suspend fun search(query: String): List<MediaItem> {
         if (query.length > 100) throw DataError(DataErrorCode.INVALID_INPUT, "Invalid search query")
         val q = query.trim()
         if (q.isEmpty()) return emptyList()
-        val first = searchPage(q, 0, 50)
-        val total = Json.positiveInt(first["total"]) ?: 0
-        val extraStarts = listOf(50, 100, 150).filter { it < total }
-        val pages = if (extraStarts.isEmpty()) {
-            listOf(first)
-        } else {
-            val rest = coroutineScope {
-                extraStarts.map { s -> async { searchPage(q, s, 50) } }.map { it.await() }
-            }
-            listOf(first) + rest
-        }
         val seen = HashSet<String>()
-        val deduped = pages.flatMap { Normalize.requiredArray(it, "items") }
-            .mapNotNull { Normalize.normalize(it) }
-            .filter { seen.add(it.item.id) }
-        return keep(deduped)
+        return keep(searchTitlesRows(q, false).filter { seen.add(it.item.id) })
     }
 
     suspend fun suggest(query: String): List<MediaItem> {
         if (query.length > 100) throw DataError(DataErrorCode.INVALID_INPUT, "Invalid search query")
         val q = query.trim()
         if (q.isEmpty()) return emptyList()
-        val page = searchPage(q, 0, 8)
-        return keep(Normalize.requiredArray(page, "items").mapNotNull { Normalize.normalize(it) }.take(8))
+        return keep(searchTitlesRows(q, true).take(8))
+    }
+
+    suspend fun titleHints(query: String): List<String> = withContext(Dispatchers.IO) {
+        if (query.length > 100) throw DataError(DataErrorCode.INVALID_INPUT, "Invalid search query")
+        if (TitleSearchIndex.initialQuery(query) == null) emptyList() else searchTitles?.hints(query).orEmpty()
     }
 
     suspend fun hotSearches(): List<String> = coroutineScope {

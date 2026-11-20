@@ -1,0 +1,261 @@
+{
+  "at": "2026-11-20T10:23:48.528Z",
+  "cases": [
+    {
+      "query": "LBXX",
+      "expectedTitle": "蜡笔小新",
+      "searchMs": 4433,
+      "results": [
+        {
+          "id": "db-1962611",
+          "title": "蜡笔小新：呼风唤雨！夕阳下的春日部男孩",
+          "type": "anime",
+          "year": 2004
+        },
+        {
+          "id": "db-1958667",
+          "title": "蜡笔小新：大人王国的反击",
+          "type": "anime",
+          "year": 2001
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1962611",
+          "title": "蜡笔小新：呼风唤雨！夕阳下的春日部男孩"
+        },
+        {
+          "id": "db-1958667",
+          "title": "蜡笔小新：大人王国的反击"
+        }
+      ]
+    },
+    {
+      "query": "cqsl",
+      "expectedTitle": "重庆森林",
+      "searchMs": 6913,
+      "results": [
+        {
+          "id": "db-1291999",
+          "title": "重庆森林",
+          "type": "movie",
+          "year": 1994
+        },
+        {
+          "id": "db-35460371",
+          "title": "“青春恰时来”五四青春歌会",
+          "type": "variety",
+          "year": 2021
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1291999",
+          "title": "重庆森林"
+        },
+        {
+          "id": "db-35460371",
+          "title": "“青春恰时来”五四青春歌会"
+        }
+      ]
+    },
+    {
+      "query": "ZHC",
+      "expectedTitle": "甄嬛传",
+      "searchMs": 14573,
+      "results": [
+        {
+          "id": "db-5139195",
+          "title": "Dayte nam muzhchin!",
+          "type": "movie",
+          "year": 1985
+        },
+        {
+          "id": "db-5318640",
+          "title": "醉红尘",
+          "type": "tv",
+          "year": 2010
+        },
+        {
+          "id": "db-27181010",
+          "title": "藏海传",
+          "type": "tv",
+          "year": 2025
+        },
+        {
+          "id": "db-4922787",
+          "title": "后宫·甄嬛传",
+          "type": "tv",
+          "year": 2011
+        },
+        {
+          "id": "db-36619921",
+          "title": "再会长江",
+          "type": "doc",
+          "year": 2024
+        },
+        {
+          "id": "db-35778779",
+          "title": "再会长江",
+          "type": "doc",
+          "year": 2022
+        },
+        {
+          "id": "db-30334075",
+          "title": "坐火车旅行",
+          "type": "movie",
+          "year": 2019
+        },
+        {
+          "id": "db-37855030",
+          "title": "再会～沉默的真相～",
+          "type": "tv",
+          "year": 2026
+        },
+        {
+          "id": "db-38242965",
+          "title": "再会～另一个真相～",
+          "type": "tv",
+          "year": 2026
+        },
+        {
+          "id": "db-38457894",
+          "title": "藏海传2",
+          "type": "tv",
+          "year": 2028
+        },
+        {
+          "id": "db-26346934",
+          "title": "甄嬛传(美版)",
+          "type": "tv",
+          "year": 2015
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-5139195",
+          "title": "Dayte nam muzhchin!"
+        },
+        {
+          "id": "db-5318640",
+          "title": "醉红尘"
+        },
+        {
+          "id": "db-27181010",
+          "title": "藏海传"
+        },
+        {
+          "id": "db-4922787",
+          "title": "后宫·甄嬛传"
+        },
+        {
+          "id": "db-36619921",
+          "title": "再会长江"
+        },
+        {
+          "id": "db-35778779",
+          "title": "再会长江"
+        },
+        {
+          "id": "db-30334075",
+          "title": "坐火车旅行"
+        },
+        {
+          "id": "db-37855030",
+          "title": "再会～沉默的真相～"
+        }
+      ]
+    },
+    {
+      "query": "AQZC",
+      "expectedTitle": "阿Q正传",
+      "searchMs": 4485,
+      "results": [
+        {
+          "id": "db-1306506",
+          "title": "阿Q正传",
+          "type": "movie",
+          "year": 1981
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1306506",
+          "title": "阿Q正传"
+        }
+      ]
+    }
+  ],
+  "diagnostics": [
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":2}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"results\",\"returned\":2}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":2}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n[search] {\"stage\":\"results\",\"returned\":2}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":11}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":4}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}\n[search] {\"stage\":\"results\",\"returned\":7}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":1}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"results\",\"returned\":1}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"results\",\"returned\":2}\n"
+  ],
+  "errors": []
+}

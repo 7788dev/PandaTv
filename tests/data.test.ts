@@ -265,6 +265,17 @@ describe('channel filter vocabulary and queries', () => {
     expect((await source.detail('db-26647087')).title).toBe('三体')
     expect((await source.byIds(['db-26647087']))[0].title).toBe('三体')
   })
+  it('finds Chinese title initials on a fresh installation', async () => {
+    const source = new DoubanDataSource({ imageUrl: value => value, fetch: fetcher(url => {
+      const query = url.searchParams.get('q')
+      return json({ total: query === '蜡笔小新' ? 2 : 0, items: query === '蜡笔小新' ? [
+        { target_type: 'tv', target: card('1431683', { title: '蜡笔小新', genres: ['动画'] }) },
+        { target_type: 'movie', target: card('35693381', { title: '蜡笔小新：好别致的影分身', type: 'movie', genres: ['动画'] }) },
+      ] : [] })
+    }) })
+    expect((await source.search('LBXX')).map(item => item.id)).toEqual(['db-1431683', 'db-35693381'])
+    expect((await source.suggest('lbxx')).map(item => item.id)).toEqual(['db-1431683', 'db-35693381'])
+  })
 })
 
 // 肖申克的救赎 (movie 1292052) as `credits` answered on 2026-11-17, trimmed to the fields read:
