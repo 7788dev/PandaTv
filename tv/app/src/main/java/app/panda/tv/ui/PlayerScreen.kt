@@ -25,7 +25,6 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.DefaultRenderersFactory
-import androidx.media3.exoplayer.DecoderCounters
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.exoplayer.hls.HlsMediaSource
@@ -187,15 +186,19 @@ class PlayerScreen(
     private var quality: Quality = sessionQuality ?: nav.app.userStore.get().settings.quality
     private var actualQuality: Quality? = null
     private var lastPanelAnchor: View? = null
-    private var speed: Double = sessionSpeed ?: nav.app.userStore.get().settings.speed
+    private var requestedSpeed: Double = sessionSpeed ?: nav.app.userStore.get().settings.speed
+    private var speed: Double = requestedSpeed
+    private var speedCleanWindows = 0
+    private var speedBufferingSample = PlaybackBufferingSample(0L, 0)
     private var resumeAtSec: Double? = null
     private var startedPlayback = false
     private var playingEpisode: Int? = null
     private var loadGeneration = 0L
+    private var activeMediaId: String? = null
     private var screenShown = false
     private var playRequested = true
     private var sourceStarted = false
-    private var lastProgressAt = System.currentTimeMillis()
+    private var progressSample = PlaybackProgressSample(0L, android.os.SystemClock.elapsedRealtime())
     private var playingSince = 0L
     private var autoAttempts = 0
     private var autoAdvanced = false
@@ -212,7 +215,6 @@ class PlayerScreen(
     private var speedMeasureGeneration = 0L
     private val speedMeasureProcessedFrames = AtomicInteger()
     private val speedMeasureDropped = AtomicInteger()
-    private data class VideoFrameCounters(val rendered: Int, val dropped: Int)
 
     private var loadJob: Job? = null
     private var tickJob: Job? = null
@@ -535,16 +537,16 @@ class PlayerScreen(
         player.setPlaybackParameters(player.playbackParameters.withSpeed(speed.toFloat()))
         player.addAnalyticsListener(object : AnalyticsListener {
             override fun onVideoFrameProcessingOffset(eventTime: AnalyticsListener.EventTime, totalProcessingOffsetUs: Long, frameCount: Int) {
-                if (speed != 1.0 && player.isPlaying) speedMeasureProcessedFrames.addAndGet(frameCount)
+                if (requestedSpeed > 1.0 && player.isPlaying) speedMeasureProcessedFrames.addAndGet(frameCount)
             }
 
             override fun onDroppedVideoFrames(eventTime: AnalyticsListener.EventTime, count: Int, elapsedMs: Long) {
-                if (speed != 1.0) speedMeasureDropped.addAndGet(count)
+                if (requestedSpeed > 1.0 && player.isPlaying) speedMeasureDropped.addAndGet(count)
             }
         })
         player.addListener(object : Player.Listener {
             private fun isCurrentMedia(): Boolean = !destroyed && playbackData != null &&
-                player.currentMediaItem?.mediaId == "$itemId:$episode:$loadGeneration"
+                activeMediaId != null && player.currentMediaItem?.mediaId == activeMediaId
 
             override fun onVideoSizeChanged(videoSize: VideoSize) {
                 if (!isCurrentMedia()) return
@@ -552,23 +554,58 @@ class PlayerScreen(
                 adjustVideoAspect(videoSize)
             }
 
+            override fun onPositionDiscontinuity(
+                oldPosition: Player.PositionInfo,
+                newPosition: Player.PositionInfo,
+                reason: Int,
+            ) {
+                if (!isCurrentMedia()) return
+                progressSample = PlaybackProgressSample(
+                    newPosition.positionMs.coerceAtLeast(0L),
+                    android.os.SystemClock.elapsedRealtime(),
+                )
+            }
+
             override fun onRenderedFirstFrame() {
-                if (isCurrentMedia()) videoShutter.visibility = View.GONE
+                if (!isCurrentMedia()) return
+                videoShutter.visibility = View.GONE
+                sourceStarted = true
+                startedPlayback = true
+                if (playingSince == 0L) playingSince = System.currentTimeMillis()
+                startupWatchJob?.cancel()
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (!isCurrentMedia()) return
-                lastProgressAt = System.currentTimeMillis()
                 when (playbackState) {
                     Player.STATE_BUFFERING -> {
+                        val bufferingDecision = if (
+                            sourceStarted && playRequested && player.playWhenReady
+                        ) {
+                            PlaybackSpeedPolicy.observeBuffering(
+                                speed,
+                                requestedSpeed,
+                                speedBufferingSample,
+                                android.os.SystemClock.elapsedRealtime(),
+                            )
+                        } else null
+                        if (bufferingDecision != null) {
+                            speedBufferingSample = bufferingDecision.sample
+                            if (bufferingDecision.changed) {
+                                val previousSpeed = speed
+                                speed = bufferingDecision.speed
+                                player.setPlaybackParameters(player.playbackParameters.withSpeed(speed.toFloat()))
+                                speedCleanWindows = 0
+                                Log.i("PandaTV", "[speed] requested=${requestedSpeed}x reason=buffering from=${previousSpeed}x rate=${speed}x windowMs=${PlaybackSpeedPolicy.BUFFERING_WINDOW_MS}")
+                                syncButtons()
+                                showOsd(TvIcon.SPEED, "${Rules.speedLabel(previousSpeed)} → ${Rules.speedLabel(speed)}")
+                            }
+                        }
+                        resetSpeedWindow()
                         centerSpinner.visibility = View.VISIBLE
                     }
                     Player.STATE_READY -> {
                         centerSpinner.visibility = View.GONE
-                        sourceStarted = true
-                        startedPlayback = true
-                        if (playingSince == 0L) playingSince = System.currentTimeMillis()
-                        startupWatchJob?.cancel()
                         if (scrubbing) endScrubbingSoon()
                         syncButtons()
                         scheduleIdleHide()
@@ -588,7 +625,8 @@ class PlayerScreen(
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (isPlaying && speed != 1.0) measureSpeedPlayback()
+                if (isPlaying && requestedSpeed > 1.0) measureSpeedPlayback()
+                else if (!isPlaying) resetSpeedWindow()
                 syncButtons()
                 if (!isPlaying && startedPlayback) saveHistory()
             }
@@ -650,39 +688,47 @@ class PlayerScreen(
         val targetEpisode = episode
         val targetQuality = quality
         val targetResume = resumeAtSec
+        speedBufferingSample = PlaybackBufferingSample(0L, 0)
+        val keepPicture = playbackData != null && playingEpisode == targetEpisode && videoShutter.visibility == View.GONE
+        val keepPlaying = keepPicture && sourceStarted && !retry
         resumeAtSec = null
         loadJob?.cancel()
         startupWatchJob?.cancel()
         preloadJob?.cancel()
         idleJob?.cancel()
-        osdJob?.cancel()
-        // Retire the old episode before any network work or mutable heading change.
-        startedPlayback = false
-        playingEpisode = null
-        sourceStarted = false
-        playbackData = null
-        playSources = null
-        actualQuality = null
-        lastVideoSize = null
-        videoShutter.visibility = View.VISIBLE
-        exoPlayer?.apply {
-            pause()
-            stop()
-            clearMediaItems()
+        if (!keepPicture) {
+            // A different episode must never show or save the old episode's media.
+            activeMediaId = null
+            startedPlayback = false
+            playingEpisode = null
+            sourceStarted = false
+            playbackData = null
+            playSources = null
+            actualQuality = null
+            lastVideoSize = null
+            videoShutter.visibility = View.VISIBLE
+            exoPlayer?.apply {
+                pause()
+                stop()
+                clearMediaItems()
+            }
+            seekBar.progress = 0
+            seekBar.secondaryProgress = 0
+            timeTv.text = "00:00 / 00:00"
+            userSeeking = false
+            upNextBox.visibility = View.GONE
+            osdJob?.cancel()
+            osdBox.visibility = View.GONE
+            preparedNext = false
+            autoAdvanced = false
+            upNextCancelled = false
         }
-        seekBar.progress = 0
-        seekBar.secondaryProgress = 0
-        timeTv.text = "00:00 / 00:00"
-        userSeeking = false
-        upNextBox.visibility = View.GONE
-        osdBox.visibility = View.GONE
         errorBox.visibility = View.GONE
         showOverlay()
-        centerSpinner.visibility = View.VISIBLE
-        preparedNext = false
-        autoAdvanced = false
-        upNextCancelled = false
-        playingSince = 0L
+        if (!keepPlaying) {
+            sourceStarted = false
+            centerSpinner.visibility = View.VISIBLE
+        }
         mediaItem?.let { updateHeader(it) }
         syncButtons()
 
@@ -714,8 +760,14 @@ class PlayerScreen(
                 val resolved = pb ?: throw (lastErr ?: IllegalStateException(Copy.Extra.PLAYER_RETRY))
                 coroutineContext.ensureActive()
                 if (destroyed || generation != loadGeneration) return@launch
+                // During catalogue lookup the viewer can keep watching, pause or seek.
+                val position = if (keepPlaying) exoPlayer?.currentPosition?.div(1000.0) ?: targetResume else targetResume
+                saveHistory()
+                sourceStarted = false
+                startedPlayback = false
+                playingSince = 0L
                 playbackData = resolved
-                startExoPlayer(item, resolved, targetEpisode, targetResume, generation)
+                startExoPlayer(item, resolved, targetEpisode, position, generation)
 
                 launch {
                     val srcs = runCatching { nav.app.playback.sources(item, targetEpisode, hints) }.getOrNull()
@@ -728,7 +780,15 @@ class PlayerScreen(
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (t: Throwable) {
-                if (!destroyed && generation == loadGeneration) showError(t)
+                if (destroyed || generation != loadGeneration) return@launch
+                if (keepPlaying && sourceStarted && exoPlayer?.playerError == null) {
+                    showOsd(TvIcon.REFRESH, Copy.Extra.LINE_SWITCH_FAILED)
+                    scheduleIdleHide()
+                } else if (keepPicture && autoAttempts in 1 until 2) {
+                    handlePlaybackFailure(t)
+                } else {
+                    showError(t)
+                }
             }
         }
     }
@@ -741,17 +801,19 @@ class PlayerScreen(
             ?: Rules.startPosition(pb, nav.app.userStore.get().settings)
 
         val dsFactory = PandaMediaDataSource.Factory(nav.app.warmCache, nav.app.sourceRules)
-        val m3Item = Media3Item.Builder().setUri(pb.url).setMediaId("$itemId:$targetEpisode:$generation").build()
+        val mediaId = "$itemId:$targetEpisode:$generation"
+        val m3Item = Media3Item.Builder().setUri(pb.url).setMediaId(mediaId).build()
         val source = if (pb.format == "hls") {
             HlsMediaSource.Factory(dsFactory).createMediaSource(m3Item)
         } else {
             ProgressiveMediaSource.Factory(dsFactory).createMediaSource(m3Item)
         }
         playingEpisode = targetEpisode
+        activeMediaId = mediaId
         player.setMediaSource(source, (startSec * 1000.0).toLong().coerceAtLeast(0L))
         player.prepare()
         player.playWhenReady = screenShown && playRequested
-        lastProgressAt = System.currentTimeMillis()
+        progressSample = PlaybackProgressSample(0L, android.os.SystemClock.elapsedRealtime())
         syncButtons()
 
         startupWatchJob?.cancel()
@@ -771,7 +833,7 @@ class PlayerScreen(
         exoPlayer?.setScrubbingModeEnabled(false)
         saveHistory()
         val p = exoPlayer
-        if (p != null && p.currentPosition > 0L) resumeAtSec = p.currentPosition / 1000.0
+        if (p != null && p.duration > 0L) resumeAtSec = p.currentPosition.coerceAtLeast(0L) / 1000.0
         if (autoAttempts < 2) {
             autoAttempts++
             showOsd(TvIcon.REFRESH, Copy.Extra.RESTORING_SOURCE)
@@ -784,6 +846,7 @@ class PlayerScreen(
     private fun showError(t: Throwable) {
         startedPlayback = false
         sourceStarted = false
+        activeMediaId = null
         videoShutter.visibility = View.VISIBLE
         exoPlayer?.pause()
         exoPlayer?.stop()
@@ -823,15 +886,18 @@ class PlayerScreen(
                 if (errorBox.visibility == View.VISIBLE || playbackData == null) continue
                 val durMs = p.duration.takeIf { it > 0L } ?: 0L
                 val posMs = p.currentPosition.coerceAtLeast(0L)
+                val nowMs = android.os.SystemClock.elapsedRealtime()
+                progressSample = PlaybackProgressPolicy.observe(posMs, nowMs, progressSample)
                 if (p.isPlaying) {
-                    lastProgressAt = System.currentTimeMillis()
                     if (autoAttempts > 0 && playingSince > 0L && System.currentTimeMillis() - playingSince > 60_000L) {
                         autoAttempts = 0
                     }
-                } else if (sourceStarted && p.playWhenReady && p.playbackState == Player.STATE_BUFFERING &&
-                    System.currentTimeMillis() - lastProgressAt > 20_000L
+                }
+                if (sourceStarted && playRequested && p.playWhenReady && !userSeeking && !scrubbing &&
+                    p.playbackState != Player.STATE_IDLE && p.playbackState != Player.STATE_ENDED &&
+                    PlaybackProgressPolicy.isStalled(nowMs, progressSample)
                 ) {
-                    lastProgressAt = System.currentTimeMillis()
+                    progressSample = PlaybackProgressSample(posMs, nowMs)
                     handlePlaybackFailure(IllegalStateException("stall timeout"))
                     continue
                 }
@@ -917,7 +983,7 @@ class PlayerScreen(
 
     private fun togglePlayPause() {
         val p = exoPlayer ?: return
-        if (p.isPlaying || (playbackData == null && playRequested)) {
+        if (playRequested) {
             playRequested = false
             p.pause()
             showOsd(TvIcon.PAUSE, Copy.Player.PAUSE)
@@ -986,9 +1052,12 @@ class PlayerScreen(
     }
 
     private fun cycleSpeed() {
-        val idx = Constants.SPEEDS.indexOf(speed)
-        speed = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size]
-        sessionSpeed = speed
+        val idx = Constants.SPEEDS.indexOf(requestedSpeed)
+        requestedSpeed = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size]
+        speed = requestedSpeed
+        speedCleanWindows = 0
+        speedBufferingSample = PlaybackBufferingSample(0L, 0)
+        sessionSpeed = requestedSpeed
         exoPlayer?.let { it.setPlaybackParameters(it.playbackParameters.withSpeed(speed.toFloat())) }
         measureSpeedPlayback()
         syncButtons()
@@ -996,54 +1065,48 @@ class PlayerScreen(
         scheduleIdleHide()
     }
 
-    /** Record renderer frame and dropped-frame counters for ten seconds after a speed change. */
+    private fun resetSpeedWindow() {
+        speedMeasureJob?.cancel()
+        speedMeasureGeneration++
+        speedCleanWindows = 0
+        speedMeasureProcessedFrames.set(0)
+        speedMeasureDropped.set(0)
+    }
+
+    /** Use public Media3 analytics callbacks to adapt only after measured ten-second windows. */
     private fun measureSpeedPlayback() {
         speedMeasureJob?.cancel()
         val generation = ++speedMeasureGeneration
         speedMeasureProcessedFrames.set(0)
         speedMeasureDropped.set(0)
-        if (speed == 1.0) return
+        speedCleanWindows = 0
+        if (requestedSpeed <= 1.0) return
         val player = exoPlayer ?: return
         if (!player.isPlaying) return
-        val measuredSpeed = speed
-        val initialCounters = readVideoFrameCounters(player)
-        val startedAt = android.os.SystemClock.elapsedRealtime()
         speedMeasureJob = scope.launch {
-            delay(10_000L)
-            if (!destroyed && generation == speedMeasureGeneration && speed == measuredSpeed) {
+            while (!destroyed && generation == speedMeasureGeneration && exoPlayer === player && requestedSpeed > 1.0 && player.isPlaying) {
+                val measuredSpeed = speed
+                speedMeasureProcessedFrames.set(0)
+                speedMeasureDropped.set(0)
+                val startedAt = android.os.SystemClock.elapsedRealtime()
+                delay(PlaybackSpeedPolicy.WINDOW_MS)
+                if (destroyed || generation != speedMeasureGeneration || exoPlayer !== player) break
                 val elapsed = android.os.SystemClock.elapsedRealtime() - startedAt
-                val finalCounters = readVideoFrameCounters(player)
-                val rendered = if (initialCounters != null && finalCounters != null) {
-                    (finalCounters.rendered - initialCounters.rendered).coerceAtLeast(0)
-                } else 0
-                val dropped = if (initialCounters != null && finalCounters != null) {
-                    (finalCounters.dropped - initialCounters.dropped).coerceAtLeast(0)
-                } else 0
-                val offsetSamples = speedMeasureProcessedFrames.get()
-                Log.i("PandaTV", "[speed] rate=${measuredSpeed}x elapsedMs=$elapsed renderedFrames=$rendered droppedFrames=$dropped offsetSamples=$offsetSamples")
-            }
-        }
-    }
-
-    private fun readVideoFrameCounters(player: ExoPlayer): VideoFrameCounters? {
-        for (index in 0 until player.rendererCount) {
-            if (player.getRendererType(index) != C.TRACK_TYPE_VIDEO) continue
-            val renderer = player.getRenderer(index)
-            var owner: Class<*>? = renderer.javaClass
-            while (owner != null) {
-                val field = runCatching { owner.getDeclaredField("decoderCounters") }.getOrNull()
-                if (field != null) {
-                    val counters = runCatching {
-                        field.isAccessible = true
-                        field.get(renderer) as? DecoderCounters
-                    }.getOrNull() ?: return null
-                    counters.ensureUpdated()
-                    return VideoFrameCounters(counters.renderedOutputBufferCount, counters.droppedBufferCount)
+                val sampledFrames = speedMeasureProcessedFrames.get()
+                val dropped = speedMeasureDropped.get()
+                // Media3 reports offset samples for rendered, skipped and dropped frames.
+                val rendered = (sampledFrames - dropped).coerceAtLeast(0)
+                val decision = PlaybackSpeedPolicy.evaluate(speed, requestedSpeed, rendered, dropped, speedCleanWindows, elapsed)
+                speedCleanWindows = decision.cleanWindows
+                Log.i("PandaTV", "[speed] requested=${requestedSpeed}x rate=${measuredSpeed}x next=${decision.speed}x elapsedMs=$elapsed renderedFrames=$rendered droppedFrames=$dropped")
+                if (decision.changed) {
+                    speed = decision.speed
+                    player.setPlaybackParameters(player.playbackParameters.withSpeed(speed.toFloat()))
+                    syncButtons()
+                    showOsd(TvIcon.SPEED, "${Rules.speedLabel(measuredSpeed)} → ${Rules.speedLabel(speed)}")
                 }
-                owner = owner.superclass
             }
         }
-        return null
     }
 
     private fun cycleQuality() {

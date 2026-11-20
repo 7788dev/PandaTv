@@ -26,7 +26,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--serial", default="127.0.0.1:16416")
     parser.add_argument("--label", default="playback-transitions")
-    parser.add_argument("--case", choices=["focus", "seek", "speed", "next", "missing", "all"], default="all")
+    parser.add_argument("--case", choices=["focus", "seek", "speed", "switch", "next", "missing", "all"], default="all")
+    parser.add_argument("--switch-repeats", type=int, default=2)
+    parser.add_argument("--line-title", default="三体", help="Real title to use when replaying source-line switching")
     parser.add_argument("--require-missing", action="store_true", help="Require a confirmed empty catalogue verdict, instead of a retryable network error")
     parser.add_argument("--enabled-sources", nargs="+", help="Temporarily enable only these real built-in catalogues; restore the original configuration after replay")
     args = parser.parse_args()
@@ -62,7 +64,7 @@ def main():
         if next_control:
             state["nextTap"] = [next_control["cx"], next_control["cy"]]
         if capture:
-            (out / f"{name}.xml").write_text(xml, encoding="utf-8")
+            (out / f"{name}.xml").write_text(xml.replace("\r\n", "\n").replace("\r", ""), encoding="utf-8", newline="\n")
             shot = d.screenshot()
             shot.save(out / f"{name}.png")
             w, ht = shot.size
@@ -130,9 +132,11 @@ def main():
         h.wait_for(d, lambda ns: any(n["class"] == "android.widget.EditText" for n in ns))
         snapshot("search-" + query)
         d(className="android.widget.EditText").set_text(query)
-        h.key("dpad_right", wait=.1)
+        h.focus_search_submit(d)
         h.key("enter", wait=.3)
-        h.wait_for(d, lambda ns: any(n["focused"] and n["cy"] > 250 for n in ns), timeout=35)
+        h.wait_for(d, lambda ns: not h.has_keypad(ns) and any(
+            n["focused"] and n["cy"] > 250 for n in ns
+        ), timeout=35)
         for step in range(36):
             ns = h.dump_nodes(d)
             focus = h.find_focused(ns)
@@ -143,8 +147,16 @@ def main():
         else:
             raise AssertionError(f"Real subject not found: {query} {rating}")
         h.key("enter", wait=.3)
-        h.wait_for(d, lambda ns: query in h.texts(ns) and "播放" in h.texts(ns) and "演职员" in h.texts(ns), timeout=35)
+        # The same production control is renamed after a history entry exists.
+        # An exact "播放" wait failed before the replay ever activated Resume.
+        h.wait_for(d, lambda ns: query in h.texts(ns) and any(
+            t == "播放" or t.startswith("继续播放") for t in h.texts(ns)
+        ) and "演职员" in h.texts(ns), timeout=35)
         h.move_focus_to_text(d, "播放", max_steps=6)
+        ready = snapshot("detail-primary-" + query)
+        assert ready["focus"] and any(
+            t == "播放" or t.startswith("继续播放") for t in ready["focus"]["labels"]
+        ), f"The replay did not focus the real play/resume control: {ready}"
 
     def record(name, callback):
         try:
@@ -344,6 +356,11 @@ def main():
         before_sec = h.parse_clock(before_clock)
         started = time.monotonic()
         latest = before
+        rate_samples = [{"wallSeconds": 0.0, "clock": before_clock,
+                         "spinner": any(n["class"] == "android.widget.ProgressBar" for n in before),
+                         "playing": "暂停" in h.texts(before),
+                         "speed": next((t for t in h.texts(before) if re.fullmatch(r"\d+(?:\.\d+)?×", t)), None),
+                         "line": next((t for t in h.texts(before) if t.startswith("线路:")), None)}]
         while time.monotonic() - started < 12.5:
             time.sleep(.5)
             latest = h.dump_nodes(d)
@@ -352,23 +369,43 @@ def main():
                 raise AssertionError(f"Playback failed during 2.0x measurement: {labels}")
             if not any(" / " in text for text in labels):
                 h.key("dpad_down", wait=.05)
+            clock = next((n["text"].split(" / ")[0] for n in latest if " / " in n["text"]), None)
+            rate_samples.append({"wallSeconds": round(time.monotonic() - started, 2), "clock": clock,
+                                 "spinner": any(n["class"] == "android.widget.ProgressBar" for n in latest),
+                                 "playing": "暂停" in labels,
+                                 "speed": next((t for t in labels if re.fullmatch(r"\d+(?:\.\d+)?×", t)), None),
+                                 "line": next((t for t in labels if t.startswith("线路:")), None)})
         after_clock = next(n["text"].split(" / ")[0] for n in latest if " / " in n["text"])
         after_sec = h.parse_clock(after_clock)
         elapsed = time.monotonic() - started
+        active_wall_sec = sum(
+            max(0.0, right["wallSeconds"] - left["wallSeconds"])
+            for left, right in zip(rate_samples, rate_samples[1:])
+            if left["playing"] and not left["spinner"]
+        )
+        measured_speed = (after_sec - before_sec) / elapsed if before_sec is not None and after_sec is not None else None
+        active_speed = (after_sec - before_sec) / active_wall_sec if active_wall_sec > 0 and before_sec is not None and after_sec is not None else None
         if before_sec is None or after_sec is None or after_sec <= before_sec:
             return {"status": "unavailable", "selectionPassed": True, "steps": states, "final": final,
                     "reason": "Playback timeline did not advance during the 2.0x measurement window.",
                     "playbackMeasurement": {"status": "unavailable", "wallSeconds": round(elapsed, 2),
                                             "beforeClock": before_clock, "afterClock": after_clock,
                                             "renderedFrames": None, "droppedFrames": None}}
-        observed_speed = (after_sec - before_sec) / elapsed
+        if active_wall_sec < 8.0:
+            return {"status": "unavailable", "selectionPassed": True, "steps": states, "final": final,
+                    "reason": "The real source buffered for most of the measurement window; active playback rate is not a stable speed sample.",
+                    "playbackMeasurement": {"mediaSeconds": after_sec - before_sec, "wallSeconds": round(elapsed, 2),
+                                            "effectiveWallSpeed": round(measured_speed, 2),
+                                            "activePlaybackSeconds": round(active_wall_sec, 2),
+                                            "activePlaybackSpeed": round(active_speed, 2) if active_speed is not None else None,
+                                            "samples": rate_samples, "renderedFrames": None, "droppedFrames": None}}
 
         log = subprocess.run(
             [h.ADB, "-s", args.serial, "logcat", "-d", "-s", "PandaTV:I"],
             capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=20,
         ).stdout
-        measurements = re.findall(r"\[speed\] rate=2\.0x elapsedMs=(\d+) (?:processed|rendered)Frames=(\d+) droppedFrames=(\d+)(?: offsetSamples=(\d+))?", log)
-        assert 1.55 <= observed_speed <= 2.45, f"Observed playback rate was {observed_speed:.2f}x at the 2.0x setting"
+        measurements = re.findall(r"\[speed\] (?:requested=\S+\s+)?rate=2\.0x elapsedMs=(\d+) (?:processed|rendered)Frames=(\d+) droppedFrames=(\d+)(?: offsetSamples=(\d+))?", log)
+        assert active_speed is not None and 1.55 <= active_speed <= 2.45, f"Observed active playback rate was {active_speed}x at the 2.0x setting; samples={rate_samples}"
         renderer_sample = None
         if measurements:
             measure_ms, rendered_frames, dropped_frames = map(int, measurements[-1][:3])
@@ -382,8 +419,48 @@ def main():
         else:
             renderer_sample = {"coverage": "no frame-counter callback sample"}
         return {"steps": states, "final": final, "sourceRetries": retries,
-                "rateSample": {"mediaSeconds": after_sec - before_sec, "wallSeconds": round(elapsed, 2), "observedSpeed": round(observed_speed, 2)},
+                "rateSample": {"mediaSeconds": after_sec - before_sec, "wallSeconds": round(elapsed, 2),
+                               "effectiveWallSpeed": round(measured_speed, 2), "activePlaybackSeconds": round(active_wall_sec, 2),
+                               "activePlaybackSpeed": round(active_speed, 2), "samples": rate_samples},
                 "rendererSample": renderer_sample}
+
+    def line_switch():
+        restart()
+        open_subject(args.line_title)
+        h.key("dpad_center", wait=.2)
+        wait_playing()
+        h.key("dpad_down", wait=.1)
+        ns = h.dump_nodes(d)
+        if not any(t.startswith("线路:") for t in h.texts(ns)):
+            return {"status": "unavailable", "reason": "The real catalogue pool returned only one line; no alternate line can be selected."}
+        h.move_focus_to_text(d, "线路", max_steps=15)
+        h.key("enter", wait=.2)
+        ns = h.dump_nodes(d)
+        names = {row["name"] for row in json.loads((ROOT / "resources/play-sources.json").read_text(encoding="utf-8-sig"))["sources"]}
+        choices = [n["text"] for n in ns if n["text"] in names and not n["text"].endswith("✓")]
+        if not choices:
+            return {"status": "unavailable", "reason": "No second real source is present in the line panel."}
+        selected = choices[0]
+        h.move_focus_to_text(d, selected, max_steps=18)
+        before = snapshot("line-switch-before")
+        assert before["focus"] and selected in before["focus"]["labels"], f"Alternate line was not focused: {before}"
+        position = h.parse_clock(before["clock"].split(" / ")[0])
+        block_network()
+        checks = []
+        try:
+            h.key("dpad_center", wait=.1)
+            for number in range(3):
+                time.sleep(.35)
+                now = snapshot(f"line-switch-pending-{number}")
+                checks.append(now)
+            assert all(s["clock"] and (h.parse_clock(s["clock"].split(" / ")[0]) or 0) >= position for s in checks), f"Switching a line reset the existing timeline: {checks}"
+            assert all(s["loadingRegionMaxRgb"] > 3 for s in checks), f"Switching a line blacked out the existing picture: {checks}"
+        finally:
+            restore_network()
+        wait_playing()
+        after = snapshot("line-switch-recovered")
+        assert (h.parse_clock(after["clock"].split(" / ")[0]) or 0) >= position, "Line recovery lost the viewing position"
+        return {"selectedLine": selected, "before": before, "pending": checks, "after": after}
 
     def missing_source():
         restart()
@@ -454,6 +531,9 @@ def main():
             record("seek-control", seek_control)
         if args.case in ["speed", "all"]:
             record("speed-control", speed_control)
+        if args.case in ["switch", "all"]:
+            for number in range(args.switch_repeats):
+                record(f"line-switch-{number + 1}", line_switch)
         if args.case in ["next", "all"]:
             record("episode-switch", next_episode)
         if args.case in ["missing", "all"]:

@@ -177,6 +177,7 @@ object Copy {
         const val NO_EPISODE = "未找到这一集的可用片源"
         const val LINE = "线路"
         const val SWITCHING_LINE = "正在切换线路"
+        const val LINE_SWITCH_FAILED = "切换未成功，保留当前线路"
         const val PERSON_WORKS = "全部作品"
         const val PERSON_NOT_FOUND = "未找到这位影人"
 

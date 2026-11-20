@@ -52,7 +52,7 @@ def main():
         d.screenshot(str(out / f"{name}.png"))
         f = h.find_focused(ns)
         return {"texts": h.texts(ns), "focus": f["childTexts"] if f else [],
-                "keyboard": "A–Z / 0–9" in h.texts(ns),
+                "keyboard": h.has_keypad(ns),
                 "systemIme": "mInputShown=true" in h.run_adb("shell", "dumpsys", "input_method")}
 
     def open_search():
@@ -62,7 +62,7 @@ def main():
         h.focus_top_bar(d)
         h.move_focus_to_text(d, "搜索", max_steps=15)
         h.key("enter", wait=.3)
-        h.wait_for(d, lambda ns: "A–Z / 0–9" in h.texts(ns), timeout=15)
+        h.wait_for(d, h.has_keypad, timeout=15)
 
     def focus_input():
         trace = []

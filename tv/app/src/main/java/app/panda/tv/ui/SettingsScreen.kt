@@ -144,9 +144,10 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
 
         @Suppress("DEPRECATION")
         val verName = runCatching { ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName }
-            .getOrNull()?.takeIf { it.isNotBlank() } ?: "1.0.3"
+            .getOrNull()?.takeIf { it.isNotBlank() }
         col.addView(sectionLabel(Copy.SettingsCopy.ABOUT))
-        col.addView(rowShell(Copy.fmt(Copy.App.VERSION, "v" to verName), trailing = Theme.label(ctx, Copy.SettingsCopy.CHECK_UPDATE, sp = 14f, color = Theme.PAPER_70, bold = true)) {
+        val versionLabel = verName?.let { Copy.fmt(Copy.App.VERSION, "v" to it) } ?: Copy.App.NAME
+        col.addView(rowShell(versionLabel, trailing = Theme.label(ctx, Copy.SettingsCopy.CHECK_UPDATE, sp = 14f, color = Theme.PAPER_70, bold = true)) {
             nav.toast(Copy.Extra.UPDATE_UNAVAILABLE)
         })
 

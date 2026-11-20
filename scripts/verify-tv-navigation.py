@@ -148,9 +148,9 @@ def main():
         h.move_focus_to_text(d, "搜索", max_steps=15)
         h.key("enter", wait=.6)
         d(className="android.widget.EditText").set_text(query)
-        h.key("dpad_right", wait=.2)
+        h.focus_search_submit(d)
         h.key("enter", wait=.5)
-        h.wait_for(d, lambda ns: sum(n["focusable"] and n["cy"] > 250 for n in ns) >= 6, timeout=30)
+        h.wait_for(d, lambda ns: not h.has_keypad(ns) and sum(n["focusable"] and n["cy"] > 250 for n in ns) >= 6, timeout=30)
         time.sleep(.4)
 
     def search_person():

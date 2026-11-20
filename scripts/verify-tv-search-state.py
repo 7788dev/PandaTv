@@ -41,7 +41,7 @@ def main():
         input_text = input_node.get("text", "")
         if input_text == input_node.get("hint"):
             input_text = ""
-        result = {"input": input_text, "movieGrid": movie_grid, "discovery": "A–Z / 0–9" in labels, "texts": labels}
+        result = {"input": input_text, "movieGrid": movie_grid, "discovery": h.has_keypad(h.parse_nodes(xml)), "texts": labels}
         if capture:
             (out / f"{name}.xml").write_text(xml, encoding="utf-8")
             d.screenshot(str(out / f"{name}.png"))
@@ -60,11 +60,12 @@ def main():
         h.focus_top_bar(d)
         h.move_focus_to_text(d, "搜索", max_steps=15)
         h.key("enter", wait=.6)
-        h.wait_for(d, lambda ns: "A–Z / 0–9" in h.texts(ns), timeout=15)
+        h.wait_for(d, h.has_keypad, timeout=15)
         for idx, query in enumerate(args.queries):
             d(className="android.widget.EditText").set_text(query)
+            h.focus_search_submit(d)
             # Input -> Search -> submit -> Clear Input -> clear, without network-dependent pauses.
-            h.run_adb("shell", "input", "keyevent", "22", "66", "22", "66")
+            h.run_adb("shell", "input", "keyevent", "66", "22", "66")
             immediate = state(f"{idx + 1}-clear", capture=True)
             assert not immediate["input"], f"D-pad sequence did not clear the input: {immediate}"
             deadline = time.monotonic() + 12

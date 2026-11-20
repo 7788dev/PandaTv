@@ -407,13 +407,6 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         }
 
         // 3-row x 13-column remote keypad so any key or Backspace is <= 2 Down + 6 Right moves away
-        val padHeader = Theme.sectionHeader(ctx, "A–Z / 0–9", m.pageH, Theme.dp(ctx, 10)).apply {
-            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                topMargin = if (recent.isNotEmpty() || hotTerms.isNotEmpty()) Theme.dp(ctx, 20) else 0
-            }
-        }
-        col.addView(padHeader)
-
         val keyRows = listOf(
             "ABCDEFGHIJKLM".map { it.toString() },
             "NOPQRSTUVWXYZ".map { it.toString() },
@@ -423,7 +416,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(m.pageH, 0, m.pageH, 0)
+            setPadding(m.pageH, Theme.dp(ctx, 14), m.pageH, 0)
         }
         for (rIdx in keyRows.indices) {
             val rowKeys = keyRows[rIdx]

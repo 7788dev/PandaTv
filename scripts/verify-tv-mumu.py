@@ -78,6 +78,11 @@ def texts(nodes: list[dict]) -> list[str]:
     return [n["text"] for n in nodes if n["text"]]
 
 
+def has_keypad(nodes: list[dict]) -> bool:
+    keys = {n["text"] for n in nodes if n["focusable"]}
+    return {"A", "M", "N", "Z", "0", "9", "⌫"} <= keys
+
+
 def wait_for(d, pred, timeout: float = 22.0, interval: float = 0.45):
     deadline = time.time() + timeout
     last = []
@@ -142,7 +147,12 @@ def move_focus_to_text(d, target_text: str, direction: str | None = None, max_st
         if step_dir is None:
             t_node = next((n for n in nodes if target_text in n["text"]), None)
             if f and t_node:
-                step_dir = "dpad_right" if t_node["cx"] > f["cx"] else "dpad_left"
+                dx = t_node["cx"] - f["cx"]
+                dy = t_node["cy"] - f["cy"]
+                if abs(dy) > abs(dx):
+                    step_dir = "dpad_down" if dy > 0 else "dpad_up"
+                else:
+                    step_dir = "dpad_right" if dx > 0 else "dpad_left"
             else:
                 step_dir = "dpad_right"
         key(step_dir, wait=0.28)
@@ -157,6 +167,24 @@ def focus_top_bar(d) -> None:
             return
         key("dpad_up", wait=0.28)
     raise AssertionError("Could not return focus to top navigation bar")
+
+
+def focus_search_submit(d) -> None:
+    """Reach the header submit button without activating the editable field/keypad."""
+    for _ in range(18):
+        focused = find_focused(dump_nodes(d))
+        if focused and focused["class"] == "android.widget.EditText":
+            query_length = len(focused["text"])
+            break
+        key("dpad_up", wait=.1)
+    else:
+        raise AssertionError("The real search input was not reachable before submission")
+    for _ in range(query_length + 3):
+        key("dpad_right", wait=.08)
+        focused = find_focused(dump_nodes(d))
+        if focused and focused["class"] == "android.widget.LinearLayout" and "搜索" in focused["childTexts"]:
+            return
+    raise AssertionError("The actual search submit button was not focused")
 
 
 def parse_clock(s: str) -> int | None:
@@ -419,7 +447,7 @@ def main() -> None:
         focus_top_bar(d)
         move_focus_to_text(d, "搜索", max_steps=12)
         key("enter", wait=0.8)
-        _, search_disc = wait_for(d, lambda ns: "热搜" in texts(ns) and "百度影视热搜" in texts(ns) and "A–Z / 0–9" in texts(ns), timeout=15.0)
+        _, search_disc = wait_for(d, lambda ns: "热搜" in texts(ns) and "百度影视热搜" in texts(ns) and has_keypad(ns), timeout=15.0)
         time.sleep(0.4)
         assert_no_bezel_overflow(dump_nodes(d), "Search discovery")
         shot(d, "04-search-discovery")
