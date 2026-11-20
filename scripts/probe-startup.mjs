@@ -2,13 +2,15 @@
 //   node scripts/probe-startup.mjs [firstStarts=5] [repeatStarts=3]
 // Each first start uses an empty profile (nothing saved); the repeat starts reuse the last one.
 // PANDA_E2E_EXECUTABLE selects a packaged or installed Panda.exe; otherwise the build in out/ runs.
-// Needs the network. Writes docs/evidence/startup-timing.json.
+// Needs the network. PANDA_E2E_EVIDENCE_DIR can keep a separate run per installer.
 import { _electron } from '@playwright/test'
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
 const root = resolve(import.meta.dirname, '..')
 mkdirSync(join(root, '.tmp'), { recursive: true })
+const evidence = resolve(root, process.env.PANDA_E2E_EVIDENCE_DIR || 'docs/evidence')
+mkdirSync(evidence, { recursive: true })
 const firstStarts = Number(process.argv[2] ?? 5)
 const repeatStarts = Number(process.argv[3] ?? 3)
 
@@ -57,4 +59,4 @@ for (let i = 0; i < repeatStarts && profile; i++) {
   result.repeatStarts.push(await start(profile))
   console.log('repeat start', JSON.stringify(result.repeatStarts.at(-1)))
 }
-writeFileSync(join(root, 'docs/evidence/startup-timing.json'), JSON.stringify(result, null, 2))
+writeFileSync(join(evidence, 'startup-timing.json'), JSON.stringify(result, null, 2))

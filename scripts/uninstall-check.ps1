@@ -10,7 +10,7 @@ $un = Join-Path $target 'Uninstall Panda.exe'
 if (-not (Test-Path $un)) { throw "Panda is not installed at $target" }
 $log = @()
 $started = Get-Date
-$process = Start-Process -FilePath $un -ArgumentList '/S' -Wait -PassThru
+$process = Start-Process -FilePath $un -ArgumentList '/S' -WindowStyle Hidden -Wait -PassThru
 $deadline = (Get-Date).AddSeconds(60)
 while ((Test-Path $target) -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 500 }
 $log += "uninstall exit code: $($process.ExitCode) in $([int]((Get-Date) - $started).TotalSeconds)s"

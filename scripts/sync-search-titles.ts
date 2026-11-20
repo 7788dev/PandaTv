@@ -4,6 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync, renameSync, existsSync } from '
 import { join } from 'node:path';
 import { pinyin, polyphonic } from 'pinyin-pro';
 import { getText, WorkLimiter } from '../src/main/playback/network';
+import { adultShelf } from '../src/main/adult';
 import sourceConfig from '../resources/play-sources.json';
 
 type Category = { type_id: number; type_pid: number; type_name: string };
@@ -30,7 +31,7 @@ function checked(raw: unknown): Page {
 function filmCategories(categories: Category[]): Category[] {
   const byId = new Map(categories.map(category => [Number(category.type_id), category]));
   return categories.filter(category => {
-    if (/短剧|漫剧|伦理|体育|足球|篮球|NBA/i.test(category.type_name)) return false;
+    if (adultShelf(category.type_name) || /短剧|漫剧|体育|足球|篮球|NBA/i.test(category.type_name)) return false;
     let current = category;
     for (let depth = 0; depth < 5 && Number(current.type_pid); depth++) {
       const parent = byId.get(Number(current.type_pid));

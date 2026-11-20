@@ -9,6 +9,7 @@ import { filterPlaylist } from '../src/main/playback/filter'
 import { getText } from '../src/main/playback/network'
 import { manifestVariants, matchesItem, parseLines, searchTerms } from '../src/main/playback/service'
 import { loadSourceRules, type PlaySource } from '../src/main/playback/sources'
+import { describeEgress } from '../src/main/egress'
 
 const SAMPLES: Array<Pick<MediaItem, 'title' | 'year' | 'type'>> = [
   { title: '流浪地球2', year: 2023, type: 'movie' },
@@ -120,7 +121,7 @@ async function main() {
     }
   }))
   rows.sort((a, b) => a.source.localeCompare(b.source) || a.title.localeCompare(b.title) || a.episode - b.episode)
-  writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), rulesVersion: rules.version, verifiedAt: rules.verifiedAt, samples: SAMPLES, rows }, null, 1) + '\n')
+  writeFileSync(out, JSON.stringify({ at: new Date().toISOString(), route: describeEgress(), rulesVersion: rules.version, verifiedAt: rules.verifiedAt, samples: SAMPLES, rows }, null, 1) + '\n')
   const ok = rows.filter(row => row.ok)
   console.log(`\n${rows.length} rows, ${ok.length} manifests read, ${ok.filter(row => row.removedSegments).length} filtered, ${ok.filter(row => row.suspects?.length).length} with short blocks left in place`)
 }

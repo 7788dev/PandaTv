@@ -17,7 +17,7 @@ $before = Get-PandaDirectory (Get-PandaEntry)
 if ($before) { $log += "existing install found at $before before this run: upgraded in place, not removed afterwards" }
 Remove-Item $marker -ErrorAction SilentlyContinue
 $started = Get-Date
-$process = Start-Process -FilePath $setup -ArgumentList '/S' -Wait -PassThru
+$process = Start-Process -FilePath $setup -ArgumentList '/S' -WindowStyle Hidden -Wait -PassThru
 $log += "install exit code: $($process.ExitCode) in $([int]((Get-Date) - $started).TotalSeconds)s"
 $entry = Get-PandaEntry
 $target = Get-PandaDirectory $entry
