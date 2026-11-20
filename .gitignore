@@ -56,6 +56,8 @@ playwright-report/
 .cache/
 .tmp/
 .vitest/
+__pycache__/
+*.py[cod]
 
 # Android TV
 tv/.gradle/
