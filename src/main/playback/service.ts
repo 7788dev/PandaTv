@@ -5,6 +5,7 @@ import { MediaProxy } from './proxy'
 import { clearHead, pictureOf } from './picture'
 import { loadSourceRules, type PlaySource, type SourceRules } from './sources'
 import { extra } from '../../copy.extra'
+import { adultShelf } from '../adult'
 import { compareDelivery, compareSourceOrder, playbackMargin, PLAYBACK_HEADROOM, type DeliveryScore, type SourceOrderScore } from './delivery'
 
 interface RawVod { vod_id?: string | number; vod_name?: string; vod_year?: string | number; type_name?: string; vod_play_from?: string; vod_play_url?: string }
@@ -156,7 +157,7 @@ export interface RecordMatch {
  * its name together with its year and category; a name alone is never enough.
  */
 export function matchRecord(item: MediaItem, raw: RawVod, hints: WorkHints = {}): RecordMatch | undefined {
-  if (!raw.vod_name || NOT_FEATURE.test(raw.vod_name) || NOT_FEATURE.test(String(raw.type_name ?? ''))) return undefined
+  if (!raw.vod_name || NOT_FEATURE.test(raw.vod_name) || NOT_FEATURE.test(String(raw.type_name ?? '')) || adultShelf(String(raw.type_name ?? ''))) return undefined
   const year = Number.parseInt(String(raw.vod_year ?? ''), 10)
   const type = classifySourceType(String(raw.type_name ?? ''))
   const plain = squash(raw.vod_name).replace(LANGUAGE, '')
@@ -420,9 +421,10 @@ export class PlaybackService {
       })
       return compareSourceOrder(score(a), score(b), retry)
     })
-    // A user retry starts with another provider, rather than replaying a broken URL.
+    // Give other providers the first chance. The old provider may have recovered in the meantime.
     const alternatives = retry && previous ? attempts.filter(attempt => attempt.source.key !== previous) : attempts
     const ordered = alternatives.length ? alternatives : attempts
+    const lastChance = !from && ordered !== attempts ? attempts.filter(attempt => attempt.source.key === previous) : []
     // The source the viewer asked for is not raced against the others: it plays if it can.
     const asked = from ?? (retry ? undefined : this.preferred.get(item.id))
     const own = asked ? attempts.filter(attempt => attempt.source.key === asked) : []
@@ -548,7 +550,7 @@ export class PlaybackService {
       start()
       if (!live.size) reject(new Error('片源暂时无法连接，请重试'))
     })
-    for (const list of [own, rest]) if (list.length) { try { return await contest(list) } catch { /* asked again below where that can help */ } }
+    for (const list of [own, rest, lastChance]) if (list.length) { try { return await contest(list) } catch { /* asked again below where that can help */ } }
     // A reset connection or a deadline says nothing about the episode. Before telling the viewer
     // that it cannot be played, ask once more those that failed that way.
     const again = [...own, ...rest].filter(attempt => TRANSIENT.test(reason(failed.get(attempt)))).slice(0, 3)

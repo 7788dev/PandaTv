@@ -163,6 +163,18 @@ describe('starting an episode', () => {
     expect(opened[0]).toBe('one-media.example.com')
   })
 
+  it('rechecks the previous source when every replacement fails', async () => {
+    const playback = service()
+    catalogues.set('two', true)
+    plans.set('two-media.example.com', [{ status: 404 }])
+    await playback.resolve(item, 1, undefined, false, {}, 'one')
+
+    opened.length = 0
+    const recovered = await playback.resolve(item, 1, undefined, true)
+    expect(opened).toEqual(['two-media.example.com', 'one-media.example.com'])
+    expect(from((await firstSegment(recovered.url)).bytes)).toBe('one')
+  })
+
   it('prefers a smooth smaller picture over HD that downloads slower than it plays', async () => {
     catalogues.set('two', true)
     pictures.set('two-media.example.com', '1080x606')

@@ -3,6 +3,7 @@ package app.panda.tv
 import app.panda.tv.data.HotSearch
 import app.panda.tv.data.Normalize
 import app.panda.tv.data.Taxonomy
+import app.panda.tv.model.Adult
 import app.panda.tv.model.HistoryEntry
 import app.panda.tv.model.Json
 import app.panda.tv.model.MediaItem
@@ -316,6 +317,10 @@ class GoldenParityTest {
                 if (rng == null) assertNull(got.range)
                 else assertEquals(EpisodeRange(rng["name"] as String, (rng["first"] as Number).toInt(), (rng["last"] as Number).toInt()), got.range)
             }
+        }
+        for (c in Json.list(svc["adultShelf"])) {
+            val r = Json.row(c)
+            assertEquals(r["input"] as String, r["output"], Adult.shelf(r["input"] as String))
         }
         for (c in Json.list(svc["searchTerms"])) {
             val r = Json.row(c)

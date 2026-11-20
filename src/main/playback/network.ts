@@ -3,6 +3,7 @@ import https from 'node:https'
 import dns from 'node:dns'
 import { isIP } from 'node:net'
 import { watchHandshake } from '../handshake'
+import { directEgress } from '../egress'
 
 export function isPublicAddress(raw: string): boolean {
   const ip = raw.toLowerCase().replace(/^\[|\]$/g, '')
@@ -109,23 +110,29 @@ function markStalled(address: string | undefined) {
   if (stalledAt.size < 64) stalledAt.set(address, Date.now())
 }
 
+const systemAddresses = (hostname: string) => new Promise<dns.LookupAddress[]>((resolve, reject) => {
+  dns.lookup(hostname, { all: true, order: 'verbatim' }, (error, addresses) => {
+    if (error || (addresses.length && addresses.every(row => isFakeIp(row.address)))) publicDns(hostname).then(resolve, reject)
+    else resolve(addresses)
+  })
+})
+// A measurement run names the adapter requests leave by; its names then come from that line too.
+const egress = directEgress()
+const addressesOf = egress?.addresses ?? systemAddresses
+
 const publicLookup: RequestOptions['lookup'] = (hostname, options, callback) => {
-  const done = (found: dns.LookupAddress[]) => {
+  addressesOf(hostname).then(found => {
     const addresses = [...found.filter(row => !stalledLately(row.address)), ...found.filter(row => stalledLately(row.address))]
     if (!addresses.length || addresses.some(row => !isPublicAddress(row.address))) return callback(new Error(NOT_PUBLIC), '', 0)
     if ((options as { all?: boolean }).all) return (callback as unknown as (e: null, a: typeof addresses) => void)(null, addresses)
     const selected = addresses.find(row => row.family === options.family) ?? addresses[0]!
     callback(null, selected.address, selected.family)
-  }
-  dns.lookup(hostname, { all: true, order: 'verbatim' }, (error, addresses) => {
-    if (error || (addresses.length && addresses.every(row => isFakeIp(row.address)))) {
-      void publicDns(hostname).then(done, error => callback(error, '', 0))
-    } else done(addresses)
-  })
+  }, error => callback(error, '', 0))
 }
 
-const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 8, lookup: publicLookup })
-const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 12, lookup: publicLookup })
+const route = egress ? { localAddress: egress.localAddress } : {}
+const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 8, lookup: publicLookup, ...route })
+const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 12, lookup: publicLookup, ...route })
 
 export interface NetworkOptions { timeoutMs?: number; /** Deadline for a new connection to finish connecting; see watchHandshake. */ handshakeMs?: number; signal?: AbortSignal; headers?: Record<string, string>; method?: 'GET' | 'HEAD' }
 export interface NetworkResponse { response: IncomingMessage; url: URL }

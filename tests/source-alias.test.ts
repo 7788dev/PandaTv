@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { episodeRange, matchRecord, matchesItem, numbering, parseLines, rank, runOf, workTerms } from '../src/main/playback/service'
 import { normalize } from '../src/main/data/normalize'
+import { adultShelf } from '../src/main/adult'
 import type { MediaItem, MediaType } from '../design/contract/types'
 
 const item = (title: string, year: number, type: MediaType): MediaItem => ({ id: 'db-1', title, year, type, poster: null, backdrop: null, genres: [] })
@@ -142,6 +143,21 @@ describe('records filed under an alias', () => {
     const film = item('肖申克的救赎', 1994, 'movie')
     expect(matchRecord(film, { vod_name: '肖申克的救赎', vod_year: '1994', type_name: '剧情片' }, { aliases: ['月黑高飞(港)'] })).toEqual({})
     expect(matchesItem(film, { vod_name: '肖申克的救赎', vod_year: '1996', type_name: '剧情片' }, { aliases: ['月黑高飞(港)'] })).toBe(false)
+  })
+})
+
+describe('records on a catalogue shelf of adult titles', () => {
+  // Shelf names as 21 catalogues listed them on 2026-11-20 (伦理片 on 22 addresses, 港台三级,
+  // 韩国伦理, 西方伦理, 日本伦理 and 写真热舞 on 10, 里番动漫 on 4).
+  const film = item('生日快乐', 2007, 'movie')
+  it.each(['伦理片', '伦理', '倫理片', '港台三级', '韩国伦理', '西方伦理', '日本伦理', '写真热舞', '里番动漫', '福利', '成人动漫', 'AV'])('%s is never the work asked for', shelf => {
+    expect(matchRecord(film, { vod_name: '生日快乐', vod_year: '2007', type_name: shelf })).toBeUndefined()
+    expect(matchRecord(item('生日快乐', 2007, 'anime'), { vod_name: '生日快乐', vod_year: '2007', type_name: shelf })).toBeUndefined()
+    expect(adultShelf(shelf)).toBe(true)
+  })
+  it.each(['爱情片', '剧情片', '国产动漫', '日韩动漫', '动漫电影', '纪录片', '大陆综艺', '家庭剧', '欧美剧', 'MV', ''])('%s is an ordinary shelf', shelf => expect(adultShelf(shelf)).toBe(false))
+  it('leaves the same record on an ordinary shelf as it was', () => {
+    expect(matchRecord(film, { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' })).toEqual({})
   })
 })
 

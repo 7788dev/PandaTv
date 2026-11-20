@@ -5,19 +5,23 @@
 //   npm run probe:start -- [titlesPerChannel=4] [sorts=hot] [onlyTheseSources]
 // The bundle (.tmp/probe-start.cjs) is self-contained: to measure another network, pipe it to
 // `node - 8 hot` on a machine there (Node 22+); nothing is installed or written on that machine.
+// On a machine behind a proxy, PANDA_DIRECT_EGRESS=auto measures the line itself (src/main/egress.ts);
+// PANDA_SOURCE_CONFIG measures another set of sources.
 import { DoubanDataSource } from '../src/main/data/douban'
 import { PlaybackService } from '../src/main/playback/service'
 import { MediaProxy } from '../src/main/playback/proxy'
-import { validateSourceRules } from '../src/main/playback/sources'
-import candidate from '../resources/play-sources.json'
+import { loadSourceRules } from '../src/main/playback/sources'
+import { createTransport } from '../src/main/data/transport'
+import { describeEgress } from '../src/main/egress'
 
 async function main() {
   const perChannel = Number(process.argv[2] ?? 4)
   const sorts = (process.argv[3] ?? 'hot').split(',')
   const only = process.argv[4]?.split(',')
-  const rules = validateSourceRules(candidate)
+  const rules = loadSourceRules()
+  console.log(JSON.stringify({ route: describeEgress(), sources: rules.sources.filter(source => source.enabled).map(source => source.key).join(',') }))
   if (only) for (const source of rules.sources) source.enabled = only.includes(source.key)
-  const data = new DoubanDataSource({ imageUrl: url => url, onWarning: () => {} })
+  const data = new DoubanDataSource({ imageUrl: url => url, onWarning: () => {}, fetch: createTransport() })
   const proxy = new MediaProxy({ rules }); await proxy.start()
   const rows: Record<string, number | string>[] = []
   const wins: Record<string, number> = {}, fails: Record<string, number> = {}

@@ -1,5 +1,6 @@
 package app.panda.tv.data
 
+import app.panda.tv.model.Adult
 import app.panda.tv.model.Credit
 import app.panda.tv.model.Json
 import app.panda.tv.model.MediaItem
@@ -105,6 +106,8 @@ object Normalize {
 
         val subtitle = subtitleParts(source["card_subtitle"])
         val genres = (strings(source["genres"]) + subtitle.genres).distinct()
+        // Every listing, search, detail and saved record passes through here: an adult work is no row at all.
+        if (Adult.GENRE in genres) return null
         val pic = Json.row(source["pic"])
         val cover = Json.row(source["cover"])
         val poster = imageUrl(pic["large"])

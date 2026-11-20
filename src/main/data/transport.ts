@@ -3,6 +3,7 @@ import type { IncomingMessage } from 'node:http'
 import { Readable, pipeline } from 'node:stream'
 import { createBrotliDecompress, createGunzip, createInflate } from 'node:zlib'
 import { watchHandshake } from '../handshake'
+import { directEgress } from '../egress'
 
 interface TransportOptions {
   /** How long each new connection may take to connect; one entry per connection tried. */
@@ -20,7 +21,8 @@ class Reconnect extends Error {}
  */
 export function createTransport(options: TransportOptions = {}): typeof globalThis.fetch {
   const deadlines = options.handshakeMs ?? [1500, 4000]
-  const agent = options.agent ?? new https.Agent({ keepAlive: true, maxSockets: 6 })
+  const egress = options.agent ? undefined : directEgress()
+  const agent = options.agent ?? new https.Agent({ keepAlive: true, maxSockets: 6, ...(egress ? { localAddress: egress.localAddress, lookup: egress.lookup } : {}) })
 
   const open = (url: URL, headers: Record<string, string>, signal: AbortSignal | undefined, handshakeMs: number) => new Promise<IncomingMessage>((resolve, reject) => {
     const request = https.request(url, { method: 'GET', agent, headers, signal }, resolve)

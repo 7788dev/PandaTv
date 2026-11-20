@@ -7,7 +7,7 @@ import { GENRES, LANES, REGIONS, matchesRegion, matchesYear, yearChoices, yearSp
 import { hotQueries, combineHotQueries } from '../src/main/data/hot-search'
 import { MetadataStore } from '../src/main/data/store'
 import { mkdtemp } from 'node:fs/promises'
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -57,6 +57,33 @@ describe('real metadata contract normalization', () => {
     expect(normalize(card('../1'))).toBeNull()
     expect(normalize(card('1', { pic: { large: 'https://img1.doubanio.com.attacker.net/image.jpg' } }))?.item.poster).toBeNull()
     expect(normalize({ target_type: 'tv', target: card() })?.item.type).toBe('tv')
+  })
+  it('has no row for a work Douban files as adult, wherever the row comes from', async () => {
+    // 色，戒 (movie 1828115) as search and detail answered on 2026-11-20: a search row has no year,
+    // the genre is in its subtitle; the detail lists it in both fields.
+    const found = { id: '1828115', type: 'movie', title: '色，戒', card_subtitle: '中国台湾 中国大陆 美国 中国香港 / 剧情 爱情 情色 / 李安 / 梁朝伟 汤唯' }
+    const detail = { ...found, year: '2007', genres: ['剧情', '爱情', '情色'], card_subtitle: '2007 / 中国台湾 中国大陆 美国 中国香港 / 剧情 爱情 情色 / 李安 / 梁朝伟 汤唯' }
+    expect(normalize(found)).toBeNull()
+    expect(normalize(detail)).toBeNull()
+    expect(normalize({ ...detail, card_subtitle: '' })).toBeNull()
+    expect(normalize({ target_type: 'movie', target: found })).toBeNull()
+    // 堕落色戒 (5110302), answered by the same search, is not filed so and stays.
+    expect(normalize({ id: '5110302', type: 'movie', title: '堕落色戒', card_subtitle: '墨西哥 / 剧情 爱情 / 华金·罗德里格斯 / Alejandro Estrada Nataly Umaña' })?.item.title).toBe('堕落色戒')
+    // A name is not a genre: only the genre field of the subtitle is read.
+    expect(normalize({ id: '7', type: 'movie', title: '情色', card_subtitle: '2020 / 日本 / 剧情 / 情色 / 情色' })?.item.genres).toEqual(['剧情'])
+
+    const source = new DoubanDataSource({ imageUrl: value => value, fetch: fetcher(url => {
+      if (url.pathname.includes('/search/')) return json({ total: 2, items: [{ target_type: 'movie', target: found }, { target_type: 'tv', target: card() }] })
+      if (url.pathname.endsWith('/1828115')) return json(detail)
+      return json({}, 404)
+    }) })
+    expect((await source.search('色戒')).map(item => item.id)).toEqual(['db-26647087'])
+    await expect(source.detail('db-1828115')).rejects.toMatchObject({ code: 'NOT_FOUND' })
+    expect(await source.byIds(['db-1828115'])).toEqual([])
+  })
+  it('offers no filter that reads as adult', () => {
+    const offered = Object.values(GENRES).flat()
+    for (const term of ['情色', '伦理', '后宫', '三级', '成人', '福利']) expect(offered, term).not.toContain(term)
   })
   it('preserves real people and movie/series thematic distinctions', () => {
     const result = normalize(card('2', { genres: ['动画', '悬疑'], actors: [{ name: '真实姓名', character: '饰 角色' }], directors: [{ name: '导演姓名' }] }))!
@@ -504,5 +531,13 @@ describe('real heat ranking and durable metadata', () => {
     expect(restored.get('db-1')?.item.synopsis).toBe('真实接口简介')
     expect(restored.get('db-1')?.item.poster).toMatch(/^https:/)
     expect(restored.get('db-1')?.item).not.toHaveProperty('episodes')
+  })
+  it('forgets a saved work that is filed as adult, so a copy installed before the rule shows none', async () => {
+    const directory = await mkdtemp(join(tmpdir(), 'panda-metadata-'))
+    const record = (id: string, title: string, genres: string[]) => ({ kind: 'movie', updatedAt: Date.now(), item: { id: `db-${id}`, title, type: 'movie', year: 2007, genres, poster: 'https://img1.doubanio.com/view/photo/s_ratio_poster/public/p.jpg', backdrop: null } })
+    writeFileSync(join(directory, 'metadata-v1.json'), JSON.stringify({ version: 1, records: [record('1828115', '色，戒', ['剧情', '爱情', '情色']), record('1292052', '肖申克的救赎', ['剧情', '犯罪'])] }))
+    const restored = new MetadataStore(directory)
+    await restored.ready
+    expect(restored.values().map(value => value.item.id)).toEqual(['db-1292052'])
   })
 })

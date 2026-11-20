@@ -20,6 +20,7 @@ import {
 } from '../src/main/playback/service';
 import { filterPlaylist, hasSynchronizedTracks } from '../src/main/playback/filter';
 import { clearHead, pictureOf } from '../src/main/playback/picture';
+import { adultShelf } from '../src/main/adult';
 import { loadSourceRules } from '../src/main/playback/sources';
 import { compareDelivery, compareSourceOrder, playbackMargin } from '../src/main/playback/delivery';
 import { TitleSearchIndex, initialQuery, titleSearchScore, suggestedSubjectIds, type InitialsDictionary } from '../src/shared/title-search';
@@ -57,6 +58,8 @@ const normalizeCases = [
   { id: '37457082', type: 'tv', title: '凡人修仙传 年番4', year: '2026', genres: ['动画'], episodes_count: 52, aka: ['凡人修仙传 第177-228集', '凡人修仙传 年番4之慕兰之战'] },
   { id: '1', type: 'movie', title: '恶意主机', pic: { large: 'https://img1.doubanio.com.attacker.net/image.jpg' }, rating: { value: 0 }, durations: ['45分钟'] },
   { card: 'chart', id: '9', type: 'movie', title: '非条目卡片' },
+  { id: '1828115', type: 'movie', title: '成人题材条目', card_subtitle: '2007 / 中国台湾 / 剧情 爱情 情色 / 某导演' },
+  { id: '1828116', type: 'movie', title: '成人题材详情', genres: ['剧情', '情色'] },
 ];
 
 const creditsSample = {
@@ -224,7 +227,9 @@ const vectors = {
       { item: run4, raw: { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, hints: run4Hints, output: matchRecord(run4, { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, run4Hints) ?? null },
       { item: { ...filmItem, year: 2025, title: '生日快乐' }, raw: { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }, hints: {}, output: matchRecord({ ...filmItem, year: 2025, title: '生日快乐' }, { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }) ?? null },
       { item: { id: 'db-9', title: '生命奇观', year: 2023, type: 'doc' as const, poster: null, backdrop: null, genres: [] }, raw: { vod_name: '生命奇观', vod_year: '2024', type_name: '记录片' }, hints: {}, output: matchRecord({ id: 'db-9', title: '生命奇观', year: 2023, type: 'doc', poster: null, backdrop: null, genres: [] }, { vod_name: '生命奇观', vod_year: '2024', type_name: '记录片' }) ?? null },
+      ...['伦理片', '港台三级', '里番动漫', '福利', '爱情片'].map(shelf => ({ item: { ...filmItem, title: '生日快乐', year: 2007 }, raw: { vod_name: '生日快乐', vod_year: '2007', type_name: shelf }, hints: {}, output: matchRecord({ ...filmItem, title: '生日快乐', year: 2007 }, { vod_name: '生日快乐', vod_year: '2007', type_name: shelf }) ?? null })),
     ],
+    adultShelf: ['伦理片', '倫理片', '韩国伦理', '港台三级', '里番动漫', '福利', '写真', '成人动漫', 'AV', 'av解说', '爱情片', '剧情片', '国产动漫', '日韩动漫', 'MV', '纪录片', '大陆综艺', '家庭剧', ''].map(input => ({ input, output: adultShelf(input) })),
     searchTerms: ['现在就出发 第二季', 'Doctor X：白色黑手党时代', '1917'].map(input => ({ input, output: searchTerms(input) })),
     workTerms: workTerms('凡人修仙传 年番4', run4Hints.aliases),
     parseLines: parseLines('dyttm3u8$$$yun123$$$dytt', '第01集$https://a.com/1.m3u8#第30集已完结$https://a.com/30.m3u8#第240集上$https://a.com/240a.m3u8#预告$https://a.com/t.m3u8$$$x$https://y.com/1.m3u8$$$HD$//b.com/v.mp4'),

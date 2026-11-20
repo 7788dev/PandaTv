@@ -1,6 +1,7 @@
 import type { MediaItem, MediaType, Person } from '../../../design/contract/types';
 import type { Credit } from '../../shared/api';
 import { DataError } from './http';
+import { ADULT_GENRE } from '../adult';
 
 export type Row = Record<string, unknown>;
 export type DoubanKind = 'movie' | 'tv';
@@ -74,6 +75,8 @@ export function normalize(value: unknown, fallbackKind: DoubanKind = 'movie'): N
   // A detail response lists at most three genres; its subtitle carries all of them. A work whose
   // fourth genre is 动画 or 纪录片 would otherwise change channel when its detail is opened.
   const genres = [...new Set([...strings(source.genres), ...subtitle.genres])];
+  // Every listing, search, detail and saved record passes through here: an adult work is no row at all.
+  if (genres.includes(ADULT_GENRE)) return null;
   // Listings and details carry the poster as `pic`; some collections (movie_latest) carry it
   // as an object under `cover` instead, older rows as a plain `cover` or `cover_url` string.
   const poster = imageUrl(row(source.pic).large) ?? imageUrl(row(source.pic).normal) ?? imageUrl(source.cover_url) ?? imageUrl(source.cover) ?? imageUrl(row(source.cover).url);

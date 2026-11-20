@@ -1,5 +1,6 @@
 package app.panda.tv.playback
 
+import app.panda.tv.model.Adult
 import app.panda.tv.model.Availability
 import app.panda.tv.model.Copy
 import app.panda.tv.model.Json
@@ -182,7 +183,7 @@ object PlaybackMatchers {
     fun matchRecord(item: MediaItem, raw: RawVod, hints: WorkHints = WorkHints()): RecordMatch? {
         val vodName = raw.vodName?.takeIf { it.isNotEmpty() } ?: return null
         val typeName = raw.typeName ?: ""
-        if (NOT_FEATURE_RE.containsMatchIn(vodName) || NOT_FEATURE_RE.containsMatchIn(typeName)) return null
+        if (NOT_FEATURE_RE.containsMatchIn(vodName) || NOT_FEATURE_RE.containsMatchIn(typeName) || Adult.shelf(typeName)) return null
         val year = Regex("^\\d+").find(raw.vodYear?.trim() ?: "")?.value?.toIntOrNull()
         val type = classifySourceType(typeName)
         val plain = LANGUAGE_RE.replace(squash(vodName), "")
@@ -602,9 +603,9 @@ class PlaybackService(
             )
             DeliverySpeed.compareSourceOrder(score(a), score(b), retry)
         })
-        val ordered = if (retry && previous != null) {
-            sorted.filter { it.source.key != previous }.ifEmpty { sorted }
-        } else sorted
+        val alternatives = if (retry && previous != null && from == null) sorted.filter { it.source.key != previous } else emptyList()
+        val ordered = alternatives.ifEmpty { sorted }
+        val lastChance = if (alternatives.isNotEmpty()) sorted.filter { it.source.key == previous } else emptyList()
 
         val asked = from ?: if (retry) null else synchronized(lock) { preferred[item.id] }
         val own = if (asked != null) sorted.filter { it.source.key == asked } else emptyList()
@@ -834,7 +835,7 @@ class PlaybackService(
             }
         }
 
-        for (list in listOf(own, rest)) {
+        for (list in listOf(own, rest, lastChance)) {
             if (list.isNotEmpty()) {
                 try {
                     return contest(list)

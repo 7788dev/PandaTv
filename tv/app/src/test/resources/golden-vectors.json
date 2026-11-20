@@ -553,6 +553,27 @@
           "title": "非条目卡片"
         },
         "output": null
+      },
+      {
+        "input": {
+          "id": "1828115",
+          "type": "movie",
+          "title": "成人题材条目",
+          "card_subtitle": "2007 / 中国台湾 / 剧情 爱情 情色 / 某导演"
+        },
+        "output": null
+      },
+      {
+        "input": {
+          "id": "1828116",
+          "type": "movie",
+          "title": "成人题材详情",
+          "genres": [
+            "剧情",
+            "情色"
+          ]
+        },
+        "output": null
       }
     ],
     "principalCredits": {
@@ -693,9 +714,9 @@
       }
     ],
     "genreCounts": {
-      "tv": 72,
+      "tv": 71,
       "movie": 102,
-      "anime": 84,
+      "anime": 83,
       "variety": 62,
       "doc": 77
     },
@@ -1204,6 +1225,204 @@
         "output": {
           "weak": true
         }
+      },
+      {
+        "item": {
+          "id": "db-1292052",
+          "title": "生日快乐",
+          "type": "movie",
+          "year": 2007,
+          "region": "美国",
+          "score": 9.7,
+          "genres": [
+            "剧情",
+            "犯罪"
+          ],
+          "runtime": 142,
+          "poster": "https://img2.doubanio.com/b.jpg",
+          "backdrop": "https://img2.doubanio.com/bg.jpg"
+        },
+        "raw": {
+          "vod_name": "生日快乐",
+          "vod_year": "2007",
+          "type_name": "伦理片"
+        },
+        "hints": {},
+        "output": null
+      },
+      {
+        "item": {
+          "id": "db-1292052",
+          "title": "生日快乐",
+          "type": "movie",
+          "year": 2007,
+          "region": "美国",
+          "score": 9.7,
+          "genres": [
+            "剧情",
+            "犯罪"
+          ],
+          "runtime": 142,
+          "poster": "https://img2.doubanio.com/b.jpg",
+          "backdrop": "https://img2.doubanio.com/bg.jpg"
+        },
+        "raw": {
+          "vod_name": "生日快乐",
+          "vod_year": "2007",
+          "type_name": "港台三级"
+        },
+        "hints": {},
+        "output": null
+      },
+      {
+        "item": {
+          "id": "db-1292052",
+          "title": "生日快乐",
+          "type": "movie",
+          "year": 2007,
+          "region": "美国",
+          "score": 9.7,
+          "genres": [
+            "剧情",
+            "犯罪"
+          ],
+          "runtime": 142,
+          "poster": "https://img2.doubanio.com/b.jpg",
+          "backdrop": "https://img2.doubanio.com/bg.jpg"
+        },
+        "raw": {
+          "vod_name": "生日快乐",
+          "vod_year": "2007",
+          "type_name": "里番动漫"
+        },
+        "hints": {},
+        "output": null
+      },
+      {
+        "item": {
+          "id": "db-1292052",
+          "title": "生日快乐",
+          "type": "movie",
+          "year": 2007,
+          "region": "美国",
+          "score": 9.7,
+          "genres": [
+            "剧情",
+            "犯罪"
+          ],
+          "runtime": 142,
+          "poster": "https://img2.doubanio.com/b.jpg",
+          "backdrop": "https://img2.doubanio.com/bg.jpg"
+        },
+        "raw": {
+          "vod_name": "生日快乐",
+          "vod_year": "2007",
+          "type_name": "福利"
+        },
+        "hints": {},
+        "output": null
+      },
+      {
+        "item": {
+          "id": "db-1292052",
+          "title": "生日快乐",
+          "type": "movie",
+          "year": 2007,
+          "region": "美国",
+          "score": 9.7,
+          "genres": [
+            "剧情",
+            "犯罪"
+          ],
+          "runtime": 142,
+          "poster": "https://img2.doubanio.com/b.jpg",
+          "backdrop": "https://img2.doubanio.com/bg.jpg"
+        },
+        "raw": {
+          "vod_name": "生日快乐",
+          "vod_year": "2007",
+          "type_name": "爱情片"
+        },
+        "hints": {},
+        "output": {}
+      }
+    ],
+    "adultShelf": [
+      {
+        "input": "伦理片",
+        "output": true
+      },
+      {
+        "input": "倫理片",
+        "output": true
+      },
+      {
+        "input": "韩国伦理",
+        "output": true
+      },
+      {
+        "input": "港台三级",
+        "output": true
+      },
+      {
+        "input": "里番动漫",
+        "output": true
+      },
+      {
+        "input": "福利",
+        "output": true
+      },
+      {
+        "input": "写真",
+        "output": true
+      },
+      {
+        "input": "成人动漫",
+        "output": true
+      },
+      {
+        "input": "AV",
+        "output": true
+      },
+      {
+        "input": "av解说",
+        "output": true
+      },
+      {
+        "input": "爱情片",
+        "output": false
+      },
+      {
+        "input": "剧情片",
+        "output": false
+      },
+      {
+        "input": "国产动漫",
+        "output": false
+      },
+      {
+        "input": "日韩动漫",
+        "output": false
+      },
+      {
+        "input": "MV",
+        "output": false
+      },
+      {
+        "input": "纪录片",
+        "output": false
+      },
+      {
+        "input": "大陆综艺",
+        "output": false
+      },
+      {
+        "input": "家庭剧",
+        "output": false
+      },
+      {
+        "input": "",
+        "output": false
       }
     ],
     "searchTerms": [

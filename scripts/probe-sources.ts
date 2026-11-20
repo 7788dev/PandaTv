@@ -14,6 +14,8 @@ import { join } from 'node:path'
 import { DoubanDataSource } from '../src/main/data/douban'
 import { PlaybackService } from '../src/main/playback/service'
 import { MediaProxy } from '../src/main/playback/proxy'
+import { createTransport } from '../src/main/data/transport'
+import { describeEgress } from '../src/main/egress'
 import type { MediaItem, MediaType } from '../design/contract/types'
 
 /** Long serials Douban files as one subject per run; play sources keep one cumulative record. */
@@ -28,7 +30,7 @@ interface Row {
 
 async function main() {
   const perChannel = Number(process.argv[2] ?? 14)
-  const data = new DoubanDataSource({ imageUrl: url => url, onWarning: () => {} })
+  const data = new DoubanDataSource({ imageUrl: url => url, onWarning: () => {}, fetch: createTransport() })
   const proxy = new MediaProxy(); await proxy.start()
   const playback = new PlaybackService({ proxy })
   const rows: Row[] = []
@@ -71,7 +73,7 @@ async function main() {
   summary['serials with an episode range'] = `${runs.filter(row => row.ok).length}/${runs.length}`
   const out = process.argv[3] ?? join(__dirname, '..', 'docs', 'evidence', 'source-coverage.json')
   writeFileSync(out, JSON.stringify({
-    at: new Date().toISOString(),
+    at: new Date().toISOString(), route: describeEgress(),
     method: 'DoubanDataSource.detail → PlaybackService.availability + resolve(episode 1); ok = first media bytes read',
     perChannel, summary, rows,
   }, null, 1) + '\n')
