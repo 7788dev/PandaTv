@@ -1,0 +1,11 @@
+installer: 133203396 bytes, sha256 EB8DAFE7875F671F490D0EDCD6EDDC428A1F7C4ED4967A82395637B14BA720BA
+existing install found at D:\Programs\Panda before this run: upgraded in place, not removed afterwards
+install exit code: 0 in 12s
+install directory: D:\Programs\Panda
+installed exe exists: True
+uninstall entry: Panda 1.1.1 | 1.1.1 | Panda
+start menu shortcut: True
+desktop shortcut: True
+installed size: 370 MB in 75 files
+resources: app-update.yml 89, app.asar 13781384, elevate.exe 107520
+installed exe version info: Panda | 1.1.1 | Panda; authenticode: NotSigned

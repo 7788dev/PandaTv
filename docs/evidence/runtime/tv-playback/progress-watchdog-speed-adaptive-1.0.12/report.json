@@ -1,0 +1,391 @@
+{
+  "at": "2026-11-20T16:42:55.418177+00:00",
+  "cases": [
+    {
+      "name": "speed-control",
+      "passed": true,
+      "steps": [
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "倍速"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1661,
+              956,
+              1828,
+              1028
+            ],
+            "labels": [
+              "倍速"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "1.25×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "1.25×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1649,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "1.25×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "1.5×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "1.5×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1664,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "1.5×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "2.0×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "2.0×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1664,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "2.0×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        }
+      ],
+      "final": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "2.0×",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "2.0×"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1664,
+            956,
+            1828,
+            1027
+          ],
+          "labels": [
+            "2.0×"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "sourceRetries": 0,
+      "rateSample": {
+        "mediaSeconds": 20,
+        "wallSeconds": 12.55,
+        "effectiveWallSpeed": 1.59,
+        "activePlaybackSeconds": 9.87,
+        "activePlaybackSpeed": 2.03,
+        "samples": [
+          {
+            "wallSeconds": 0.0,
+            "clock": "00:02",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 0.54,
+            "clock": "00:02",
+            "spinner": true,
+            "playing": false,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 1.08,
+            "clock": "00:02",
+            "spinner": true,
+            "playing": false,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 1.62,
+            "clock": "00:02",
+            "spinner": true,
+            "playing": false,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 2.15,
+            "clock": "00:02",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 2.68,
+            "clock": "00:02",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 3.21,
+            "clock": "00:04",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 3.75,
+            "clock": "00:06",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 4.28,
+            "clock": "00:06",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 4.8,
+            "clock": "00:08",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 5.45,
+            "clock": null,
+            "spinner": false,
+            "playing": false,
+            "speed": null,
+            "line": null
+          },
+          {
+            "wallSeconds": 5.98,
+            "clock": "00:10",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 6.52,
+            "clock": "00:10",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 7.06,
+            "clock": "00:12",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 7.6,
+            "clock": "00:12",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 8.13,
+            "clock": "00:14",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 8.67,
+            "clock": "00:14",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 9.3,
+            "clock": null,
+            "spinner": false,
+            "playing": false,
+            "speed": null,
+            "line": null
+          },
+          {
+            "wallSeconds": 9.84,
+            "clock": "00:18",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 10.38,
+            "clock": "00:18",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 10.92,
+            "clock": "00:20",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 11.46,
+            "clock": "00:20",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 12.01,
+            "clock": "00:22",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          },
+          {
+            "wallSeconds": 12.55,
+            "clock": "00:22",
+            "spinner": false,
+            "playing": true,
+            "speed": "2.0×",
+            "line": null
+          }
+        ]
+      },
+      "rendererSample": {
+        "coverage": "no frame-counter callback sample"
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

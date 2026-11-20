@@ -18,6 +18,7 @@ Use Context7 to resolve and query current library documentation before relying o
 - After touching the home feed, the artwork proxy, connection handling or main-process startup, run `npm run probe:startup` with at least 20 first starts: stalls are intermittent, so a few clean starts prove nothing ([why](.agents/notes/implemented/architecture/2026-11-17-startup.md)).
 - Keep `tv/` data, matching, ad-filtering and contract rules aligned with desktop, keep `minSdk = 22` (`NewApi` fatal, Media3 <= 1.8.x), and after changing shared rules or `resources/play-sources.json` re-export golden vectors (`node scripts/export-tv-vectors.mjs`) and run `tv\gradlew.bat testDebugUnitTest lintRelease assembleRelease` ([why](.agents/notes/implemented/architecture/2026-11-18-android-tv.md)).
 - For TV focus, loading or player changes, replay navigation and playback on the installed final APK. Verify the actual control focus before activation and restore seeded user state, source overrides and firewall rules after device tests ([why](.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md), [workflow](.agents/skills/tv-runtime-regression/SKILL.md)).
+- In TV replay helpers, choose the D-pad axis from both target and focused-node positions; a left/right move can close the player side panel ([why](.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)).
 - On this host write multi-line helper scripts to a file before running them: shell heredocs drop backslashes and mangle non-ASCII literals.
 
 ## Verification

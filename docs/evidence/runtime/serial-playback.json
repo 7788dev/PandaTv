@@ -1,10 +1,10 @@
 {
-  "at": "2026-11-19T17:13:47.672Z",
+  "at": "2026-11-20T10:36:37.218Z",
   "episodes": {
     "episodes": 8
   },
   "first": {
-    "position": 1.005582,
+    "position": 1.002576,
     "duration": 3635.134000000003,
     "width": 1920,
     "height": 1080,
@@ -13,10 +13,11 @@
     "rate": 1,
     "volume": 0.8,
     "muted": true,
-    "decodedFrames": 31
+    "decodedFrames": 34,
+    "droppedFrames": 0
   },
   "second": {
-    "position": 1.002127,
+    "position": 1.004258,
     "duration": 3831.8880000000017,
     "width": 1920,
     "height": 1080,
@@ -25,10 +26,11 @@
     "rate": 1,
     "volume": 0.8,
     "muted": true,
-    "decodedFrames": 34
+    "decodedFrames": 34,
+    "droppedFrames": 0
   },
   "third": {
-    "position": 1.001664,
+    "position": 1.004254,
     "duration": 3209.875000000001,
     "width": 1920,
     "height": 1080,
@@ -37,7 +39,8 @@
     "rate": 1,
     "volume": 0.8,
     "muted": true,
-    "decodedFrames": 27
+    "decodedFrames": 27,
+    "droppedFrames": 0
   },
   "filterDiagnostics": []
 }

@@ -9,7 +9,7 @@ Status: implemented
 ## Decision
 
 - 词表（[taxonomy.ts](../../../../src/main/data/taxonomy.ts)）：类型用豆瓣标签，地区用豆瓣的国家/地区标签加“华语”“欧美”两个语言组，年份用单年标签（2010 至今）加年代标签和“更早”。动画、纪录片同时读电视与电影两条列表并合并。`tags=a,b,c` 为交集，由豆瓣服务端过滤。
-- 准入：`npm run probe:filters` 用生产数据源逐项读取首页，至少 6 部才保留；结果写入 [filter-vocabulary.json](../../../../docs/evidence/filter-vocabulary.json)，[单测](../../../../tests/data.test.ts)要求词表与该证据逐项一致。2026-11-16 最终一轮：738 项全部通过，无一项需要重问。
+- 准入规则为 `npm run probe:filters` 用生产数据源逐项读取首页，至少返回 6 部。更新后于 2026-11-20 21:38 重放，736 项全部通过。[线上探测](../../../../docs/evidence/filter-vocabulary.json)与[单测](../../../../tests/data.test.ts)逐项校验词表。
 - 冷门组合（[douban.ts](../../../../src/main/data/douban.ts) 的 `listing`）：列表请求单次等待 20 秒且超时不重发（重发会让豆瓣重新计算）；返回条数少于 `min(count, total-start)` 即判为部分页，不缓存，0.8 秒后重读一次；仍不完整就把这一页拆成更小的页（30 → 10 → 5）读，小页先完成而且条目与顺序一致。仍读不全时报 `TIMEOUT`，界面显示“连接超时，请重试”。
 
 ## Alternatives considered

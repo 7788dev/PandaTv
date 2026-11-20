@@ -1,0 +1,213 @@
+{
+  "at": "2026-11-20T13:43:33.233Z",
+  "executable": "D:\\Programs\\Panda\\Panda.exe",
+  "unit": "ms after process creation",
+  "firstStarts": [
+    {
+      "skeleton": 736,
+      "topOfPage": 1208,
+      "visibleArtwork": 1700,
+      "wholePage": 2065,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 990,
+      "topOfPage": 1690,
+      "visibleArtwork": 3170,
+      "wholePage": 2220,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 1033,
+      "topOfPage": 1381,
+      "visibleArtwork": 8761,
+      "wholePage": 2517,
+      "visibleImages": 31,
+      "failed": false,
+      "notices": [
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":3270,\"served\":true,\"attempts\":[{\"ms\":1505,\"error\":\"网络请求失败或超时\"},{\"ms\":1765}]}",
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":5120,\"served\":true,\"attempts\":[{\"ms\":2306,\"error\":\"网络请求失败或超时\"},{\"ms\":2503,\"error\":\"网络请求失败或超时\"},{\"ms\":310}]}",
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":7461,\"served\":true,\"attempts\":[{\"ms\":2822,\"error\":\"网络请求失败或超时\"},{\"ms\":4639}]}"
+      ]
+    },
+    {
+      "skeleton": 1082,
+      "topOfPage": 1369,
+      "visibleArtwork": 2845,
+      "wholePage": 2419,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 656,
+      "topOfPage": 1290,
+      "visibleArtwork": 2874,
+      "wholePage": 2276,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 806,
+      "topOfPage": 1534,
+      "visibleArtwork": 2033,
+      "wholePage": 2182,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 899,
+      "topOfPage": 1669,
+      "visibleArtwork": 4612,
+      "wholePage": 2516,
+      "visibleImages": 18,
+      "failed": false,
+      "notices": [
+        "[image] {\"host\":\"img9.doubanio.com\",\"ms\":3164,\"served\":true,\"attempts\":[{\"ms\":1641,\"error\":\"网络请求失败或超时\"},{\"ms\":1523}]}"
+      ]
+    },
+    {
+      "skeleton": 816,
+      "topOfPage": 1400,
+      "visibleArtwork": 3703,
+      "wholePage": 2334,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 956,
+      "topOfPage": 1219,
+      "visibleArtwork": 1781,
+      "wholePage": 2404,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 1455,
+      "topOfPage": 1455,
+      "visibleArtwork": 7101,
+      "wholePage": 2394,
+      "visibleImages": 18,
+      "failed": false,
+      "notices": [
+        "[image] {\"host\":\"img9.doubanio.com\",\"ms\":5626,\"served\":true,\"attempts\":[{\"ms\":1867,\"error\":\"网络请求失败或超时\"},{\"ms\":3759}]}"
+      ]
+    },
+    {
+      "skeleton": 804,
+      "topOfPage": 1069,
+      "visibleArtwork": 2758,
+      "wholePage": 2111,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 850,
+      "topOfPage": 1338,
+      "visibleArtwork": 1846,
+      "wholePage": 2107,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 718,
+      "topOfPage": 1374,
+      "visibleArtwork": 11321,
+      "wholePage": 2256,
+      "visibleImages": 18,
+      "failed": false,
+      "notices": [
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":4589,\"served\":true,\"attempts\":[{\"ms\":4588}]}",
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":4777,\"served\":true,\"attempts\":[{\"ms\":2130,\"error\":\"网络请求失败或超时\"},{\"ms\":2502,\"error\":\"网络请求失败或超时\"},{\"ms\":145}]}",
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":4882,\"served\":true,\"attempts\":[{\"ms\":1980,\"error\":\"网络请求失败或超时\"},{\"ms\":2501,\"error\":\"网络请求失败或超时\"},{\"ms\":401}]}",
+        "[image] {\"host\":\"img2.doubanio.com\",\"ms\":10050,\"served\":true,\"attempts\":[{\"ms\":2624,\"error\":\"网络请求失败或超时\"},{\"ms\":6719,\"error\":\"aborted\"},{\"ms\":706}]}"
+      ]
+    },
+    {
+      "skeleton": 685,
+      "topOfPage": 1093,
+      "visibleArtwork": 1508,
+      "wholePage": 2191,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 788,
+      "topOfPage": 1393,
+      "visibleArtwork": 2799,
+      "wholePage": 2233,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 769,
+      "topOfPage": 1138,
+      "visibleArtwork": 4874,
+      "wholePage": 2013,
+      "visibleImages": 18,
+      "failed": false,
+      "notices": [
+        "[image] {\"host\":\"img9.doubanio.com\",\"ms\":3805,\"served\":true,\"attempts\":[{\"ms\":3804}]}"
+      ]
+    },
+    {
+      "skeleton": 1161,
+      "topOfPage": 1760,
+      "visibleArtwork": 2989,
+      "wholePage": 2762,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 644,
+      "topOfPage": 1358,
+      "visibleArtwork": 3501,
+      "wholePage": 1924,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 522,
+      "topOfPage": 926,
+      "visibleArtwork": 3040,
+      "wholePage": 2031,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 494,
+      "topOfPage": 1147,
+      "visibleArtwork": 1573,
+      "wholePage": 2483,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ],
+  "repeatStarts": [
+    {
+      "skeleton": 623,
+      "topOfPage": 815,
+      "visibleArtwork": 968,
+      "wholePage": 815,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 607,
+      "topOfPage": 791,
+      "visibleArtwork": 980,
+      "wholePage": 791,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 584,
+      "topOfPage": 742,
+      "visibleArtwork": 962,
+      "wholePage": 742,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ]
+}

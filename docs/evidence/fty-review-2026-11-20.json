@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-20T10:37:06.8046738Z",
+  "retrievedAt": "2026-11-20T08:46:07.4326182Z",
+  "url": "https://raw.githubusercontent.com/qist/tvbox/master/fty.json",
+  "sha256": "2767E3D55B986D3903E3C0695A30E1EF6F2B3C5FCA45356445BD831FE233992D",
+  "sites": 49,
+  "nativePluginSites": 49,
+  "guardedPlugins": 46,
+  "directJsonCatalogues": 0,
+  "directXmlCatalogues": 0,
+  "compatibleDirectCandidates": [],
+  "decision": "No direct CMS adapter was found. Keep the tested nine-source pool; plugin-backed websites need separate adapters and playback evidence before admission."
+}

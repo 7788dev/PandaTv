@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-20T16:06:52.326191+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "speed-control",
+      "error": "Observed playback rate was 1.00x at the 2.0x setting"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "765044DC805725FB22CB76B6967A2960C25B443FCB9A9F381685D1E76DE432D3",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

@@ -1,0 +1,173 @@
+{
+  "at": "2026-11-20T16:53:40.979233+00:00",
+  "cases": [
+    {
+      "name": "line-switch-1",
+      "passed": true,
+      "selectedLine": "金鹰资源",
+      "before": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "0.0",
+          "暂停",
+          "00:03 / 2:53:10",
+          "线路: 360资源",
+          "720P",
+          "倍速",
+          "线路",
+          "金鹰资源",
+          "360资源 ✓"
+        ],
+        "clock": "00:03 / 2:53:10",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.TextView",
+          "bounds": [
+            1296,
+            149,
+            1864,
+            235
+          ],
+          "labels": [
+            "金鹰资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 255
+      },
+      "pending": [
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "正在切换线路",
+            "0.0",
+            "暂停",
+            "00:04 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              92,
+              956,
+              267,
+              1028
+            ],
+            "labels": [
+              "暂停"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:04 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              92,
+              956,
+              267,
+              1028
+            ],
+            "labels": [
+              "暂停"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:05 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:05 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              92,
+              956,
+              267,
+              1028
+            ],
+            "labels": [
+              "暂停"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "0.0",
+          "暂停",
+          "00:05 / 2:53:10",
+          "线路: 360资源",
+          "720P",
+          "倍速"
+        ],
+        "clock": "00:05 / 2:53:10",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "loadingRegionMaxRgb": 255
+      }
+    }
+  ],
+  "unavailable": [
+    {
+      "name": "line-switch-2",
+      "status": "unavailable",
+      "reason": "The real catalogue pool returned only one line; no alternate line can be selected."
+    }
+  ],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "enabledSources": [
+    "360zy",
+    "jyzy"
+  ],
+  "sourceRulesRestored": true,
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}
