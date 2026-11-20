@@ -1,0 +1,88 @@
+{
+  "at": "2026-11-20T08:51:37.869130+00:00",
+  "version": "1.0.9",
+  "apkSha256": "5DC185DCC59A0F5E9FD5884D702C76D46C2251AD64D1C2EC8BB26CB1A1136A37",
+  "cases": [
+    {
+      "name": "剧集榜-1",
+      "selected": [
+        "剧集"
+      ],
+      "focused": [
+        "首页"
+      ]
+    },
+    {
+      "name": "电影榜-1",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "首页"
+      ]
+    },
+    {
+      "name": "动漫榜-1",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "首页"
+      ]
+    },
+    {
+      "name": "剧集榜-2",
+      "selected": [
+        "剧集"
+      ],
+      "focused": [
+        "首页"
+      ]
+    },
+    {
+      "name": "电影榜-2",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "首页"
+      ]
+    },
+    {
+      "name": "动漫榜-2",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "首页"
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "name": "剧集榜-1",
+      "error": "Page changed to 剧集, but D-pad focus stayed elsewhere: {'selected': ['剧集'], 'focused': ['首页']}"
+    },
+    {
+      "name": "电影榜-1",
+      "error": "Page changed to 电影, but D-pad focus stayed elsewhere: {'selected': ['电影'], 'focused': ['首页']}"
+    },
+    {
+      "name": "动漫榜-1",
+      "error": "Page changed to 动漫, but D-pad focus stayed elsewhere: {'selected': ['动漫'], 'focused': ['首页']}"
+    },
+    {
+      "name": "剧集榜-2",
+      "error": "Page changed to 剧集, but D-pad focus stayed elsewhere: {'selected': ['剧集'], 'focused': ['首页']}"
+    },
+    {
+      "name": "电影榜-2",
+      "error": "Page changed to 电影, but D-pad focus stayed elsewhere: {'selected': ['电影'], 'focused': ['首页']}"
+    },
+    {
+      "name": "动漫榜-2",
+      "error": "Page changed to 动漫, but D-pad focus stayed elsewhere: {'selected': ['动漫'], 'focused': ['首页']}"
+    }
+  ],
+  "userStateRestored": true
+}

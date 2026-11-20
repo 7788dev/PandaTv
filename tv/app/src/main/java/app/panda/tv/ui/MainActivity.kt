@@ -236,6 +236,9 @@ class MainActivity : Activity(), Navigator {
         syncChrome(screen)
         if (hadPrior) animateScreenIn(screen.view, rise = false)
         screen.onShown()
+        // Removing a focused More button lets Android choose the first nav tab.
+        // The destination tab owns focus after root navigation, regardless of the entry point.
+        if (hadPrior) navPills[screen.activeTab]?.requestFocus()
     }
 
     private fun pushScreen(screen: Screen) {

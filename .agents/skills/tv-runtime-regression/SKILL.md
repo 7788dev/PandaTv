@@ -13,6 +13,7 @@ Read the [delivery report](../../../docs/delivery-report.md) for the current APK
 2. Query the actual MuMu instance before device actions: `mumu-cli.exe info --vmindex 1`. Wait for `is_android_started: true` and `player_state: start_finished`, and use the returned host and port for the serial; do not derive the instance from a port formula. Connect `adb.exe connect <serial>` and install the reported APK with `adb.exe -s <serial> install -r <apk>`.
 3. From the repository root, run the following sequentially on that same device, with a new evidence label for each comparison:
    - `python -X utf8 scripts/verify-tv-navigation.py --serial <serial> --label <label> --extended --library`
+   - For home More links or root navigation changes: `python -X utf8 scripts/verify-tv-nav-selection.py --serial <serial> --label <label> --repeat 2`
    - `python -X utf8 scripts/verify-tv-search-state.py --serial <serial> --label <label>`
    - `python -X utf8 scripts/verify-tv-playback-transitions.py --serial <serial> --label <label> --case all`
    - `python -X utf8 scripts/verify-tv-motion.py --serial <serial> --label <label> --repeat 2`
