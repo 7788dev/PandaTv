@@ -20,6 +20,18 @@ pnpm-debug.log*
 *.keystore
 *.p12
 *.pfx
+*.pem
+*.key
+logs/
+**/logs/
+**/*token*
+!design/styles/tokens.css
+**/*cookie*
+**/*secret*
+**/*api-key*
+**/*apikey*
+**/*private-config*
+**/*private_config*
 
 # Tauri
 src-tauri/target
@@ -38,7 +50,9 @@ design/tools/.out
 out/
 release/
 test-results/
+coverage/
 playwright-report/
+.playwright/
 .cache/
 .tmp/
 .vitest/
