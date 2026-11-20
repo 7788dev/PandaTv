@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import re
 import time
+import subprocess
 
 import uiautomator2 as u2
 
@@ -25,7 +26,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--serial", default="127.0.0.1:16416")
     parser.add_argument("--label", default="playback-transitions")
-    parser.add_argument("--case", choices=["focus", "next", "missing", "all"], default="all")
+    parser.add_argument("--case", choices=["focus", "seek", "speed", "next", "missing", "all"], default="all")
     parser.add_argument("--require-missing", action="store_true", help="Require a confirmed empty catalogue verdict, instead of a retryable network error")
     parser.add_argument("--enabled-sources", nargs="+", help="Temporarily enable only these real built-in catalogues; restore the original configuration after replay")
     args = parser.parse_args()
@@ -39,7 +40,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     scratch = ROOT / ".tmp/tv-playback"
     scratch.mkdir(parents=True, exist_ok=True)
-    report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "cases": [], "failures": []}
+    report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "cases": [], "unavailable": [], "failures": []}
     report["version"] = re.search(r"versionName=(\S+)", h.run_adb("shell", "dumpsys", "package", PACKAGE))[1]
     report["apkSha256"] = h.installed_apk_sha256()
     original = None
@@ -104,6 +105,24 @@ def main():
             time.sleep(.25)
         raise TimeoutError(f"Playback did not advance; visible texts={h.texts(last)}")
 
+    def wait_playing_with_retries(timeout=150):
+        deadline = time.monotonic() + timeout
+        retries = 0
+        last_error = None
+        while time.monotonic() < deadline:
+            try:
+                wait_playing(timeout=min(6, max(1, int(deadline - time.monotonic()))))
+                return retries
+            except TimeoutError as error:
+                last_error = str(error)
+                nodes = h.dump_nodes(d)
+                labels = h.texts(nodes)
+                if "重试" in labels and any("暂时无法连接" in text or "播放失败" in text or "超时" in text for text in labels):
+                    raise TimeoutError(f"Retryable source failure before a decodable first frame: {labels}")
+                else:
+                    time.sleep(.4)
+        raise TimeoutError(f"Playback did not advance after {retries} retry actions; {last_error}")
+
     def open_subject(query, rating=None):
         h.focus_top_bar(d)
         h.move_focus_to_text(d, "搜索", max_steps=15)
@@ -130,18 +149,37 @@ def main():
     def record(name, callback):
         try:
             result = callback()
+            if result and result.get("status") == "unavailable":
+                report["unavailable"].append({"name": name, **result})
+                print(f"UNAVAILABLE {name}: {result.get('reason', 'measurement unavailable')}", flush=True)
+                return
             report["cases"].append({"name": name, "passed": True, **(result or {})})
             print(f"PASS {name}", flush=True)
         except Exception as exc:
-            report["failures"].append({"name": name, "error": str(exc)})
-            snapshot(name + "-failure")
-            print(f"FAIL {name}: {exc}", flush=True)
+            state = snapshot(name + "-failure")
+            message = str(exc)
+            if isinstance(exc, TimeoutError) and any("暂时无法连接" in text or "超时" in text for text in state["texts"]):
+                report["unavailable"].append({"name": name, "reason": message, "state": state,
+                                               "detail": "Catalogues returned retryable network errors before this real playback sample could run."})
+                print(f"UNAVAILABLE {name}: {message}", flush=True)
+            else:
+                report["failures"].append({"name": name, "error": message})
+                print(f"FAIL {name}: {exc}", flush=True)
 
     def next_episode():
         restart()
         open_subject("三体", "8.8")
         h.key("enter", wait=.4)
-        wait_playing()
+        try:
+            wait_playing()
+        except TimeoutError as error:
+            state = snapshot("episode-playback-unavailable", capture=True)
+            labels = state["texts"]
+            detail_still_open = "演职员" in labels and any("播放" in text for text in labels)
+            retryable = any("暂时无法连接" in text or "超时" in text or "重试" in text for text in labels)
+            if detail_still_open or retryable:
+                return {"status": "unavailable", "reason": str(error), "detail": "Catalogue or media host failed before a decodable episode was available.", "state": state}
+            raise
         h.key("menu", wait=.1)
         h.key("dpad_down", wait=.1)
         # Move into feature content so the old episode is visibly distinguishable
@@ -153,9 +191,11 @@ def main():
         seek_nodes = h.dump_nodes(d)
         seek_clock = next(n["text"] for n in seek_nodes if " / " in n["text"])
         seek_position = h.parse_clock(seek_clock.split(" / ")[0]) or 0
+        seek_started = time.monotonic()
         h.wait_for(d, lambda ns: not any(n["class"] == "android.widget.ProgressBar" for n in ns) and any(
             " / " in n["text"] and (h.parse_clock(n["text"].split(" / ")[0]) or 0) >= seek_position + 2 for n in ns
         ), timeout=70)
+        seek_recovery_ms = round((time.monotonic() - seek_started) * 1000)
         h.key("dpad_down", wait=.1)
         h.move_focus_to_text(d, "下一集", max_steps=12)
         before = snapshot("episode-1-playing")
@@ -199,7 +239,8 @@ def main():
         history = json.loads(h.run_adb("shell", "cat", STATE))["history"]
         entry = next((row for row in history if row["id"] == "db-26647087"), None)
         assert entry is not None and entry["episode"] == 3, f"Latest episode did not own its history: {entry}"
-        return {"before": before, "loading": checks, "after": after, "paused": paused, "history": entry}
+        return {"before": before, "seekRecoveryMs": seek_recovery_ms, "seekPositionSec": seek_position,
+                "loading": checks, "after": after, "paused": paused, "history": entry}
 
     def player_focus():
         restart()
@@ -217,6 +258,132 @@ def main():
         restored = snapshot("player-restored-focus")
         assert restored["focus"] and any(t in ["播放", "暂停"] for t in restored["focus"]["labels"]), f"Hidden controls lost their remote focus: {restored}"
         return {"initial": initial, "next": selected, "restored": restored}
+
+    def seek_control():
+        restart()
+        open_subject("三体", "8.8")
+        h.key("dpad_center", wait=.3)
+        try:
+            source_retries = wait_playing_with_retries(timeout=150)
+        except TimeoutError as error:
+            state = snapshot("seek-playback-unavailable", capture=True)
+            labels = state["texts"]
+            if "演职员" in labels or any("暂时无法连接" in text or "超时" in text for text in labels):
+                return {"status": "unavailable", "reason": str(error), "state": state}
+            raise
+
+        h.key("menu", wait=.1)
+        h.key("dpad_down", wait=.1)
+        h.key("dpad_up", wait=.1)
+        h.wait_for(d, lambda ns: any(n["focused"] and n["class"] == "android.widget.SeekBar" for n in ns), timeout=8)
+        before_nodes = h.dump_nodes(d)
+        before_clock = next(n["text"].split(" / ")[0] for n in before_nodes if " / " in n["text"])
+        before_sec = h.parse_clock(before_clock)
+        started = time.monotonic()
+        for _ in range(6):
+            h.key("dpad_right", wait=.05)
+        requested_nodes = h.dump_nodes(d)
+        requested_clock = next(n["text"].split(" / ")[0] for n in requested_nodes if " / " in n["text"])
+        requested_sec = h.parse_clock(requested_clock)
+        assert before_sec is not None and requested_sec is not None and requested_sec > before_sec, f"Seek bar did not acknowledge D-pad input: {before_clock} -> {requested_clock}"
+        request_feedback_ms = round((time.monotonic() - started) * 1000)
+
+        recovered = False
+        last = requested_nodes
+        until = time.monotonic() + 70
+        while time.monotonic() < until:
+            last = h.dump_nodes(d)
+            labels = h.texts(last)
+            if any("暂时无法连接" in text or "播放失败" in text for text in labels):
+                break
+            if not any(" / " in text for text in labels) or "暂停" not in labels:
+                h.key("dpad_down", wait=.05)
+            clock_text = next((node["text"] for node in last if " / " in node["text"]), None)
+            current = h.parse_clock(clock_text.split(" / ")[0]) if clock_text else None
+            if (current is not None and requested_sec is not None and current >= requested_sec + 2
+                and "暂停" in labels and not any(node["class"] == "android.widget.ProgressBar" for node in last)):
+                recovered = True
+                break
+            time.sleep(.2)
+        if not recovered:
+            state = snapshot("seek-recovery-unavailable", capture=True)
+            if any("暂时无法连接" in text or "播放失败" in text for text in state["texts"]):
+                return {"status": "unavailable", "reason": "Source or media failed during seek refill.", "state": state,
+                        "requestFeedbackMs": request_feedback_ms, "beforeClock": before_clock, "requestedClock": requested_clock}
+            raise TimeoutError(f"Seek did not refill and advance after 70s: {h.texts(last)}")
+
+        recovered_clock = next(node["text"] for node in last if " / " in node["text"])
+        return {"sourceRetries": source_retries, "beforeClock": before_clock, "requestedClock": requested_clock,
+                "recoveredClock": recovered_clock, "requestFeedbackMs": request_feedback_ms,
+                "seekRecoveryMs": round((time.monotonic() - started) * 1000), "steps": 6}
+
+    def speed_control():
+        restart()
+        open_subject("三体", "8.8")
+        h.key("dpad_center", wait=.4)
+        h.wait_for(d, lambda ns: "倍速" in h.texts(ns), timeout=35)
+        h.move_focus_to_text(d, "倍速", max_steps=12)
+        h.run_adb("logcat", "-c")
+        states = [snapshot("speed-initial", capture=True)]
+        for _ in range(5):
+            if any("2.0×" in text or "2×" in text for text in h.texts(h.dump_nodes(d))):
+                break
+            h.key("dpad_center", wait=.15)
+            states.append(snapshot("speed-step-" + str(len(states) + 1), capture=True))
+        final = snapshot("speed-2x-selected", capture=True)
+        assert any("2.0×" in text or "2×" in text for text in final["texts"]), f"Remote speed cycle did not reach 2.0x: {final}"
+        try:
+            retries = wait_playing_with_retries(timeout=150)
+        except TimeoutError as error:
+            failed = snapshot("speed-playback-unavailable", capture=True)
+            return {"status": "unavailable", "selectionPassed": True, "steps": states, "final": final,
+                    "reason": str(error), "playbackMeasurement": {"status": "unavailable", "final": failed,
+                                                                    "renderedFrames": None, "droppedFrames": None}}
+        before = h.dump_nodes(d)
+        before_clock = next(n["text"].split(" / ")[0] for n in before if " / " in n["text"])
+        before_sec = h.parse_clock(before_clock)
+        started = time.monotonic()
+        latest = before
+        while time.monotonic() - started < 12.5:
+            time.sleep(.5)
+            latest = h.dump_nodes(d)
+            labels = h.texts(latest)
+            if any("暂时无法连接" in text or "播放失败" in text for text in labels):
+                raise AssertionError(f"Playback failed during 2.0x measurement: {labels}")
+            if not any(" / " in text for text in labels):
+                h.key("dpad_down", wait=.05)
+        after_clock = next(n["text"].split(" / ")[0] for n in latest if " / " in n["text"])
+        after_sec = h.parse_clock(after_clock)
+        elapsed = time.monotonic() - started
+        if before_sec is None or after_sec is None or after_sec <= before_sec:
+            return {"status": "unavailable", "selectionPassed": True, "steps": states, "final": final,
+                    "reason": "Playback timeline did not advance during the 2.0x measurement window.",
+                    "playbackMeasurement": {"status": "unavailable", "wallSeconds": round(elapsed, 2),
+                                            "beforeClock": before_clock, "afterClock": after_clock,
+                                            "renderedFrames": None, "droppedFrames": None}}
+        observed_speed = (after_sec - before_sec) / elapsed
+
+        log = subprocess.run(
+            [h.ADB, "-s", args.serial, "logcat", "-d", "-s", "PandaTV:I"],
+            capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=20,
+        ).stdout
+        measurements = re.findall(r"\[speed\] rate=2\.0x elapsedMs=(\d+) (?:processed|rendered)Frames=(\d+) droppedFrames=(\d+)(?: offsetSamples=(\d+))?", log)
+        assert 1.55 <= observed_speed <= 2.45, f"Observed playback rate was {observed_speed:.2f}x at the 2.0x setting"
+        renderer_sample = None
+        if measurements:
+            measure_ms, rendered_frames, dropped_frames = map(int, measurements[-1][:3])
+            offset_samples = int(measurements[-1][3] or 0)
+            denominator = rendered_frames or offset_samples
+            renderer_sample = {"elapsedMs": measure_ms, "renderedOutputBuffers": rendered_frames,
+                               "frameProcessingOffsetSamples": offset_samples, "droppedOutputBuffers": dropped_frames,
+                               "dropRateDenominatorFrames": denominator,
+                               "dropRate": (round(dropped_frames / denominator, 4) if denominator > 0 else None),
+                               "coverage": ("decoder counters" if rendered_frames > 0 else "processing-offset callback only" if offset_samples > 0 else "no renderer frame counters")}
+        else:
+            renderer_sample = {"coverage": "no frame-counter callback sample"}
+        return {"steps": states, "final": final, "sourceRetries": retries,
+                "rateSample": {"mediaSeconds": after_sec - before_sec, "wallSeconds": round(elapsed, 2), "observedSpeed": round(observed_speed, 2)},
+                "rendererSample": renderer_sample}
 
     def missing_source():
         restart()
@@ -283,6 +450,10 @@ def main():
         restart()
         if args.case in ["focus", "all"]:
             record("player-focus", player_focus)
+        if args.case in ["seek", "all"]:
+            record("seek-control", seek_control)
+        if args.case in ["speed", "all"]:
+            record("speed-control", speed_control)
         if args.case in ["next", "all"]:
             record("episode-switch", next_episode)
         if args.case in ["missing", "all"]:

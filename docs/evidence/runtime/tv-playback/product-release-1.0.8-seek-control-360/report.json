@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-20T03:41:00.262529+00:00",
+  "cases": [
+    {
+      "name": "seek-control",
+      "passed": true,
+      "sourceRetries": 0,
+      "beforeClock": "00:02",
+      "requestedClock": "01:03",
+      "recoveredClock": "01:05 / 1:00:35",
+      "requestFeedbackMs": 677,
+      "seekRecoveryMs": 8461,
+      "steps": 6
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.8",
+  "apkSha256": "64A81DB3173FE38FC31EDC8E9C78B99C93A510E78AB1CBBF784360FF594B063F",
+  "enabledSources": [
+    "360zy"
+  ],
+  "sourceRulesRestored": true,
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

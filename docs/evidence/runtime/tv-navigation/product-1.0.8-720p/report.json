@@ -1,0 +1,159 @@
+{
+  "at": "2026-11-20T04:20:50.847753+00:00",
+  "version": "1.0.8",
+  "display": {
+    "size": "Physical size: 1080x1920\nOverride size: 1280x720",
+    "density": "Physical density: 280\nOverride density: 240"
+  },
+  "cases": [
+    {
+      "name": "动漫-1-normal",
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 9,
+      "firstMovie": "谷雨街后巷",
+      "trace": [
+        {
+          "title": "鬼灭之刃：柱训练篇",
+          "labels": [
+            "8.9",
+            "鬼灭之刃：柱训练篇",
+            "剧情 / 动作 / 动画 / 奇幻"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "强风吹拂",
+          "labels": [
+            "9.6",
+            "强风吹拂",
+            "动画 / 运动"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "相反的你和我 第二季",
+          "labels": [
+            "9.2",
+            "相反的你和我 第二季",
+            "喜剧 / 爱情 / 动画"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "斗破苍穹 年番4",
+          "labels": [
+            "4.7",
+            "斗破苍穹 年番4",
+            "动作 / 动画 / 奇幻 / 冒险 / 古装"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "鬼灭之刃",
+          "labels": [
+            "9.1",
+            "鬼灭之刃",
+            "动作 / 动画 / 奇幻 / 冒险"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "凡人修仙传 年番4",
+          "labels": [
+            "凡人修仙传 年番4",
+            "动作 / 动画 / 奇幻"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "死神 千年血战篇 -祸进谭-",
+          "labels": [
+            "8.4",
+            "死神 千年血战篇 -祸进谭-",
+            "剧情 / 动作 / 动画"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "谷雨街后巷",
+          "labels": [
+            "谷雨街后巷",
+            "剧情 / 动画 / 奇幻"
+          ],
+          "bounds": [
+            58,
+            165,
+            239,
+            501
+          ],
+          "focused": true
+        },
+        {
+          "title": "最热",
+          "labels": [
+            "最热"
+          ],
+          "bounds": [
+            133,
+            100,
+            207,
+            143
+          ],
+          "focused": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [
+    {
+      "name": "navigation-run",
+      "error": "Could not move focus to '首页'"
+    }
+  ],
+  "apkSha256": "64A81DB3173FE38FC31EDC8E9C78B99C93A510E78AB1CBBF784360FF594B063F",
+  "userStateRestored": true
+}

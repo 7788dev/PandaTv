@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--channels", nargs="+", default=["动漫", "电影", "剧集", "综艺", "纪录片"])
     parser.add_argument("--repeat", type=int, default=1)
     parser.add_argument("--extended", action="store_true")
+    parser.add_argument("--normal-only", action="store_true", help="Skip the fast-right focus-edge variant on unusually short viewports")
     parser.add_argument("--library", action="store_true", help="Use temporary library entries from the emulator's real metadata cache, then restore user state")
     parser.add_argument("--skip-channels", action="store_true")
     args = parser.parse_args()
@@ -33,7 +34,9 @@ def main():
     d = u2.connect(args.serial)
     out = ROOT / "docs/evidence/runtime/tv-navigation" / args.label
     out.mkdir(parents=True, exist_ok=True)
-    report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "version": h.run_adb("shell", "dumpsys", "package", "app.panda.tv").split("versionName=")[-1].splitlines()[0].strip(), "cases": [], "failures": []}
+    report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "version": h.run_adb("shell", "dumpsys", "package", "app.panda.tv").split("versionName=")[-1].splitlines()[0].strip(),
+              "display": {"size": h.run_adb("shell", "wm", "size").strip(), "density": h.run_adb("shell", "wm", "density").strip()},
+              "cases": [], "failures": []}
     report["apkSha256"] = h.installed_apk_sha256()
 
     def snapshot(name, capture=False):
@@ -253,7 +256,8 @@ def main():
         h.wait_for(d, lambda ns: "播放" in h.texts(ns), timeout=30)
         for repeat in range(args.repeat):
             for channel in ([] if args.skip_channels else args.channels):
-                for variant, fast, col in [("normal", False, 0), ("fast-right", True, 5)]:
+                variants = [("normal", False, 0)] if args.normal_only else [("normal", False, 0), ("fast-right", True, 5)]
+                for variant, fast, col in variants:
                     open_channel(channel)
                     name = f"{channel}-{repeat + 1}-{variant}"
                     try:

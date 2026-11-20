@@ -1,0 +1,231 @@
+{
+  "at": "2026-11-20T04:00:43.211241+00:00",
+  "cases": [
+    {
+      "name": "episode-switch",
+      "passed": true,
+      "before": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "18.0",
+          "暂停",
+          "下一集",
+          "01:06 / 1:00:35",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "01:06 / 1:00:35",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            285,
+            956,
+            482,
+            1028
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          407,
+          992
+        ],
+        "loadingRegionMaxRgb": 199
+      },
+      "seekRecoveryMs": 9692,
+      "seekPositionSec": 63,
+      "loading": [
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第2集",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "倍速"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              285,
+              956,
+              482,
+              1028
+            ],
+            "labels": [
+              "下一集"
+            ]
+          },
+          "nextTap": [
+            407,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第2集",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "倍速"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              285,
+              956,
+              482,
+              1028
+            ],
+            "labels": [
+              "下一集"
+            ]
+          },
+          "nextTap": [
+            407,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第2集",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "倍速"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              285,
+              956,
+              482,
+              1028
+            ],
+            "labels": [
+              "下一集"
+            ]
+          },
+          "nextTap": [
+            407,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "三体",
+          "第3集",
+          "0.0",
+          "暂停",
+          "下一集",
+          "00:02 / 53:29",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 53:29",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            285,
+            956,
+            482,
+            1028
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          407,
+          992
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "paused": {
+        "texts": [
+          "返回",
+          "三体",
+          "第3集",
+          "1.0",
+          "播放",
+          "下一集",
+          "00:03 / 53:29",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:03 / 53:29",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 240
+      },
+      "history": {
+        "id": "db-26647087",
+        "episode": 3,
+        "position": 3,
+        "duration": 3209.875,
+        "at": 1795147297064
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.8",
+  "apkSha256": "64A81DB3173FE38FC31EDC8E9C78B99C93A510E78AB1CBBF784360FF594B063F",
+  "enabledSources": [
+    "360zy"
+  ],
+  "sourceRulesRestored": true,
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

@@ -1,0 +1,205 @@
+{
+  "at": "2026-11-20T03:57:05.311895+00:00",
+  "cases": [
+    {
+      "name": "speed-control",
+      "passed": true,
+      "steps": [
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "倍速"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1661,
+              956,
+              1828,
+              1028
+            ],
+            "labels": [
+              "倍速"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "1.25×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "1.25×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1649,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "1.25×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "1.5×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "1.5×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1664,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "1.5×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "2.0×",
+            "0.0",
+            "播放",
+            "下一集",
+            "00:00 / 00:00",
+            "选集",
+            "2.0×"
+          ],
+          "clock": "00:00 / 00:00",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1664,
+              956,
+              1828,
+              1027
+            ],
+            "labels": [
+              "2.0×"
+            ]
+          },
+          "nextTap": [
+            406,
+            992
+          ],
+          "loadingRegionMaxRgb": 0
+        }
+      ],
+      "final": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "2.0×",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "2.0×"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1664,
+            956,
+            1828,
+            1027
+          ],
+          "labels": [
+            "2.0×"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "sourceRetries": 0,
+      "rateSample": {
+        "mediaSeconds": 23,
+        "wallSeconds": 12.57,
+        "observedSpeed": 1.83
+      },
+      "rendererSample": {
+        "elapsedMs": 10000,
+        "renderedOutputBuffers": 591,
+        "frameProcessingOffsetSamples": 0,
+        "droppedOutputBuffers": 0,
+        "dropRateDenominatorFrames": 591,
+        "dropRate": 0.0,
+        "coverage": "decoder counters"
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.8",
+  "apkSha256": "64A81DB3173FE38FC31EDC8E9C78B99C93A510E78AB1CBBF784360FF594B063F",
+  "enabledSources": [
+    "360zy"
+  ],
+  "sourceRulesRestored": true,
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

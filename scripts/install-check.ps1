@@ -1,11 +1,13 @@
 $ErrorActionPreference = 'Stop'
-# Installs release\Panda-1.0.1-Setup.exe silently and records what is on disk afterwards.
+# Installs the current release silently and records what is on disk afterwards.
 # A silent NSIS install reuses the directory of an existing install, so the location is read
 # from the uninstall entry, never assumed. An install that was already there is upgraded in
 # place and is NOT marked as removable by uninstall-check.ps1.
 $root = Split-Path -Parent $PSScriptRoot
-$setup = Join-Path $root 'release\Panda-1.0.1-Setup.exe'
-$marker = Join-Path $root '.tmp\install-created.txt'
+$desktopVersion = (Get-Content (Join-Path $root 'package.json') -Raw | ConvertFrom-Json).version
+$setup = Join-Path $root "release\Panda-$desktopVersion-Setup.exe"
+$marker = Join-Path $root ".tmp\install-created-$desktopVersion.txt"
+$evidence = Join-Path $root "docs\evidence\install-$desktopVersion.txt"
 function Get-PandaEntry { Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall' | ForEach-Object { Get-ItemProperty $_.PSPath } | Where-Object { $_.DisplayName -like 'Panda*' } | Select-Object -First 1 }
 function Get-PandaDirectory($entry) { if ($entry -and $entry.UninstallString -match '^"([^"]+)\\[^"\\]+"') { $Matches[1] } }
 
@@ -32,5 +34,5 @@ $log += "installed size: $([int](($files | Measure-Object Length -Sum).Sum / 1MB
 $log += "resources: $((Get-ChildItem (Join-Path $target 'resources') | ForEach-Object { $_.Name + ' ' + $_.Length }) -join ', ')"
 $version = (Get-Item $exe).VersionInfo
 $log += "installed exe version info: $($version.ProductName) | $($version.FileVersion) | $($version.CompanyName); authenticode: $((Get-AuthenticodeSignature $exe).Status)"
-$log | Set-Content -Encoding utf8 (Join-Path $root 'docs\evidence\install.txt')
+$log | Set-Content -Encoding utf8 $evidence
 $log

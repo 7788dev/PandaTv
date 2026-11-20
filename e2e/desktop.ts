@@ -31,13 +31,17 @@ export async function capture(page: Page, name: string, result?: unknown) {
   if (result !== undefined) await writeFile(join(evidenceDir, name + '.json'), JSON.stringify(result, null, 2))
 }
 export async function videoStatus(page: Page) {
-  return page.evaluate(() => { const video = document.querySelector('video')!; return ({
-    position: video.currentTime, duration: video.duration,
-    width: video.videoWidth, height: video.videoHeight, readyState: video.readyState,
-    paused: video.paused, rate: video.playbackRate, volume: video.volume, muted: video.muted,
-    decodedFrames: video.getVideoPlaybackQuality().totalVideoFrames,
-    error: video.error?.message,
-  }) })
+  return page.evaluate(() => {
+    const video = document.querySelector('video')!
+    const quality = video.getVideoPlaybackQuality()
+    return {
+      position: video.currentTime, duration: video.duration,
+      width: video.videoWidth, height: video.videoHeight, readyState: video.readyState,
+      paused: video.paused, rate: video.playbackRate, volume: video.volume, muted: video.muted,
+      decodedFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames,
+      error: video.error?.message,
+    }
+  })
 }
 export async function playing(page: Page) {
   await page.waitForFunction(() => {

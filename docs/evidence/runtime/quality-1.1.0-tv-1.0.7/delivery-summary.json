@@ -1,0 +1,86 @@
+{
+  "measuredAt": "2026-11-20 Asia/Shanghai",
+  "desktop": {
+    "version": "1.1.0",
+    "installer": "release/Panda-1.1.0-Setup.exe",
+    "installerSha256": "1CD071C0999B627E6BB4F9157462034785C6B2426948A4463D032069DF42B8DF",
+    "asarSha256": "06E328315FAC5EB5394DD266422EF13A72DB459A224BF3A40488F718723AF3B4",
+    "asarEntries": 268,
+    "existing100InstallUpgradedInPlace": true,
+    "installedUserDataCleared": false,
+    "realMoviePlaybackSeekSpeedAndHistoryE2E": 1,
+    "startupAndResponsiveLayoutTargetedE2E": 8,
+    "allPackagedE2E": {
+      "passed": 21,
+      "failed": 3,
+      "total": 24,
+      "failedCases": [
+        "forced single-source bfzy ad playback",
+        "forced single-source dyttzy ad playback",
+        "forced single-source lzi ad playback"
+      ],
+      "failureStage": "each timed out waiting for a decoded frame; error context does not separate first frame from later seek",
+      "360AdRemovalE2E": "passed"
+    }
+  },
+  "androidTv": {
+    "version": "1.0.7",
+    "versionCode": 8,
+    "minSdk": 22,
+    "targetSdk": 34,
+    "apk": "release/Panda-TV-1.0.7.apk",
+    "apkBytes": 1072144,
+    "apkSha256": "242F249E0A21D72DEB3F007342E9E6609EE9151F081715DD44FEB999FD52A498",
+    "signature": {
+      "v1": true,
+      "v2": true,
+      "certificateSha256": "d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd"
+    },
+    "installedHashMatchesRelease": true,
+    "navigationCases": 23,
+    "searchClearCases": 3,
+    "motionCases": 4,
+    "motionJankyFrames": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "motionP95Ms": [
+      5,
+      5,
+      5,
+      5
+    ],
+    "coldActivityLaunchMs": [
+      156,
+      193,
+      161,
+      164,
+      171
+    ],
+    "speed360SingleSource": {
+      "setting": 2.0,
+      "observedPlaybackRate": 1.82,
+      "durationSeconds": 12.64,
+      "mediaSeconds": 23,
+      "decoderRenderedOutputBuffers": 577,
+      "decoderDroppedOutputBuffers": 0,
+      "dropRatio": 0.0,
+      "scope": "MuMu Android 15 at 60Hz, one 360zy real stream"
+    },
+    "serialSwitch360SingleSource": "passed through episode 3 and updated history",
+    "defaultNineSourcePlayback": "intermittent retryable failures with this egress; one latest all-case run passed focus, episode switch and missing-source behavior, but marked speed sample unavailable when no source decoded",
+    "stateRestoration": {
+      "user": true,
+      "sourceRules": true,
+      "firewall": true
+    },
+    "coldActivityMedianMs": 164,
+    "seek360SingleSourceBurst": {
+      "seekInputs": 6,
+      "seekRecoveryMs": 5375,
+      "scope": "one sequence of six remote seek inputs on one 360zy real stream; this is the post-burst recovery sample, not a single-seek latency distribution"
+    }
+  }
+}

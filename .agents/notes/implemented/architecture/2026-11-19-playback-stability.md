@@ -11,7 +11,9 @@ Status: implemented
 - 桌面 `PlaybackService` 和 TV `PlaybackService` 使用相同的 `compareSourceOrder`：失败、首片超时或播放余量不足的源只在当前作品下延后 10 分钟，状态键为 `workId + sourceKey`；过期条目会被清理。
 - 记录每个作品最近一次赢得竞速的源。下一集把它作为排序优先级，同时继续并发竞速其它候选；重试会避开上一条失败线路，手动指定线路仍保持独占语义。
 - 排序比较器与工作级回退行为加入 TypeScript/TV 黄金向量和 `playback-start` 回归测试，保证两端一致。
+- 桌面与 TV 目录检索并发容量均为 12，覆盖内置 9 源池并留有少量覆盖配置余量；TV 回归会在前 8 个源挂起时确认第 9 个仍开始检索，避免备用源等空位。
 - 桌面 hls.js 使用当前 `LoadPolicy` 重试配置，前向缓冲 90/180 秒、回看缓冲 30 秒；TV Media3 按内存设置 10--30 秒或 12--48 秒缓冲，起播 1 秒、重缓冲 2 秒，并优先满足时间阈值。
+- TV 快进/快退和拖动进度使用累积 pending seek target，方向键快速连按在网络缓冲期间累积到最后目标，不从尚未更新的 playhead 重算；边界 clamp 和累积行为有纯规则回归。seek 时短暂启用 Media3 scrubbing mode 与动态调度，READY 后等待 320 ms 静默再退出，buffering 超过 15 秒则复位。2×改速开始 10 秒播放器运行计数，记录 video decoder rendered/dropped buffer 与 frame-processing offset；无 decoder 样本报告为不可测，不将 0 帧误报为 0 丢帧。
 - 本次实测没有足够证据全局停用新增目录：境外出口稳定选中 360zy，而北京证据仍支持速播、虎牙、暴风、量子、非凡、红牛、金鹰等目录。现有 `piaoling2`、`jszy` 继续停用；垃圾线路由匹配规则和工作级健康排序过滤。
 
 ## Alternatives considered

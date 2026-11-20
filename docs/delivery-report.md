@@ -1,6 +1,6 @@
 # Panda 交付报告
 
-2026-11-20（桌面 1.0.1；TV 1.0.3）。在 11 月 18 日 TV 交互修复的基础上，本次优化了播放源竞速、失败回退和双端播放器缓冲；11 月 19 日的线上探测、11 月 20 日的安装包和回归证据见下方及 [playback-stability-checks.txt](evidence/playback-stability-checks.txt)。此前交付见 [final-verification.txt](evidence/final-verification.txt)。
+2026-11-20（桌面 1.1.0；TV 1.0.8）。本轮补齐目录竞速、窗口最大化恢复、桌面多尺寸筛选布局回归、TV seek coalescing/scrubbing 优化与 decoder 计数；实机播放受出口可达性影响的证据单独注明。原始 1.0.1/1.0.3 包历史仍保留在下文；本轮新增验收见[UX 品控记录](evidence/ux-quality-2026-11-20.md)。
 
 ## 启动方式
 
@@ -12,8 +12,8 @@
 | 开发运行 | `npm run dev` |
 | 类型检查 / 离线单测 | `npm run typecheck` / `npm test` |
 | 桌面 E2E（需联网，先 `npm run build`） | `npm run test:e2e` |
-| 生成桌面安装包 | `npm run dist` → `release/Panda-1.0.1-Setup.exe` |
-| 构建并校验 Android TV 包 | `cd tv && .\gradlew.bat testDebugUnitTest lintRelease assembleRelease` → `release/Panda-TV-1.0.3.apk` |
+| 生成桌面安装包 | `npm run dist` → `release/Panda-1.1.0-Setup.exe` |
+| 构建并校验 Android TV 包 | `cd tv && .\gradlew.bat testDebugUnitTest lintRelease assembleRelease` → `release/Panda-TV-1.0.8.apk` |
 | 导出双端对齐黄金向量 / 播放器回归 | `node scripts/export-tv-vectors.mjs` / `python scripts/verify-tv-playback-transitions.py --case all` |
 | TV 列表 / 搜索 / 动画回归 | `python scripts/verify-tv-navigation.py --extended --library` / `python scripts/verify-tv-search-state.py` / `python scripts/verify-tv-motion.py` |
 | 重放线上审计 | `npm run probe:filters`、`npm run probe:sources`、`npm run audit:ads`、`npm run probe:start`、`npm run probe:startup` |
@@ -52,7 +52,7 @@
 
 ## 播放链路
 
-豆瓣条目（片名、年份、分类、别名、集数）→ 9 个片源并发检索（找到后最多再等 1.2 秒，不等最慢的）→ 身份匹配 → 按集号对齐各源线路 → 3 个源同时起播比较：先看首片的实际传输余量，再比较真实画面 → 本机代理（清单改写、去广告、分片 / 密钥转发）→ hls.js / 原生 video。
+豆瓣条目（片名、年份、分类、别名、集数）→ 9 个片源同时检索（限流容量 12；找到后最多再等 1.2 秒，不等最慢的）→ 身份匹配 → 按集号对齐各源线路 → 3 个源同时起播比较：先看首片的实际传输余量，再比较真实画面 → 本机代理（清单改写、去广告、分片 / 密钥转发）→ hls.js / 原生 video。TV 源池保持相同的 12 个搜索槽，避免排在末位的回退目录在前八个请求迟滞时无法启动。
 
 - 身份以“名称 + 年份 + 分类”互证；豆瓣按年拆分的长篇连载用别名里的集数区间映射到片源的累计记录。
 - 片源表 v3：速播、虎牙、暴风、电影天堂、量子、非凡、红牛、金鹰、360；本次新增速播、虎牙、红牛，停用飘零（接口关闭），极速仍停用。依据是在北京服务器上的实测，见 [cn-sources.md](evidence/cn-sources.md)。
@@ -74,11 +74,11 @@
 - 播放源排序的独立复现先将共享排序设为中性值：新增“下一集先试上一集赢家”的同一测试由通过转失败（先打开慢源 `one`）；恢复正式排序后，同一测试通过。工作级失败降权有独立测试，确认不影响其它作品。
 - 最终桌面包的全量 E2E 为 16/19 通过：真实电影、剧集、动画、自动换线与其余界面 / 数据用例通过。其余 3 项是在强制 `bfzy`、`dyttzy`、`lzi` 单源模式下等待解码播放时超时；这些用例会先起播、再验证跨广告剪切点和 seek 后续播，但失败上下文不足以确定具体超时在哪个阶段。同类 `360zy` 用例通过。不能将失败归因到某一阶段或推广成国内网络结论，也不能把本轮完整 E2E 记为全绿。详细结果见[本次验收记录](evidence/playback-stability-checks.txt)。
 
-## 2026-11-20 发布包
+## 当前发布包（2026-11-20）
 
-- 桌面安装程序：[Panda-1.0.1-Setup.exe](../release/Panda-1.0.1-Setup.exe)，132,630,453 字节，SHA-256 `F5C2A3491C433949E11B4A475FE756EB9E13244BFD95A1AF7051076C9B0ADF03`。asar 12,456,895 字节、268 项，不含依赖目录、演示原型、测试或脚本。安装包已构建并由打包目录运行 E2E；没有升级这台电脑现有的 1.0.0 安装。
-- TV 安装包：[Panda-TV-1.0.3.apk](../release/Panda-TV-1.0.3.apk)，1,068,444 字节，SHA-256 `6112B93C49BA76EC9C7C22E2935564F403DEA8F5404DC3351D56F797542EDEDB`，versionCode 4、minSdk 22，v1/v2 签名通过。MuMu 实际安装并回归的是与该文件哈希一致的包。
-- `npm run typecheck`、`npm test`（15 个文件、234 测试）、`npm run verify:design`、405 项原型契约测试和 `tv\\gradlew.bat testDebugUnitTest lintRelease assembleRelease` 均通过。
+- 桌面安装程序：[Panda-1.1.0-Setup.exe](../release/Panda-1.1.0-Setup.exe)，132,630,589 字节，SHA-256 `1CD071C0999B627E6BB4F9157462034785C6B2426948A4463D032069DF42B8DF`。asar 12,457,600 字节、268 项，不含依赖目录、演示原型、测试或脚本。安装包原位升级了此机已有的 1.0.0，安装 E2E 用临时配置目录，未清除用户资料。
+- TV 安装包：[Panda-TV-1.0.7.apk](../release/Panda-TV-1.0.7.apk)，1,072,144 字节，SHA-256 `242F249E0A21D72DEB3F007342E9E6609EE9151F081715DD44FEB999FD52A498`，versionCode 8、minSdk 22，v1/v2 签名通过。MuMu 安装 APK 哈希与此文件一致。
+- `npm run typecheck`、`npm test`（15 个文件、235 项）、`npm run verify:design`、405 项原型契约检查和 `tv\\gradlew.bat testDebugUnitTest lintRelease assembleRelease` 均通过。TV 实机替代设备与桌面布局/性能详细验收及 E2E 未通过项见[本轮品控报告](evidence/ux-quality-2026-11-20.md)。
 
 ## 去广告规则审查结果
 
@@ -100,9 +100,9 @@
 
 ## Android TV 版本（Android 5.1+）
 
-针对客厅电视 TCL L55P2-UD（Android 5.1 / API 22，晶晨 T968 四核 Cortex-A53，1.5 GB 内存，8 GB 闪存，55 英寸遥控器交互），在 [tv/](../tv/) 下采用原生 Kotlin + Android Views + Leanback 焦点网格 + Media3 ExoPlayer `1.8.1`（支持 API 22 的最后一代分支）独立实现，正式包输出为 [Panda-TV-1.0.3.apk](../release/Panda-TV-1.0.3.apk)（[决策记录](../.agents/notes/implemented/architecture/2026-11-18-android-tv.md)）：
+针对客厅电视 TCL L55P2-UD（Android 5.1 / API 22，晶晨 T968 四核 Cortex-A53，1.5 GB 内存，8 GB 闪存，55 英寸遥控器交互），在 [tv/](../tv/) 下采用原生 Kotlin + Android Views + Leanback 焦点网格 + Media3 ExoPlayer `1.8.1`（支持 API 22 的最后一代分支）独立实现，当前包为 [Panda-TV-1.0.8.apk](../release/Panda-TV-1.0.8.apk)（[决策记录](../.agents/notes/implemented/architecture/2026-11-18-android-tv.md)）：
 
-- **体积与签名**：不引入 WebView、JS 引擎、跨端框架或 `.so` 原生库；开启 R8 压缩、资源压缩与中文语言过滤（`localeFilters`），v1 + v2 双签名（Android 7.0 以下必须含 v1 签名），同时声明 `LAUNCHER` 与 `LEANBACK_LAUNCHER` 入口及电视横幅。当前 release APK **1,068,444 字节（1.019 MiB，`1.0.3`）**，单 DEX，全架构通用。
+- **体积与签名**：不引入 WebView、JS 引擎、跨端框架或 `.so` 原生库；开启 R8 压缩、资源压缩与中文语言过滤（`localeFilters`），v1 + v2 双签名（Android 7.0 以下必须含 v1 签名），同时声明 `LAUNCHER` 与 `LEANBACK_LAUNCHER` 入口及电视横幅。当前 release APK 为 1,072,144 字节（约 1.02 MiB），单 DEX，全架构通用。
 - **老系统与小内存 / 小闪存 / 滚动帧率优化**：内置当前 Mozilla 根证书束（140+ 根证书）与系统证书库组合校验，保留底层 Conscrypt SNI 并在后台线程异步初始化 TLS 1.2，不阻塞冷启动首帧；针对 Android 5.1 Bitmap 占用受管 Java 堆的特性，海报按显示尺寸降采样并以 `RGB_565` 解码，限制并发解码并在回收视图时立即取消陈旧加载任务，无锁读取磁盘图片缓存，关闭焦点动态阴影投射并采用增量分页（`notifyItemRangeInserted`）；首片 `.ts` 预热数据在播放器读取后立即释放，低内存设备使用 16 MiB、10--30 秒缓冲，普通设备使用 32 MiB、12--48 秒缓冲，起播/重缓冲阈值为 1/2 秒；磁盘图片缓存封顶 36 MB、元数据缓存封顶 4 MB；自定义图标与开关零 `onDraw` 对象分配。
 - **双端逻辑对齐与原生 TV OS 10 英尺布局**：豆瓣元数据、738 项筛选词表、主要演职员头像与影人全部作品、百度热搜、9 源并发检索、身份匹配、首片真实分辨率竞速与清单内证据去广告在 `PandaMediaDataSource` 内 1:1 复现，经 TypeScript 导出的黄金测试向量单测锁死一致。界面以 `960×540` 屏幕实际像素比例单位锁定布局与字号（免疫非标电视系统 DPI 与大字体缩放溢出），全局统一 `4.8%` 防过扫描安全边距与安全裁剪框（杜绝屏幕边缘半截溢出），悬浮胶囊顶栏、单列 `VerticalGridView` 首页（从下方任意栏目按上键必定完整回到轮播图）、置顶裁剪二级筛选栏（滚动影片绝不遮挡或嵌在海报下方）、居中卡片式加载提示、唯一 2dp 遥控器光标环、3×13 遥控器快捷输入面板、全屏连续左右快进锚定进度条与线路面板默认聚焦在播源。
 

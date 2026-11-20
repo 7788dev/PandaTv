@@ -10,6 +10,7 @@ import app.panda.tv.playback.SourceRulesLoader
 import app.panda.tv.playback.WarmMediaCache
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.async
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.runBlocking
@@ -102,6 +103,36 @@ class PlaybackSearchTest {
         playback.prepareItem(item, 1)
         delay(750L)
         assertEquals("Late source must be present in the cache", 2, playback.sources(item, 1).list.size)
+    }
+
+    @Test
+    fun `last bundled fallback starts while first eight catalogues are waiting`() = runBlocking {
+        val allRules = SourceRulesLoader.validate(
+            listOf(File("src/main/assets/play-sources.json"), File("app/src/main/assets/play-sources.json")).first { it.exists() }.readText()
+        ).let { it.copy(sources = it.sources.filter { source -> source.enabled }) }
+        assertEquals(9, allRules.sources.size)
+        val waiting = List(8) { CompletableDeferred<Unit>() }
+        val release = CompletableDeferred<Unit>()
+        val fallbackStarted = CompletableDeferred<Unit>()
+        val lastHost = URI(allRules.sources.last().api).host
+        val answer = found("last-fallback")
+        val playback = PlaybackService(allRules, WarmMediaCache(allRules), CatalogueFetcher { url, _ ->
+            if (URI(url).host == lastHost) {
+                fallbackStarted.complete(Unit)
+                answer
+            } else {
+                val index = allRules.sources.indexOfFirst { URI(it.api).host == URI(url).host }
+                waiting[index].complete(Unit)
+                release.await()
+                "{\"list\":[],\"pagecount\":1}"
+            }
+        }, searchGraceMs = 30L, requeryDelayMs = 10L)
+
+        val lookup = async(start = CoroutineStart.UNDISPATCHED) { playback.prepareItem(item, 1) }
+        for (started in waiting) withTimeout(1_000L) { started.await() }
+        withTimeout(500L) { fallbackStarted.await() }
+        release.complete(Unit)
+        assertEquals(item.id, withTimeout(1_000L) { lookup.await() }.id)
     }
 
     @Test

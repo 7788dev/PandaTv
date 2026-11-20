@@ -1,0 +1,954 @@
+{
+  "at": "2026-11-20T03:54:17.954207+00:00",
+  "version": "1.0.8",
+  "apkSha256": "64A81DB3173FE38FC31EDC8E9C78B99C93A510E78AB1CBBF784360FF594B063F",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [
+    {
+      "name": "home-1",
+      "passed": true,
+      "elapsedMs": 8712,
+      "frames": {
+        "totalFrames": 172,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "heroReturnComplete": true,
+      "initialHeroCy": 559,
+      "returnedHeroCy": 553
+    },
+    {
+      "name": "channel-expanded-1",
+      "passed": true,
+      "elapsedMs": 8337,
+      "frames": {
+        "totalFrames": 209,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "normalAndRapidInput": true
+    },
+    {
+      "name": "home-2",
+      "passed": true,
+      "elapsedMs": 8629,
+      "frames": {
+        "totalFrames": 170,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "heroReturnComplete": true,
+      "initialHeroCy": 559,
+      "returnedHeroCy": 551
+    },
+    {
+      "name": "channel-expanded-2",
+      "passed": true,
+      "elapsedMs": 8824,
+      "frames": {
+        "totalFrames": 215,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "normalAndRapidInput": true
+    }
+  ],
+  "failures": [],
+  "focusTrace": [
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          447,
+          506,
+          806
+        ],
+        "labels": [
+          "8.8",
+          "三体",
+          "剩余60分钟"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          87,
+          401,
+          359,
+          902
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          518,
+          288,
+          610,
+          338
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "多喜一家人",
+          "家庭 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑球",
+          "剧情 · 2026",
+          "8.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑球",
+          "剧情 · 2026",
+          "8.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "多喜一家人",
+          "家庭 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          518,
+          263,
+          610,
+          313
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          87,
+          318,
+          359,
+          819
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          85,
+          412,
+          506,
+          771
+        ],
+        "labels": [
+          "8.8",
+          "三体",
+          "第1集 · 剩余60分钟"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          152,
+          514,
+          337,
+          592
+        ],
+        "labels": [
+          "播放"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          446,
+          506,
+          805
+        ],
+        "labels": [
+          "8.8",
+          "三体",
+          "第1集 · 剩余60分钟"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          87,
+          406,
+          359,
+          907
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          518,
+          309,
+          610,
+          359
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "多喜一家人",
+          "家庭 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑球",
+          "剧情 · 2026",
+          "8.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "冰之城墙 第2季",
+          "喜剧 · 2026",
+          "8.5"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑球",
+          "剧情 · 2026",
+          "8.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "嫁金钗",
+          "剧情 · 2026",
+          "6.7"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "多喜一家人",
+          "家庭 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          518,
+          263,
+          610,
+          313
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          87,
+          308,
+          359,
+          809
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          85,
+          404,
+          506,
+          763
+        ],
+        "labels": [
+          "8.8",
+          "三体",
+          "第1集 · 剩余60分钟"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          152,
+          512,
+          337,
+          590
+        ],
+        "labels": [
+          "播放"
+        ]
+      }
+    }
+  ]
+}

@@ -447,7 +447,9 @@ class PlaybackService(
     private val winners = LinkedHashMap<String, String>(64, 0.75f, true)
     private val episodeCounts = LinkedHashMap<String, Int>(128, 0.75f, true)
     private val behind = HashMap<String, Long>()
-    private val searchLimiter = Semaphore(8)
+    // The bundled pool has nine enabled catalogues. Leave capacity above that so a hung
+    // high-priority directory cannot keep the last fallback from starting its search.
+    private val searchLimiter = Semaphore(12)
     private val probeScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val searchScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 

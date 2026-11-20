@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
+import android.util.Log
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.SurfaceView
@@ -24,7 +25,9 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.DefaultRenderersFactory
+import androidx.media3.exoplayer.DecoderCounters
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.analytics.AnalyticsListener
 import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +40,7 @@ import app.panda.tv.model.Quality
 import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
 import app.panda.tv.playback.PandaMediaDataSource
+import app.panda.tv.playback.RemoteSeekTarget
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +50,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(UnstableApi::class)
 class PlayerScreen(
@@ -137,8 +143,8 @@ class PlayerScreen(
         setPadding(Theme.dp(ctx, 4), Theme.dp(ctx, 6), Theme.dp(ctx, 4), Theme.dp(ctx, 12))
         clipToPadding = false
         clipChildren = false
-        setOnUnhandledKeyListener { event ->
-            if (event.action != KeyEvent.ACTION_DOWN || panelMode == null) return@setOnUnhandledKeyListener false
+        setOnKeyInterceptListener { event ->
+            if (event.action != KeyEvent.ACTION_DOWN || panelMode == null) return@setOnKeyInterceptListener false
             when (event.keyCode) {
                 // The panel is anchored to the right edge. Left exits it;
                 // right must be consumed so focus never leaks back to the
@@ -200,6 +206,13 @@ class PlayerScreen(
     private var destroyed = false
     private var lastSavedAt = 0L
     private var userSeeking = false
+    private var scrubbing = false
+    private var pendingRemoteSeekMs: Long? = null
+    private var speedMeasureJob: Job? = null
+    private var speedMeasureGeneration = 0L
+    private val speedMeasureProcessedFrames = AtomicInteger()
+    private val speedMeasureDropped = AtomicInteger()
+    private data class VideoFrameCounters(val rendered: Int, val dropped: Int)
 
     private var loadJob: Job? = null
     private var tickJob: Job? = null
@@ -207,6 +220,7 @@ class PlayerScreen(
     private var osdJob: Job? = null
     private var startupWatchJob: Job? = null
     private var preloadJob: Job? = null
+    private var scrubbingOffJob: Job? = null
 
     override val view: View get() = root
 
@@ -242,6 +256,10 @@ class PlayerScreen(
         osdJob?.cancel()
         startupWatchJob?.cancel()
         preloadJob?.cancel()
+        scrubbingOffJob?.cancel()
+        speedMeasureJob?.cancel()
+        scrubbing = false
+        pendingRemoteSeekMs = null
         exoPlayer?.release()
         exoPlayer = null
         scope.cancel()
@@ -407,11 +425,17 @@ class PlayerScreen(
             }
             override fun onStartTrackingTouch(sb: SeekBar?) {
                 userSeeking = true
+                pendingRemoteSeekMs = null
+                beginScrubbing()
             }
             override fun onStopTrackingTouch(sb: SeekBar?) {
                 userSeeking = false
                 val dur = exoPlayer?.duration ?: 0L
-                if (dur > 0L) exoPlayer?.seekTo(dur * (sb?.progress ?: 0) / 1000L)
+                if (dur > 0L) {
+                    pendingRemoteSeekMs = dur * (sb?.progress ?: 0) / 1000L
+                    exoPlayer?.seekTo(pendingRemoteSeekMs!!)
+                }
+                endScrubbingSoon()
                 scheduleIdleHide()
             }
         })
@@ -503,9 +527,21 @@ class PlayerScreen(
         val renderers = DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)
         val player = ExoPlayer.Builder(ctx, renderers)
             .setLoadControl(loadControl)
+            // Align renderer work with CPU wake cycles; this reduces needless wakeups while
+            // keeping frame release responsive when playback speed changes.
+            .experimentalSetDynamicSchedulingEnabled(true)
             .build()
         player.setVideoSurfaceView(surfaceView)
         player.setPlaybackParameters(player.playbackParameters.withSpeed(speed.toFloat()))
+        player.addAnalyticsListener(object : AnalyticsListener {
+            override fun onVideoFrameProcessingOffset(eventTime: AnalyticsListener.EventTime, totalProcessingOffsetUs: Long, frameCount: Int) {
+                if (speed != 1.0 && player.isPlaying) speedMeasureProcessedFrames.addAndGet(frameCount)
+            }
+
+            override fun onDroppedVideoFrames(eventTime: AnalyticsListener.EventTime, count: Int, elapsedMs: Long) {
+                if (speed != 1.0) speedMeasureDropped.addAndGet(count)
+            }
+        })
         player.addListener(object : Player.Listener {
             private fun isCurrentMedia(): Boolean = !destroyed && playbackData != null &&
                 player.currentMediaItem?.mediaId == "$itemId:$episode:$loadGeneration"
@@ -533,6 +569,7 @@ class PlayerScreen(
                         startedPlayback = true
                         if (playingSince == 0L) playingSince = System.currentTimeMillis()
                         startupWatchJob?.cancel()
+                        if (scrubbing) endScrubbingSoon()
                         syncButtons()
                         scheduleIdleHide()
                     }
@@ -551,6 +588,7 @@ class PlayerScreen(
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
+                if (isPlaying && speed != 1.0) measureSpeedPlayback()
                 syncButtons()
                 if (!isPlaying && startedPlayback) saveHistory()
             }
@@ -603,6 +641,10 @@ class PlayerScreen(
     }
 
     private fun loadAndStart(retry: Boolean, fromSource: String?) {
+        scrubbingOffJob?.cancel()
+        scrubbing = false
+        pendingRemoteSeekMs = null
+        exoPlayer?.setScrubbingModeEnabled(false)
         saveHistory()
         val generation = ++loadGeneration
         val targetEpisode = episode
@@ -723,6 +765,10 @@ class PlayerScreen(
 
     private fun handlePlaybackFailure(cause: Throwable) {
         if (destroyed) return
+        scrubbingOffJob?.cancel()
+        scrubbing = false
+        pendingRemoteSeekMs = null
+        exoPlayer?.setScrubbingModeEnabled(false)
         saveHistory()
         val p = exoPlayer
         if (p != null && p.currentPosition > 0L) resumeAtSec = p.currentPosition / 1000.0
@@ -886,8 +932,11 @@ class PlayerScreen(
         val p = exoPlayer ?: return
         val dur = p.duration
         if (dur <= 0L) return
-        val target = (p.currentPosition + deltaSec * 1000L).coerceIn(0L, dur)
+        val target = RemoteSeekTarget.relative(p.currentPosition, pendingRemoteSeekMs, deltaSec * 1000L, dur) ?: return
+        pendingRemoteSeekMs = target
+        beginScrubbing()
         p.seekTo(target)
+        endScrubbingSoon()
         seekBar.progress = ((target * 1000L) / dur).toInt().coerceIn(0, 1000)
         timeTv.text = "${Rules.clock(target / 1000.0)} / ${Rules.clock(dur / 1000.0)}"
         showOsd(
@@ -897,14 +946,104 @@ class PlayerScreen(
         showOverlay(focusTarget = if (focusSeekBar) seekBar else null)
     }
 
+    /** Keep rapid remote seeks responsive; Media3 uses a higher codec operating rate while this is on. */
+    private fun beginScrubbing() {
+        scrubbing = true
+        scrubbingOffJob?.cancel()
+        exoPlayer?.setScrubbingModeEnabled(true)
+    }
+
+    private fun endScrubbingSoon() {
+        scrubbingOffJob?.cancel()
+        scrubbingOffJob = scope.launch {
+            val player = exoPlayer ?: return@launch
+            // Keep the operating rate elevated until the seek refill is ready, then give the
+            // decoder a short quiet window before returning to normal playback scheduling.
+            while (!destroyed) {
+                if (player.playbackState == Player.STATE_BUFFERING) {
+                    val refilled = withTimeoutOrNull(15_000L) {
+                        while (!destroyed && player.playbackState == Player.STATE_BUFFERING) delay(50L)
+                        true
+                    } ?: false
+                    if (!refilled) {
+                        if (!destroyed && exoPlayer === player) {
+                            scrubbing = false
+                            pendingRemoteSeekMs = null
+                            player.setScrubbingModeEnabled(false)
+                        }
+                        return@launch
+                    }
+                }
+                delay(320L)
+                if (player.playbackState != Player.STATE_BUFFERING) break
+            }
+            if (!destroyed && exoPlayer === player && player.playbackState != Player.STATE_BUFFERING) {
+                scrubbing = false
+                pendingRemoteSeekMs = null
+                player.setScrubbingModeEnabled(false)
+            }
+        }
+    }
+
     private fun cycleSpeed() {
         val idx = Constants.SPEEDS.indexOf(speed)
         speed = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size]
         sessionSpeed = speed
         exoPlayer?.let { it.setPlaybackParameters(it.playbackParameters.withSpeed(speed.toFloat())) }
+        measureSpeedPlayback()
         syncButtons()
         showOsd(TvIcon.SPEED, Rules.speedLabel(speed))
         scheduleIdleHide()
+    }
+
+    /** Record renderer frame and dropped-frame counters for ten seconds after a speed change. */
+    private fun measureSpeedPlayback() {
+        speedMeasureJob?.cancel()
+        val generation = ++speedMeasureGeneration
+        speedMeasureProcessedFrames.set(0)
+        speedMeasureDropped.set(0)
+        if (speed == 1.0) return
+        val player = exoPlayer ?: return
+        if (!player.isPlaying) return
+        val measuredSpeed = speed
+        val initialCounters = readVideoFrameCounters(player)
+        val startedAt = android.os.SystemClock.elapsedRealtime()
+        speedMeasureJob = scope.launch {
+            delay(10_000L)
+            if (!destroyed && generation == speedMeasureGeneration && speed == measuredSpeed) {
+                val elapsed = android.os.SystemClock.elapsedRealtime() - startedAt
+                val finalCounters = readVideoFrameCounters(player)
+                val rendered = if (initialCounters != null && finalCounters != null) {
+                    (finalCounters.rendered - initialCounters.rendered).coerceAtLeast(0)
+                } else 0
+                val dropped = if (initialCounters != null && finalCounters != null) {
+                    (finalCounters.dropped - initialCounters.dropped).coerceAtLeast(0)
+                } else 0
+                val offsetSamples = speedMeasureProcessedFrames.get()
+                Log.i("PandaTV", "[speed] rate=${measuredSpeed}x elapsedMs=$elapsed renderedFrames=$rendered droppedFrames=$dropped offsetSamples=$offsetSamples")
+            }
+        }
+    }
+
+    private fun readVideoFrameCounters(player: ExoPlayer): VideoFrameCounters? {
+        for (index in 0 until player.rendererCount) {
+            if (player.getRendererType(index) != C.TRACK_TYPE_VIDEO) continue
+            val renderer = player.getRenderer(index)
+            var owner: Class<*>? = renderer.javaClass
+            while (owner != null) {
+                val field = runCatching { owner.getDeclaredField("decoderCounters") }.getOrNull()
+                if (field != null) {
+                    val counters = runCatching {
+                        field.isAccessible = true
+                        field.get(renderer) as? DecoderCounters
+                    }.getOrNull() ?: return null
+                    counters.ensureUpdated()
+                    return VideoFrameCounters(counters.renderedOutputBufferCount, counters.droppedBufferCount)
+                }
+                owner = owner.superclass
+            }
+        }
+        return null
     }
 
     private fun cycleQuality() {

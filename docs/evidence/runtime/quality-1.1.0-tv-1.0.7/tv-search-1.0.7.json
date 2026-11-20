@@ -1,0 +1,24 @@
+{
+  "at": "2026-11-20T01:43:45.467390+00:00",
+  "cases": [
+    {
+      "query": "刘德华",
+      "passed": true,
+      "observedSeconds": 12
+    },
+    {
+      "query": "西游记",
+      "passed": true,
+      "observedSeconds": 12
+    },
+    {
+      "query": "蜡笔小新",
+      "passed": true,
+      "observedSeconds": 12
+    }
+  ],
+  "failures": [],
+  "version": "1.0.7",
+  "apkSha256": "242F249E0A21D72DEB3F007342E9E6609EE9151F081715DD44FEB999FD52A498",
+  "userStateRestored": true
+}

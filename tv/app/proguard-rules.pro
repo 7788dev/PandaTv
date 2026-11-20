@@ -8,3 +8,8 @@
     public static int v(...);
     public static int d(...);
 }
+
+# PlayerScreen reads Media3's video decoder counters reflectively for speed/drop-frame QA.
+-keepclassmembers class androidx.media3.exoplayer.mediacodec.MediaCodecRenderer {
+    androidx.media3.exoplayer.DecoderCounters decoderCounters;
+}

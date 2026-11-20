@@ -7,6 +7,7 @@ import app.panda.tv.model.StateAction
 import app.panda.tv.net.PublicNetwork
 import app.panda.tv.net.TlsCompat
 import app.panda.tv.playback.SharedSegmentFlow
+import app.panda.tv.playback.RemoteSeekTarget
 import app.panda.tv.playback.SourceRulesLoader
 import app.panda.tv.playback.WarmMediaCache
 import app.panda.tv.state.UserStore
@@ -30,6 +31,24 @@ class RuntimeCoreTest {
         File("src/main/assets/$name"),
         File("app/src/main/assets/$name"),
     ).first { it.exists() }
+
+    @Test
+    fun `rapid remote seek inputs accumulate against the latest pending target`() {
+        var target: Long? = null
+        repeat(6) {
+            target = RemoteSeekTarget.relative(currentPositionMs = 0L, pendingPositionMs = target, deltaMs = 10_000L, durationMs = 3_600_000L)
+        }
+        assertEquals(60_000L, target)
+        target = RemoteSeekTarget.relative(currentPositionMs = 0L, pendingPositionMs = target, deltaMs = -20_000L, durationMs = 3_600_000L)
+        assertEquals(40_000L, target)
+    }
+
+    @Test
+    fun `remote seek targets clamp at media boundaries and reject unknown duration`() {
+        assertEquals(0L, RemoteSeekTarget.relative(2_000L, null, -10_000L, 3_600_000L))
+        assertEquals(3_600_000L, RemoteSeekTarget.relative(3_599_000L, null, 10_000L, 3_600_000L))
+        assertEquals(null, RemoteSeekTarget.relative(0L, null, 10_000L, 0L))
+    }
 
     @Test
     fun `json roundtrip preserves unicode and escapes`() {

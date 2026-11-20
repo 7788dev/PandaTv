@@ -2,7 +2,8 @@ $ErrorActionPreference = 'Stop'
 # Silently removes the install that install-check.ps1 created, and records what is left.
 # It refuses to touch an install that was on the machine before install-check.ps1 ran.
 $root = Split-Path -Parent $PSScriptRoot
-$marker = Join-Path $root '.tmp\install-created.txt'
+$desktopVersion = (Get-Content (Join-Path $root 'package.json') -Raw | ConvertFrom-Json).version
+$marker = Join-Path $root ".tmp\install-created-$desktopVersion.txt"
 if (-not (Test-Path $marker)) { throw 'No install created by install-check.ps1: an existing install is never removed by this script' }
 $target = (Get-Content $marker -Raw).Trim()
 $un = Join-Path $target 'Uninstall Panda.exe'
@@ -20,5 +21,5 @@ $log += "start menu shortcut left: $(Test-Path (Join-Path $env:APPDATA 'Microsof
 $log += "desktop shortcut left: $(Test-Path (Join-Path ([Environment]::GetFolderPath('Desktop')) 'Panda.lnk'))"
 $log += "%APPDATA%\Panda exists after uninstall: $(Test-Path (Join-Path $env:APPDATA 'Panda')) (the uninstaller keeps user data; the E2E runs use temporary PANDA_USER_DATA_DIR profiles)"
 Remove-Item $marker
-$log | Add-Content -Encoding utf8 (Join-Path $root 'docs\evidence\install.txt')
+$log | Add-Content -Encoding utf8 (Join-Path $root "docs\evidence\install-$desktopVersion.txt")
 $log
