@@ -2,7 +2,6 @@
 
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -10,14 +9,16 @@ import time
 import xml.etree.ElementTree as ET
 
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--serial", default="127.0.0.1:16416")
+    parser.add_argument("--serial", required=True)
     parser.add_argument("--label", default="navigation")
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--channels", nargs="+", default=["动漫", "电影", "剧集", "综艺", "纪录片"])
     parser.add_argument("--repeat", type=int, default=1)
     parser.add_argument("--extended", action="store_true")
@@ -25,14 +26,11 @@ def main():
     parser.add_argument("--library", action="store_true", help="Use temporary library entries from the emulator's real metadata cache, then restore user state")
     parser.add_argument("--skip-channels", action="store_true")
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location("tv_helpers", ROOT / "scripts/verify-tv-mumu.py")
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     h.run_adb("get-state")
     d = u2.connect(args.serial)
-    out = ROOT / "docs/evidence/runtime/tv-navigation" / args.label
+    out = args.output or ROOT / ".tmp/e2e-evidence/tv-navigation" / args.label
     out.mkdir(parents=True, exist_ok=True)
     report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "version": h.run_adb("shell", "dumpsys", "package", "app.panda.tv").split("versionName=")[-1].splitlines()[0].strip(),
               "display": {"size": h.run_adb("shell", "wm", "size").strip(), "density": h.run_adb("shell", "wm", "density").strip()},
@@ -82,6 +80,7 @@ def main():
         initial = snapshot(name + "-first", capture=True)
         first_y = min(c["bounds"][1] for c in initial["cards"])
         first_row = [c for c in initial["cards"] if abs(c["bounds"][1] - first_y) < 20]
+        has_later_row = any(c["bounds"][1] > first_y + 20 for c in initial["cards"])
         first_titles = {c["title"] for c in first_row}
         expected_card = next(c for c in first_row if c["focused"])
         expected_title = expected_card["title"]
@@ -100,6 +99,23 @@ def main():
         time.sleep(.6)
         down = snapshot(name + "-down", capture=True)
         assert focus_in_grid(down), "D-pad Down unexpectedly left the movie grid"
+        if not has_later_row:
+            # Live title search often returns a single six-column row. Still
+            # test the real first-row/header boundary and focus restoration;
+            # there is no second row to use as a scroll fixture.
+            trace = [down["focus"]]
+            h.key("dpad_up", wait=.32)
+            header = snapshot(name + "-header", capture=True)
+            assert not focus_in_grid(header), f"Up from the only poster row did not reach its header: {header['focus']}"
+            retained = [restored_card(header, original) for original in first_row]
+            assert all(retained), f"The only poster row was lost when leaving it: {retained}"
+            h.key("dpad_down", wait=.5)
+            reentered = snapshot(name + "-reentered", capture=True)
+            assert focus_in_grid(reentered) and reentered["focus"]["title"] == expected_title, \
+                f"Down from the header did not restore the only poster row: {reentered['focus']}"
+            return {"name": name, "fast": fast, "column": column, "rowCount": 1,
+                    "upPressesToHeader": 1, "firstMovie": expected_title, "trace": trace,
+                    "passed": True, "navigationScope": "Single live result row; checked header return and first-row restoration."}
         assert down["focus"]["title"] not in first_titles, "Test did not scroll beyond the first row"
         trace = []
         saw_first_row = False
@@ -137,7 +153,10 @@ def main():
         h.focus_top_bar(d)
         h.move_focus_to_text(d, "首页", max_steps=12)
         h.key("enter", wait=.7)
-        h.wait_for(d, lambda ns: "播放" in h.texts(ns), timeout=30)
+        h.wait_for(d, lambda ns: "播放" in h.texts(ns) and any(
+            node["text"] == "首页" and node["selected"] for node in ns
+        ), timeout=30)
+        time.sleep(.35)
         h.focus_top_bar(d)
         h.move_focus_to_text(d, channel, max_steps=12)
         h.key("enter", wait=.7)
@@ -154,9 +173,17 @@ def main():
         time.sleep(.4)
 
     def search_person():
-        open_search("三体")
+        open_search("刘德华")
         record("搜索结果回顶", lambda: round_trip("搜索结果回顶"))
         record("搜索末行保持列", lambda: round_trip("搜索末行保持列", fast=True, column=5))
+        # Switch the same live Search screen to the subject used to enter its
+        # detail and actor-work pages. Direct text setup does not replace the
+        # renderer or its navigation path.
+        d(className="android.widget.EditText").set_text("三体")
+        h.focus_search_submit(d)
+        h.key("enter", wait=.5)
+        h.wait_for(d, lambda ns: not h.has_keypad(ns) and sum(n["focusable"] and n["cy"] > 250 for n in ns) >= 4, timeout=30)
+        time.sleep(.4)
         for _ in range(5):
             h.key("dpad_left", wait=.12)
         for step in range(30):

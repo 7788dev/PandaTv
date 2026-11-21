@@ -89,6 +89,14 @@ test('real movie decodes, seeks, changes speed, enters fullscreen and persists h
       expect(resumed.errors).toEqual([])
     } finally { await resumed.app.close() }
     expect(run.errors).toEqual([])
+  } catch (error) {
+    if (!page.isClosed()) {
+      const status = await videoStatus(page).catch(() => undefined)
+      await capture(page, 'movie-failure-observation', {
+        ...evidence, failure: error instanceof Error ? error.message : String(error), status,
+      }).catch(() => {})
+    }
+    throw error
   } finally { if (!didClose) await app.close() }
 })
 
@@ -124,14 +132,44 @@ test('real serial exposes playable episodes and decodes after switching to the n
 
 test('real animation resolves by Douban identity and decodes its actual stream', async () => {
   const { app, page, errors, logs } = await launch()
+  const evidence: Record<string, unknown> = { at: new Date().toISOString() }
   try {
     await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { muted: true } }))
     // The bare title is the 2025 live-action series; the animation is listed under its subtitle.
     const item = await page.evaluate(async () => (await window.panda.data.search('凡人修仙传')).find(item => item.title.startsWith('凡人修仙传') && item.type === 'anime'))
     expect(item?.type).toBe('anime')
+    evidence.item = item && { id: item.id, title: item.title, type: item.type }
     await page.evaluate(id => { location.hash = '#/play/' + id + '/1' }, item!.id)
     await playing(page)
     await capture(page, 'animation-playback', { id: item!.id, title: item!.title, ...await videoStatus(page), filterDiagnostics: logs.filter(value => value.includes('[media]')) })
     expect(errors).toEqual([])
+  } catch (error) {
+    if (!page.isClosed()) {
+      evidence.failure = error instanceof Error ? error.message : String(error)
+      evidence.initialStatus = await videoStatus(page).catch(() => undefined)
+      evidence.initialText = await page.locator('body').innerText().catch(() => '')
+      evidence.pageErrors = [...errors]
+      await capture(page, 'animation-initial-failure', evidence).catch(() => {})
+      const retry = page.getByRole('button', { name: '重试', exact: true })
+      if (await retry.isVisible().catch(() => false)) {
+        const started = Date.now()
+        try {
+          await retry.click()
+          evidence.retryObservation = await page.waitForFunction(() => {
+            const video = document.querySelector('video')
+            return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+          }, undefined, { timeout: 30000 }).then(() => ({ playing: true }), retryError => ({
+            playing: false, error: retryError instanceof Error ? retryError.message : String(retryError),
+          }))
+        } catch (probeError) {
+          evidence.retryObservation = { playing: false, error: probeError instanceof Error ? probeError.message : String(probeError) }
+        }
+        evidence.retryElapsedMs = Date.now() - started
+        evidence.retryStatus = await videoStatus(page).catch(() => undefined)
+        evidence.retryText = await page.locator('body').innerText().catch(() => '')
+        await capture(page, 'animation-retry-observation', evidence).catch(() => {})
+      }
+    }
+    throw error
   } finally { await app.close() }
 })

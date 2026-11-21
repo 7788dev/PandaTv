@@ -1,0 +1,48 @@
+{
+  "at": "2026-11-21T07:32:01.579Z",
+  "episodes": {
+    "episodes": 8
+  },
+  "first": {
+    "position": 1.383947,
+    "duration": 3635.134000000003,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 43,
+    "droppedFrames": 0
+  },
+  "second": {
+    "position": 1.310526,
+    "duration": 3831.8880000000017,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 35,
+    "droppedFrames": 0
+  },
+  "third": {
+    "position": 1.051676,
+    "duration": 3209.875000000001,
+    "width": 1920,
+    "height": 1080,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 23,
+    "droppedFrames": 0
+  },
+  "filterDiagnostics": [],
+  "runtime": "desktop-packaged-live",
+  "renderer": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html#/play/db-26647087/3"
+}

@@ -90,7 +90,7 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
   private readonly homeReady: Promise<void>;
   private readonly searchTitles: SearchTitleVocabulary;
   private readonly fallbackHttp: DoubanHttp;
-  private searchFallbackUntil = 0;
+  private searchFallbackFailure?: { until: number; error: DataError };
 
   constructor(private options: SourceOptions) {
     this.http = new DoubanHttp({ fetch: options.fetch });
@@ -490,14 +490,15 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
     return q.trim();
   }
   private async searchRows(q: string, count: number, paginate: boolean): Promise<Normalized[]> {
-    if (this.searchFallbackUntil > Date.now()) return this.searchFallback(q, count);
+    const fallbackFailure = this.searchFallbackFailure;
+    if (fallbackFailure && fallbackFailure.until > Date.now()) return this.searchFallback(q, count, fallbackFailure.error);
     let first: Record<string, unknown>;
     try { first = await this.searchPage(q, 0, count); }
     catch (error) {
       if (!(error instanceof DataError) || error.code === 'INVALID_INPUT' || error.message === 'Search query was rejected') throw error;
-      this.searchFallbackUntil = Date.now() + 60_000;
+      this.searchFallbackFailure = { until: Date.now() + 60_000, error };
       this.diagnostic('search:primary', error);
-      return this.searchFallback(q, count);
+      return this.searchFallback(q, count, error);
     }
     const pages = [first];
     const total = positive(first.total) ?? 0;
@@ -510,21 +511,26 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
     }
     return pages.flatMap(value => requiredArray(value, 'items')).flatMap(value => normalize(value) ?? []);
   }
-  private async searchFallback(q: string, count: number): Promise<Normalized[]> {
-    const hints = await this.fallbackHttp.json(`https://movie.douban.com/j/subject_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value), false, 1000);
-    let ids = suggestedSubjectIds(hints).slice(0, count);
-    this.options.onSearchDiagnostic?.({ stage: 'fallback', hints: hints.length, identities: ids.length });
-    if (!ids.length) {
-      const cards = await this.fallbackHttp.json(`https://www.douban.com/j/search_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value, 'cards'), false, 1000);
-      ids = suggestedSubjectIds(cards).slice(0, count);
-      this.options.onSearchDiagnostic?.({ stage: 'global-fallback', hints: cards.length, identities: ids.length });
+  private async searchFallback(q: string, count: number, primaryError: DataError): Promise<Normalized[]> {
+    try {
+      const hints = await this.fallbackHttp.json(`https://movie.douban.com/j/subject_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value), false, 1000);
+      let ids = suggestedSubjectIds(hints).slice(0, count);
+      this.options.onSearchDiagnostic?.({ stage: 'fallback', hints: hints.length, identities: ids.length });
+      if (!ids.length) {
+        const cards = await this.fallbackHttp.json(`https://www.douban.com/j/search_suggest?q=${encodeURIComponent(q)}`, SEARCH_TTL, value => requiredArray(value, 'cards'), false, 1000);
+        ids = suggestedSubjectIds(cards).slice(0, count);
+        this.options.onSearchDiagnostic?.({ stage: 'global-fallback', hints: cards.length, identities: ids.length });
+      }
+      if (!ids.length) throw primaryError;
+      const replies = await Promise.allSettled(ids.map(id => this.readSubject(id)));
+      const values = replies.flatMap(reply => reply.status === 'fulfilled' ? [reply.value] : []);
+      if (!values.length) throw (replies[0] as PromiseRejectedResult).reason;
+      for (const reply of replies) if (reply.status === 'rejected') this.diagnostic('search:subject', reply.reason);
+      return values;
+    } catch (error) {
+      if (this.searchFallbackFailure?.error === primaryError) this.searchFallbackFailure = undefined;
+      throw error;
     }
-    if (!ids.length) return [];
-    const replies = await Promise.allSettled(ids.map(id => this.readSubject(id)));
-    const values = replies.flatMap(reply => reply.status === 'fulfilled' ? [reply.value] : []);
-    if (!values.length) throw (replies[0] as PromiseRejectedResult).reason;
-    for (const reply of replies) if (reply.status === 'rejected') this.diagnostic('search:subject', reply.reason);
-    return values;
   }
   private async searchTitlesRows(q: string, suggestions: boolean): Promise<Normalized[]> {
     const count = suggestions ? 20 : 50;
@@ -539,7 +545,8 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
     const responses = await Promise.allSettled([q, ...terms].map(term => this.searchRows(term, count, !suggestions)));
     const values = responses.flatMap(response => response.status === 'fulfilled' ? response.value.filter(value => !terms.length || Number.isFinite(score(value))) : []);
     this.options.onSearchDiagnostic?.({ stage: 'results', returned: values.length });
-    if (!responses.some(response => response.status === 'fulfilled') && !saved.length) throw (responses[0] as PromiseRejectedResult).reason;
+    const failed = responses.find(response => response.status === 'rejected');
+    if (!values.length && !saved.length && failed?.status === 'rejected') throw failed.reason;
     if (saved.length && responses.every(response => response.status === 'rejected')) this.warn({ code: 'CACHED', operation: 'search:initials', message: 'Showing saved title matches while metadata queries are unavailable', at: Date.now() });
     const merged = new Map<string, Normalized>(saved.map(value => [value.item.id, value]));
     for (const value of values) merged.set(value.item.id, value);

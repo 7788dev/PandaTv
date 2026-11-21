@@ -1,13 +1,15 @@
 import { test, expect, _electron, type Page } from '@playwright/test'
-import { readFile, readdir, mkdir, mkdtemp, writeFile } from 'node:fs/promises'
+import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { root, evidenceDir, launch } from './desktop'
+import { root, evidenceDir, launch, temporaryProfile } from './desktop'
 
 test('startup: a reload during initial loading does not report application failure', async () => {
-  const profile = await mkdtemp(join(root, '.tmp', 'startup-'))
+  test.skip(Boolean(process.env.PANDA_E2E_EXECUTABLE), 'The startup fault-injection hook runs only against the local build')
+  const profile = await temporaryProfile()
   const env: Record<string, string> = Object.fromEntries(Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === 'string'))
   env.PANDA_USER_DATA_DIR = profile
   delete env.ELECTRON_RUN_AS_NODE
+  delete env.ELECTRON_RENDERER_URL
   const app = await _electron.launch({ args: ['-r', join(root, 'e2e/startup-hook.cjs'), root], cwd: root, env })
   let result: unknown
   try {
@@ -48,31 +50,33 @@ async function homeTimeline(page: Page) {
 
 test('startup: a second start shows the home page and its artwork from what the first start saved', async () => {
   const first = await launch()
-  const cold = await homeTimeline(first.page)
-  expect(cold.failed).toBe(false)
-  expect(cold.imageCount).toBeGreaterThan(5)
-  // A first start shows the top of the page, then the shelves below it; the page is kept once it is whole.
-  await expect(first.page.locator('main .section')).toHaveCount(6, { timeout: 30000 })
-  const titles = await first.page.locator('.section a[href^="#/detail/"]').count()
-  await expect.poll(() => readFile(join(first.profile, 'cache', 'home-v1.json'), 'utf8').then(() => true, () => false)).toBe(true)
-  await first.app.close()
+  let cold, titles
+  try {
+    cold = await homeTimeline(first.page)
+    expect(cold.failed).toBe(false)
+    expect(cold.imageCount).toBeGreaterThan(5)
+    await expect(first.page.locator('main .section')).toHaveCount(6, { timeout: 30000 })
+    titles = await first.page.locator('.section a[href^="#/detail/"]').count()
+    await expect.poll(() => readFile(join(first.profile, 'cache', 'home-v1.json'), 'utf8').then(() => true, () => false)).toBe(true)
+    expect(first.errors).toEqual([])
+  } finally { await first.app.close() }
   expect(JSON.parse(await readFile(join(first.profile, 'cache', 'home-v1.json'), 'utf8')).version).toBe(1)
   const kept = (await readdir(join(first.profile, 'images'))).length
   expect(kept).toBeGreaterThanOrEqual(cold.imageCount!)
 
   const second = await launch(first.profile)
-  const warm = await homeTimeline(second.page)
-  const result = { at: new Date().toISOString(), executable: process.env.PANDA_E2E_EXECUTABLE ?? 'out/', unit: 'ms after navigation start', firstStart: cold, secondStart: warm, imagesKept: kept }
-  await writeFile(join(evidenceDir, 'startup-second.json'), JSON.stringify(result, null, 2))
-  expect(warm.failed).toBe(false)
-  await expect(second.page.locator('main .section')).toHaveCount(6)
-  expect(await second.page.locator('.section a[href^="#/detail/"]').count()).toBe(titles)
-  // Ten Douban answers take about two seconds and the posters as long again; a start that waited
-  // for either cannot be this quick. Measured 2026-11-16: data after 0.3 s, artwork after 0.45 s.
-  expect(warm.data).toBeLessThan(1500)
-  expect(warm.images).toBeLessThan(2500)
-  expect(second.errors).toEqual([])
-  await second.app.close()
+  try {
+    const warm = await homeTimeline(second.page)
+    const result = { at: new Date().toISOString(), renderer: second.page.url(), executable: process.env.PANDA_E2E_EXECUTABLE ?? 'out/', unit: 'ms after navigation start', firstStart: cold, secondStart: warm, imagesKept: kept }
+    await mkdir(evidenceDir, { recursive: true })
+    await writeFile(join(evidenceDir, 'startup-second.json'), JSON.stringify(result, null, 2))
+    expect(warm.failed).toBe(false)
+    await expect(second.page.locator('main .section')).toHaveCount(6)
+    expect(await second.page.locator('.section a[href^="#/detail/"]').count()).toBe(titles)
+    expect(warm.data).toBeLessThan(1500)
+    expect(warm.images).toBeLessThan(2500)
+    expect(second.errors).toEqual([])
+  } finally { await second.app.close() }
 })
 
 test('startup: restores a maximized window after a clean restart', async () => {

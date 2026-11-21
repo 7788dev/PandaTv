@@ -1,0 +1,11 @@
+--------- beginning of main
+11-21 18:44:37.432 11358 11404 I PandaTV : [source] lzi (392ms): search: 网络请求失败或超时
+11-21 18:44:38.055 11358 11405 I PandaTV : [source] bfzy (1015ms): search: 网络请求失败或超时
+11-21 18:44:39.504 11358 11406 I PandaTV : [source] lzi (443ms): search: 网络请求失败或超时
+11-21 18:44:39.965 11358 11403 I PandaTV : [source] bfzy (904ms): search: 网络请求失败或超时
+11-21 18:44:41.435 11358 11403 W PandaTV : [douban] search:primary: UPSTREAM (Metadata HTTP 403)
+11-21 18:44:42.509 11358 11403 I PandaTV : [search] fallback hints=4 identities=4
+11-21 18:44:46.061 11358 11401 I PandaTV : [source] subo (9022ms): search: 网络请求失败或超时
+11-21 18:44:46.062 11358 11407 I PandaTV : [source] dyttzy (9022ms): search: 网络请求失败或超时
+11-21 18:44:48.073 11358 11405 I PandaTV : [source] subo (9012ms): search: 网络请求失败或超时
+11-21 18:44:48.074 11358 11428 I PandaTV : [source] dyttzy (9013ms): search: 网络请求失败或超时

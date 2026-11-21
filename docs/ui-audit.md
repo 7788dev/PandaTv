@@ -2,6 +2,8 @@
 
 审阅日期：2026-11-16。编码前完成静态审阅；本文件记录可核实的设计输入，不将原型演示行为视为生产能力。
 
+> **历史参考，不是现版前端。** `design/preview` 已退出应用 E2E；演示截图和下方的像素对照都不能证明实际包的布局、数据或播放。当前审查见 [Windows](frontend-audit-windows.md)、[TV](frontend-audit-tv.md) 和 [证据核验](ui-evidence-review.md)。
+
 ## 审阅范围与证据
 
 - 完整阅读 `design/preview/js/{app,core,views,parts,ui,player,kit}.js`、`design/preview/index.html`。
@@ -65,11 +67,11 @@
 - 渲染进程只调用类型化bridge的DataSource操作；window/state/update独立bridge命名空间；不接触豆瓣原始字段、播放解析规则、Cookie或远程凭据。
 - UI 本地状态通过主进程持久化并在renderer订阅，不直接对设计契约的localStorage说明实施机械复制。需要 user.get、toggleFavorite、recordHistory、remove/restoreHistory、clearHistory、add/clearSearch、updateSettings；状态写入失败必须显露。
 - `DataSource.byIds` 顺序与输入一致；收藏/历史可使用主进程缓存的真实metadata；网络错误不能被空数组吞没，无法获取单个已删除条目可以按契约略过。
-- 验证：原型19种状态的结构/截图对照，五频道筛选与分页、搜索键盘交互、菜单/对话框焦点、持久化重启、离线与重试、全部可见控件、播放controls分别覆盖自动化。
+- 原始验收计划：以原型状态检查结构；数据、焦点、持久化及播放另测。下面保留当时实际做过的对照，不作当前覆盖清单。
 
 ## 还原结果（2026-11-16，实现完成后）
 
-对照方式：同一个 Electron 进程里同时打开原型（`design/preview`，只在 e2e 的 fixture 主进程里加载）和生产界面，喂同一份 fixture 数据，1440×901 视口，逐场景成对截图并比较关键元素的盒模型。实现见 [fixture.spec.ts](../e2e/fixture.spec.ts)；截图与盒模型数据在 [evidence/visual](evidence/visual/overlay-report.json)，数字汇总在 [final-verification.txt](evidence/final-verification.txt)。fixture 与原型加载器都不进入发行包。
+当时的对照方式：同一 Electron 进程分别打开原型和编译后的界面，两者都喂同一份 fixture 数据，在 1440×901 比较截图和部分盒模型。该启动器及对照用例已删除；历史截图和坐标见 [overlay-report.json](evidence/visual/overlay-report.json)，不能用来证明真数据、命中层级或安装版表现。
 
 - 19 组截图覆盖原型 01–17、19 号状态（05 号分“集标题列表”与“分段选集”两组）。18 号“缓冲中”是瞬时状态，没有成对截图。
 - 非播放页 16 组的像素差异（任一通道相差超过 24/255 的像素占比）在最终一轮（20:07）为 0–0.40%，多数为 0，超过 0.17% 的三组都是带海报的页面（首页、频道、联想）；各轮之间随图片淡入时机有零点几个百分点的波动，当天见过的最大值 0.38%。

@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-21T16:37:06.7297732+08:00",
+  "task": ":app:pandaFrontendAuditNonexistentTask",
+  "projectDirectory": "E:\\dev\\项目\\panda\\tv",
+  "beforeExit": 0,
+  "afterExit": 1,
+  "beforeReportedFailure": true,
+  "afterReportedFailure": true,
+  "beforeScope": "Isolated copy of the pre-fix batch control flow, using copied original wrapper JAR/properties and the actual TV project; original leading rem line omitted.",
+  "afterScope": "Current tv/gradlew.bat in the actual TV project."
+}

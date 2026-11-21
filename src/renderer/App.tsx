@@ -41,23 +41,23 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   const { state, dispatch } = useUser()
   const notify = useNotify()
   const query = value.trim()
+  const close = () => { setActive(-1); setOpen(false) }
   useEffect(() => { const timer = setTimeout(() => setDebounced(query), query ? 220 : 0); return () => clearTimeout(timer) }, [query])
   const results = useRemote(async (): Promise<{ suggestions?: MediaItem[]; titles?: string[]; hot?: string[] }> => {
     if (!open) return {}
     if (/^[a-z0-9\s]+$/i.test(debounced)) return { titles: await window.panda.data.titleHints(debounced) }
     return debounced ? { suggestions: await window.panda.data.suggest(debounced) } : { hot: await window.panda.data.hotSearches() }
-  }, [open, debounced, online])
-  useEffect(() => { setActive(-1) }, [value, results.data])
-  useEffect(() => { setValue(currentQuery); setOpen(false); input.current?.blur() }, [routeKey])
+  }, [open, debounced, online], false, JSON.stringify([open, debounced, online]))
+  useEffect(() => { setValue(currentQuery); close(); input.current?.blur() }, [routeKey])
   useEffect(() => {
-    const pointer = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false) }
+    const pointer = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) close() }
     const keyboard = (event: KeyboardEvent) => {
       const typing = (event.target as HTMLElement)?.matches('input,textarea,[contenteditable=true]')
       if ((event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey)) || (event.key === '/' && !typing)) {
-        event.preventDefault(); input.current?.focus(); input.current?.select()
+        event.preventDefault(); setOpen(true); input.current?.focus(); input.current?.select()
       }
     }
-    const network = () => setOnline(navigator.onLine)
+    const network = () => { setActive(-1); setOnline(navigator.onLine) }
     document.addEventListener('pointerdown', pointer)
     document.addEventListener('keydown', keyboard)
     addEventListener('online', network); addEventListener('offline', network)
@@ -68,27 +68,32 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   const titles = results.data?.titles ?? []
   const hot = results.data?.hot ?? []
   const hasPanel = !query || waiting || Boolean(results.error) || suggestions.length > 0 || titles.length > 0
-  const targets = query ? results.data?.titles ? titles.map(title => `/search?q=${encodeURIComponent(title)}`) : suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
+  const targets = waiting || results.error ? [] : query ? results.data?.titles ? titles.map(title => `/search?q=${encodeURIComponent(title)}`) : suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
   const choose = (index: number) => {
     if (query && suggestions[index]) void dispatch({ type: 'search:add', query: suggestions[index].title }).catch(error => notify(errorText(error)))
     if (query && titles[index]) void dispatch({ type: 'search:add', query: titles[index] }).catch(error => notify(errorText(error)))
     if (targets[index]) go(targets[index])
   }
-  return <div className="search" role="search" ref={root} data-open={dataAttr(open)} onBlur={event => { if (!root.current?.contains(event.relatedTarget as Node)) setOpen(false) }}>
+  return <div className="search" role="search" ref={root} data-open={dataAttr(open)} onBlur={event => { if (!root.current?.contains(event.relatedTarget as Node)) close() }}>
     <label className="field" data-filled={dataAttr(value)}><Icon name="search" size="sm" className="field__icon" />
       <input className="field__input" type="search" ref={input} value={value} placeholder={extra.searchInitialsPlaceholder} aria-label={t.search.label} autoComplete="off" spellCheck={false}
-        role="combobox" aria-expanded={open && hasPanel} aria-controls="search-suggestions" aria-activedescendant={active >= 0 ? `search-item-${active}` : undefined}
-        onChange={event => { setValue(event.target.value); setOpen(true) }} onFocus={() => setOpen(true)} onKeyDown={event => {
+        role="combobox" aria-expanded={open && hasPanel} aria-controls="search-suggestions" aria-activedescendant={open && active >= 0 && active < targets.length ? `search-item-${active}` : undefined}
+        onChange={event => { setActive(-1); setValue(event.target.value); setOpen(true) }} onFocus={() => setOpen(true)} onClick={() => setOpen(true)} onKeyDown={event => {
           if (event.nativeEvent.isComposing) return
-          if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && targets.length) {
-            event.preventDefault(); const next = (active + (event.key === 'ArrowDown' ? 1 : -1) + targets.length) % targets.length; setActive(next)
+          const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
+          if (step) {
+            if (!open) { event.preventDefault(); setOpen(true); return }
+            if (!targets.length) return
+            event.preventDefault()
+            const next = active < 0 ? step > 0 ? 0 : targets.length - 1 : (active + step + targets.length) % targets.length
+            setActive(next)
             panel.current?.querySelectorAll<HTMLElement>('.suggest__item,.hotlist__item')[next]?.scrollIntoView({ block: 'nearest' })
-          } else if (event.key === 'Enter') { event.preventDefault(); if (active >= 0) choose(active); else if (query) go(`/search?q=${encodeURIComponent(query)}`) }
-          else if (event.key === 'Escape') { setOpen(false); input.current?.blur() }
+          } else if (event.key === 'Enter') { event.preventDefault(); if (open && targets[active]) choose(active); else if (query) go(`/search?q=${encodeURIComponent(query)}`) }
+          else if (event.key === 'Escape' && open) { event.preventDefault(); close() }
         }} />
-      <kbd className="kbd field__hint">Ctrl K</kbd><button className="field__clear" type="button" aria-label={t.action.clearInput} tabIndex={-1} onClick={() => { setValue(''); input.current?.focus(); setOpen(true) }}><Icon name="close" size="sm" /></button>
+      <kbd className="kbd field__hint">Ctrl K</kbd><button className="field__clear" type="button" aria-label={t.action.clearInput} tabIndex={-1} onClick={() => { setActive(-1); setValue(''); input.current?.focus(); setOpen(true) }}><Icon name="close" size="sm" /></button>
     </label>
-    <div id="search-suggestions" className="search__panel" ref={panel} data-open={dataAttr(open && hasPanel)} onMouseDown={event => event.preventDefault()} onPointerMove={() => setActive(-1)}>
+    <div id="search-suggestions" className="search__panel" ref={panel} inert={!open || !hasPanel} data-open={dataAttr(open && hasPanel)} onMouseDown={event => event.preventDefault()} onPointerMove={event => { if (event.movementX || event.movementY) setActive(-1) }}>
       {query ? waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : results.data?.titles ? titles.map((title, index) => <a className="suggest__item" id={`search-item-${index}`} key={title} href={`#/search?q=${encodeURIComponent(title)}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text">{title}</span></a>) : suggestions.map((item, index) => <a className="suggest__item" id={`search-item-${index}`} key={item.id} href={`#/detail/${item.id}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: item.title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text"><Highlight title={item.title} query={query} /></span><span className="suggest__type">{t.nav[item.type]}</span></a>) : <>
         {state.searches.length > 0 && <div className="search__group"><div className="search__head"><span className="search__label">{t.search.recent}</span><button className="text-btn" onClick={() => { void dispatch({ type: 'search:clear' }).catch(error => notify(errorText(error))) }}>{t.action.clear}</button></div><div className="search__chips">{state.searches.map(word => <a className="chip chip--solid" key={word} href={`#/search?q=${encodeURIComponent(word)}`}>{word}</a>)}</div></div>}
         <div className="search__group"><div className="search__head"><span className="search__label">{t.search.hot}</span></div>{waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : <div className="hotlist" aria-label={extra.hotSearchSource}>{hot.map((word, index) => <a className="hotlist__item" id={`search-item-${index}`} href={`#/search?q=${encodeURIComponent(word)}`} key={word} data-highlighted={dataAttr(index === active)}><span className="hotlist__rank">{index + 1}</span><span className="hotlist__title">{word}</span></a>)}</div>}</div>

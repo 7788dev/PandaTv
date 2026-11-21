@@ -1,8 +1,10 @@
 # Panda 交付报告
 
-2026-11-21（桌面 1.1.2；TV 1.0.12）。本轮强化线路切换时的画面保留、失败恢复和倍速帧率适配，扩充频道布局与真实播放回归，并重验 Windows 安装包与 TV APK。实际运行数据和仍受上游线路影响的样本见下方“1.1.2 发布验收”；既有版本记录保留作历史对照。
+2026-11-21 前端审查：[Android TV 问题与实测](frontend-audit-tv.md) · [Windows 问题与实测](frontend-audit-windows.md) · [旧文档、脚本与清理](ui-evidence-review.md)。下文保留已发布桌面 1.1.2 / TV 1.0.12 和更早版本的证据。审查构建未覆盖这些原发布包；同版本号不能替代包哈希。
 
 ## 启动方式
+
+GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说明](ci-release.md)，接入及激活状态见[CI 验证记录](evidence/ci-release.txt)。
 
 桌面端需要 Node 24、Windows 10/11 x64；电视端构建需要 JDK 17+（本机 JDK 21）与 Android SDK（`local.properties` 指向本机 `E:\dev\android-sdk`）。
 
@@ -11,11 +13,12 @@
 | 安装依赖 | `npm install` |
 | 开发运行 | `npm run dev` |
 | 类型检查 / 离线单测 | `npm run typecheck` / `npm test` |
-| 桌面 E2E（需联网，先 `npm run build`） | `npm run test:e2e` |
-| 生成桌面安装包 | `npm run dist` → `release/Panda-1.1.2-Setup.exe` |
-| 构建并校验 Android TV 包 | `cd tv && .\gradlew.bat testDebugUnitTest lintRelease assembleRelease` → `release/Panda-TV-1.0.12.apk` |
-| 导出双端对齐黄金向量 / 播放器回归 | `node scripts/export-tv-vectors.mjs` / `python scripts/verify-tv-playback-transitions.py --case all` |
-| TV 列表 / 搜索 / 动画回归 | `python scripts/verify-tv-navigation.py --extended --library` / `python scripts/verify-tv-search-state.py` / `python scripts/verify-tv-motion.py` |
+| 桌面真实 E2E（需要联网） | `npm run test:e2e`；不设 `PANDA_E2E_EXECUTABLE` 时先 `npm run build`，运行 `out/`；设定后运行对应 `Panda.exe` |
+| 桌面离线状态与布局（无可见窗口） | `npm run build` 后 `npm run test:e2e:fixture`；测试数据，不作安装包证据 |
+| 生成桌面安装包 | `npm run dist` → `release/Panda-1.1.3-Setup.exe` |
+| 构建并校验 Android TV 包 | 在 `tv/` 运行 `.\gradlew.bat testDebugUnitTest lintRelease assembleRelease` → `tv/app/build/outputs/apk/release/app-release.apk`；不自动更新 `release/` |
+| 导出双端对齐黄金向量 | `node scripts/export-tv-vectors.mjs` |
+| TV 列表 / 搜索 / 动画 / 播放回归 | 按 [TV 设备规程](../.agents/skills/tv-runtime-regression/SKILL.md) 指定安装包和设备序列号后串行重放 |
 | 重放线上审计 | `npm run probe:filters`、`npm run probe:sources`、`npm run audit:ads`、`npm run probe:start`、`npm run probe:startup` |
 
 安装包为按用户安装的 NSIS 程序，默认安装到 `%LOCALAPPDATA%\Programs\Panda`（安装向导里可改目录；再次安装会沿用上次的目录原地升级），创建开始菜单与桌面快捷方式，可从“应用和功能”卸载，卸载保留 `%APPDATA%\Panda` 里的收藏与历史。
@@ -74,7 +77,7 @@
 - 播放源排序的独立复现先将共享排序设为中性值：新增“下一集先试上一集赢家”的同一测试由通过转失败（先打开慢源 `one`）；恢复正式排序后，同一测试通过。工作级失败降权有独立测试，确认不影响其它作品。
 - 最终桌面包的全量 E2E 为 16/19 通过：真实电影、剧集、动画、自动换线与其余界面 / 数据用例通过。其余 3 项是在强制 `bfzy`、`dyttzy`、`lzi` 单源模式下等待解码播放时超时；这些用例会先起播、再验证跨广告剪切点和 seek 后续播，但失败上下文不足以确定具体超时在哪个阶段。同类 `360zy` 用例通过。不能将失败归因到某一阶段或推广成国内网络结论，也不能把本轮完整 E2E 记为全绿。详细结果见[本次验收记录](evidence/playback-stability-checks.txt)。
 
-## 当前发布包（2026-11-21，桌面 1.1.2 / TV 1.0.12）
+## 审查前发布包（2026-11-21，桌面 1.1.2 / TV 1.0.12）
 
 - 桌面安装程序：[Panda-1.1.2-Setup.exe](../release/Panda-1.1.2-Setup.exe)，133,204,226 字节，SHA-256 `81231C2397F59F2E7ADAF94C34BA93989AB45036F33DAF0ED77422ECF23A5C8D`。已原位升级既有 1.1.1；安装记录为 [install-1.1.2.txt](evidence/install-1.1.2.txt)，asar 271 项，不含 node_modules、原型 mock/art/preview、测试、脚本或 source map。该机器已有用户安装未卸载，未清除用户资料。
 - TV 安装包：[Panda-TV-1.0.12.apk](../release/Panda-TV-1.0.12.apk)，1,812,339 字节，SHA-256 `8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974`，versionCode 13、minSdk 22；v1/v2 签名通过，证书 SHA-256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`，MuMu 安装了此 APK。
@@ -118,7 +121,7 @@
 - **立即切集**：选择下一集或选集立即停止旧视频与声音、清空进度和画面、切换标题，再加载新集；连续选择以最后一集为准，观看历史记录实际播放的集数。旧版两次保留旧时间轴；新版两次完成第 3 集实际播放与对应历史。
 - **播放首片竞态**：修复预热下载已结束、播放器稍晚开始读取时得到空分片的问题；保留同一份字节给迟到读取者，读完释放。
 
-取舍与已撤回的验收误判见 [TV interaction](../.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)。下表记录 1.0.2 的交互验收历史；当前 1.0.3 的回归证据见本报告的 11 月 20 日记录。旧版的多密度、起播时长和帧率保留在 [tv-verification.json](evidence/tv-verification.json)，不作为当前包的测量结果。
+取舍与已撤回的验收误判见 [TV interaction](../.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)。以下为 1.0.2/1.0.3 等旧版记录；[tv-verification.json](evidence/tv-verification.json) 不作为现版包的多密度、起播或帧率证据。
 
 ## 已修复的问题
 
@@ -159,20 +162,20 @@
 - 清晰度切换、跳过片头只在片源提供多档清晰度、片头标记时出现；实测的片源都不提供片头标记。H.265 或 fMP4 的片源读不出画面大小，不显示清晰度。
 - 未验证：高 DPI 多显示器下的窗口位置还原、数小时连续播放；TCL L55P2-UD（Android 5.1）实体电视真机（开发机无实体电视连接，运行时 E2E 在 MuMu Android 15 的 `960×540dp` 标准电视视口下完成，API 22 兼容性由 `minSdk = 22`、`lintRelease` 的 `NewApi` 致命检查、v1+v2 签名与内置根证书静态保障）。
 
-## 验证证据
+## 历史验证证据
 
 | 项目 | 结果 | 证据 |
 | --- | --- | --- |
 | 类型检查 | 本次无错误 | [tv-interaction-checks.txt](evidence/tv-interaction-checks.txt) |
 | 离线单测 | 15 个文件 232 项通过（2026-11-18 18:06） | [tv-interaction-checks.txt](evidence/tv-interaction-checks.txt)、[tests/](../tests/) |
 | 桌面 E2E（开发构建） | 本次 18/19 通过（2026-11-18 17:50）；强制量子单源的广告播放起播超时，18:04 单独重跑仍失败。附加诊断也观察到目录或媒体请求超时；旧打包版本先出现两轮连接重置，后恢复播放，不能把一次网络对照当作稳定可用性结论。此前 19/19 全通过记录保留在 final-verification.txt | [tv-interaction-checks.txt](evidence/tv-interaction-checks.txt)、[量子源诊断](evidence/runtime/source-diagnostics/) |
-| 原型对照 | 成对截图；非播放场景像素差异 0–0.17%；播放场景的差异来自视频画面本身（原型放的是演示片段）；40 个被测控件盒子与原型最大相差 0.97 px（断言上限 1 px） | [evidence/visual](evidence/visual/overlay-report.json)、[界面审阅](ui-audit.md) |
+| 原型对照（已退役） | 同一模拟数据、单一视口的历史设计对照；不能证明真实渲染、可点击性或安装版交互 | [overlay-report.json](evidence/visual/overlay-report.json)、[证据核验](ui-evidence-review.md) |
 | 筛选词表 | 738 项全部有内容 | [filter-vocabulary.json](evidence/filter-vocabulary.json) |
 | 演职员与头像取景 | 45 部作品主要演职员 45/45 答复（每部 4–8 人，中位 52 ms），3 位影人全部作品无重不漏；1123 张头像顶端对齐 93.0% 头部露出九成以上（居中为 20.2%） | [people-audit.json](evidence/people-audit.json)、[portrait-framing.json](evidence/portrait-framing.json) |
 | 片源覆盖 / 国内可用性 / 起播 | 本次境外开发机起播探针 23/24，中位总耗时 1.984 秒（2026-11-18 17:50）；读取真实首片及中间分片。覆盖数据见新导出结果；国内测量仍以 cn-sources.md 为准 | [tv-source-coverage-2026-11-18.json](evidence/tv-source-coverage-2026-11-18.json)、[tv-interaction-checks.txt](evidence/tv-interaction-checks.txt)、[cn-sources.md](evidence/cn-sources.md) |
 | 去广告线上审计 | 见上表 | [ad-audit.json](evidence/ad-audit.json)、截帧 `evidence/ad-frame-v2-*.jpg` |
 | 原型未改动 | 206 个文件 SHA256 一致；契约检查 405 项通过 | `npm run verify:design`、`node design/tools/test-contract.mjs` |
-| 安装包（桌面） | 当前 [Panda-1.0.1-Setup.exe](../release/Panda-1.0.1-Setup.exe) 的大小和哈希见上面的发布包记录；打包目录全量 E2E 16/19 通过，其中真实电影 / 剧集 / 动画播放通过，三个强制单源广告后远跳续播用例未通过。asar 检查 268 项，通过。当前安装程序没有在这台电脑上执行；旧安装 1.0.0 未升级。此前 7 项打包 E2E 与旧版安装 / 卸载循环保留在旧证据中 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt)、[install.txt](evidence/install.txt) |
+| 历史桌面 1.0.1 | 打包目录 E2E 16/19，三项强制单源用例失败，asar 268 项。该轮未执行 1.0.1 安装程序；不是对 1.1.2 的结论 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt)、[install.txt](evidence/install.txt) |
 | Android TV 安装包 | [Panda-TV-1.0.3.apk](../release/Panda-TV-1.0.3.apk) 1,068,444 字节、SHA-256 `6112B93C49BA76EC9C7C22E2935564F403DEA8F5404DC3351D56F797542EDEDB`；versionCode 4、minSdk 22、v1/v2 签名通过 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt) |
 | TV 遥控器列表与搜索 | 1.0.3 重跑完整导航全部通过，user/library 状态恢复；搜索 3 项通过，user 状态恢复。第一次导航的一项偶发焦点错误未复现 | [导航](evidence/runtime/tv-navigation/playback-stability-1.0.3-repeat/report.json)、[搜索](evidence/runtime/tv-navigation/playback-stability-1.0.3/report.json) |
 | TV 播放器与查源 | 1.0.3 播放按钮焦点、连续切至第 3 集、历史记录和无源重试通过；user 状态、防火墙规则恢复 | [播放](evidence/runtime/tv-playback/playback-stability-1.0.3/report.json) |

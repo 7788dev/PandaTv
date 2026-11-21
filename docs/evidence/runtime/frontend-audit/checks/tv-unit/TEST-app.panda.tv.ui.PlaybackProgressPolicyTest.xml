@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.ui.PlaybackProgressPolicyTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-21T10:08:59.280Z" hostname="DESKTOP-G3A3P0Q" time="0.002">
+  <properties/>
+  <testcase name="playing without any timeline movement reaches the stall deadline" classname="app.panda.tv.ui.PlaybackProgressPolicyTest" time="0.001"/>
+  <testcase name="ongoing low speed playback refreshes progress at its actual timeline rate" classname="app.panda.tv.ui.PlaybackProgressPolicyTest" time="0.0"/>
+  <testcase name="seek rewind reanchors the watched position and timeout" classname="app.panda.tv.ui.PlaybackProgressPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

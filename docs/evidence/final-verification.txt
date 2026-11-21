@@ -1,3 +1,4 @@
+Historical verification for the 1.0.0 delivery only. The current evidence index is ../ui-evidence-review.md.
 Final verification on the delivered code — 2026-11-17 / 2026-11-18 (local time UTC+8), Windows 11 26100, Node 24.
 Last change to shipped desktop code: 2026-11-17 21:30 (comments in src/main/data/douban.ts and normalize.ts;
 functional changes in douban.ts, normalize.ts, ipc.ts, preload/index.ts, shared/api.ts, copy.extra.ts,

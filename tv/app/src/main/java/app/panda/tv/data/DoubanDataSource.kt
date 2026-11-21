@@ -50,7 +50,9 @@ class DoubanDataSource(
     private val warnings = ArrayList<DataWarning>()
     private val flights = HashMap<String, CompletableDeferred<MediaItem>>()
     private val searchTitles by lazy { titleIndex?.invoke() }
-    @Volatile private var searchFallbackUntil = 0L
+    @Volatile private var searchFallbackFailure: SearchFallbackFailure? = null
+
+    private data class SearchFallbackFailure(val until: Long, val error: DataError)
 
     @Volatile
     private var homeState: CachedHome? = null
@@ -731,14 +733,15 @@ class DoubanDataSource(
     }
 
     private suspend fun searchRows(q: String, count: Int, paginate: Boolean): List<Normalized> {
-        if (searchFallbackUntil > System.currentTimeMillis()) return searchFallback(q, count)
+        val fallbackFailure = searchFallbackFailure
+        if (fallbackFailure != null && fallbackFailure.until > System.currentTimeMillis()) return searchFallback(q, count, fallbackFailure.error)
         val first = try { searchPage(q, 0, count) }
         catch (cancelled: CancellationException) { throw cancelled }
         catch (e: DataError) {
             if (e.code == DataErrorCode.INVALID_INPUT || e.message == "Search query was rejected") throw e
-            searchFallbackUntil = System.currentTimeMillis() + 60_000L
+            synchronized(lock) { searchFallbackFailure = SearchFallbackFailure(System.currentTimeMillis() + 60_000L, e) }
             diagnostic("search:primary", e)
-            return searchFallback(q, count)
+            return searchFallback(q, count, e)
         }
         val total = Json.positiveInt(first["total"]) ?: 0
         val extraStarts = if (paginate) listOf(count, count * 2, count * 3).filter { it < total } else emptyList()
@@ -758,27 +761,34 @@ class DoubanDataSource(
         return pages.flatMap { Normalize.requiredArray(it, "items") }.mapNotNull { Normalize.normalize(it) }
     }
 
-    private suspend fun searchFallback(q: String, count: Int): List<Normalized> {
-        val hints = fallbackHttp.json("https://movie.douban.com/j/subject_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it) }, emptyTtlMs = 1000L)
-        var ids = TitleSearchIndex.suggestedSubjectIds(hints).take(count)
-        onSearchDiagnostic("fallback hints=${hints.size} identities=${ids.size}")
-        if (ids.isEmpty()) {
-            val cards = fallbackHttp.json("https://www.douban.com/j/search_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it, "cards") }, emptyTtlMs = 1000L)
-            ids = TitleSearchIndex.suggestedSubjectIds(cards).take(count)
-            onSearchDiagnostic("global-fallback hints=${cards.size} identities=${ids.size}")
+    private suspend fun searchFallback(q: String, count: Int, primaryError: DataError): List<Normalized> {
+        try {
+            val hints = fallbackHttp.json("https://movie.douban.com/j/subject_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it) }, emptyTtlMs = 1000L)
+            var ids = TitleSearchIndex.suggestedSubjectIds(hints).take(count)
+            onSearchDiagnostic("fallback hints=${hints.size} identities=${ids.size}")
+            if (ids.isEmpty()) {
+                val cards = fallbackHttp.json("https://www.douban.com/j/search_suggest?q=${URLEncoder.encode(q, "UTF-8")}", SEARCH_TTL, { Normalize.requiredArray(it, "cards") }, emptyTtlMs = 1000L)
+                ids = TitleSearchIndex.suggestedSubjectIds(cards).take(count)
+                onSearchDiagnostic("global-fallback hints=${cards.size} identities=${ids.size}")
+            }
+            if (ids.isEmpty()) throw primaryError
+            val replies = supervisorScope {
+                ids.map { id -> async {
+                    try { Result.success(readSubject(id)) }
+                    catch (cancelled: CancellationException) { throw cancelled }
+                    catch (e: Exception) { Result.failure<Normalized>(e) }
+                } }.map { it.await() }
+            }
+            val values = replies.mapNotNull { it.getOrNull() }
+            if (values.isEmpty()) throw requireNotNull(replies.first().exceptionOrNull())
+            for (reply in replies) reply.exceptionOrNull()?.let { diagnostic("search:subject", it) }
+            return values
+        } catch (error: Exception) {
+            synchronized(lock) {
+                if (searchFallbackFailure?.error === primaryError) searchFallbackFailure = null
+            }
+            throw error
         }
-        if (ids.isEmpty()) return emptyList()
-        val replies = supervisorScope {
-            ids.map { id -> async {
-                try { Result.success(readSubject(id)) }
-                catch (cancelled: CancellationException) { throw cancelled }
-                catch (e: Exception) { Result.failure<Normalized>(e) }
-            } }.map { it.await() }
-        }
-        val values = replies.mapNotNull { it.getOrNull() }
-        if (values.isEmpty()) throw requireNotNull(replies.first().exceptionOrNull())
-        for (reply in replies) reply.exceptionOrNull()?.let { diagnostic("search:subject", it) }
-        return values
     }
 
     private suspend fun searchTitlesRows(q: String, suggestions: Boolean): List<Normalized> = withContext(Dispatchers.IO) {
@@ -799,7 +809,8 @@ class DoubanDataSource(
         }
         val values = responses.flatMap { response -> response.getOrNull().orEmpty().filter { terms.isEmpty() || score(it).isFinite() } }
         onSearchDiagnostic("results returned=${values.size}")
-        if (responses.all { it.isFailure } && saved.isEmpty()) throw requireNotNull(responses.first().exceptionOrNull())
+        val failure = responses.firstOrNull { it.isFailure }?.exceptionOrNull()
+        if (values.isEmpty() && saved.isEmpty() && failure != null) throw failure
         if (saved.isNotEmpty() && responses.all { it.isFailure }) warn(DataWarning("CACHED", "search:initials", "Showing saved title matches while metadata queries are unavailable", System.currentTimeMillis()))
         val merged = LinkedHashMap<String, Normalized>()
         for (value in saved + values) merged[value.item.id] = value

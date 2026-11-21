@@ -1,0 +1,5 @@
+contract ok · 405 checks
+(node:20204) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/design/preview/js/core.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to E:\dev\项目\panda\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)

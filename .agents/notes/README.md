@@ -45,3 +45,7 @@ Version 1.0.0 was delivered on 2026-11-16; the [delivery report](../../docs/deli
 | [title-initials](implemented/architecture/2026-11-20-title-initials.md) | Fresh-install initials vocabulary, verified metadata fallback, local query hints and cancellation ownership |
 
 The repeatable device workflow is [tv-runtime-regression](../skills/tv-runtime-regression/SKILL.md). It runs production APK replays sequentially and checks restoration of temporary state and network rules.
+
+Evidence boundaries, prototype retirement and serial desktop verification are recorded in [runtime-ui-evidence](implemented/testing/2026-11-21-runtime-ui-evidence.md).
+
+Cloud CI and release ownership is recorded in [cloud-release](implemented/process/2026-11-21-cloud-release.md); commands and signing setup are in the [release guide](../../docs/ci-release.md).

@@ -1,0 +1,21 @@
+--------- beginning of main
+11-21 18:33:55.053 58680 58680 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:33:55.054 58680 58680 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:33:55.056 58680 58680 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:33:55.443 58680 58703 I PandaTV : [source] 360zy (388ms): search: 网络请求失败或超时
+11-21 18:33:55.627 58680 58708 I PandaTV : [source] lzi (572ms): search: 网络请求失败或超时
+11-21 18:33:57.822 58680 58713 I PandaTV : [source] lzi (749ms): search: 网络请求失败或超时
+11-21 18:33:59.433 58680 58713 W PandaTV : [douban] search:primary: UPSTREAM (Metadata HTTP 403)
+11-21 18:33:59.560 58680 58713 I PandaTV : [search] fallback hints=4 identities=4
+11-21 18:33:59.563 58680 58830 I PandaTV : [search] fallback hints=4 identities=4
+11-21 18:34:02.923 58680 58715 I PandaTV : [source] huya (1203ms): probe: 网络请求失败或超时
+11-21 18:34:04.073 58680 58702 I PandaTV : [source] subo (9018ms): search: 网络请求失败或超时
+11-21 18:34:04.073 58680 58705 I PandaTV : [source] bfzy (9018ms): search: 网络请求失败或超时
+11-21 18:34:04.074 58680 58710 I PandaTV : [source] dyttzy (9019ms): search: 网络请求失败或超时
+11-21 18:34:04.198 58680 58711 I PandaTV : [source] ffzy (9143ms): search: 网络请求失败或超时
+11-21 18:34:06.082 58680 58706 I PandaTV : [source] dyttzy (9010ms): search: 网络请求失败或超时
+11-21 18:34:06.083 58680 58707 I PandaTV : [source] ffzy (9010ms): search: 网络请求失败或超时
+11-21 18:34:06.083 58680 58704 I PandaTV : [source] subo (9011ms): search: 网络请求失败或超时
+11-21 18:34:06.084 58680 58708 I PandaTV : [source] bfzy (9012ms): search: 网络请求失败或超时
+11-21 18:34:25.503 58680 58708 I PandaTV : [source] huya (773ms): probe: 网络请求失败或超时
+11-21 18:34:48.591 58680 58710 I PandaTV : [source] huya (849ms): probe: 网络请求失败或超时

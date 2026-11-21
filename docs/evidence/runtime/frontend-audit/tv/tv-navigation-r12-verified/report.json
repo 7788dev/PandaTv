@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-21T10:42:25.853628+00:00",
+  "version": "1.0.12",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [],
+  "failures": [
+    {
+      "name": "navigation-run",
+      "error": "Could not return focus to top navigation bar after 24 Up presses: [{'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}]"
+    }
+  ],
+  "apkSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "userStateRestored": true
+}

@@ -1,0 +1,24 @@
+PASS 动漫-1-normal: first movie=谷雨街后巷, up presses=9
+PASS 动漫-1-fast-right: first movie=千与千寻, up presses=9
+PASS 动漫筛选展开回顶
+PASS 电影-1-normal: first movie=可能的爱, up presses=9
+PASS 电影-1-fast-right: first movie=给阿嬷的情书, up presses=9
+PASS 电影筛选展开回顶
+PASS 剧集-1-normal: first movie=今天是太阳雨, up presses=9
+PASS 剧集-1-fast-right: first movie=幻视任务, up presses=9
+PASS 剧集筛选展开回顶
+PASS 综艺-1-normal: first movie=后会友期, up presses=9
+PASS 综艺-1-fast-right: first movie=现在就出发 第三季, up presses=9
+PASS 综艺筛选展开回顶
+PASS 纪录片-1-normal: first movie=生命奇观2, up presses=9
+PASS 纪录片-1-fast-right: first movie=脸庞，村庄, up presses=9
+PASS 纪录片筛选展开回顶
+PASS 搜索结果回顶
+PASS 搜索末行保持列
+PASS 影人作品回顶
+PASS 搜索与影人页面流程
+PASS 收藏列表回顶
+PASS 收藏详情返回位置
+PASS 历史列表回顶
+PASS 收藏历史流程
+Report: .tmp\frontend-audit\tv-navigation-r12-complete\report.json

@@ -1,0 +1,13 @@
+{
+  "at": null,
+  "timeScope": "REA tool output did not contain an acquisition timestamp; no run timestamp is inferred from package file times.",
+  "operation": "REA open_binary and inspect_artifact(detail=summary), followed by close_binary",
+  "path": "D:/Programs/Panda/resources/app.asar",
+  "sha256": "823108d66fcfd4c8e690bb24977401576a992ce91e3794433081b819dfe31302",
+  "format": "asar",
+  "inventoryEvidence": "ev_14abf48eea73ab0623d739c45de7bbfc00ee7398746024988cffbacde63087cb",
+  "regularFiles": 246,
+  "directories": 26,
+  "integrityContradictions": 0,
+  "scope": "Manual projection of observed REA metadata only. Does not execute or launch the installed application, analyze JavaScript semantics, or establish current installed runtime UI behavior."
+}

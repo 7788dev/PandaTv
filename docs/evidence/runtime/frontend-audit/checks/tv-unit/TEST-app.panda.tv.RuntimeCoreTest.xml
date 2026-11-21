@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.RuntimeCoreTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-21T10:08:51.716Z" hostname="DESKTOP-G3A3P0Q" time="0.193">
+  <properties/>
+  <testcase name="bundled mozilla ca store and play sources match desktop" classname="app.panda.tv.RuntimeCoreTest" time="0.115"/>
+  <testcase name="completed warm flow still delivers bytes to a reader attaching after completion" classname="app.panda.tv.RuntimeCoreTest" time="0.002"/>
+  <testcase name="warm media cache keeps playlists and keys while evicting one-shot media segments" classname="app.panda.tv.RuntimeCoreTest" time="0.002"/>
+  <testcase name="user store persists favorites history searches and settings" classname="app.panda.tv.RuntimeCoreTest" time="0.065"/>
+  <testcase name="json roundtrip preserves unicode and escapes" classname="app.panda.tv.RuntimeCoreTest" time="0.001"/>
+  <testcase name="rapid remote seek inputs accumulate against the latest pending target" classname="app.panda.tv.RuntimeCoreTest" time="0.0"/>
+  <testcase name="oversized unconsumed warm segment cannot leave a later reader waiting forever" classname="app.panda.tv.RuntimeCoreTest" time="0.005"/>
+  <testcase name="public network rejects private ips and unsafe ports while allowing fake-ip domain resolution" classname="app.panda.tv.RuntimeCoreTest" time="0.002"/>
+  <testcase name="remote seek targets clamp at media boundaries and reject unknown duration" classname="app.panda.tv.RuntimeCoreTest" time="0.0"/>
+  <testcase name="shared segment flow streams chunks without full copies and throws on fail" classname="app.panda.tv.RuntimeCoreTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

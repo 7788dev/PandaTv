@@ -1,12 +1,11 @@
 import { test, expect } from '@playwright/test'
-import { mkdtemp, mkdir, readFile, writeFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { launch, capture, playing, root, videoStatus } from './desktop'
+import { launch, capture, playing, root, temporaryProfile, videoStatus } from './desktop'
 
 /** Launches the app with a user-data rules file that leaves one source enabled. */
 async function launchWith(source: string) {
-  await mkdir(join(root, '.tmp'), { recursive: true })
-  const profile = await mkdtemp(join(root, '.tmp', 'desktop-'))
+  const profile = await temporaryProfile()
   const bundled = JSON.parse(await readFile(join(root, 'resources/play-sources.json'), 'utf8')) as { version: number; sources: Array<{ key: string; enabled: boolean }> }
   await writeFile(join(profile, 'play-sources.json'), JSON.stringify({ ...bundled, sources: bundled.sources.map(entry => ({ ...entry, enabled: entry.key === source })) }))
   return launch(profile)

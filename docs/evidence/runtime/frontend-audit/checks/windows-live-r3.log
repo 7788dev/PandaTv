@@ -1,0 +1,216 @@
+
+> panda-desktop@1.1.2 test:e2e
+> playwright test --project=desktop-live --output=.tmp/frontend-audit/windows-live-r3/results
+
+
+Running 15 tests using 1 worker
+
+(node:56852) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x   1 [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decoding (1.1m)
+(node:46156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok  2 [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on 360zy: out-of-directory blocks plays, seeks across the cut and keeps decoding (26.0s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x   3 [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decoding (1.1m)
+(node:62056) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x   4 [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding (1.1m)
+(node:31264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+Real filter: tv 动作 30
+Real filter: tv 悬疑 30
+Real filter: tv 校园 30
+Real filter: movie 动作 29
+Real filter: movie 悬疑 28
+Real filter: movie 校园 30
+Real filter: anime 校园 60
+Real filter: anime 悬疑 60
+Real filter: anime 热血 60
+Real filter: variety 音乐 29
+Real filter: variety 真人秀 30
+Real filter: variety 旅行 30
+Real filter: doc 自然 55
+Real filter: doc 历史 52
+Real filter: doc 科学 57
+  ok  5 [desktop-live] › e2e\data.spec.ts:7:16 › real Douban metadata, detailed channel facets, suggestions, hot searches and pagination (29.6s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x   6 [desktop-live] › e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history (40.5s)
+(node:62684) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok  7 [desktop-live] › e2e\live.spec.ts:95:1 › real serial exposes playable episodes and decodes after switching to the next episode (1.4m)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x   8 [desktop-live] › e2e\live.spec.ts:125:1 › real animation resolves by Douban identity and decodes its actual stream (1.1m)
+(node:63144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok  9 [desktop-live] › e2e\packaged-ui.spec.ts:7:1 › packaged live: real navigation, dialogs and hit targets at native window sizes (7.6s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 10 [desktop-live] › e2e\people.spec.ts:9:1 › real Douban people: the few a title is known for, their photos, and everything one of them worked on (18.9s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x  11 [desktop-live] › e2e\runtime-ui.spec.ts:34:1 › packaged live: UI frame samples and player resource release after repeated navigation (33.3s)
+(node:27888) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 12 [desktop-live] › e2e\search-initials.spec.ts:6:1 › real title initials search finds Chinese films in a new profile (25.7s)
+  -  13 [desktop-live] › e2e\startup.spec.ts:6:1 › startup: a reload during initial loading does not report application failure
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 14 [desktop-live] › e2e\startup.spec.ts:51:1 › startup: a second start shows the home page and its artwork from what the first start saved (3.3s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 15 [desktop-live] › e2e\startup.spec.ts:82:1 › startup: restores a maximized window after a clean restart (1.6s)
+
+
+  1) [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decoding 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:70
+
+      68 | }
+      69 | export async function playing(page: Page) {
+    > 70 |   await page.waitForFunction(() => {
+         |              ^
+      71 |     const video = document.querySelector('video')
+      72 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      73 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:70:14)
+        at E:\dev\项目\panda\e2e\ads.spec.ts:41:13
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\ads-ad-removal-on-bfzy-res-34276--the-cut-and-keeps-decoding-desktop-live\error-context.md
+
+  2) [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decoding 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:70
+
+      68 | }
+      69 | export async function playing(page: Page) {
+    > 70 |   await page.waitForFunction(() => {
+         |              ^
+      71 |     const video = document.querySelector('video')
+      72 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      73 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:70:14)
+        at E:\dev\项目\panda\e2e\ads.spec.ts:41:13
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\ads-ad-removal-on-dyttzy-d-4a576--the-cut-and-keeps-decoding-desktop-live\error-context.md
+
+  3) [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:70
+
+      68 | }
+      69 | export async function playing(page: Page) {
+    > 70 |   await page.waitForFunction(() => {
+         |              ^
+      71 |     const video = document.querySelector('video')
+      72 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      73 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:70:14)
+        at E:\dev\项目\panda\e2e\ads.spec.ts:41:13
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\ads-ad-removal-on-lzi-CMS--c7431--the-cut-and-keeps-decoding-desktop-live\error-context.md
+
+  4) [desktop-live] › e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 501
+    Received:   500.000068
+
+    Call Log:
+    - Timeout 25000ms exceeded while waiting on the predicate
+
+      30 |     const seekStarted = Date.now()
+      31 |     await page.mouse.click(bounds.x + bounds.width * 500 / duration, bounds.y + bounds.height / 2)
+    > 32 |     await expect.poll(() => page.evaluate(() => document.querySelector('video')!.currentTime), { timeout: 25000 }).toBeGreaterThan(501)
+         |                                                                                                                    ^
+      33 |     evidence.seekRecoveryMs = Date.now() - seekStarted
+      34 |     evidence.seek = await videoStatus(page)
+      35 |     await page.getByRole('button', { name: '倍速', exact: true }).click()
+        at E:\dev\项目\panda\e2e\live.spec.ts:32:116
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\live-real-movie-decodes-se-596e4-screen-and-persists-history-desktop-live\error-context.md
+
+  5) [desktop-live] › e2e\live.spec.ts:125:1 › real animation resolves by Douban identity and decodes its actual stream 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:70
+
+      68 | }
+      69 | export async function playing(page: Page) {
+    > 70 |   await page.waitForFunction(() => {
+         |              ^
+      71 |     const video = document.querySelector('video')
+      72 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      73 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:70:14)
+        at E:\dev\项目\panda\e2e\live.spec.ts:133:11
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\live-real-animation-resolv-3cd24-d-decodes-its-actual-stream-desktop-live\error-context.md
+
+  6) [desktop-live] › e2e\runtime-ui.spec.ts:34:1 › packaged live: UI frame samples and player resource release after repeated navigation 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  0
+    + Received  + 13
+
+    @@ -3,12 +3,25 @@
+          "keydown:false": 1,
+          "pointerdown:false": 1,
+          "selectionchange:false": 1,
+        },
+        "window": Object {
+    +     "__playwright_global_listeners_check__:false": 1,
+    +     "auxclick:true": 1,
+          "blur:false": 3,
+    +     "click:true": 1,
+    +     "contextmenu:true": 1,
+    +     "dblclick:true": 1,
+          "hashchange:false": 1,
+    +     "mousedown:true": 1,
+    +     "mousemove:true": 1,
+    +     "mouseup:true": 1,
+          "offline:false": 2,
+          "online:false": 1,
+    +     "pointerdown:true": 1,
+    +     "pointerup:true": 1,
+          "popstate:false": 1,
+    +     "touchcancel:true": 1,
+    +     "touchend:true": 1,
+    +     "touchstart:true": 1,
+        },
+      }
+
+      163 |       scope: 'Visible Electron renderer; finite six-cycle sample, not a long-duration or target-TV guarantee.',
+      164 |       samples, before, checkpoints, after })
+    > 165 |     expect(after.roots).toEqual(before.roots)
+          |                         ^
+      166 |     expect(timerKinds(after)).toEqual(timerKinds(before))
+      167 |     expect(errors).toEqual([])
+      168 |     await session.detach()
+        at E:\dev\项目\panda\e2e\runtime-ui.spec.ts:165:25
+
+    Error Context: .tmp\frontend-audit\windows-live-r3\results\runtime-ui-packaged-live-U-b3fa6-e-after-repeated-navigation-desktop-live\error-context.md
+
+  6 failed
+    [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decoding 
+    [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decoding 
+    [desktop-live] › e2e\ads.spec.ts:34:3 › ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding 
+    [desktop-live] › e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history 
+    [desktop-live] › e2e\live.spec.ts:125:1 › real animation resolves by Douban identity and decodes its actual stream 
+    [desktop-live] › e2e\runtime-ui.spec.ts:34:1 › packaged live: UI frame samples and player resource release after repeated navigation 
+  1 skipped
+  8 passed (9.0m)

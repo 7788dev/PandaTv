@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
@@ -84,9 +85,10 @@ object Theme {
         val dm = ctx.resources.displayMetrics
         val screenW: Int = maxOf(dm.widthPixels, dm.heightPixels)
         val screenH: Int = minOf(dm.widthPixels, dm.heightPixels)
+        val safeV: Int = (screenH * 0.053f).roundToInt()
 
-        /** 4.8% overscan-safe horizontal gutter aligned across every screen (~46u on 960x540 TV). */
-        val pageH: Int = (screenW * 0.048f).toInt().coerceAtLeast(dp(ctx, 32))
+
+        val pageH: Int = (screenW * 0.053f).roundToInt().coerceAtLeast(dp(ctx, 32))
         val innerW: Int = (screenW - pageH * 2).coerceAtLeast(dp(ctx, 560))
 
         val gridGapH: Int = dp(ctx, 16)
@@ -349,15 +351,37 @@ object Theme {
             tuneBaseGrid(ctx, this, vertical = true, cacheSize = 14, prefetchCount = 6)
         }
 
-    fun bindGridHeaderNavigation(grid: VerticalGridView, columns: Int, onLoadMore: (() -> Unit)? = null, header: () -> View?) {
+    fun bindGridHeaderNavigation(
+        grid: VerticalGridView,
+        columns: Int,
+        onReachEnd: ((position: Int, isNewPress: Boolean) -> Unit)? = null,
+        header: () -> View?,
+    ) {
         grid.setNumColumns(columns)
         alignLowEdge(grid, grid.paddingTop)
         var preferredColumn: Int? = null
+        var pendingPosition: Int? = null
+        var framePosition: Int? = null
+        val applyPosition = Runnable {
+            val target = framePosition
+            framePosition = null
+            if (target != null && grid.hasFocus() && target in 0 until (grid.adapter?.itemCount ?: 0)) {
+                grid.setSelectedPositionSmooth(target)
+            }
+        }
+        fun clearPendingPosition() {
+            grid.removeCallbacks(applyPosition)
+            framePosition = null
+            pendingPosition = null
+        }
         var focusObserver: ViewTreeObserver? = null
         val focusListener = ViewTreeObserver.OnGlobalFocusChangeListener { _, focus ->
             // Leanback briefly focuses the grid itself while a remote target is
             // being attached. That transition must retain the intended column.
-            if (focus != null && focus !== grid && grid.findContainingViewHolder(focus) == null) preferredColumn = null
+            if (focus != null && focus !== grid && grid.findContainingViewHolder(focus) == null) {
+                preferredColumn = null
+                clearPendingPosition()
+            }
         }
         grid.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
             override fun onViewAttachedToWindow(v: View) {
@@ -367,6 +391,7 @@ object Theme {
                 focusObserver?.takeIf { it.isAlive }?.removeOnGlobalFocusChangeListener(focusListener)
                 focusObserver = null
                 preferredColumn = null
+                clearPendingPosition()
             }
         })
         grid.setOnKeyInterceptListener { event ->
@@ -375,13 +400,17 @@ object Theme {
             }
             val count = grid.adapter?.itemCount ?: 0
             val actual = grid.findFocus()?.let { grid.findContainingViewHolder(it)?.bindingAdapterPosition }
-            val position = if (grid.scrollState == RecyclerView.SCROLL_STATE_IDLE && actual != null) actual else grid.selectedPosition
+            val idle = grid.scrollState == RecyclerView.SCROLL_STATE_IDLE
+            if (framePosition == null && idle && actual == pendingPosition) pendingPosition = null
+            val position = pendingPosition?.takeIf { it in 0 until count }
+                ?: actual?.takeIf { it in 0 until count } ?: grid.selectedPosition
             if (position !in 0 until count) return@setOnKeyInterceptListener false
             val target = when (event.keyCode) {
                 KeyEvent.KEYCODE_DPAD_UP -> {
                     val column = preferredColumn ?: (position % columns).also { preferredColumn = it }
                     if (position < columns) {
-                        if (actual == null || actual >= columns || grid.scrollState != RecyclerView.SCROLL_STATE_IDLE) {
+                        if (actual != position || !idle || framePosition != null) {
+                            clearPendingPosition()
                             grid.stopScroll()
                             grid.setSelectedPosition(position)
                         } else {
@@ -397,7 +426,9 @@ object Theme {
                     val column = preferredColumn ?: (position % columns).also { preferredColumn = it }
                     val nextRow = (position / columns + 1) * columns
                     if (nextRow >= count) {
-                        onLoadMore?.let { grid.post { it() } }
+                        if (framePosition == null && idle && actual == position) {
+                            onReachEnd?.invoke(position, event.repeatCount == 0)
+                        }
                         position
                     } else minOf(nextRow + column, count - 1)
                 }
@@ -405,7 +436,11 @@ object Theme {
                 KeyEvent.KEYCODE_DPAD_RIGHT -> (if (position % columns == columns - 1) position else minOf(position + 1, count - 1)).also { preferredColumn = it % columns }
                 else -> return@setOnKeyInterceptListener false
             }
-            if (target != position) grid.setSelectedPositionSmooth(target)
+            if (target != position) {
+                pendingPosition = target
+                if (framePosition == null) grid.postOnAnimation(applyPosition)
+                framePosition = target
+            }
             true
         }
     }
@@ -469,6 +504,18 @@ object Theme {
         grid.setWindowAlignmentOffsetPercent(BaseGridView.WINDOW_ALIGN_OFFSET_PERCENT_DISABLED)
         grid.setItemAlignmentOffset(0)
         grid.setItemAlignmentOffsetPercent(0f)
+    }
+
+    fun focusScrollView(ctx: Context): ScrollView = object : ScrollView(ctx) {
+        private val focusRect = Rect()
+        private val margin = dp(ctx, 12)
+
+        override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect): Int {
+            focusRect.set(rect)
+            focusRect.top -= margin
+            focusRect.bottom += margin
+            return super.computeScrollDeltaToGetChildRectOnScreen(focusRect)
+        }
     }
 
     fun navPill(ctx: Context, text: String): TextView {

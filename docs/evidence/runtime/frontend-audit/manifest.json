@@ -1,0 +1,1355 @@
+{
+  "at": "2026-11-21T11:44:02.803079+00:00",
+  "files": [
+    {
+      "file": "checks/gradle-wrapper-independent.json",
+      "source": ".tmp/frontend-audit/gradle-wrapper-independent.json",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "9B0EDB67EBA2F411CE1D054C1544883F0585F581223F0B4265AF0E3FDB3DB904",
+      "sha256": "9B0EDB67EBA2F411CE1D054C1544883F0585F581223F0B4265AF0E3FDB3DB904",
+      "bytes": 509,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/gradle-wrapper-independent-before.log",
+      "source": ".tmp/frontend-audit/gradle-wrapper-independent-before.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "49525B57D19237BDC0848E27865260987E5D4F2343B9A767A6099FF34804D359",
+      "sha256": "C93DEC3F885746ED0591D20D6CDE75B71062D620B1D6042E497017DD219C41FC",
+      "bytes": 781,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/gradle-wrapper-independent-after.log",
+      "source": ".tmp/frontend-audit/gradle-wrapper-independent-after.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "F47E16153AFF322C131FE1A7D7C7ACE5812D3AB17ED1C63F5841F96CFE213F1E",
+      "sha256": "43FDF3AB83F16EF77F9041825701F24C2DA14F1196539155B3BFD527F9292100",
+      "bytes": 781,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/search-state-before-desktop.log",
+      "source": ".tmp/frontend-audit/search-state-before-desktop.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "D5A6D630126734D93FE677555DA08CC9AAA4FA4A832B25E0768870764AD1ED54",
+      "sha256": "D5A6D630126734D93FE677555DA08CC9AAA4FA4A832B25E0768870764AD1ED54",
+      "bytes": 2412,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-state-after-desktop.log",
+      "source": ".tmp/frontend-audit/search-state-after-desktop.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "01FF0636A913491BB4B5FD248018FBD3D5BEEE89D66EBB668D31E779EE8EB527",
+      "sha256": "01FF0636A913491BB4B5FD248018FBD3D5BEEE89D66EBB668D31E779EE8EB527",
+      "bytes": 241,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-state-before-tv.log",
+      "source": ".tmp/frontend-audit/search-state-before-tv.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "FF27CA35D47A90BF14F8F342FDFE93DBFFC832B08288301E335111B10C1EAA0E",
+      "sha256": "FF27CA35D47A90BF14F8F342FDFE93DBFFC832B08288301E335111B10C1EAA0E",
+      "bytes": 2237,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-state-after-tv.log",
+      "source": ".tmp/frontend-audit/search-state-after-tv.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "77E71F293061C22F155063CBF090FB49E5A5EF94A2DE83DCC2EA42F8F1E0B59F",
+      "sha256": "20BEBBD08901A65632DFC92083BB8AC46E4257E7F9A30FEBDF901B72F6951EF7",
+      "bytes": 1549,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/search-retry-before-desktop.log",
+      "source": ".tmp/frontend-audit/search-retry-before-desktop.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "6242B41EC3EB3624BC2A66F82C55382422C6D81035BA97797F654596E0089239",
+      "sha256": "6242B41EC3EB3624BC2A66F82C55382422C6D81035BA97797F654596E0089239",
+      "bytes": 1586,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-retry-after-desktop.log",
+      "source": ".tmp/frontend-audit/search-retry-after-desktop.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "D6E1772CE2BC9FC0521DBAA43083DEE5DAB0F2DC9BB18C0E70CFD22E8CC93E31",
+      "sha256": "D6E1772CE2BC9FC0521DBAA43083DEE5DAB0F2DC9BB18C0E70CFD22E8CC93E31",
+      "bytes": 242,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-retry-before-tv.log",
+      "source": ".tmp/frontend-audit/search-retry-before-tv.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "56223BF28139A44B59541A63AC67FC9A315677D075F0BD190D7BC600893F8FD8",
+      "sha256": "56223BF28139A44B59541A63AC67FC9A315677D075F0BD190D7BC600893F8FD8",
+      "bytes": 2084,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/search-retry-after-tv.log",
+      "source": ".tmp/frontend-audit/search-retry-after-tv.log",
+      "scope": "Same check before and after; retain the command's original outcome.",
+      "sourceSha256": "F1236BF8D7D0912838C61E08766F22A46497892E8450033C24B8A76E68AD5BFC",
+      "sha256": "19205F103810157C2B82E6BD3353FEEFB9C72F7B8E5225FE6FD311419B1D4EBB",
+      "bytes": 1560,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/tv-gradle-r11.log",
+      "source": ".tmp/frontend-audit/tv-gradle-r11.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "93C23B6B9F31A1EA6A0CFEB25BE4BE0674BB24A5C833D50D3E250AEFD6F7B437",
+      "sha256": "0441ACAC4858E2540E04F107F281510FDD90B9A9A20CE893434C0E2175510067",
+      "bytes": 4283,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/tv-signature-r11.log",
+      "source": ".tmp/frontend-audit/tv-signature-r11.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "sha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "bytes": 1818,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-identity-r11.json",
+      "source": ".tmp/frontend-audit/tv-identity-r11.json",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "5DDBF6C4E2F8711A538BB5A74185484DF1FDD49157834E1F120E9793F9AEA2D5",
+      "sha256": "5DDBF6C4E2F8711A538BB5A74185484DF1FDD49157834E1F120E9793F9AEA2D5",
+      "bytes": 322,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-installed-r11.json",
+      "source": ".tmp/frontend-audit/tv-installed-r11.json",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "C69F63E10C5214908A67A16FF60E2C37B82206F34A548D36E59B23D1E8A690DC",
+      "sha256": "C69F63E10C5214908A67A16FF60E2C37B82206F34A548D36E59B23D1E8A690DC",
+      "bytes": 565,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-gradle-r12.log",
+      "source": ".tmp/frontend-audit/tv-gradle-r12.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "36BC5D95450C26F480A97268EEF62B1F775E89AD00C853147294B7A847616915",
+      "sha256": "9A692164E4D3F93E79F85B0D41D00C4904A970E51B2117ECAE4130C7CC4123C7",
+      "bytes": 4261,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/tv-signature-r12.log",
+      "source": ".tmp/frontend-audit/tv-signature-r12.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "sha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "bytes": 1818,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-identity-r12.json",
+      "source": ".tmp/frontend-audit/tv-identity-r12.json",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "663A4C0D529E3F96C99AD305A8DD8FDF7FB087A6450872522381D72F644F7E46",
+      "sha256": "663A4C0D529E3F96C99AD305A8DD8FDF7FB087A6450872522381D72F644F7E46",
+      "bytes": 322,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-installed-r12.json",
+      "source": ".tmp/frontend-audit/tv-installed-r12.json",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "9597C729BAAABF0DDF7B084F422F84358FE9FC682A67764E00CFB85805E24089",
+      "sha256": "9597C729BAAABF0DDF7B084F422F84358FE9FC682A67764E00CFB85805E24089",
+      "bytes": 565,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/cleanup.log",
+      "source": ".tmp/frontend-audit/cleanup.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "89748988C3FE7EC76F7649F01B60A80BA90522F6937BA63CF40A5AB8A27BFA19",
+      "sha256": "89748988C3FE7EC76F7649F01B60A80BA90522F6937BA63CF40A5AB8A27BFA19",
+      "bytes": 967,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-build-final-audit.log",
+      "source": ".tmp/frontend-audit/windows-build-final-audit.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "B00CB378EE0C8C3C456392F72B3D5BB6C42A9F7AB16636249E07BEC1FAD0F0D1",
+      "sha256": "AD07075905A64F288F816908A3B8F9675781CF6A7204B5CAEA2BE0D6122449F4",
+      "bytes": 20598,
+      "transformation": "HTTP(S) URLs redacted"
+    },
+    {
+      "file": "checks/windows-build-identity-final.json",
+      "source": ".tmp/frontend-audit/windows-build-identity-final.json",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "85DD0974B6A6117A4DD75529601E7A0A9BFF4E29C7B24FB87AF787A48B0D0524",
+      "sha256": "85DD0974B6A6117A4DD75529601E7A0A9BFF4E29C7B24FB87AF787A48B0D0524",
+      "bytes": 264,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/vitest-final-audit.log",
+      "source": ".tmp/frontend-audit/vitest-final-audit.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "A85B4C1C4576C9A8AEE556F7D71F9F9AE137238F16820666F11F91233CD2FE1A",
+      "sha256": "A85B4C1C4576C9A8AEE556F7D71F9F9AE137238F16820666F11F91233CD2FE1A",
+      "bytes": 229,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/design-final-audit.log",
+      "source": ".tmp/frontend-audit/design-final-audit.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "993348A125777D6037EFCB955F917A9BA9853ED0C43CB76DDD9D36B3BA660A7A",
+      "sha256": "993348A125777D6037EFCB955F917A9BA9853ED0C43CB76DDD9D36B3BA660A7A",
+      "bytes": 104,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/contract-final-audit.log",
+      "source": ".tmp/frontend-audit/contract-final-audit.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "09E673DFB336E6007F3096F97F7683923F559E89109D0E9FFEB71BA9A06342B3",
+      "sha256": "09E673DFB336E6007F3096F97F7683923F559E89109D0E9FFEB71BA9A06342B3",
+      "bytes": 468,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-asar-final-audit.log",
+      "source": ".tmp/frontend-audit/windows-asar-final-audit.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "BE31653890B3EA50DED10782DE5DC8B294A262D49422978FAD7B1D3724A030A9",
+      "sha256": "BE31653890B3EA50DED10782DE5DC8B294A262D49422978FAD7B1D3724A030A9",
+      "bytes": 174,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-package-r3.log",
+      "source": ".tmp/frontend-audit/windows-package-r3.log",
+      "scope": "Offline or package check. APK device identity is separate from the desktop installer.",
+      "sourceSha256": "0D8A9DD39E7A2690725F01D44E726FE5EBC40F02AA04D31EFDB8C52C5488C340",
+      "sha256": "0D8A9DD39E7A2690725F01D44E726FE5EBC40F02AA04D31EFDB8C52C5488C340",
+      "bytes": 1596,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/desktop-fixture-r3.log",
+      "source": ".tmp/frontend-audit/desktop-fixture-r3.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "5570ABEA9041B09430FB4C2BE7DB55DC396FAB4E8FAC11129E1A2DE3987CF7F7",
+      "sha256": "5570ABEA9041B09430FB4C2BE7DB55DC396FAB4E8FAC11129E1A2DE3987CF7F7",
+      "bytes": 3138,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-live-r3.log",
+      "source": ".tmp/frontend-audit/windows-live-r3.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "E3B940A3EBA59A35A349731CD2CB18CFC6ACDE273E1F70EF4F1F120D987EFBAA",
+      "sha256": "E3B940A3EBA59A35A349731CD2CB18CFC6ACDE273E1F70EF4F1F120D987EFBAA",
+      "bytes": 13927,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-resource-r3-verified.log",
+      "source": ".tmp/frontend-audit/windows-resource-r3-verified.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "677AD8393F1922728F8970E74369652321FD9EF2AE562835E09B2A65D2E913F8",
+      "sha256": "677AD8393F1922728F8970E74369652321FD9EF2AE562835E09B2A65D2E913F8",
+      "bytes": 694,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-playback-r3-phase.log",
+      "source": ".tmp/frontend-audit/windows-playback-r3-phase.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "5F4B5795A940AA824597A8AA600BD4E665E14CFA394DBD1B704E67BC68F51EA0",
+      "sha256": "5F4B5795A940AA824597A8AA600BD4E665E14CFA394DBD1B704E67BC68F51EA0",
+      "bytes": 2443,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-animation-r3-diagnostic.log",
+      "source": ".tmp/frontend-audit/windows-animation-r3-diagnostic.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "C9700BB45A55B55833C440407D689B55DE725B0DB659C324024D9B28816A5263",
+      "sha256": "C9700BB45A55B55833C440407D689B55DE725B0DB659C324024D9B28816A5263",
+      "bytes": 694,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/windows-r3-independent-ui.log",
+      "source": ".tmp/frontend-audit/windows-r3-independent-ui.log",
+      "scope": "Original run output. Fixture and live reports use separate application modes.",
+      "sourceSha256": "2548C7F5B368455AAEEE70B5BF919246959590304D037C2B0A364A37DB811105",
+      "sha256": "2548C7F5B368455AAEEE70B5BF919246959590304D037C2B0A364A37DB811105",
+      "bytes": 620,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.GoldenParityTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.GoldenParityTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "0462B25C05CE2F2226C52D7916E0FD44F1443086AA9ECA2EA13EA2563E01C54D",
+      "sha256": "0462B25C05CE2F2226C52D7916E0FD44F1443086AA9ECA2EA13EA2563E01C54D",
+      "bytes": 1211,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.MetadataFlightTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.MetadataFlightTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "3670A1E306723C3AEEBDF3E017EAD62465DA103372EEFF95442FE7FB298A1409",
+      "sha256": "3670A1E306723C3AEEBDF3E017EAD62465DA103372EEFF95442FE7FB298A1409",
+      "bytes": 477,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.PlaybackSearchTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.PlaybackSearchTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "720125DD22B75B62FEC861D2CCB5C7C33A5D0F139934C21F69684CC5E8031DE8",
+      "sha256": "720125DD22B75B62FEC861D2CCB5C7C33A5D0F139934C21F69684CC5E8031DE8",
+      "bytes": 1504,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.RuntimeCoreTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.RuntimeCoreTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "072BF0E13DE57FEB4A37868A631458B55C86471FF4682E95D30355A3B0FB1E8B",
+      "sha256": "072BF0E13DE57FEB4A37868A631458B55C86471FF4682E95D30355A3B0FB1E8B",
+      "bytes": 1793,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.SearchRequestTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.SearchRequestTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "C96EE9125614B61E4A8E83DADBBAD1E6A93A88089BDBC62BA41DD9AA13CB5083",
+      "sha256": "C96EE9125614B61E4A8E83DADBBAD1E6A93A88089BDBC62BA41DD9AA13CB5083",
+      "bytes": 767,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.TitleSearchTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.TitleSearchTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "C1E3BDD0698E5EC5F861DB6126DF3ED2CF619B9EB0917308ED0CB834A22BB955",
+      "sha256": "C1E3BDD0698E5EC5F861DB6126DF3ED2CF619B9EB0917308ED0CB834A22BB955",
+      "bytes": 1353,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "0E435A563E254B30345EE5977B1994D9FD6EE0BAB4CEEE126489753DA42C2D1C",
+      "sha256": "0E435A563E254B30345EE5977B1994D9FD6EE0BAB4CEEE126489753DA42C2D1C",
+      "bytes": 799,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-unit/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml",
+      "source": "tv/app/build/test-results/testDebugUnitTest/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml",
+      "scope": "Actual testDebugUnitTest XML",
+      "sourceSha256": "3BDE53EACED766CFE6C977F19956166C529F14C2E9CC44FE2CF88E10F41C15DC",
+      "sha256": "3BDE53EACED766CFE6C977F19956166C529F14C2E9CC44FE2CF88E10F41C15DC",
+      "bytes": 1708,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-before/report.json",
+      "source": ".tmp/frontend-audit/tv-before/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "03F693E6C15391896D473C61F9DAE6A429CAEF6578AA25DE35C7AAF2C58075AC",
+      "sha256": "03F693E6C15391896D473C61F9DAE6A429CAEF6578AA25DE35C7AAF2C58075AC",
+      "bytes": 749,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-admission-before-verified/report.json",
+      "source": ".tmp/frontend-audit/tv-admission-before-verified/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "AAB0C05BD5C10AC2EBB6DD405A3E2C25D404068E9C1221A7FDECA2C6F47B9F51",
+      "sha256": "AAB0C05BD5C10AC2EBB6DD405A3E2C25D404068E9C1221A7FDECA2C6F47B9F51",
+      "bytes": 656,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-safe-5pct-before/report.json",
+      "source": ".tmp/frontend-audit/tv-safe-5pct-before/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "AB477254C63F8CD38ECE299369AEE7A595B2F1ECCEB8907A3B8EE973407F6032",
+      "sha256": "AB477254C63F8CD38ECE299369AEE7A595B2F1ECCEB8907A3B8EE973407F6032",
+      "bytes": 829,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-errors-r3/report.json",
+      "source": ".tmp/frontend-audit/tv-search-errors-r3/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "07A985ABA90DD2A2200D8F473D3A79008A645CE4E55B3DD665AA9A3FAF7ABDA0",
+      "sha256": "07A985ABA90DD2A2200D8F473D3A79008A645CE4E55B3DD665AA9A3FAF7ABDA0",
+      "bytes": 1808,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-focus-before-r5/report.json",
+      "source": ".tmp/frontend-audit/tv-search-focus-before-r5/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "EB75DF02D61F03D87820DBDF1D12B0D64D8ACFF41CBB1993DA57B2C02D2F36B7",
+      "sha256": "EB75DF02D61F03D87820DBDF1D12B0D64D8ACFF41CBB1993DA57B2C02D2F36B7",
+      "bytes": 6373,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-eviction-before-r5-1/report.json",
+      "source": ".tmp/frontend-audit/tv-root-eviction-before-r5-1/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "CD62B115BCCEDF3BED35853B07CC5459BCAABD94A7E35D327D7E58E1ADA01FDF",
+      "sha256": "CD62B115BCCEDF3BED35853B07CC5459BCAABD94A7E35D327D7E58E1ADA01FDF",
+      "bytes": 749,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-eviction-before-r5-2/report.json",
+      "source": ".tmp/frontend-audit/tv-root-eviction-before-r5-2/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "1628E3FC12A32DDDB2BC1B82C1F28E4148B62984FCC025A8B7D38766FB83C801",
+      "sha256": "1628E3FC12A32DDDB2BC1B82C1F28E4148B62984FCC025A8B7D38766FB83C801",
+      "bytes": 749,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-correct-baseline-r6/report.json",
+      "source": ".tmp/frontend-audit/tv-root-correct-baseline-r6/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "A96BB79FDBD3F7D5727C576B6516E2E49D110632646972CD4C581023B0EBFC10",
+      "sha256": "A96BB79FDBD3F7D5727C576B6516E2E49D110632646972CD4C581023B0EBFC10",
+      "bytes": 2140,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-correct-baseline-r7/report.json",
+      "source": ".tmp/frontend-audit/tv-root-correct-baseline-r7/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "CF24080B5D2C1FFBEC8C5E6A8C2456105492DF6310B233DB508DA9F29BCD43A9",
+      "sha256": "CF24080B5D2C1FFBEC8C5E6A8C2456105492DF6310B233DB508DA9F29BCD43A9",
+      "bytes": 2140,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-aux-stage-r9/report.json",
+      "source": ".tmp/frontend-audit/tv-root-aux-stage-r9/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "18BC5BEB7AD99716895AEDE537AEBE9FCC123CC8981E80C75C8DBB47382A6A25",
+      "sha256": "18BC5BEB7AD99716895AEDE537AEBE9FCC123CC8981E80C75C8DBB47382A6A25",
+      "bytes": 627,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-root-aux-confirm-r9/report.json",
+      "source": ".tmp/frontend-audit/tv-root-aux-confirm-r9/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "3E5E78099C60D09F55E27E11ECD248548BA3117887BBE1C9C66B7DB80F237CB5",
+      "sha256": "3E5E78099C60D09F55E27E11ECD248548BA3117887BBE1C9C66B7DB80F237CB5",
+      "bytes": 1115,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-library-root-before-r9-1/report.json",
+      "source": ".tmp/frontend-audit/tv-library-root-before-r9-1/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "B37F010502163B655C45BBA72BF6A6B778C978D4680D70D75FBDFE46B51FA66C",
+      "sha256": "B37F010502163B655C45BBA72BF6A6B778C978D4680D70D75FBDFE46B51FA66C",
+      "bytes": 429,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-library-root-before-r9-2/report.json",
+      "source": ".tmp/frontend-audit/tv-library-root-before-r9-2/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "5C3251B62202B7E61DACE3BEA4001BF595691B180A39BD5E9644B6132E1786CD",
+      "sha256": "5C3251B62202B7E61DACE3BEA4001BF595691B180A39BD5E9644B6132E1786CD",
+      "bytes": 429,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-before-polish/report.json",
+      "source": ".tmp/frontend-audit/tv-motion-before-polish/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "A2DC467F2F54E707411E68F2F7735517B32C6D1783BCDBE26FC02CD39D6308DE",
+      "sha256": "A2DC467F2F54E707411E68F2F7735517B32C6D1783BCDBE26FC02CD39D6308DE",
+      "bytes": 10544,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-after-polish/report.json",
+      "source": ".tmp/frontend-audit/tv-motion-after-polish/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "20337CB3838ABC1CD91C935FB209A03A5F0917CE5DD98C305EFB88C121E6FD1C",
+      "sha256": "20337CB3838ABC1CD91C935FB209A03A5F0917CE5DD98C305EFB88C121E6FD1C",
+      "bytes": 6406,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r5/report.json",
+      "source": ".tmp/frontend-audit/tv-playback-r5/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "D26ECEE40584F52208197AC4A98419F1F4A30B7C8738335381784A39A54D42F3",
+      "sha256": "D26ECEE40584F52208197AC4A98419F1F4A30B7C8738335381784A39A54D42F3",
+      "bytes": 23474,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r10/report.json",
+      "source": ".tmp/frontend-audit/tv-playback-r10/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "F3BDDCF127560B1E66D93C140773E7FE508BA6D92739DB6817B200C1C1474707",
+      "sha256": "F3BDDCF127560B1E66D93C140773E7FE508BA6D92739DB6817B200C1C1474707",
+      "bytes": 33809,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-switch-r10-independent/report.json",
+      "source": ".tmp/frontend-audit/tv-switch-r10-independent/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "CF1D96871310A0B25BAF2D995987BA10078D3F1AB75254ACB5E576C7362C71BD",
+      "sha256": "CF1D96871310A0B25BAF2D995987BA10078D3F1AB75254ACB5E576C7362C71BD",
+      "bytes": 8544,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-error-r10-independent/report.json",
+      "source": ".tmp/frontend-audit/tv-error-r10-independent/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "AA152CFFE48E173345ADC4C08C1FE88B88B3D1B4DE2B498891A0AEA358E827EB",
+      "sha256": "AA152CFFE48E173345ADC4C08C1FE88B88B3D1B4DE2B498891A0AEA358E827EB",
+      "bytes": 3767,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-error-r10-independent-repeat/report.json",
+      "source": ".tmp/frontend-audit/tv-error-r10-independent-repeat/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "CC9712AEA3CD7407649BF4E71AC0EC856ADBFCE865402A6136861C2EBB3CFD6F",
+      "sha256": "CC9712AEA3CD7407649BF4E71AC0EC856ADBFCE865402A6136861C2EBB3CFD6F",
+      "bytes": 3952,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-detail-return-r10-independent/report.json",
+      "source": ".tmp/frontend-audit/tv-detail-return-r10-independent/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "02D1116BFCE686F5658D2BAB8F91EF28AEC034AD3F6559C22844C2A59314541B",
+      "sha256": "02D1116BFCE686F5658D2BAB8F91EF28AEC034AD3F6559C22844C2A59314541B",
+      "bytes": 7742,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-error-r10-deadline-before/report.json",
+      "source": ".tmp/frontend-audit/tv-error-r10-deadline-before/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "2E8500058E272B9F665B167D302B14F30383918BC4855B18A47EA53D8FC1E38C",
+      "sha256": "2E8500058E272B9F665B167D302B14F30383918BC4855B18A47EA53D8FC1E38C",
+      "bytes": 4812,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-error-r11-deadline-after/report.json",
+      "source": ".tmp/frontend-audit/tv-error-r11-deadline-after/report.json",
+      "scope": "Historical or independent comparison; use the installed APK hash and actual case outcome in each report.",
+      "sourceSha256": "60C8CEAA3B25C7A28B7EA0AD17CAF81A30F715F9A3A2A0AE1D2154BF4AE612DA",
+      "sha256": "60C8CEAA3B25C7A28B7EA0AD17CAF81A30F715F9A3A2A0AE1D2154BF4AE612DA",
+      "bytes": 13510,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-errors-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-search-errors-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "83348BD1437BB350564246E29D857BD66335EA2FC55FB1E82561638ACD008955",
+      "sha256": "83348BD1437BB350564246E29D857BD66335EA2FC55FB1E82561638ACD008955",
+      "bytes": 4734,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-state-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-search-state-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "199E7FAC6B0DAFCB51693A2B52E63FEF702D37113111F9411E60EECEFC722F0D",
+      "sha256": "199E7FAC6B0DAFCB51693A2B52E63FEF702D37113111F9411E60EECEFC722F0D",
+      "bytes": 515,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-title-search-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-title-search-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "2FC4125FD8FBEAAF731F9AB1CC16A1D8A860E28D6F1203E12CE08EE3E53E328B",
+      "sha256": "2FC4125FD8FBEAAF731F9AB1CC16A1D8A860E28D6F1203E12CE08EE3E53E328B",
+      "bytes": 16207,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "ADBFDDBB7AAD6D8CD56FECBB5B80A11B007DB28A1C2A74157B5A7FC7487B190C",
+      "sha256": "ADBFDDBB7AAD6D8CD56FECBB5B80A11B007DB28A1C2A74157B5A7FC7487B190C",
+      "bytes": 1772,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-720p-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-720p-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "3AAABAD6B13FDAAED515D49F9C5E64AF53B5D6F9F5485CB83332977F076D22D2",
+      "sha256": "3AAABAD6B13FDAAED515D49F9C5E64AF53B5D6F9F5485CB83332977F076D22D2",
+      "bytes": 1794,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-4k-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-4k-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "B02CD00FF6D4E304D866F0373B54564B4480DC54BF9568A1AA7803C49DA3DDDE",
+      "sha256": "B02CD00FF6D4E304D866F0373B54564B4480DC54BF9568A1AA7803C49DA3DDDE",
+      "bytes": 1834,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-navigation-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-navigation-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "8D96DBFF945877E5B6F1E22533ED1E28CB36F4056FEB7E6E726FF2C2EB1684EA",
+      "sha256": "8D96DBFF945877E5B6F1E22533ED1E28CB36F4056FEB7E6E726FF2C2EB1684EA",
+      "bytes": 57024,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-more-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-more-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "69F83CE0FF59AC03D15D0E44204BE7D5B036D70595E415B569E4E1DFB792FED6",
+      "sha256": "69F83CE0FF59AC03D15D0E44204BE7D5B036D70595E415B569E4E1DFB792FED6",
+      "bytes": 1208,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-motion-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "68072352518E1C73D9D1B93B1771CB5CCFD6721F581A5D63C5E7E9CB8D4DFFD7",
+      "sha256": "68072352518E1C73D9D1B93B1771CB5CCFD6721F581A5D63C5E7E9CB8D4DFFD7",
+      "bytes": 23491,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r11-final/report.json",
+      "source": ".tmp/frontend-audit/tv-playback-r11-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "D6DF1C6924FFF3272659990F71BD9FA0DF7E16E6D4ED65DE08975FE8EBBDFEDA",
+      "sha256": "D6DF1C6924FFF3272659990F71BD9FA0DF7E16E6D4ED65DE08975FE8EBBDFEDA",
+      "bytes": 47450,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r11-before/report.json",
+      "source": ".tmp/frontend-audit/tv-pagination-r11-before/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "56804EE27C730C937F478040D7510145C15707D8644DE7B68BB737709EDEF75E",
+      "sha256": "56804EE27C730C937F478040D7510145C15707D8644DE7B68BB737709EDEF75E",
+      "bytes": 3353,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-after/report.json",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-after/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "EFE56F2A47060F18BE890EB6A173B6394740CDBB210FAB17ED8B6ECEC45E9AE6",
+      "sha256": "EFE56F2A47060F18BE890EB6A173B6394740CDBB210FAB17ED8B6ECEC45E9AE6",
+      "bytes": 2207,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-strict/report.json",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-strict/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "77FF12704CEE3A40AD9F12C2D504084C5C0C42D51CD18C1794702D4982CF5DF2",
+      "sha256": "77FF12704CEE3A40AD9F12C2D504084C5C0C42D51CD18C1794702D4982CF5DF2",
+      "bytes": 5153,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/report.json",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "AE55659434C9501FCCD4473295E73D71DC5C3029F1052CB27C7F32E555438E90",
+      "sha256": "AE55659434C9501FCCD4473295E73D71DC5C3029F1052CB27C7F32E555438E90",
+      "bytes": 7342,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-admission-r11-before/report.json",
+      "source": ".tmp/frontend-audit/tv-admission-r11-before/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "F7E87EC29C52DA350F8F1D26684235859447AE001A07CE91E1D3A7242905D8C7",
+      "sha256": "F7E87EC29C52DA350F8F1D26684235859447AE001A07CE91E1D3A7242905D8C7",
+      "bytes": 2694,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-admission-r12-after/report.json",
+      "source": ".tmp/frontend-audit/tv-admission-r12-after/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "D65E1C53859F7792C76BF637091D146681EDEFAEAB88F31C4E5FF3C07C2A1293",
+      "sha256": "D65E1C53859F7792C76BF637091D146681EDEFAEAB88F31C4E5FF3C07C2A1293",
+      "bytes": 2694,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-navigation-r12-complete/report.json",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-complete/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "3BCEE10373805E316878706DABD0301FDCA2F5C59516EB0DE8245CE5AD84F067",
+      "sha256": "3BCEE10373805E316878706DABD0301FDCA2F5C59516EB0DE8245CE5AD84F067",
+      "bytes": 59385,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-navigation-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-final/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "608E5866259A131A6A4EEE583E17124903BF61B60A0BD6AAC58010F00661778D",
+      "sha256": "608E5866259A131A6A4EEE583E17124903BF61B60A0BD6AAC58010F00661778D",
+      "bytes": 53546,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-navigation-r12-verified/report.json",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-verified/report.json",
+      "scope": "Installed package replay. Original errors and superseded probe output are retained.",
+      "sourceSha256": "49847A387FB65AAA09B20C61C446A4BA87E15749C14E9B0C07EB13046F090AB6",
+      "sha256": "49847A387FB65AAA09B20C61C446A4BA87E15749C14E9B0C07EB13046F090AB6",
+      "bytes": 760,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r11-before/channel-failure-network.log",
+      "source": ".tmp/frontend-audit/tv-pagination-r11-before/channel-failure-network.log",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "DECEDB36CCB8EBECD7F62DD2D975FC099428AF9E9792B7087876C12D8DB2D44C",
+      "sha256": "DECEDB36CCB8EBECD7F62DD2D975FC099428AF9E9792B7087876C12D8DB2D44C",
+      "bytes": 103,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r11-before/person-failure-network.log",
+      "source": ".tmp/frontend-audit/tv-pagination-r11-before/person-failure-network.log",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "60F2F47478AB6BB4D6B8946D9D960B8E609D4D6A428C1310B4C247A6344EB4EB",
+      "sha256": "60F2F47478AB6BB4D6B8946D9D960B8E609D4D6A428C1310B4C247A6344EB4EB",
+      "bytes": 90,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/channel-loading.png",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/channel-loading.png",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "ED97F54F2A570F2AE64431D4B1A02B378A2766AF00FE9C1CC5F9AF35D5C9F7BA",
+      "sha256": "ED97F54F2A570F2AE64431D4B1A02B378A2766AF00FE9C1CC5F9AF35D5C9F7BA",
+      "bytes": 163650,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/channel-retry-focused.png",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/channel-retry-focused.png",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "36F4242344102AA729093D36B1148DC15DD62652BF614540C87FA0C060AB629D",
+      "sha256": "36F4242344102AA729093D36B1148DC15DD62652BF614540C87FA0C060AB629D",
+      "bytes": 653302,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/channel-retry-up.xml",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/channel-retry-up.xml",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "32BF0A72CBA7C07984E5F19A1F778F4B9407D7FBCED5C0492CB85D6CF0535538",
+      "sha256": "32BF0A72CBA7C07984E5F19A1F778F4B9407D7FBCED5C0492CB85D6CF0535538",
+      "bytes": 35822,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/channel-retried.xml",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/channel-retried.xml",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "0F0051FD18416CAE8D92FE39E57AE684E1B46BE9A9766743D8BAE1EFA123F019",
+      "sha256": "0F0051FD18416CAE8D92FE39E57AE684E1B46BE9A9766743D8BAE1EFA123F019",
+      "bytes": 43828,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/person-retry-focused.png",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/person-retry-focused.png",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "A9C938705E70964B69DC45639889C54A3390F0A1EBE9843CB7228E861282C0D9",
+      "sha256": "A9C938705E70964B69DC45639889C54A3390F0A1EBE9843CB7228E861282C0D9",
+      "bytes": 1157197,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/person-retried.png",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/person-retried.png",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "9F29640F381622DC7F074EE2CB8539C1C3EAFE6A265E73661C8177A13D2CC18C",
+      "sha256": "9F29640F381622DC7F074EE2CB8539C1C3EAFE6A265E73661C8177A13D2CC18C",
+      "bytes": 1577028,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-pagination-r12-verified/person-retried.xml",
+      "source": ".tmp/frontend-audit/tv-pagination-r12-verified/person-retried.xml",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "0EF94973CBEE88CE9890577579F31C196D433FA851556B2974D95C976FA6986B",
+      "sha256": "0EF94973CBEE88CE9890577579F31C196D433FA851556B2974D95C976FA6986B",
+      "bytes": 33403,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-admission-r12-after/admission-wait-returned.png",
+      "source": ".tmp/frontend-audit/tv-admission-r12-after/admission-wait-returned.png",
+      "scope": "Real network failure or recovery on the named installed APK.",
+      "sourceSha256": "0362BEBE16FDFD210DE80AD3B2B8AA4F68172D9EAAEB7E7FEF16691AF737838D",
+      "sha256": "0362BEBE16FDFD210DE80AD3B2B8AA4F68172D9EAAEB7E7FEF16691AF737838D",
+      "bytes": 349875,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-before/failure-bezel.png",
+      "source": ".tmp/frontend-audit/tv-before/failure-bezel.png",
+      "scope": "Actual device screencap for this package and scenario",
+      "sourceSha256": "EF0527282004E84C709324CD8D27FA2269E1830FCC050238575B06CF5F7632EE",
+      "sha256": "EF0527282004E84C709324CD8D27FA2269E1830FCC050238575B06CF5F7632EE",
+      "bytes": 832992,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-focus-before-r5/failure-1.png",
+      "source": ".tmp/frontend-audit/tv-search-focus-before-r5/failure-1.png",
+      "scope": "Actual device screencap for this package and scenario",
+      "sourceSha256": "1FE1B0EC462592CB3A77A24B751990EC3E96C1E1BE810FB2B5B2A7290E9DC96E",
+      "sha256": "1FE1B0EC462592CB3A77A24B751990EC3E96C1E1BE810FB2B5B2A7290E9DC96E",
+      "bytes": 1048341,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-error-r11-deadline-after/playback-error.png",
+      "source": ".tmp/frontend-audit/tv-error-r11-deadline-after/playback-error.png",
+      "scope": "Actual device screencap for this package and scenario",
+      "sourceSha256": "44D11C11F23A4E21E44C52EF14DDBDAED4BCDDA9460E3F6BCC142FCD14ED222B",
+      "sha256": "44D11C11F23A4E21E44C52EF14DDBDAED4BCDDA9460E3F6BCC142FCD14ED222B",
+      "bytes": 59880,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/before/search-compact-packaged-live.json",
+      "source": ".tmp/frontend-audit/windows-search-before/desktop-packaged-live/search-compact-packaged-live.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "6E053B9C504ED5A9CDD8D52708279903D12EF912F3F475E4EDC2C3C00102C168",
+      "sha256": "6E053B9C504ED5A9CDD8D52708279903D12EF912F3F475E4EDC2C3C00102C168",
+      "bytes": 764,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/before/search-compact-packaged-live.png",
+      "source": ".tmp/frontend-audit/windows-search-before/desktop-packaged-live/search-compact-packaged-live.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "9D99132E29C52C084DCAFCBCB1AD947BDDD1D756195881A4106BB14A5A8904A2",
+      "sha256": "9D99132E29C52C084DCAFCBCB1AD947BDDD1D756195881A4106BB14A5A8904A2",
+      "bytes": 1613267,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/search-compact-packaged-live.json",
+      "source": ".tmp/frontend-audit/windows-r3-independent/desktop-packaged-live/search-compact-packaged-live.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "A69BA9A9A3954A141B95C3991777D241AE07E5D013EB16381A747C6A0DC7ABEE",
+      "sha256": "A69BA9A9A3954A141B95C3991777D241AE07E5D013EB16381A747C6A0DC7ABEE",
+      "bytes": 641,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/search-compact-packaged-live.png",
+      "source": ".tmp/frontend-audit/windows-r3-independent/desktop-packaged-live/search-compact-packaged-live.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "92AED23B08B15192D475D9BB4CBC69E5D7F21AF69ADE9179593EDC6130759811",
+      "sha256": "92AED23B08B15192D475D9BB4CBC69E5D7F21AF69ADE9179593EDC6130759811",
+      "bytes": 1485741,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/settings-compact-packaged-live.json",
+      "source": ".tmp/frontend-audit/windows-r3-independent/desktop-packaged-live/settings-compact-packaged-live.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "066EB19222677696E3068206591DEBBDC6B1BA0659147E6E2A269C1DCCE25692",
+      "sha256": "066EB19222677696E3068206591DEBBDC6B1BA0659147E6E2A269C1DCCE25692",
+      "bytes": 634,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/settings-compact-packaged-live.png",
+      "source": ".tmp/frontend-audit/windows-r3-independent/desktop-packaged-live/settings-compact-packaged-live.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "055E13AF77D97807E50E2B12948969687DB101C9AD0A6F505383C50532FE14A8",
+      "sha256": "055E13AF77D97807E50E2B12948969687DB101C9AD0A6F505383C50532FE14A8",
+      "bytes": 68120,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/ui-performance-lifecycle.json",
+      "source": ".tmp/frontend-audit/windows-resource-r3-verified/desktop-packaged-live/ui-performance-lifecycle.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "55EE80C55F5B4181686569E8F4E2848A539E84AD3DEDEB1395795ED9BF0B32A4",
+      "sha256": "55EE80C55F5B4181686569E8F4E2848A539E84AD3DEDEB1395795ED9BF0B32A4",
+      "bytes": 45671,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/packaged-live/ui-performance-lifecycle.png",
+      "source": ".tmp/frontend-audit/windows-resource-r3-verified/desktop-packaged-live/ui-performance-lifecycle.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "B10ED7BBDCD6BFFC7F72E170AEB0969D9EBCE4BC2E8B0CC127F6DFA8A7E69E6C",
+      "sha256": "B10ED7BBDCD6BFFC7F72E170AEB0969D9EBCE4BC2E8B0CC127F6DFA8A7E69E6C",
+      "bytes": 83427,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/playback-independent/movie-controls.json",
+      "source": ".tmp/frontend-audit/windows-playback-r3-phase/desktop-packaged-live/movie-controls.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "03B1F834026F06135486BD9A4C0AEA9F93326A7F6D3BFB7B427BDD5474B8895F",
+      "sha256": "03B1F834026F06135486BD9A4C0AEA9F93326A7F6D3BFB7B427BDD5474B8895F",
+      "bytes": 1685,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/playback-independent/movie-controls.png",
+      "source": ".tmp/frontend-audit/windows-playback-r3-phase/desktop-packaged-live/movie-controls.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "BC1A1E76B71955FDD6922B0E7175DEA0F42B457C809CE083921B5BCF47C943B8",
+      "sha256": "BC1A1E76B71955FDD6922B0E7175DEA0F42B457C809CE083921B5BCF47C943B8",
+      "bytes": 666134,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/playback-independent/serial-playback.json",
+      "source": ".tmp/frontend-audit/windows-playback-r3-phase/desktop-packaged-live/serial-playback.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "990DC3767931EC1E2D30F18D26B09BE90B063CE5E84348ECEC663CC84ECF88DD",
+      "sha256": "990DC3767931EC1E2D30F18D26B09BE90B063CE5E84348ECEC663CC84ECF88DD",
+      "bytes": 1091,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/playback-independent/serial-playback.png",
+      "source": ".tmp/frontend-audit/windows-playback-r3-phase/desktop-packaged-live/serial-playback.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "9161938AA24C2DA99FF3FC181BFB093D7A9E657CC99F37A217171B286FA4BB4C",
+      "sha256": "9161938AA24C2DA99FF3FC181BFB093D7A9E657CC99F37A217171B286FA4BB4C",
+      "bytes": 25892,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/animation-independent/animation-playback.json",
+      "source": ".tmp/frontend-audit/windows-animation-r3-diagnostic/desktop-packaged-live/animation-playback.json",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "F52B500E79D2C00F1072721402A889DB6FC80D3192535A2FDA269869E84A2949",
+      "sha256": "F52B500E79D2C00F1072721402A889DB6FC80D3192535A2FDA269869E84A2949",
+      "bytes": 513,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/animation-independent/animation-playback.png",
+      "source": ".tmp/frontend-audit/windows-animation-r3-diagnostic/desktop-packaged-live/animation-playback.png",
+      "scope": "Exact unpacked Windows package that produced the run.",
+      "sourceSha256": "8C833C6156203018B05D7F3A8EEBCE7025360CE10421F0AFFB064F22BD27464A",
+      "sha256": "8C833C6156203018B05D7F3A8EEBCE7025360CE10421F0AFFB064F22BD27464A",
+      "bytes": 2188453,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/windows-installed-identity.json",
+      "source": ".tmp/frontend-audit/windows-installed-identity.json",
+      "scope": "Independent read-only identity or report-mode audit.",
+      "sourceSha256": "AB120AF1519BCB6BD9381F14D41DB62328C89C2B1F2948523E210211218CDEF4",
+      "sha256": "AB120AF1519BCB6BD9381F14D41DB62328C89C2B1F2948523E210211218CDEF4",
+      "bytes": 769,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/windows-installed-rea-summary.json",
+      "source": ".tmp/frontend-audit/windows-installed-rea-summary.json",
+      "scope": "Independent read-only identity or report-mode audit.",
+      "sourceSha256": "BE6D9D0F2A823A7E0A0E5A343960AB869FCB200A8BFA22D6C1BC7A4AF4C502D8",
+      "sha256": "BE6D9D0F2A823A7E0A0E5A343960AB869FCB200A8BFA22D6C1BC7A4AF4C502D8",
+      "bytes": 763,
+      "transformation": "none"
+    },
+    {
+      "file": "windows/report-labels/report.json",
+      "source": ".tmp/frontend-audit/report-labels/report.json",
+      "scope": "Independent read-only identity or report-mode audit.",
+      "sourceSha256": "A121973CC8D920DCF3B07AA73A03189C48263F5B33BF2CC02ED8787DD00A6ED6",
+      "sha256": "A121973CC8D920DCF3B07AA73A03189C48263F5B33BF2CC02ED8787DD00A6ED6",
+      "bytes": 4538,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-errors-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-search-errors-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "8D2045B9CBBC5B522693036812CF28EE1CFB84D06FA630CFF0EEB645C1669AAE",
+      "sha256": "8D2045B9CBBC5B522693036812CF28EE1CFB84D06FA630CFF0EEB645C1669AAE",
+      "bytes": 5289,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-search-state-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-search-state-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "3ED11B04DD2862EC3B1B30F80AAEE55681E6019D0FC97B4BC64D7F5969469E2D",
+      "sha256": "3ED11B04DD2862EC3B1B30F80AAEE55681E6019D0FC97B4BC64D7F5969469E2D",
+      "bytes": 515,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-title-search-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-title-search-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "A6EFB635DA7DA038EFAA747305FD8101628259689559CF848CAB0D03CE60873C",
+      "sha256": "A6EFB635DA7DA038EFAA747305FD8101628259689559CF848CAB0D03CE60873C",
+      "bytes": 14922,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "1369403CEABF6E18DD6EF8D8EEBFDC6F97B11FF37B11A5026D0234734BFB9515",
+      "sha256": "1369403CEABF6E18DD6EF8D8EEBFDC6F97B11FF37B11A5026D0234734BFB9515",
+      "bytes": 1795,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-720p-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-720p-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "30ADEBF16348C84C9F1077544B929F09BD8517C99AD471D01FBF9D01E3C1C4ED",
+      "sha256": "30ADEBF16348C84C9F1077544B929F09BD8517C99AD471D01FBF9D01E3C1C4ED",
+      "bytes": 1794,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-4k-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-surfaces-4k-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "F131CBCC524D05CF641A6FA82C1F726A3FE51DD38988082D9FA165C64EAB09B9",
+      "sha256": "F131CBCC524D05CF641A6FA82C1F726A3FE51DD38988082D9FA165C64EAB09B9",
+      "bytes": 1795,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-more-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-more-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "CB5AD5B3F81A8B5EB426691CA8DB3D82D00B777AF7339F67C1CF2879D61BF3B5",
+      "sha256": "CB5AD5B3F81A8B5EB426691CA8DB3D82D00B777AF7339F67C1CF2879D61BF3B5",
+      "bytes": 1208,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-motion-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "087E49CB4D83B009A1E98CD93BE6C52B5301709D075F46EA06FF780C5660CDAC",
+      "sha256": "087E49CB4D83B009A1E98CD93BE6C52B5301709D075F46EA06FF780C5660CDAC",
+      "bytes": 23491,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/report.json",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/report.json",
+      "scope": "Final installed R12 batch. Preserve failed and unavailable cases as observed.",
+      "sourceSha256": "45A6006A8E4DA8F84025BEEED91657AC025D00C64BC32310D0E9967C78A2198E",
+      "sha256": "45A6006A8E4DA8F84025BEEED91657AC025D00C64BC32310D0E9967C78A2198E",
+      "bytes": 23346,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-replay-all-r12-final.log",
+      "source": ".tmp/frontend-audit/tv-replay-all-r12-final.log",
+      "scope": "Batch output, device identity and raw UiAutomation diagnostic.",
+      "sourceSha256": "4D4456098B009C7B5AE9B458C17B2415A77C1B3455373075B214A2E55B53A092",
+      "sha256": "4D4456098B009C7B5AE9B458C17B2415A77C1B3455373075B214A2E55B53A092",
+      "bytes": 8720,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-device-all-r12-final.json",
+      "source": ".tmp/frontend-audit/tv-device-all-r12-final.json",
+      "scope": "Batch output, device identity and raw UiAutomation diagnostic.",
+      "sourceSha256": "0B92F1A3127A645C835AE0A79D4AD05E94B3EE77AB0D54EBC66A2287E34281D9",
+      "sha256": "0B92F1A3127A645C835AE0A79D4AD05E94B3EE77AB0D54EBC66A2287E34281D9",
+      "bytes": 579,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-crash-all-r12-final.log",
+      "source": ".tmp/frontend-audit/tv-crash-all-r12-final.log",
+      "scope": "Batch output, device identity and raw UiAutomation diagnostic.",
+      "sourceSha256": "FA2F89390EE35E9F84485D7E5CAAE6D8E2687492152B1BB4BA44CE5DECAA1B5F",
+      "sha256": "FA2F89390EE35E9F84485D7E5CAAE6D8E2687492152B1BB4BA44CE5DECAA1B5F",
+      "bytes": 4002,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-panel-r12-independent.log",
+      "source": ".tmp/frontend-audit/tv-panel-r12-independent.log",
+      "scope": "Batch output, device identity and raw UiAutomation diagnostic.",
+      "sourceSha256": "2E50BA0A2116C9AB29FCCE10364CFC2763E0F85E8F505FD0C7EFE1AB99C0C4F2",
+      "sha256": "2E50BA0A2116C9AB29FCCE10364CFC2763E0F85E8F505FD0C7EFE1AB99C0C4F2",
+      "bytes": 573,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-navigation-r12-complete.log",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-complete.log",
+      "scope": "Corrected isolated R12 navigation replay and superseded failure-stage diagnostics.",
+      "sourceSha256": "D591D9AD67EA7447CFE3683D70D270A1D557ED82E3E8B00E47529309FF05B890",
+      "sha256": "D591D9AD67EA7447CFE3683D70D270A1D557ED82E3E8B00E47529309FF05B890",
+      "bytes": 1122,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-navigation-r12-final-corrected.log",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-final-corrected.log",
+      "scope": "Corrected isolated R12 navigation replay and superseded failure-stage diagnostics.",
+      "sourceSha256": "019C97EC2A6B9F39741DFB5B3B45B69BE51064AB943E1998F09C2E9881142862",
+      "sha256": "019C97EC2A6B9F39741DFB5B3B45B69BE51064AB943E1998F09C2E9881142862",
+      "bytes": 1216,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-navigation-r12-verified.log",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-verified.log",
+      "scope": "Corrected isolated R12 navigation replay and superseded failure-stage diagnostics.",
+      "sourceSha256": "75BC765FD6EC19FDDEC20AAAF250A677F2E7CF68B92596E5EEB6E563369E45DC",
+      "sha256": "75BC765FD6EC19FDDEC20AAAF250A677F2E7CF68B92596E5EEB6E563369E45DC",
+      "bytes": 1008,
+      "transformation": "none"
+    },
+    {
+      "file": "checks/tv-navigation-r12-verified-after.sha256",
+      "source": ".tmp/frontend-audit/tv-navigation-r12-verified-after.sha256",
+      "scope": "Corrected isolated R12 navigation replay and superseded failure-stage diagnostics.",
+      "sourceSha256": "1FEF5892E7E6D68EEF1CED3DC1F8569C0B7E0970990F3F8587A6C2E840EA7170",
+      "sha256": "1FEF5892E7E6D68EEF1CED3DC1F8569C0B7E0970990F3F8587A6C2E840EA7170",
+      "bytes": 66,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r12-final/channel-expanded-1-gfxinfo.txt",
+      "source": ".tmp/frontend-audit/tv-motion-r12-final/channel-expanded-1-gfxinfo.txt",
+      "scope": "Raw gfxinfo for a bounded UI input window.",
+      "sourceSha256": "7D951448C88E2881AE3B5FD62886F0336672F79AD400E91F3489E3A7D1628B5B",
+      "sha256": "7D951448C88E2881AE3B5FD62886F0336672F79AD400E91F3489E3A7D1628B5B",
+      "bytes": 3847,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r12-final/channel-expanded-2-gfxinfo.txt",
+      "source": ".tmp/frontend-audit/tv-motion-r12-final/channel-expanded-2-gfxinfo.txt",
+      "scope": "Raw gfxinfo for a bounded UI input window.",
+      "sourceSha256": "E7E8315FC1A25CB094E0CDD376BAEA25FC249648B364004E85C3B017C56DE386",
+      "sha256": "E7E8315FC1A25CB094E0CDD376BAEA25FC249648B364004E85C3B017C56DE386",
+      "bytes": 3847,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r12-final/home-1-gfxinfo.txt",
+      "source": ".tmp/frontend-audit/tv-motion-r12-final/home-1-gfxinfo.txt",
+      "scope": "Raw gfxinfo for a bounded UI input window.",
+      "sourceSha256": "ACAA4270B03E2313D836FF7F7C342B4DE4041107BF3A6D09FE1A9F20EDC7E8DD",
+      "sha256": "ACAA4270B03E2313D836FF7F7C342B4DE4041107BF3A6D09FE1A9F20EDC7E8DD",
+      "bytes": 3834,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-motion-r12-final/home-2-gfxinfo.txt",
+      "source": ".tmp/frontend-audit/tv-motion-r12-final/home-2-gfxinfo.txt",
+      "scope": "Raw gfxinfo for a bounded UI input window.",
+      "sourceSha256": "046E03A66E5C32427D7DEB03C94BD7E43E8670D458ACB473BB15E3616CA02EE0",
+      "sha256": "046E03A66E5C32427D7DEB03C94BD7E43E8670D458ACB473BB15E3616CA02EE0",
+      "bytes": 3841,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-r12-final/home-bezel.png",
+      "source": ".tmp/frontend-audit/tv-surfaces-r12-final/home-bezel.png",
+      "scope": "Screencap of the final installed APK for the named scenario.",
+      "sourceSha256": "B8B44A529A83C0EA4C0946CC508A13BC69ECC9DF019C148E53F76018D1D2A4CF",
+      "sha256": "B8B44A529A83C0EA4C0946CC508A13BC69ECC9DF019C148E53F76018D1D2A4CF",
+      "bytes": 822811,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-r12-final/confirmation.png",
+      "source": ".tmp/frontend-audit/tv-surfaces-r12-final/confirmation.png",
+      "scope": "Screencap of the final installed APK for the named scenario.",
+      "sourceSha256": "C36A98CE02BBAC6820A77692EFEF69D76782423D8B0DB676D42D1A1C1D8949E8",
+      "sha256": "C36A98CE02BBAC6820A77692EFEF69D76782423D8B0DB676D42D1A1C1D8949E8",
+      "bytes": 200828,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-r12-final/keypad-back.png",
+      "source": ".tmp/frontend-audit/tv-surfaces-r12-final/keypad-back.png",
+      "scope": "Screencap of the final installed APK for the named scenario.",
+      "sourceSha256": "F86B38975C42B147555C109409D0CAC77C3574EA27D1AE46A42628C45239AE4E",
+      "sha256": "F86B38975C42B147555C109409D0CAC77C3574EA27D1AE46A42628C45239AE4E",
+      "bytes": 225488,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-720p-r12-final/channel-card.png",
+      "source": ".tmp/frontend-audit/tv-surfaces-720p-r12-final/channel-card.png",
+      "scope": "Screencap of the final installed APK for the named scenario.",
+      "sourceSha256": "4A847370A315E9F75CD7213DE6AC88E5617AD20FD9A2C85B520D095246913C5A",
+      "sha256": "4A847370A315E9F75CD7213DE6AC88E5617AD20FD9A2C85B520D095246913C5A",
+      "bytes": 471322,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-surfaces-4k-r12-final/keypad-focused.png",
+      "source": ".tmp/frontend-audit/tv-surfaces-4k-r12-final/keypad-focused.png",
+      "scope": "Screencap of the final installed APK for the named scenario.",
+      "sourceSha256": "8F8777C1DF9AC6610B63C6A3DD1C52386C125BBED2EF345C61EA15A82ADDF40A",
+      "sha256": "8F8777C1DF9AC6610B63C6A3DD1C52386C125BBED2EF345C61EA15A82ADDF40A",
+      "bytes": 772056,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-panel-r12-independent/report.json",
+      "source": ".tmp/frontend-audit/tv-panel-r12-independent/report.json",
+      "scope": "Independent R12 sample. Batch results retain their original outcomes.",
+      "sourceSha256": "2B939E4A9533FF5D831009D10C0FF26CA424AF1C51F1718D6BCA9C5A26587C66",
+      "sha256": "2B939E4A9533FF5D831009D10C0FF26CA424AF1C51F1718D6BCA9C5A26587C66",
+      "bytes": 1033,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r11-final/loaded-detail-return-1-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r11-final/loaded-detail-return-1-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "5F2FE17E63FAD83FCA7B7D21B29E80082988B11CF95596C6A51BF152982F64C5",
+      "sha256": "5F2FE17E63FAD83FCA7B7D21B29E80082988B11CF95596C6A51BF152982F64C5",
+      "bytes": 1660,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r11-final/loaded-detail-return-2-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r11-final/loaded-detail-return-2-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "1DDF1D755ADDC752838C4C2C1AD84221E1E9FB4E68EE661B190F03465742B130",
+      "sha256": "1DDF1D755ADDC752838C4C2C1AD84221E1E9FB4E68EE661B190F03465742B130",
+      "bytes": 1841,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r11-final/playback-error-recovery-1-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r11-final/playback-error-recovery-1-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "56FEA3A4B7B4CCAC3DC2C8BE89A2F9D0318F5A30041217163490CEAB78B5D47E",
+      "sha256": "56FEA3A4B7B4CCAC3DC2C8BE89A2F9D0318F5A30041217163490CEAB78B5D47E",
+      "bytes": 2053,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r11-final/playback-error-recovery-2-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r11-final/playback-error-recovery-2-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "A294D824531750C66A6394E3CB56967CFAC50D561E99D7E1095C7B1B845CF86F",
+      "sha256": "A294D824531750C66A6394E3CB56967CFAC50D561E99D7E1095C7B1B845CF86F",
+      "bytes": 1259,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/episode-panel-focus-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/episode-panel-focus-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "C7098B3A1F8B2DC1DB25284E9DC9934FEF26241798008C0AF5EB0DBE8EFE6CB6",
+      "sha256": "C7098B3A1F8B2DC1DB25284E9DC9934FEF26241798008C0AF5EB0DBE8EFE6CB6",
+      "bytes": 1734,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/line-switch-1-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/line-switch-1-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "2C883F72EA55F209986F1323892CFB52E8A6A7E12388577CD578326426510F9F",
+      "sha256": "2C883F72EA55F209986F1323892CFB52E8A6A7E12388577CD578326426510F9F",
+      "bytes": 1894,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/loaded-detail-return-1-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/loaded-detail-return-1-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "304E4D114F9E21481E0FB124D566E3C581A16F054C466CC8EE10CDEB5C9F7955",
+      "sha256": "304E4D114F9E21481E0FB124D566E3C581A16F054C466CC8EE10CDEB5C9F7955",
+      "bytes": 1041,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/playback-error-recovery-1-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/playback-error-recovery-1-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "1BEF0ADF5420587811E52B1CA0F43BD6AB429798AD82A8525CCF0FC8FA371199",
+      "sha256": "1BEF0ADF5420587811E52B1CA0F43BD6AB429798AD82A8525CCF0FC8FA371199",
+      "bytes": 1044,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/playback-error-recovery-2-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/playback-error-recovery-2-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "89825AAC7CCA68D89A41820B0BC4C7E7130C9D1DD73D11AFBDD7C0A8B1066B47",
+      "sha256": "89825AAC7CCA68D89A41820B0BC4C7E7130C9D1DD73D11AFBDD7C0A8B1066B47",
+      "bytes": 1444,
+      "transformation": "none"
+    },
+    {
+      "file": "tv/tv-playback-r12-final/player-lifecycle-failure-logcat.txt",
+      "source": ".tmp/frontend-audit/tv-playback-r12-final/player-lifecycle-failure-logcat.txt",
+      "scope": "Current process log scoped to the failed playback case.",
+      "sourceSha256": "3A46BDBAD86E2A039C772F3BD3E5D613BF60CDFA395269FF80547693C966B740",
+      "sha256": "3A46BDBAD86E2A039C772F3BD3E5D613BF60CDFA395269FF80547693C966B740",
+      "bytes": 2143,
+      "transformation": "none"
+    }
+  ]
+}

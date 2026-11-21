@@ -1,6 +1,6 @@
 # Panda 生产实现清单与技术选型
 
-日期：2026-11-16。本文在生产编码前建立，里程碑状态于交付时更新。输入审阅已完成：[界面](ui-audit.md)、[豆瓣](douban-audit.md)、[播放](playback-audit.md)。原始设计206个非依赖文件的SHA256见 [基线](evidence/design-original-sha256.json)。原型契约检查405项通过。当前仓库没有生产源码、后端骨架、根package.json或历史提交；`.npmrc`使用npmmirror，设计工具不是应用构建配置。
+日期：2026-11-16。本文保留立项时的选型和里程碑，不描述现版仓库。当时尚无生产源码、根 `package.json` 和提交；现在 Windows 与原生 Android TV 分别实现。历史输入：[界面](ui-audit.md)、[豆瓣](douban-audit.md)、[播放](playback-audit.md)；冻结设计见 [SHA-256 基线](evidence/design-original-sha256.json)。现版入口见[交付报告](delivery-report.md)与[证据核验](ui-evidence-review.md)。
 
 ## 选型
 
@@ -35,7 +35,7 @@
 - [x] 首页、五频道、详情、搜索、收藏、历史、设置、全部浮层与状态还原。证据：[fixture.spec.ts](../e2e/fixture.spec.ts)、[界面审阅](ui-audit.md)。
 - [x] 真实播放器播放/暂停/缓冲/进度/音量/倍速/可用画质/选集/全屏/画中画/下一集/错误重试，历史节流和退出刷新。证据：[live.spec.ts](../e2e/live.spec.ts)、[player-model.test.ts](../tests/player-model.test.ts)。
 - [x] 类型检查、离线单测、Electron E2E、真实API与真实视频起播/拖动/切集、重启持久化、离线/错误/空态/加载态验证。结果见[交付报告](delivery-report.md)。
-- [x] 对齐原型CSS视口/DPR/字体，逐项截图核对布局和交互。成对截图与几何对照在 [evidence/visual](evidence/visual/overlay-report.json)；对照用的 fixture 只在 e2e 内。
+- [x] 当时做过原型/fixture 单一视口的[截图与几何对照](evidence/visual/overlay-report.json)。旧对照已退役，不是现版交互验收。
 - [x] 生产构建、NSIS安装包、实际安装启动、打包内容检查、设计SHA256不变、交付报告。证据：[install.txt](evidence/install.txt)、[交付报告](delivery-report.md)。
 
 ## 已确认冲突的最小处理
@@ -44,7 +44,7 @@
 
 ## 验证后仍然成立的限制
 
-影视热搜、去广告片段画面、不可达与错片源行为、实际安装均已验证，结果在各审阅文档与[交付报告](delivery-report.md)。没有验证的只有：高 DPI 多显示器下的窗口还原，以及数小时级的连续播放。外部接口无可用性承诺，证据文件都带采集时间。
+早期验证覆盖过热搜、广告片段、部分不可达/错片源与一次实际安装。未逐一验证所有数据组合、设备、DPI 或长时播放；外部接口无可用性承诺。各版本以自己的采样结果为准。
 
 ## 2026-11-16 接续复核
 

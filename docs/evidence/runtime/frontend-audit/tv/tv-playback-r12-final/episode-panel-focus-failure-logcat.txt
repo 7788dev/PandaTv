@@ -1,0 +1,18 @@
+--------- beginning of main
+11-21 18:31:11.845 55032 55068 I PandaTV : [source] lzi (601ms): search: 网络请求失败或超时
+11-21 18:31:12.043 55032 55061 I PandaTV : [source] huya (800ms): search: 片源数据格式无效
+11-21 18:31:12.147 55032 55057 I PandaTV : [source] jyzy (901ms): search: 片源数据格式无效
+11-21 18:31:15.669 55032 55057 W PandaTV : [douban] search:primary: UPSTREAM (Metadata HTTP 403)
+11-21 18:31:15.794 55032 55057 I PandaTV : [search] fallback hints=4 identities=4
+11-21 18:31:15.823 55032 55062 I PandaTV : [search] fallback hints=4 identities=4
+11-21 18:31:17.985 55032 55060 I PandaTV : [source] huya (661ms): search: 片源数据格式无效
+11-21 18:31:17.989 55032 55266 I PandaTV : [source] lzi (665ms): search: 网络请求失败或超时
+11-21 18:31:18.998 55032 55060 I PandaTV : [source] jyzy (1013ms): search: 片源数据格式无效
+11-21 18:31:20.272 55032 55071 I PandaTV : [source] ffzy (9028ms): search: 网络请求失败或超时
+11-21 18:31:20.273 55032 55063 I PandaTV : [source] bfzy (9030ms): search: 网络请求失败或超时
+11-21 18:31:20.273 55032 55055 I PandaTV : [source] dyttzy (9030ms): search: 网络请求失败或超时
+11-21 18:31:20.273 55032 55054 I PandaTV : [source] subo (9030ms): search: 网络请求失败或超时
+11-21 18:31:26.334 55032 55061 I PandaTV : [source] dyttzy (9010ms): search: 网络请求失败或超时
+11-21 18:31:26.342 55032 55053 I PandaTV : [source] bfzy (9018ms): search: 网络请求失败或超时
+11-21 18:31:26.342 55032 55058 I PandaTV : [source] subo (9018ms): search: 网络请求失败或超时
+11-21 18:31:26.342 55032 55057 I PandaTV : [source] ffzy (9018ms): search: 网络请求失败或超时

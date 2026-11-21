@@ -1,0 +1,25 @@
+{
+  "identity": {
+    "version": "1.1.2",
+    "path": "E:\\dev\\项目\\panda\\.tmp\\frontend-audit\\windows-r3\\win-unpacked\\resources\\app.asar",
+    "windows": 1
+  },
+  "asarSha256": "27C4028F5C6B577C224F2B1DD5B0AAD3252CC98C7EBF0CAEB3772E2795A28CE4",
+  "compact": {
+    "requested": [
+      1080,
+      640
+    ],
+    "viewport": [
+      1080,
+      642
+    ],
+    "outer": [
+      1080,
+      642
+    ],
+    "devicePixelRatio": 1.5
+  },
+  "runtime": "desktop-packaged-live",
+  "renderer": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html#/settings"
+}

@@ -1,0 +1,13 @@
+
+> panda-desktop@1.1.2 test
+> vitest run tests/search-recovery.test.ts
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  11:33:06
+   Duration  9.37s (tests 99%, transform 1%)
+

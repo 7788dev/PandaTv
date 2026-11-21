@@ -1,5 +1,7 @@
 # 豆瓣数据审阅与实现清单
 
+> **历史接口采样。** 不是现版路由、可用率或真实 UI 的证明；现版覆盖见 [Windows](frontend-audit-windows.md)、[TV](frontend-audit-tv.md) 和 [证据核验](ui-evidence-review.md)。
+
 审阅日期：2026-11-16。只读检查 `见界/src-tauri/src/douban.rs`、`见界/prototype/src/douban.ts`、根 AGENTS、Cargo 配置及数据源决策；完整检查 Panda `design/contract/{types,rules,constants,copy}.ts`。Panda 现有契约没有生产后端。原型与见界文件未修改。
 
 ## 真实接口验证

@@ -1,0 +1,68 @@
+
+> panda-desktop@1.1.2 test
+> vitest run --run tests/search-recovery.test.ts
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+stderr | tests/search-recovery.test.ts > search endpoint recovery > does not report an empty initials result when the Chinese query failed
+[douban] search:primary: UPSTREAM (Metadata HTTP 403)
+
+stderr | tests/search-recovery.test.ts > search endpoint recovery > keeps a blocked search retryable when both suggestion fallbacks are empty
+[douban] search:primary: UPSTREAM (Metadata HTTP 403)
+
+ ❯ tests/search-recovery.test.ts (6 tests | 2 failed) 7123ms
+   ❯ search endpoint recovery (6)
+     × does not report an empty initials result when the Chinese query failed 26ms
+     × keeps a blocked search retryable when both suggestion fallbacks are empty 1002ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/search-recovery.test.ts > search endpoint recovery > does not report an empty initials result when the Chinese query failed
+AssertionError: promise resolved "[]" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+[]
+
+ ❯ tests/search-recovery.test.ts:73:37
+     71|       throw new Error(`Unexpected request ${url.pathname}`);
+     72|     }) });
+     73|     await expect(data.search('LBXX')).rejects.toMatchObject({ code: 'U…
+       |                                     ^
+     74|   });
+     75|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/search-recovery.test.ts > search endpoint recovery > keeps a blocked search retryable when both suggestion fallbacks are empty
+AssertionError: promise resolved "[]" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+[]
+
+ ❯ tests/search-recovery.test.ts:83:39
+     81|       throw new Error(`Unexpected request ${url.pathname}`);
+     82|     }) });
+     83|     await expect(data.search('未命中的查询')).rejects.toMatchObject({ code: …
+       |                                       ^
+     84|     await expect(data.search('另一个查询')).rejects.toMatchObject({ code: '…
+     85|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+   Start at  11:27:30
+   Duration  7.34s (tests 99%, transform 1%)
+

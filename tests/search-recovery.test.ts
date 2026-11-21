@@ -61,4 +61,40 @@ describe('search endpoint recovery', () => {
     }) });
     expect((await data.search('蜡笔小新')).map(item => item.id)).toEqual(['db-3']);
   });
+
+  it('does not report an empty initials result when the Chinese query failed', async () => {
+    const data = new DoubanDataSource({ imageUrl: url => url, fetch: fetcher(url => {
+      if (url.pathname.endsWith('/search/movie')) return url.searchParams.get('q') === 'LBXX'
+        ? reply({ total: 0, items: [] }) : reply({}, 403);
+      if (url.pathname === '/j/subject_suggest') return reply([hint('1431683', '蜡笔小新')]);
+      if (url.pathname.endsWith('/movie/1431683')) return reply({}, 400);
+      throw new Error(`Unexpected request ${url.pathname}`);
+    }) });
+    await expect(data.search('LBXX')).rejects.toMatchObject({ code: 'UPSTREAM' });
+  });
+
+  it('keeps a blocked search retryable when both suggestion fallbacks are empty', async () => {
+    const data = new DoubanDataSource({ imageUrl: url => url, fetch: fetcher(url => {
+      if (url.pathname.endsWith('/search/movie')) return reply({}, 403);
+      if (url.pathname === '/j/subject_suggest') return reply([]);
+      if (url.pathname === '/j/search_suggest') return reply({ cards: [] });
+      throw new Error(`Unexpected request ${url.pathname}`);
+    }) });
+    await expect(data.search('未命中的查询')).rejects.toMatchObject({ code: 'UPSTREAM' });
+    await expect(data.search('另一个查询')).rejects.toMatchObject({ code: 'UPSTREAM' });
+  });
+
+  it('retries the primary query immediately after fallback could not verify a match', async () => {
+    let blocked = true;
+    const data = new DoubanDataSource({ imageUrl: url => url, fetch: fetcher(url => {
+      if (url.pathname.endsWith('/search/movie')) return blocked ? reply({}, 403)
+        : reply({ total: 1, items: [subject('26647087', '三体')] });
+      if (url.pathname === '/j/subject_suggest') return reply([]);
+      if (url.pathname === '/j/search_suggest') return reply({ cards: [] });
+      throw new Error(`Unexpected request ${url.pathname}`);
+    }) });
+    await expect(data.search('三体')).rejects.toMatchObject({ code: 'UPSTREAM' });
+    blocked = false;
+    expect((await data.search('三体')).map(item => item.id)).toEqual(['db-26647087']);
+  });
 });

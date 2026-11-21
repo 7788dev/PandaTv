@@ -1,13 +1,13 @@
 """Replay home More links and keep the active tab and actual D-pad focus together."""
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
 import time
 import xml.etree.ElementTree as ET
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -17,14 +17,12 @@ def main():
     parser.add_argument('--serial', required=True)
     parser.add_argument('--label', required=True)
     parser.add_argument('--repeat', type=int, default=2)
+    parser.add_argument('--output', type=Path)
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location('tv_helpers', ROOT / 'scripts/verify-tv-mumu.py')
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ['ADBUTILS_ADB_PATH'] = h.ADB
     d = u2.connect(args.serial)
-    out = ROOT / 'docs/evidence/runtime/tv-navigation' / args.label
+    out = args.output or ROOT / '.tmp/e2e-evidence/tv-navigation' / args.label
     out.mkdir(parents=True, exist_ok=True)
     report = {'at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'version': h.run_adb('shell', 'dumpsys', 'package', 'app.panda.tv').split('versionName=')[-1].splitlines()[0].strip(),
@@ -47,7 +45,16 @@ def main():
         h.focus_top_bar(d)
         h.move_focus_to_text(d, '首页', max_steps=14)
         h.key('enter', wait=.5)
-        h.wait_for(d, lambda ns: '播放' in h.texts(ns), timeout=30)
+        h.wait_for(d, lambda ns: any(n['text'] == '首页' and n['selected'] for n in ns)
+                   and ('播放' in h.texts(ns) or '剧集榜' in h.texts(ns)), timeout=30)
+        h.key('dpad_down', wait=.32)
+        for _ in range(16):
+            focus = h.find_focused(h.dump_nodes(d))
+            if focus and focus['cy'] > 140 and ('播放' in focus['childTexts'] or '详情' in focus['childTexts']):
+                break
+            h.key('dpad_up' if focus and focus['cy'] > 140 else 'dpad_down', wait=.32)
+        else:
+            raise AssertionError('Could not establish the home hero before testing downward focus')
         for _ in range(16):
             xml = d.dump_hierarchy(compressed=False)
             root = ET.fromstring(xml)

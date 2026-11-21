@@ -45,9 +45,10 @@ class PersonScreen(
     private val grid = Theme.verticalGrid(ctx, bodyBox).apply {
         setHorizontalSpacing(m.gridGapH)
         setVerticalSpacing(m.gridGapV)
-        setPadding(m.pageH, Theme.dp(ctx, 14), m.pageH, Theme.dp(ctx, 40))
-        Theme.bindGridHeaderNavigation(this, columns = 6, onLoadMore = ::loadMore) { backBtn }
+        setPadding(m.pageH, Theme.dp(ctx, 14), m.pageH, Theme.dp(ctx, 10))
+        Theme.bindGridHeaderNavigation(this, columns = 6, onReachEnd = ::onGridEnd) { backBtn }
     }
+    private val pageFooter = PosterPageFooter(ctx, grid) { loadMore(retry = true) }
 
     private val works = ArrayList<MediaItem>()
     private var nextCursor: String? = null
@@ -62,6 +63,7 @@ class PersonScreen(
         buildHeader()
         grid.adapter = adapter
         root.addView(bodyBox, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        root.addView(pageFooter)
         loadInitial()
     }
 
@@ -84,7 +86,7 @@ class PersonScreen(
             gravity = Gravity.CENTER_VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(m.pageH, Theme.dp(ctx, 20), m.pageH, Theme.dp(ctx, 16))
+            setPadding(m.pageH, m.safeV, m.pageH, Theme.dp(ctx, 16))
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
         backBtn = Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK, padH = 15, padV = 7, sp = 13.5f).apply {
@@ -135,7 +137,8 @@ class PersonScreen(
         works.clear()
         nextCursor = null
         bodyBox.removeAllViews()
-        bodyBox.addView(Theme.loadingBox(ctx))
+        pageFooter.show()
+        bodyBox.addView(posterPageLoading(ctx, grid))
         loadJob = scope.launch {
             try {
                 val infoTask = async { runCatching { nav.app.douban.person(personId) } }
@@ -170,19 +173,28 @@ class PersonScreen(
         }
     }
 
-    private fun loadMore() {
+    private fun onGridEnd(position: Int, isNewPress: Boolean) {
+        if (nextCursor == null) pageFooter.show(Copy.Channel.END)
+        else pageFooter.onGridEnd(position, isNewPress) { loadMore() }
+    }
+
+    private fun loadMore(retry: Boolean = false) {
         val cur = nextCursor ?: return
-        if (destroyed || loading) return
+        if (destroyed || !grid.isAttachedToWindow || loading || (pageFooter.failed && !retry)) return
         loading = true
+        pageFooter.show(Copy.Channel.LOADING_MORE)
         scope.launch {
             try {
-                val page = nav.app.douban.personWorks(personId, cur)
+                val data = nav.app.douban
+                val id = personId
+                val page = awaitScreenRequest(scope) { data.personWorks(id, cur) }
                 if (destroyed) return@launch
                 val seen = works.map { it.id }.toHashSet()
                 val added = page.items.filter { seen.add(it.id) }
                 val startPos = works.size
                 works.addAll(added)
                 nextCursor = page.next
+                pageFooter.show()
                 if (added.isNotEmpty()) {
                     adapter.notifyItemRangeInserted(startPos, added.size)
                 }
@@ -190,6 +202,7 @@ class PersonScreen(
                 throw cancelled
             } catch (error: Throwable) {
                 android.util.Log.w("PandaTV", "[person] pagination: ${error.message}")
+                if (!destroyed) pageFooter.show(Copy.Channel.LOAD_MORE_FAILED, retryable = true)
             } finally {
                 loading = false
             }

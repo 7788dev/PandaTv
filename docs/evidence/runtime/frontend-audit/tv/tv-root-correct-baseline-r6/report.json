@@ -1,0 +1,60 @@
+{
+  "at": "2026-11-21T07:15:03.824287+00:00",
+  "apkSha256": "06E6F2CA5F974C2E3211DDCA910D45F3D133C54CD6AE82792316367B54AC65D4",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": true
+    },
+    {
+      "case": "channel_memory",
+      "pass": true
+    },
+    {
+      "case": "detail_return",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction",
+      "pass": false,
+      "error": "Root eviction lost the actual departure focus: {'text': '', 'class': 'android.widget.LinearLayout', 'focused': True, 'focusable': True, 'selected': True, 'clickable': True, 'bounds': (334, 186, 446, 251), 'cx': 390, 'cy': 218, 'childTexts': ['最新']} -> {'text': '', 'class': 'android.widget.LinearLayout', 'focused': True, 'focusable': True, 'selected': False, 'clickable': True, 'bounds': (622, 186, 797, 251), 'cx': 709, 'cy': 218, 'childTexts': ['类型: 全部']}"
+    },
+    {
+      "case": "channel_eviction_aux_click",
+      "pass": false,
+      "error": "Auxiliary root eviction lost the card or scroll position: {'text': '', 'class': 'android.widget.LinearLayout', 'focused': True, 'focusable': True, 'selected': False, 'clickable': True, 'bounds': (97, 302, 366, 798), 'cx': 231, 'cy': 550, 'childTexts': ['Pili Channe', '剧情']} -> {'text': '', 'class': 'android.widget.LinearLayout', 'focused': True, 'focusable': True, 'selected': False, 'clickable': True, 'bounds': (622, 186, 797, 251), 'cx': 709, 'cy': 218, 'childTexts': ['类型: 全部']}"
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "rootEviction": {
+    "navigation": "D-pad",
+    "departureFocus": [
+      "最新"
+    ],
+    "setupFocusNotReturnBaseline": [
+      "Pili Channe",
+      "剧情"
+    ]
+  },
+  "rootEvictionAuxiliary": {
+    "navigation": "Auxiliary top-bar taps, not remote reachability evidence",
+    "departureFocus": [
+      "Pili Channe",
+      "剧情"
+    ]
+  },
+  "userStateRestored": true
+}

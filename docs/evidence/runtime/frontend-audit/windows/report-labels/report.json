@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-21T06:38:45.465Z",
+  "observations": [
+    {
+      "name": "fixture",
+      "file": ".tmp/playwright-report/desktop-fixture/index.html",
+      "mode": "desktop-fixture",
+      "title": "Panda E2E — desktop-fixture",
+      "headings": [],
+      "visibleModeLabel": true,
+      "errors": [],
+      "text": "All19\nPassed19\nFailed0\nFlaky0\nSkipped0\nProject: desktop-fixture\n2026/11/21 13:19:48\nTotal time: 5.5m\nPanda E2E — desktop-fixture\nfixture.spec.ts\nfixture: loading, empty, error and offline surfaces remain usabledesktop-fixture\n13.4s\nfixture.spec.ts:5\nfixture: search keyboard, tabs, favorites, history undo, settings and dialog focusdesktop-fixture\n31.1s\nfixture.spec.ts:27\nfixture: player quality, volume, episode panel, intro, up-next and retry controlsdesktop-fixture\n21.9s\nfixture.spec.ts:76\nfixture: window controls remain usable while a confirmation is opendesktop-fixture\n5.2s\nfixture.spec.ts:131\nfixture: a source that never starts recovers within thirty-five secondsdesktop-fixture\n18.9s\nfixture.spec.ts:152\nfixture: another line takes over where the first one wasdesktop-fixture\n16.2s\nfixture.spec.ts:164\nfixture: sustained decoder drops lower playback speed automaticallydesktop-fixture\n12.7s\nfixture.spec.ts:191\nfixture: a failed line switch falls back to the source pool without losing positiondesktop-fixture\n11.8s\nfixture.spec.ts:215\nfixture: changing lines while paused keeps playback pauseddesktop-fixture\n14.0s\nfixture.spec.ts:236\nfixture: failed replacements preserve a paused line and its controlsdesktop-fixture\n16.9s\nfixture.spec.ts:262\nfixture: if both the selected line and source pool fail, the current picture keeps playingdesktop-fixture\n14.7s\nfixture.spec.ts:284\nfixture: a stalled replacement line keeps the last decoded frame visibledesktop-fixture\n8.9s\nfixture.spec.ts:305\nfixture: a stalled manual line falls back to the active source pooldesktop-fixture\n24.9s\nfixture."
+    },
+    {
+      "name": "packaged-live",
+      "file": ".tmp/playwright-report/desktop-packaged-live/index.html",
+      "mode": "desktop-packaged-live",
+      "title": "Panda E2E — desktop-packaged-live",
+      "headings": [],
+      "visibleModeLabel": true,
+      "errors": [],
+      "text": "All14\nPassed8\nFailed6\nFlaky0\nSkipped1\nProject: desktop-live\n2026/11/21 13:32:51\nTotal time: 9.0m\nPanda E2E — desktop-packaged-live\nads.spec.ts\nad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decodingdesktop-live\n1.1m\nads.spec.ts:34\nad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decodingdesktop-live\n1.1m\nads.spec.ts:34\nad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decodingdesktop-live\n1.1m\nads.spec.ts:34\nad removal on 360zy: out-of-directory blocks plays, seeks across the cut and keeps decodingdesktop-live\n26.0s\nads.spec.ts:34\nlive.spec.ts\nreal movie decodes, seeks, changes speed, enters fullscreen and persists historydesktop-live\n40.5s\nlive.spec.ts:4\nreal animation resolves by Douban identity and decodes its actual streamdesktop-live\n1.1m\nlive.spec.ts:125\nreal serial exposes playable episodes and decodes after switching to the next episodedesktop-live\n1.4m\nlive.spec.ts:95\nruntime-ui.spec.ts\npackaged live: UI frame samples and player resource release after repeated navigationdesktop-live\n33.3s\nruntime-ui.spec.ts:34\ndata.spec.ts\nreal Douban metadata, detailed channel facets, suggestions, hot searches and paginationdesktop-live\n29.6s\ndata.spec.ts:7\npackaged-ui.spec.ts\npackaged live: real navigation, dialogs and hit targets at native window sizesdesktop-live\n7.6s\npackaged-ui.spec.ts:7\npeople.spec.ts\nreal Douban people: the few a title is known for, their photos, and everything one of them worked ondesktop-live"
+    },
+    {
+      "name": "resource-live",
+      "file": ".tmp/frontend-audit/windows-resource-r3-verified/report/index.html",
+      "mode": "desktop-packaged-live",
+      "title": "Panda E2E — desktop-packaged-live",
+      "headings": [],
+      "visibleModeLabel": true,
+      "errors": [],
+      "text": "All1\nPassed1\nFailed0\nFlaky0\nSkipped0\nProject: desktop-live\n2026/11/21 13:56:33\nTotal time: 33.6s\nPanda E2E — desktop-packaged-live\nruntime-ui.spec.ts\npackaged live: UI frame samples and player resource release after repeated navigationdesktop-live\n33.0s\nruntime-ui.spec.ts:34"
+    }
+  ]
+}

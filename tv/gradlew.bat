@@ -13,4 +13,5 @@ if defined JAVA_HOME (
 )
 set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=gradlew" -classpath "%CLASSPATH%" org.gradle.wrapper.GradleWrapperMain %*
-endlocal
+set "PANDA_GRADLE_EXIT=%ERRORLEVEL%"
+endlocal & exit /b %PANDA_GRADLE_EXIT%

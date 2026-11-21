@@ -2,7 +2,6 @@
 
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -10,23 +9,22 @@ import time
 import xml.etree.ElementTree as ET
 
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--serial", default="127.0.0.1:16416")
+    parser.add_argument("--serial", required=True)
     parser.add_argument("--label", default="search-state")
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--queries", nargs="+", default=["刘德华", "西游记", "蜡笔小新"])
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location("tv_helpers", ROOT / "scripts/verify-tv-mumu.py")
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     d = u2.connect(args.serial)
-    out = ROOT / "docs/evidence/runtime/tv-navigation" / args.label
+    out = args.output or ROOT / ".tmp/e2e-evidence/tv-search-state" / args.label
     out.mkdir(parents=True, exist_ok=True)
     report = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "cases": [], "failures": []}
     report["version"] = h.run_adb("shell", "dumpsys", "package", "app.panda.tv").split("versionName=")[-1].splitlines()[0].strip()

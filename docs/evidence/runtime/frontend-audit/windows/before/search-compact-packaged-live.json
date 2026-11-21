@@ -1,0 +1,33 @@
+{
+  "identity": {
+    "version": "1.1.2",
+    "path": "E:\\dev\\项目\\panda\\.tmp\\frontend-audit\\windows-package\\win-unpacked\\resources\\app.asar",
+    "windows": 1
+  },
+  "asarSha256": "33DA65060F5B798405F4042D11C4F4D81C3B4C6F03F3E436C06DF79A271E677B",
+  "compact": {
+    "requested": [
+      1080,
+      640
+    ],
+    "viewport": [
+      1080,
+      642
+    ],
+    "outer": [
+      1080,
+      642
+    ],
+    "devicePixelRatio": 1.5
+  },
+  "blocked": [
+    {
+      "name": "设置",
+      "hit": "winctl__btn",
+      "left": 933.875,
+      "right": 971.875
+    }
+  ],
+  "runtime": "desktop-packaged-live",
+  "renderer": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-package/win-unpacked/resources/app.asar/out/renderer/index.html"
+}

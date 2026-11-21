@@ -1,0 +1,69 @@
+{
+  "at": "2026-11-21T10:29:27.201347+00:00",
+  "version": "1.0.12",
+  "apkSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "cases": [
+    {
+      "name": "剧集榜-1",
+      "selected": [
+        "剧集"
+      ],
+      "focused": [
+        "剧集"
+      ],
+      "passed": true
+    },
+    {
+      "name": "电影榜-1",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "电影"
+      ],
+      "passed": true
+    },
+    {
+      "name": "动漫榜-1",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "动漫"
+      ],
+      "passed": true
+    },
+    {
+      "name": "剧集榜-2",
+      "selected": [
+        "剧集"
+      ],
+      "focused": [
+        "剧集"
+      ],
+      "passed": true
+    },
+    {
+      "name": "电影榜-2",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "电影"
+      ],
+      "passed": true
+    },
+    {
+      "name": "动漫榜-2",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "动漫"
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "userStateRestored": true
+}

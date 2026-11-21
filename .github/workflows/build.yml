@@ -1,0 +1,155 @@
+name: Build packages
+
+on:
+  workflow_call:
+    inputs:
+      release-tag:
+        description: Expected desktop version tag; empty for CI builds
+        type: string
+        default: ''
+      signed-tv:
+        type: boolean
+        default: false
+    secrets:
+      TV_KEYSTORE_BASE64:
+        required: false
+      TV_STORE_PASSWORD:
+        required: false
+      TV_KEY_ALIAS:
+        required: false
+      TV_KEY_PASSWORD:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows x64
+    runs-on: windows-2025
+    timeout-minutes: 30
+    env:
+      PANDA_RELEASE_TAG: ${{ inputs.release-tag }}
+      PANDA_E2E_EVIDENCE_DIR: .tmp/ci-evidence
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Check versions and use public registries
+        run: node scripts/ci-release.mjs prepare
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run test:release
+      - run: npm run verify:design
+      - run: node design/tools/test-contract.mjs
+      - name: Build installer without implicit publishing
+        run: npm run dist -- --publish never
+      - name: Inspect packaged application
+        run: node scripts/asar-check.cjs release/win-unpacked/resources/app.asar
+      - name: Offline UI and layout regression
+        run: npm run test:e2e:fixture
+      - name: Collect Windows installer
+        run: node scripts/ci-release.mjs collect-windows
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-dist
+          path: .tmp/ci-dist/*
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-diagnostics
+          include-hidden-files: true
+          path: |
+            .tmp/playwright-report/
+            .tmp/e2e-results/
+            .tmp/ci-evidence/
+          retention-days: 7
+
+  tv:
+    name: Android TV (API 22+)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PANDA_RELEASE_TAG: ${{ inputs.release-tag }}
+      PANDA_SIGNED_TV: ${{ inputs.signed-tv }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Read build versions and use public registries
+        id: metadata
+        run: node scripts/ci-release.mjs prepare
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+        with:
+          packages: platform-tools platforms;${{ steps.metadata.outputs.sdk_platform }} build-tools;${{ steps.metadata.outputs.build_tools }}
+          log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
+        with:
+          gradle-version: ${{ steps.metadata.outputs.gradle_version }}
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+      - name: Check desktop / TV golden vectors
+        run: |
+          npm ci --ignore-scripts
+          node scripts/export-tv-vectors.mjs
+          git diff --exit-code -- tv/app/src/test/resources/golden-vectors.json tv/app/src/main/assets
+      - name: Restore existing release key
+        if: inputs.signed-tv
+        run: node scripts/ci-release.mjs prepare-signing
+        env:
+          TV_KEYSTORE_BASE64: ${{ secrets.TV_KEYSTORE_BASE64 }}
+          TV_STORE_PASSWORD: ${{ secrets.TV_STORE_PASSWORD }}
+          TV_KEY_ALIAS: ${{ secrets.TV_KEY_ALIAS }}
+          TV_KEY_PASSWORD: ${{ secrets.TV_KEY_PASSWORD }}
+      - name: Unit tests, API compatibility lint and release APK
+        run: gradle -p tv --no-daemon testDebugUnitTest lintRelease assembleRelease
+      - name: Verify release signature (including Android 5.1 v1 signing)
+        if: inputs.signed-tv
+        shell: bash
+        env:
+          BUILD_TOOLS: ${{ steps.metadata.outputs.build_tools }}
+        run: |
+          "$ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner" verify --verbose --print-certs tv/app/build/outputs/apk/release/app-release.apk > .tmp/apk-signature.txt
+          cat .tmp/apk-signature.txt
+          grep -F 'Verified using v1 scheme (JAR signing): true' .tmp/apk-signature.txt
+          grep -F 'Verified using v2 scheme (APK Signature Scheme v2): true' .tmp/apk-signature.txt
+          grep -Fi 'certificate SHA-256 digest: d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd' .tmp/apk-signature.txt
+      - name: Collect TV APK
+        run: node scripts/ci-release.mjs collect-tv
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tv-dist
+          path: .tmp/ci-dist/*
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+      - name: Remove signing material
+        if: always() && inputs.signed-tv
+        run: node scripts/ci-release.mjs clean-signing
+      - name: Upload test diagnostics
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tv-diagnostics
+          path: |
+            tv/app/build/reports/
+            tv/app/build/test-results/
+          retention-days: 7

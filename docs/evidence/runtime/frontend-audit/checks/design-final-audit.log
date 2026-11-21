@@ -1,0 +1,5 @@
+
+> panda-desktop@1.1.2 verify:design
+> node scripts/verify-design.mjs
+
+Design unchanged: 206 files

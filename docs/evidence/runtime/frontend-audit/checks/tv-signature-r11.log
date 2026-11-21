@@ -1,0 +1,22 @@
+Verifies
+Verified using v1 scheme (JAR signing): true
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v3.2 scheme (APK Signature Scheme v3.2): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+V2 Signer: certificate DN: CN=Panda TV, OU=Mobile, O=Panda, L=Beijing, ST=Beijing, C=CN
+V2 Signer: certificate SHA-256 digest: d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd
+V2 Signer: certificate SHA-1 digest: 9aa607924531b8bc9c7972fad749ed3e83dd550d
+V2 Signer: certificate MD5 digest: 031467d4fd6d9caf07818ac582a5dc25
+V2 Signer: key algorithm: RSA
+V2 Signer: key size (bits): 2048
+V2 Signer: public key SHA-256 digest: 82fe4fd72d622a5e940d0c0dc258d86e350bae299603a6e4c0303ee2ef38dbae
+V2 Signer: public key SHA-1 digest: c3e1402e62426e014da06590c4f067363a2003f3
+V2 Signer: public key MD5 digest: 1639e88e9d4f5bea75a70eb4fd7f28a0
+WARNING: META-INF/com/android/build/gradle/app-metadata.properties not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/version-control-info.textproto not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/d2 not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.
+WARNING: META-INF/services/e2 not protected by signature. Unauthorized modifications to this JAR entry will not be detected. Delete or move the entry outside of META-INF/.

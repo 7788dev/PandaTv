@@ -1,0 +1,9 @@
+FAIL episode-panel-focus: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+Traceback (most recent call last):
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 870, in <module>
+    main()
+    ~~~~^^
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 865, in main
+    assert not report["failures"], f"{len(report['failures'])} TV playback transition regressions"
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 TV playback transition regressions

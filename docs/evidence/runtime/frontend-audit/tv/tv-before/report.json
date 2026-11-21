@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-21T02:02:34.590299+00:00",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": false,
+      "error": "首页: (318, 34, 428, 98) crosses 4.5% inset on 1920x1080"
+    },
+    {
+      "case": "channel_memory",
+      "pass": false,
+      "error": "Returning to a root tab reset its sort"
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": false,
+      "error": "Back exited Search while the keypad owned focus"
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "userStateRestored": true
+}

@@ -1,0 +1,16 @@
+--------- beginning of main
+11-21 18:05:19.989 16643 16643 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:05:19.990 16643 16643 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:05:19.994 16643 16643 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:05:20.421 16643 16685 I PandaTV : [source] subo (430ms): search: 网络请求失败或超时
+11-21 18:05:20.684 16643 16696 I PandaTV : [source] jyzy (693ms): search: 片源数据格式无效
+11-21 18:05:20.793 16643 16688 I PandaTV : [source] huya (803ms): search: 片源数据格式无效
+11-21 18:05:22.241 16643 16693 I PandaTV : [source] jyzy (230ms): search: 片源数据格式无效
+11-21 18:05:22.256 16643 16696 I PandaTV : [source] huya (246ms): search: 片源数据格式无效
+11-21 18:05:22.384 16643 16684 I PandaTV : [source] subo (374ms): search: 网络请求失败或超时
+11-21 18:05:29.024 16643 16692 I PandaTV : [source] lzi (9034ms): search: 网络请求失败或超时
+11-21 18:05:29.024 16643 16689 I PandaTV : [source] dyttzy (9034ms): search: 网络请求失败或超时
+11-21 18:05:29.024 16643 16686 I PandaTV : [source] bfzy (9034ms): search: 网络请求失败或超时
+11-21 18:05:31.023 16643 16730 I PandaTV : [source] bfzy (9013ms): search: 网络请求失败或超时
+11-21 18:05:31.023 16643 16685 I PandaTV : [source] dyttzy (9013ms): search: 网络请求失败或超时
+11-21 18:05:31.023 16643 16697 I PandaTV : [source] lzi (9013ms): search: 网络请求失败或超时

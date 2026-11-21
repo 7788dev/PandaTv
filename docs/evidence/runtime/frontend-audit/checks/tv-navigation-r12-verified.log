@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "E:\dev\项目\panda\scripts\verify-tv-navigation.py", line 324, in <module>
+    main()
+    ~~~~^^
+  File "E:\dev\项目\panda\scripts\verify-tv-navigation.py", line 285, in main
+    open_channel(channel)
+    ~~~~~~~~~~~~^^^^^^^^^
+  File "E:\dev\项目\panda\scripts\verify-tv-navigation.py", line 157, in open_channel
+    h.focus_top_bar(d)
+    ~~~~~~~~~~~~~~~^^^
+  File "E:\dev\项目\panda\scripts\tv_runtime_helpers.py", line 138, in focus_top_bar
+    raise AssertionError(f"Could not return focus to top navigation bar after {len(trace)} Up presses: {trace[-4:]}")
+AssertionError: Could not return focus to top navigation bar after 24 Up presses: [{'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}, {'focus': ['展开'], 'bounds': (506, 440, 604, 493), 'homeBounds': None}]

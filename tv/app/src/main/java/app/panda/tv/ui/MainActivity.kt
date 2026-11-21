@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -37,7 +38,20 @@ class MainActivity : Activity(), Navigator {
     private var modalOverlay: View? = null
 
     private val navPills = LinkedHashMap<String, TextView>()
+    private val launchers = HashMap<String, View>()
     private val stack = ArrayList<Screen>()
+    private val rootCache = LinkedHashMap<String, Screen>(4, .75f, true)
+    private val channelPages = HashMap<MediaType, ChannelPageState>()
+    private var resumeRootContent = false
+    private var rememberFocusChanges = true
+    private var focusObserver: ViewTreeObserver? = null
+    private val focusMemory = ViewTreeObserver.OnGlobalFocusChangeListener { _, focused ->
+        if (rememberFocusChanges) stack.lastOrNull()?.rememberContentFocus(focused)
+    }
+    private val focusAttachment = object : View.OnAttachStateChangeListener {
+        override fun onViewAttachedToWindow(view: View) = bindFocusMemory()
+        override fun onViewDetachedFromWindow(view: View) = unbindFocusMemory()
+    }
     private val handler = Handler(Looper.getMainLooper())
     private var toastHideRunnable: Runnable? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -77,7 +91,9 @@ class MainActivity : Activity(), Navigator {
             }
         }
         rootLayout.addView(toastView)
+        rootLayout.addOnAttachStateChangeListener(focusAttachment)
         setContentView(rootLayout)
+        if (rootLayout.isAttachedToWindow) bindFocusMemory()
 
         openHome()
     }
@@ -99,22 +115,33 @@ class MainActivity : Activity(), Navigator {
         cancelPlayerCheck()
         scope.cancel()
         toastHideRunnable?.let { handler.removeCallbacks(it) }
+        unbindFocusMemory()
+        rootLayout.removeOnAttachStateChangeListener(focusAttachment)
         for (s in stack.asReversed()) s.onDestroy()
         stack.clear()
+        rootCache.values.forEach { it.onDestroy() }
+        rootCache.clear()
+        channelPages.clear()
+    }
+
+    private fun bindFocusMemory() {
+        val observer = rootLayout.viewTreeObserver
+        if (focusObserver === observer) return
+        unbindFocusMemory()
+        observer.addOnGlobalFocusChangeListener(focusMemory)
+        focusObserver = observer
+    }
+
+    private fun unbindFocusMemory() {
+        focusObserver?.takeIf { it.isAlive }?.removeOnGlobalFocusChangeListener(focusMemory)
+        focusObserver = null
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (playerCheckTarget != null && event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_BACK) {
-            cancelPlayerCheck()
-            return true
-        }
-        if (modalOverlay != null) {
-            if (event.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_BACK) {
-                closeModal()
-                return true
-            }
-            return super.dispatchKeyEvent(event)
-        }
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount > 0 &&
+            (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER || event.keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
+        ) return true
+        if (playerCheckOverlay != null || modalOverlay != null) return super.dispatchKeyEvent(event)
         if (stack.lastOrNull()?.dispatchRemoteKey(event) == true) return true
         return super.dispatchKeyEvent(event)
     }
@@ -148,6 +175,7 @@ class MainActivity : Activity(), Navigator {
         val wrap = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Theme.INK_950)
+            setPadding(0, (m.safeV - Theme.dp(this@MainActivity, 11)).coerceAtLeast(0), 0, 0)
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
         val bar = LinearLayout(this).apply {
@@ -189,6 +217,15 @@ class MainActivity : Activity(), Navigator {
                     if (!last) rightMargin = Theme.dp(this@MainActivity, 2)
                 }
                 setOnClickListener { onClick() }
+                setOnKeyListener { _, code, event ->
+                    val screen = stack.lastOrNull()
+                    if (event.action == KeyEvent.ACTION_DOWN && code == KeyEvent.KEYCODE_DPAD_DOWN &&
+                        resumeRootContent && stack.size == 1 && screen?.activeTab == key
+                    ) {
+                        resumeRootContent = false
+                        screen.restoreContentFocus()
+                    } else false
+                }
             }
             navPills[key] = pill
             navDock.addView(pill)
@@ -216,6 +253,8 @@ class MainActivity : Activity(), Navigator {
         }
         bar.addView(searchBtn)
         bar.addView(settingsBtn)
+        launchers["search"] = searchBtn
+        launchers["settings"] = settingsBtn
         wrap.addView(bar)
         return wrap
     }
@@ -224,27 +263,44 @@ class MainActivity : Activity(), Navigator {
         Theme.reveal(v, if (rise) Theme.dp(this, 4) else 0)
     }
 
-    private fun replaceRoot(screen: Screen) {
+    private fun replaceRoot(key: String, create: () -> Screen) {
         cancelPlayerCheck()
         val hadPrior = stack.isNotEmpty()
+        if (stack.size == 1 && stack[0].activeTab == key) return
+        val cached = rootCache.remove(key)
         stack.lastOrNull()?.onHidden()
-        for (s in stack.asReversed()) s.onDestroy()
+        val previousRoot = stack.firstOrNull()
+        for (index in stack.lastIndex downTo 1) stack[index].onDestroy()
         stack.clear()
         contentFrame.removeAllViews()
-        stack.add(screen)
-        contentFrame.addView(screen.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        syncChrome(screen)
-        if (hadPrior) animateScreenIn(screen.view, rise = false)
-        screen.onShown()
-        // Removing a focused More button lets Android choose the first nav tab.
-        // The destination tab owns focus after root navigation, regardless of the entry point.
-        if (hadPrior) navPills[screen.activeTab]?.requestFocus()
+        previousRoot?.activeTab?.let { rootCache[it] = previousRoot }
+        while (rootCache.size > 2) {
+            val entry = rootCache.entries.firstOrNull { it.value is ChannelScreen } ?: rootCache.entries.first()
+            val evicted = entry.value
+            rootCache.remove(entry.key)
+            if (evicted is ChannelScreen) channelPages[evicted.type] = evicted.savePageState()
+            evicted.onDestroy()
+        }
+        val screen = cached ?: create()
+        rememberFocusChanges = false
+        try {
+            stack.add(screen)
+            contentFrame.addView(screen.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            syncChrome(screen)
+            if (hadPrior) animateScreenIn(screen.view, rise = false)
+            screen.onShown()
+            resumeRootContent = cached != null || screen.hasContentFocusMemory()
+            if (hadPrior) navPills[screen.activeTab]?.requestFocus()
+        } finally {
+            rememberFocusChanges = true
+        }
     }
 
     private fun pushScreen(screen: Screen) {
         cancelPlayerCheck()
         stack.lastOrNull()?.let { prev ->
             prev.lastFocused = currentFocus
+            prev.rememberContentFocus(currentFocus)
             prev.onHidden()
         }
         stack.add(screen)
@@ -263,19 +319,15 @@ class MainActivity : Activity(), Navigator {
     }
 
     override fun openHome() {
-        if (stack.size == 1 && stack[0] is HomeScreen) return
-        replaceRoot(HomeScreen(this, this))
+        replaceRoot("home") { HomeScreen(this, this) }
     }
 
     override fun openChannel(type: MediaType) {
-        val top = stack.lastOrNull()
-        if (stack.size == 1 && top is ChannelScreen && top.type == type) return
-        replaceRoot(ChannelScreen(this, this, type))
+        replaceRoot(type.wire) { ChannelScreen(this, this, type, channelPages.remove(type)) }
     }
 
     override fun openMe() {
-        if (stack.size == 1 && stack[0] is MeScreen) return
-        replaceRoot(MeScreen(this, this))
+        replaceRoot("me") { MeScreen(this, this) }
     }
 
     override fun openSearch() {
@@ -302,13 +354,24 @@ class MainActivity : Activity(), Navigator {
         cancelPlayerCheck()
         val generation = playerCheckGeneration
         playerCheckTarget = id to episode
+        val originFocus = currentFocus
+        val cancel = Theme.pillButton(this, Copy.Action.CANCEL).apply {
+            setOnClickListener { cancelPlayerCheck() }
+        }
         val overlay = Theme.loadingBox(this, Copy.Extra.CHECKING_SOURCES).apply {
-            setBackgroundColor(0x550E0D0B)
+            setBackgroundColor(Theme.SCRIM)
             isClickable = true
             isFocusable = false
+            val card = getChildAt(0) as LinearLayout
+            card.addView(cancel, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+                topMargin = Theme.dp(this@MainActivity, 15)
+            })
+            tag = originFocus
         }
         playerCheckOverlay = overlay
+        mainCol.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         rootLayout.addView(overlay, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        cancel.requestFocus()
         playerCheckJob = scope.launch {
             try {
                 val item = withTimeout(22_000L) {
@@ -334,7 +397,14 @@ class MainActivity : Activity(), Navigator {
     }
 
     private fun clearPlayerCheck() {
-        playerCheckOverlay?.let { rootLayout.removeView(it) }
+        playerCheckOverlay?.let {
+            mainCol.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            rootLayout.removeView(it)
+            val origin = it.tag as? View
+            if (origin?.isAttachedToWindow != true || !origin.isShown || !origin.requestFocus()) {
+                if (stack.lastOrNull()?.restoreContentFocus() != true) focusTopBar()
+            }
+        }
         playerCheckOverlay = null
         playerCheckTarget = null
         playerCheckJob = null
@@ -352,21 +422,32 @@ class MainActivity : Activity(), Navigator {
             openHome()
             return
         }
-        val popped = stack.removeAt(stack.lastIndex)
-        popped.onHidden()
-        popped.onDestroy()
-        contentFrame.removeAllViews()
-        val prev = stack.last()
-        prev.view.animate().cancel()
-        prev.view.alpha = 1f
-        prev.view.translationY = 0f
-        contentFrame.addView(prev.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        syncChrome(prev)
-        prev.onShown()
-        prev.view.post {
-            if (prev.lastFocused?.isAttachedToWindow == true) {
-                prev.lastFocused?.requestFocus()
+        rememberFocusChanges = false
+        var focusRestoreQueued = false
+        try {
+            val popped = stack.removeAt(stack.lastIndex)
+            popped.onHidden()
+            popped.onDestroy()
+            contentFrame.removeAllViews()
+            val prev = stack.last()
+            prev.view.animate().cancel()
+            prev.view.alpha = 1f
+            prev.view.translationY = 0f
+            contentFrame.addView(prev.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            syncChrome(prev)
+            prev.onShown()
+            focusRestoreQueued = prev.view.post {
+                try {
+                    if (stack.lastOrNull() !== prev) return@post
+                    val target = prev.lastFocused
+                    if (target != null && (target in launchers.values || target in navPills.values) && target.isShown) target.requestFocus()
+                    else if (!prev.restoreContentFocus() && prev.view.findFocus() == null) focusTopBar()
+                } finally {
+                    rememberFocusChanges = true
+                }
             }
+        } finally {
+            if (!focusRestoreQueued) rememberFocusChanges = true
         }
     }
 
@@ -436,12 +517,13 @@ class MainActivity : Activity(), Navigator {
         card.scaleX = 0.96f
         card.scaleY = 0.96f
         card.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(120L).setInterpolator(Theme.decelerate).start()
-        cancelBtn.post { cancelBtn.requestFocus() }
+        cancelBtn.requestFocus()
     }
 
     override fun focusTopBar() {
-        val active = stack.lastOrNull()?.activeTab
-        (navPills[active] ?: navPills["home"])?.requestFocus()
+        if (!topBarWrap.isShown) return
+        val key = stack.lastOrNull()?.chromeFocusKey
+        (launchers[key] ?: navPills[key] ?: navPills["home"])?.requestFocus()
     }
 
     private fun closeModal() {

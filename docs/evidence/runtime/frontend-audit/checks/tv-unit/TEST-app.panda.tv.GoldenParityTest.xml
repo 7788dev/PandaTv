@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.GoldenParityTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-21T10:08:50.074Z" hostname="DESKTOP-G3A3P0Q" time="0.446">
+  <properties/>
+  <testcase name="taxonomy and hot search match desktop" classname="app.panda.tv.GoldenParityTest" time="0.075"/>
+  <testcase name="download headroom and source preference match desktop" classname="app.panda.tv.GoldenParityTest" time="0.005"/>
+  <testcase name="douban normalization and credits match desktop" classname="app.panda.tv.GoldenParityTest" time="0.02"/>
+  <testcase name="mpeg-ts h264 picture parser and aes decryption match desktop" classname="app.panda.tv.GoldenParityTest" time="0.021"/>
+  <testcase name="playback matching numbering and ranking match desktop" classname="app.panda.tv.GoldenParityTest" time="0.035"/>
+  <testcase name="rules match desktop contract" classname="app.panda.tv.GoldenParityTest" time="0.011"/>
+  <testcase name="playlist ad filter matches desktop rules and captured manifests" classname="app.panda.tv.GoldenParityTest" time="0.269"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      signed-tv:
+        description: Sign the TV APK with the existing release key
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      signed-tv: ${{ github.event_name == 'workflow_dispatch' && inputs.signed-tv }}
+    secrets:
+      TV_KEYSTORE_BASE64: ${{ secrets.TV_KEYSTORE_BASE64 }}
+      TV_STORE_PASSWORD: ${{ secrets.TV_STORE_PASSWORD }}
+      TV_KEY_ALIAS: ${{ secrets.TV_KEY_ALIAS }}
+      TV_KEY_PASSWORD: ${{ secrets.TV_KEY_PASSWORD }}

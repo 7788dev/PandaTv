@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-21T07:55:26.226076+00:00",
+  "apkSha256": "6F9687CD73613EF94E61F941B4B4389644A18BCBEB4C56349DA2C2EB2B426E29",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "library_root_memory",
+      "pass": false,
+      "error": "Root navigation discarded the selected library tab"
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "userStateRestored": true
+}

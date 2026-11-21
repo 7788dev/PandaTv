@@ -1,0 +1,12 @@
+--------- beginning of main
+11-21 18:09:59.041 21219 21219 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:09:59.041 21219 21219 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:09:59.043 21219 21219 W PandaTV : [douban] byIds:db-26647087: CACHED (Showing saved metadata; freshness is not guaranteed)
+11-21 18:09:59.520 21219 21292 I PandaTV : [source] dyttzy (476ms): search: 网络请求失败或超时
+11-21 18:09:59.665 21219 21277 I PandaTV : [source] subo (623ms): search: 网络请求失败或超时
+11-21 18:10:01.529 21219 21264 I PandaTV : [source] subo (407ms): search: 网络请求失败或超时
+11-21 18:10:02.640 21219 21292 I PandaTV : [source] dyttzy (1518ms): search: 网络请求失败或超时
+11-21 18:10:03.639 21219 21278 I PandaTV : [source] lzi (2517ms): search: 网络请求失败或超时
+11-21 18:10:08.070 21219 21262 I PandaTV : [source] lzi (9026ms): search: 网络请求失败或超时
+11-21 18:10:08.207 21219 21291 I PandaTV : [source] bfzy (9164ms): search: 网络请求失败或超时
+11-21 18:10:10.133 21219 21267 I PandaTV : [source] bfzy (9010ms): search: 网络请求失败或超时

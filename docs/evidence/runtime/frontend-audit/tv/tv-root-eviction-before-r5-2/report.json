@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-21T06:35:16.584234+00:00",
+  "apkSha256": "D3C0E935650F1DB6394CB3D9BBAB1773F70B9AEF154F759080FEABAC2B4FEE9B",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": true
+    },
+    {
+      "case": "channel_memory",
+      "pass": true
+    },
+    {
+      "case": "detail_return",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction",
+      "pass": false,
+      "error": "Evicting a root view discarded its selected sort"
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "userStateRestored": true
+}

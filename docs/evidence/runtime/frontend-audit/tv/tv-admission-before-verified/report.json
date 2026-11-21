@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-21T05:40:41.337523+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "admission-cancel",
+      "error": "Timed out after 5s; visible texts=['Panda', '首页', '剧集', '电影', '综艺', '动漫', '纪录片', '我的', '搜索', '设置', '今天是太阳雨', '8.0', '2026 · 剧情 / 爱情', '播放', '详情', '1 / 5', '继续观看', '谷雨街后巷', '第1集 · 剩余25分钟', '正在查找片源']"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

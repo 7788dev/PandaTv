@@ -1,0 +1,371 @@
+{
+  "at": "2026-11-21T02:37:34.641469+00:00",
+  "version": "1.0.12",
+  "apkSha256": "6B827A61FFB24C5480CF0CB586F24545ABA0288C39C0CCDD0E39F492D973A7DD",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [],
+  "failures": [
+    "Home focus escaped before returning to the hero"
+  ],
+  "focusTrace": [
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          462,
+          506,
+          821
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "剩余25分钟"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          518,
+          472,
+          610,
+          522
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          475,
+          615,
+          593
+        ],
+        "labels": [
+          "2",
+          "两京十五日",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          125,
+          723,
+          613,
+          841
+        ],
+        "labels": [
+          "4",
+          "谷雨",
+          "剧情 · 2026",
+          "6.3"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          847,
+          615,
+          965
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          1726,
+          452,
+          1830,
+          508
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          87,
+          493,
+          359,
+          994
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "剧情 / 动画 / 奇幻"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          609,
+          506,
+          968
+        ],
+        "labels": [
+          "生命奇观2",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          88,
+          593,
+          509,
+          952
+        ],
+        "labels": [
+          "8.5",
+          "珠穆朗玛：云中彼岸",
+          "纪录片 / 运动"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          88,
+          593,
+          509,
+          952
+        ],
+        "labels": [
+          "生命奇观",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          88,
+          593,
+          509,
+          952
+        ],
+        "labels": [
+          "8.7",
+          "一切如你所见",
+          "纪录片 / 犯罪"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          89,
+          593,
+          510,
+          952
+        ],
+        "labels": [
+          "9.5",
+          "人生七年10",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          88,
+          593,
+          509,
+          952
+        ],
+        "labels": [
+          "9.1",
+          "脸庞，村庄",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          84,
+          593,
+          505,
+          952
+        ],
+        "labels": [
+          "9.5",
+          "人生七年10",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          84,
+          593,
+          505,
+          952
+        ],
+        "labels": [
+          "8.7",
+          "一切如你所见",
+          "纪录片 / 犯罪"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          83,
+          593,
+          504,
+          952
+        ],
+        "labels": [
+          "生命奇观",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          84,
+          593,
+          505,
+          952
+        ],
+        "labels": [
+          "8.5",
+          "珠穆朗玛：云中彼岸",
+          "纪录片 / 运动"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          84,
+          593,
+          505,
+          952
+        ],
+        "labels": [
+          "生命奇观2",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          85,
+          593,
+          506,
+          952
+        ],
+        "labels": [
+          "生命奇观2",
+          "纪录片"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          85,
+          873,
+          506,
+          1080
+        ],
+        "labels": []
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          87,
+          381,
+          359,
+          882
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "剧情 / 动画 / 奇幻"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          87,
+          387,
+          359,
+          888
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "剧情 / 动画 / 奇幻"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": null
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          513,
+          58,
+          1366,
+          106
+        ],
+        "labels": [
+          "烈焰觉醒",
+          "金牌讲师推荐，订阅赢苹果ipad！"
+        ]
+      }
+    }
+  ]
+}

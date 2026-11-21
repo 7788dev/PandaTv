@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { Dialog } from '@base-ui/react/dialog'
 import { Slider } from '@base-ui/react/slider'
 import Hls from 'hls.js'
 import type { MediaItem, Playback, Quality, Speed } from '../../design/contract/types'
@@ -64,8 +65,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const notifiedSwitchFailure = useRef<number | null>(null)
   const requestedSpeed = useRef<Speed>(sessionPreferences.speed ?? state.settings.speed)
   const activeSpeed = useRef<Speed>(sessionPreferences.activeSpeed ?? requestedSpeed.current)
-  const panel = useRef<HTMLElement>(null)
-  const panelButton = useRef<HTMLButtonElement>(null)
+  const panel = useRef<HTMLDivElement>(null)
+  const panelClose = useRef<HTMLButtonElement>(null)
   const hls = useRef<Hls | null>(null)
   const initialHistory = useRef(state.history.find(entry => entry.id === item.id))
   const retryPosition = useRef<number | null>(null)
@@ -274,6 +275,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
 
   useEffect(() => {
     mounted.current = true
+    const playerRoot = root.current
     const removeFlush = window.panda.app.onBeforeClose(async () => { await controls.current.save(); await controls.current.saveVolume() })
     const removeWindow = window.panda.window.subscribe(value => setFullscreen(value.fullscreen))
     void window.panda.window.getState().then(value => setFullscreen(value.fullscreen))
@@ -283,7 +285,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       if (xy !== lastXY) { lastXY = xy; controls.current.wake() }
     }
     const keyboard = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || document.querySelector('.menu')) return
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.altKey || latest.current.panelOpen || document.querySelector('.menu[data-open]')) return
       const target = event.target as HTMLElement
       const onSlider = Boolean(target.closest('.slider'))
       if (!onSlider && target.matches('input,textarea,[contenteditable=true]')) return
@@ -301,20 +303,18 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       else if (key === 'm') actions.mute()
       else if (key === 'f') actions.toggleFullscreen()
       else if (key === 'n') actions.next()
-      else if (key === 'Escape') {
-        if (latest.current.panelOpen) { setPanelOpen(false); panelButton.current?.focus() }
-        else void window.panda.window.getState().then(value => value.fullscreen ? window.panda.window.fullscreen(false) : actions.leave())
-      } else return
+      else if (key === 'Escape') void window.panda.window.getState().then(value => value.fullscreen ? window.panda.window.fullscreen(false) : actions.leave())
+      else return
       event.preventDefault()
     }
     document.addEventListener('keydown', keyboard)
-    root.current?.addEventListener('pointermove', move)
+    playerRoot?.addEventListener('pointermove', move)
     controls.current.wake()
     return () => {
       mounted.current = false
       removeFlush(); removeWindow()
       document.removeEventListener('keydown', keyboard)
-      root.current?.removeEventListener('pointermove', move)
+      playerRoot?.removeEventListener('pointermove', move)
       clearTimeout(idleTimer.current); clearTimeout(osdTimer.current); clearTimeout(volumeTimer.current)
       void controls.current.saveVolume()
       if (!location.hash.startsWith('#/play/')) void window.panda.window.fullscreen(false)
@@ -322,7 +322,6 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   }, [])
 
   useEffect(() => {
-    if (panelOpen) { panel.current?.querySelector<HTMLElement>('[data-current]')?.scrollIntoView({ block: 'center' }); panel.current?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true }) }
     wake()
   }, [panelOpen])
 
@@ -528,8 +527,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const bounds = event.currentTarget.getBoundingClientRect()
     return bounds.width ? clamp((event.clientX - bounds.left) / bounds.width) : 0
   }
-  return <div className="player" ref={root} data-paused={dataAttr(paused)} data-waiting={dataAttr(busy && !error)} data-error={dataAttr(error)} data-idle={dataAttr(idle && !error && !busy)} onPointerDown={wake}>
-    <video className="player__video" ref={video} playsInline preload="auto" crossOrigin="anonymous" poster={item.backdrop ?? undefined} onClick={() => panelOpen ? setPanelOpen(false) : play()} onDoubleClick={toggleFullscreen} />
+  return <Dialog.Root open={panelOpen} onOpenChange={setPanelOpen}><div className="player" ref={root} data-paused={dataAttr(paused)} data-waiting={dataAttr(busy && !error)} data-error={dataAttr(error)} data-idle={dataAttr(idle && !error && !busy)} onPointerDown={wake} onFocus={wake}>
+    <video className="player__video" ref={video} playsInline preload="auto" crossOrigin="anonymous" poster={item.backdrop ?? undefined} onClick={play} onDoubleClick={toggleFullscreen} />
     <img className="player__handoff" ref={handoff} alt="" aria-hidden="true" />
     <div className="player__shade" />
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title">{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
@@ -562,7 +561,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
           </Slider.Root>
         </div><div className="player__time"><time>{clock(position)}</time><span>{time.duration > 0 ? ' / ' + clock(time.duration) : ''}</span></div>
       </div><div className="player__group">
-        {item.episodes && <button ref={panelButton} className="btn btn--ghost" aria-expanded={panelOpen} data-popup-open={dataAttr(panelOpen)} onClick={() => setPanelOpen(value => !value)}>{t.player.episodes}</button>}
+        {item.episodes && <Dialog.Trigger className="btn btn--ghost">{t.player.episodes}</Dialog.Trigger>}
         <SelectMenu className="btn btn--ghost" label={t.player.speed} side="top" value={speed} items={SPEEDS.map(value => ({ value, label: speedLabel(value) }))} onChange={changeSpeed}>{speedButtonLabel(speed)}</SelectMenu>
         {choices.length > 1 && <SelectMenu className="btn btn--ghost" label={t.player.quality} side="top" value={actualQuality ?? playback.data?.quality ?? quality} items={choices.map(value => ({ value, label: value }))} onChange={changeQuality}>{actualQuality ?? playback.data?.quality ?? t.player.quality}</SelectMenu>}
         {lines && lines.list.length > 1 && <SelectMenu className="btn btn--ghost" label={extra.line} side="top" value={lines.current ?? ''} items={lines.list.map(entry => ({ value: entry.key, label: entry.name }))} onChange={changeLine}>{extra.line}</SelectMenu>}
@@ -570,9 +569,16 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         <IconButton name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} label={fullscreen ? t.player.exitFullscreen : t.player.fullscreen} shortcut="F" onClick={toggleFullscreen} side="top" />
       </div></div>
     </div>
-    {item.episodes && <aside className="player__panel" ref={panel} data-open={dataAttr(panelOpen)} aria-hidden={!panelOpen} inert={!panelOpen}>
-      <div className="player__panel-head"><h2 className="player__panel-title">{t.player.episodes}</h2><button className="icon-btn" aria-label={t.action.close} onClick={() => { setPanelOpen(false); panelButton.current?.focus() }}><Icon name="close" /></button></div>
-      <div className="player__panel-body"><div className={item.episodeTitles?.length ? 'eplist' : 'eps'}><EpisodeCells item={item} current={episode} replace /></div></div>
-    </aside>}
-  </div>
+    {item.episodes && <Dialog.Portal container={root}>
+      <Dialog.Backdrop className="player__panel-scrim" />
+      <Dialog.Popup className="player__panel player__panel--dialog" ref={panel} initialFocus={() => {
+        const current = panel.current?.querySelector<HTMLElement>('[data-current]')
+        current?.scrollIntoView({ block: 'center' })
+        return current ?? panelClose.current ?? true
+      }}>
+        <div className="player__panel-head"><Dialog.Title className="player__panel-title">{t.player.episodes}</Dialog.Title><Dialog.Close ref={panelClose} className="icon-btn" aria-label={t.action.close}><Icon name="close" /></Dialog.Close></div>
+        <div className="player__panel-body"><div className={item.episodeTitles?.length ? 'eplist' : 'eps'}><EpisodeCells item={item} current={episode} replace /></div></div>
+      </Dialog.Popup>
+    </Dialog.Portal>}
+  </div></Dialog.Root>
 }

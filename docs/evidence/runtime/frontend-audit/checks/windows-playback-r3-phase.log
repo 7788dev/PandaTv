@@ -1,0 +1,39 @@
+
+> panda-desktop@1.1.2 test:e2e
+> playwright test --project=desktop-live e2e/live.spec.ts --output .tmp/frontend-audit/windows-playback-r3-phase/results
+
+
+Running 3 tests using 1 worker
+
+(node:8952) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 1 [desktop-live] › e2e\live.spec.ts:4:1 › real movie decodes, seeks, changes speed, enters fullscreen and persists history (25.8s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 2 [desktop-live] › e2e\live.spec.ts:103:1 › real serial exposes playable episodes and decodes after switching to the next episode (41.7s)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  x  3 [desktop-live] › e2e\live.spec.ts:133:1 › real animation resolves by Douban identity and decodes its actual stream (1.1m)
+
+
+  1) [desktop-live] › e2e\live.spec.ts:133:1 › real animation resolves by Douban identity and decodes its actual stream 
+
+    TimeoutError: page.waitForFunction: Timeout 65000ms exceeded.
+
+       at desktop.ts:70
+
+      68 | }
+      69 | export async function playing(page: Page) {
+    > 70 |   await page.waitForFunction(() => {
+         |              ^
+      71 |     const video = document.querySelector('video')
+      72 |     return Boolean(video && video.currentTime > 1 && video.videoWidth > 0 && video.readyState >= 3 && !video.paused)
+      73 |   }, undefined, { timeout: 65000 })
+        at playing (E:\dev\项目\panda\e2e\desktop.ts:70:14)
+        at E:\dev\项目\panda\e2e\live.spec.ts:141:11
+
+    Error Context: .tmp\frontend-audit\windows-playback-r3-phase\results\live-real-animation-resolv-3cd24-d-decodes-its-actual-stream-desktop-live\error-context.md
+
+  1 failed
+    [desktop-live] › e2e\live.spec.ts:133:1 › real animation resolves by Douban identity and decodes its actual stream 
+  2 passed (2.3m)

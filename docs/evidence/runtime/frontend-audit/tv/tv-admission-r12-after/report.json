@@ -1,0 +1,123 @@
+{
+  "at": "2026-11-21T10:15:22.000786+00:00",
+  "cases": [
+    {
+      "name": "admission-wait-1",
+      "passed": true,
+      "errorObservedMs": 25741,
+      "before": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          162,
+          555,
+          347,
+          633
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "after": {
+        "texts": [
+          "Panda",
+          "首页",
+          "剧集",
+          "电影",
+          "综艺",
+          "动漫",
+          "纪录片",
+          "我的",
+          "搜索",
+          "设置",
+          "戴帽子的猫",
+          "7.2",
+          "2026 · 喜剧 / 动画",
+          "播放",
+          "详情",
+          "4 / 5",
+          "继续观看",
+          "谷雨街后巷",
+          "连接超时，请重试"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            162,
+            555,
+            347,
+            633
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "loadingRegionMaxRgb": 19
+      }
+    },
+    {
+      "name": "admission-wait-2",
+      "passed": true,
+      "errorObservedMs": 25760,
+      "before": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          162,
+          555,
+          347,
+          633
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "after": {
+        "texts": [
+          "Panda",
+          "首页",
+          "剧集",
+          "电影",
+          "综艺",
+          "动漫",
+          "纪录片",
+          "我的",
+          "搜索",
+          "设置",
+          "戴帽子的猫",
+          "7.2",
+          "2026 · 喜剧 / 动画",
+          "播放",
+          "详情",
+          "4 / 5",
+          "继续观看",
+          "谷雨街后巷",
+          "连接超时，请重试"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            162,
+            555,
+            347,
+            633
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "loadingRegionMaxRgb": 19
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

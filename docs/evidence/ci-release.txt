@@ -1,0 +1,79 @@
+Panda GitHub hosted CI / release setup
+Date: 2026-11-21, Asia/Shanghai (UTC+08:00)
+Local verification window: 08:32-08:39
+Source baseline: 527221feeff7f318d946d1b4489dbf06a3890316 (master)
+Desktop: 1.1.2; TV: 1.0.12, versionCode 13, minSdk 22
+
+BEFORE (GitHub API, 2026-11-21)
+- Repository Actions: enabled, allowed_actions=all.
+- Remote workflows: 0.
+- Releases: 0.
+- Repository Actions secrets: 0.
+- Existing tags: v1.1.0 and v1.1.2; neither contains these new workflows.
+
+IMPLEMENTED IN WORKING TREE
+- .github/workflows/ci.yml: push master / PR checks; manual signed-TV build.
+- .github/workflows/build.yml: Windows NSIS and Android TV hosted builds.
+- .github/workflows/release.yml: version-tag build, signature checks,
+  complete artifact gate, SHA256SUMS, draft upload then publication.
+- scripts/ci-release.mjs: source metadata, runner-only registry preparation,
+  safe signing file creation/cleanup, artifact collection and checksums.
+- package.json: test:release (Node built-in runner, no added dependency).
+- Release guide and project decision note added; delivery-report/index linked.
+
+EXECUTED CHECKS (final code, 2026-11-21)
+PASS actionlint 1.7.12: all 3 workflows, including reusable input/secret checks.
+     Tool archive checksum verified against its upstream release checksums.
+PASS npm run typecheck.
+PASS npm test: 19 files, 282 tests.
+PASS npm run test:release: 6 tests. Covers mismatched tags, missing signing
+     secrets, malformed Base64, Java property escaping, preservation of local
+     signing files, rejection of unsigned/missing/empty release packages and
+     exact-byte SHA256 calculation.
+PASS npm run verify:design: 206 original design files unchanged.
+PASS node design/tools/test-contract.mjs: 405 checks.
+PASS npm run dist -- --publish never --config.directories.output=.tmp/ci-package.
+     Existing release/ installers were not overwritten.
+     Temporary installer: .tmp/ci-package/Panda-1.1.2-Setup.exe
+     SHA256: ca7fde3bb23a8d1836757b6ef50b2e342fff55a16daaf3b6f70f666c8144acb3
+PASS scripts/asar-check.cjs on temporary win-unpacked/resources/app.asar:
+     271 entries, no node_modules/mock/art/preview/fixtures/tests/e2e/scripts/
+     source maps/.tmp; title search resources valid.
+PASS Playwright fixture.spec.ts + layout.spec.ts: 19/19, 2.5 minutes.
+     Test evidence isolated under .tmp, existing captured evidence preserved.
+PASS tv/gradlew.bat -p tv --no-daemon testDebugUnitTest lintRelease assembleRelease:
+     BUILD SUCCESSFUL, 69 actionable tasks (1 executed, 68 up-to-date).
+     Existing JUnit results read back: 42 tests, 0 failures/errors.
+PASS export-tv-vectors and git diff --exit-code on TV vectors and synced assets.
+PASS apksigner verify: existing TV release APK has v1 and v2 signatures and
+     certificate SHA256 d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd.
+PASS isolated runner preparation in a temporary directory: rewrote 459 npm
+     registry URLs only; dependency versions/integrity and local source files
+     unchanged; official Maven repositories retained.
+PASS clean npm ci --ignore-scripts from upstream registry in that sandbox:
+     389 packages installed in 17 seconds.
+PASS sdkmanager --list: required platform package is platforms;android-37.0
+     (not platforms;android-37); build-tools;37.0.0 is available.
+PASS git diff --check; no production source, original design, shared resources,
+     lockfile, SDK settings or local signing configuration changes.
+
+REMOTE CONFIGURATION COMPLETED (2026-11-21 08:33, UTC+08:00)
+- Verified the local keystore's private key, passwords and existing certificate.
+- Configured 4 repository Actions secrets via gh stdin: TV_KEYSTORE_BASE64,
+  TV_STORE_PASSWORD, TV_KEY_ALIAS and TV_KEY_PASSWORD.
+- Read back secret names/count only (4); no secret values printed or committed.
+- Default token permission remains read; only release publish job requests write.
+
+PRE-ACTIVATION SNAPSHOT (2026-11-21 08:39, UTC+08:00)
+- Remote workflow count still 0; no commit or push performed.
+- No hosted run or GitHub Release is claimed successful in this record.
+- Historical version tags were not moved; no new version/release was created.
+
+LIMITS
+- These checks validate workflow syntax, helpers and the existing local build
+  commands. Only a real hosted run can confirm the full GitHub runner environment.
+- No new live third-party playback, domestic network, installed-app E2E,
+  install/uninstall or TV device replay was performed for this infrastructure change.
+- Windows code signing and the in-app update service remain outside this change.
+- Full command logs and isolated helper scripts are ignored scratch under
+  .tmp/ci-validation/; unrelated user evidence files were left untouched.

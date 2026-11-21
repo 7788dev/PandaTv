@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-21T05:56:33.668008+00:00",
+  "apkSha256": "65D502D330E7F0CAB61A9EB2E7742596DA69FB0821CACD44A6AE1BA0A3FED72A",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": false,
+      "error": "['设置']: (1668, 62, 1828, 130) crosses 5% inset (1px rounding tolerance) on 1920x1080"
+    },
+    {
+      "case": "channel_memory",
+      "pass": true
+    },
+    {
+      "case": "detail_return",
+      "pass": false,
+      "error": "channel focus: (87, 281, 359, 782) crosses 5% inset (1px rounding tolerance) on 1920x1080"
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "userStateRestored": true
+}

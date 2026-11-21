@@ -6,7 +6,6 @@ traffic while switching episodes, then restores firewall rules and user state.
 
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -15,6 +14,7 @@ import time
 import subprocess
 
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = "app.panda.tv"
@@ -24,21 +24,20 @@ RULES = "/data/user/0/app.panda.tv/files/play-sources.json"
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--serial", default="127.0.0.1:16416")
+    parser.add_argument("--serial", required=True)
     parser.add_argument("--label", default="playback-transitions")
-    parser.add_argument("--case", choices=["focus", "seek", "speed", "switch", "next", "missing", "all"], default="all")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--case", choices=["focus", "panel", "media", "lifecycle", "seek", "speed", "switch", "next", "admission", "admission-wait", "detail-return", "error", "missing", "all"], default="all")
     parser.add_argument("--switch-repeats", type=int, default=2)
+    parser.add_argument("--error-repeats", type=int, default=2)
     parser.add_argument("--line-title", default="三体", help="Real title to use when replaying source-line switching")
     parser.add_argument("--require-missing", action="store_true", help="Require a confirmed empty catalogue verdict, instead of a retryable network error")
     parser.add_argument("--enabled-sources", nargs="+", help="Temporarily enable only these real built-in catalogues; restore the original configuration after replay")
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location("tv_helpers", ROOT / "scripts/verify-tv-mumu.py")
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     d = u2.connect(args.serial)
-    out = ROOT / "docs/evidence/runtime/tv-playback" / args.label
+    out = args.output or ROOT / ".tmp/e2e-evidence/tv-playback" / args.label
     out.mkdir(parents=True, exist_ok=True)
     scratch = ROOT / ".tmp/tv-playback"
     scratch.mkdir(parents=True, exist_ok=True)
@@ -48,13 +47,16 @@ def main():
     original = None
     original_rules = None
     rules_changed = False
+    firewall_before = {command: h.run_adb("shell", command, "-S", "OUTPUT") for command in ("iptables", "ip6tables")}
     blocked = []
+    stage = {"name": "not-started"}
+    clock_pattern = r"(?:\d+:)?\d{2}:\d{2} / (?:\d+:)?\d{2}:\d{2}"
 
     def snapshot(name, capture=True):
         xml = d.dump_hierarchy(compressed=False)
         ns = h.parse_nodes(xml)
         labels = h.texts(ns)
-        clock = next((t for t in labels if re.fullmatch(r"[\d:]+ / [\d:]+", t)), None)
+        clock = next((text for text in labels if re.fullmatch(clock_pattern, text)), None)
         state = {"texts": labels, "clock": clock, "player": clock is not None,
                  "spinner": any(n["class"] == "android.widget.ProgressBar" for n in ns)}
         focused = h.find_focused(ns)
@@ -79,7 +81,7 @@ def main():
 
     def block_network():
         uid = re.search(r"(?:userId|appId)=(\d+)", h.run_adb("shell", "dumpsys", "package", PACKAGE))[1]
-        for binary in ["iptables", "ip6tables"]:
+        for binary in firewall_before:
             h.run_adb("shell", binary, "-I", "OUTPUT", "1", "-m", "owner", "--uid-owner", uid, "-j", "DROP")
             blocked.append((binary, uid))
 
@@ -91,19 +93,27 @@ def main():
     def wait_playing(heading=None, timeout=80):
         until = time.monotonic() + timeout
         last = []
+        previous_sec = None
         while time.monotonic() < until:
             last = h.dump_nodes(d)
+            labels = h.texts(last)
+            clock = next((label for label in labels if re.fullmatch(clock_pattern, label)), None)
+            if clock is None and "重试" in labels and "返回" in labels and any(
+                "暂时无法连接" in label or "播放失败" in label or "超时" in label for label in labels
+            ):
+                raise TimeoutError(f"Player reached the retry screen before the timeline advanced: {labels}")
             # Use ordinary D-pad navigation when an idle overlay disappears.
             # Repeated MEDIA_PLAY events also reach Android's media-key service
             # on key-up, so they are not a faithful remote-navigation replay.
-            if not any(" / " in t for t in h.texts(last)):
+            if clock is None:
                 h.key("dpad_down", wait=.05)
-            if (heading is None or heading in h.texts(last)) and "暂停" in h.texts(last) and not any(
+            if clock and (heading is None or heading in labels) and "暂停" in labels and not any(
                 n["class"] == "android.widget.ProgressBar" for n in last
-            ) and any(
-                " / " in n["text"] and (h.parse_clock(n["text"].split(" / ")[0]) or 0) >= 2 for n in last
             ):
-                return
+                current_sec = h.parse_clock(clock.split(" / ")[0])
+                if current_sec is not None and current_sec >= 2 and previous_sec is not None and current_sec > previous_sec:
+                    return
+                previous_sec = current_sec
             time.sleep(.25)
         raise TimeoutError(f"Playback did not advance; visible texts={h.texts(last)}")
 
@@ -159,6 +169,8 @@ def main():
         ), f"The replay did not focus the real play/resume control: {ready}"
 
     def record(name, callback):
+        stage.clear()
+        stage["name"] = name + ":entry"
         try:
             result = callback()
             if result and result.get("status") == "unavailable":
@@ -170,15 +182,111 @@ def main():
         except Exception as exc:
             state = snapshot(name + "-failure")
             message = str(exc)
-            if isinstance(exc, TimeoutError) and any("暂时无法连接" in text or "超时" in text for text in state["texts"]):
-                report["unavailable"].append({"name": name, "reason": message, "state": state,
+            observation = {"name": name, "stage": stage["name"], "error": message, "state": state}
+            if "observation" in stage:
+                observation["observedPhases"] = stage["observation"]
+            try:
+                process = h.run_adb("shell", "pidof", PACKAGE).strip()
+                if re.fullmatch(r"\d+", process):
+                    logs = h.run_adb("logcat", "-d", "-t", "300", "--pid", process, "-s", "PandaTV", "AndroidRuntime")
+                    (out / f"{name}-failure-logcat.txt").write_text(re.sub(r"https?://\S+", "<redacted-url>", logs), encoding="utf-8")
+                    observation["pid"] = process
+            except Exception as error:
+                observation["logUnavailable"] = str(error)
+            is_deadline_case = name.startswith(("admission-wait", "playback-error-recovery"))
+            if not is_deadline_case and isinstance(exc, TimeoutError) and any(
+                "暂时无法连接" in text or "超时" in text for text in state["texts"]
+            ):
+                report["unavailable"].append({**observation, "reason": message,
                                                "detail": "Catalogues returned retryable network errors before this real playback sample could run."})
                 print(f"UNAVAILABLE {name}: {message}", flush=True)
             else:
-                report["failures"].append({"name": name, "error": message})
+                report["failures"].append(observation)
                 print(f"FAIL {name}: {exc}", flush=True)
 
+    def panel_focus():
+        restart()
+        open_subject("三体", "8.8")
+        h.key("dpad_center", wait=.1)
+        wait_playing()
+        h.key(127, wait=.1)
+        h.move_focus_to_text(d, "选集", direction="dpad_right", max_steps=12)
+        h.key("dpad_center", wait=.3)
+        before = snapshot("panel-open")
+        width, height = d.window_size()
+        focus = before["focus"]
+        assert focus and "第1集" in focus["labels"], f"Episode panel did not focus the current episode: {before}"
+        failures = []
+        left, top, right, bottom = focus["bounds"]
+        if left < width * .05 - 1 or right > width * .95 + 1 or top < height * .05 - 1 or bottom > height * .95 + 1:
+            failures.append(f"Episode focus crosses 5% safe inset: {focus['bounds']} on {width}x{height}")
+        for direction in ("up", "up", "down", "right", "down", "up"):
+            h.key(f"dpad_{direction}", wait=.05)
+            current = snapshot(f"panel-{direction}", capture=False)
+            if not current["focus"] or not any(re.fullmatch(r"第\d+集(?: · .+)?", text) for text in current["focus"]["labels"]):
+                failures.append(f"Panel leaked focus after {direction}: {current['focus']}")
+        h.key("back", wait=.2)
+        after = snapshot("panel-closed")
+        if not after["focus"] or after["focus"]["labels"] != ["选集"]:
+            failures.append(f"Back did not restore the episode trigger: {after['focus']}")
+        assert not failures, "; ".join(failures)
+        return {"before": before, "after": after, "viewport": [width, height]}
+
+    def source_admission_cancel():
+        restart()
+        h.focus_top_bar(d)
+        h.move_focus_to_text(d, "首页", max_steps=12)
+        h.key("dpad_down")
+        h.move_focus_to_text(d, "播放", max_steps=8)
+        origin = snapshot("admission-origin")["focus"]
+        assert origin and (origin["labels"] == ["播放"] or any(text.startswith("继续播放") for text in origin["labels"])), f"Hero Play was not focused: {origin}"
+        block_network()
+        try:
+            h.key("enter", wait=.05)
+            h.wait_for(d, lambda ns: "取消" in h.texts(ns), timeout=5, interval=.08)
+            active = snapshot("admission-checking")
+            assert active["focus"] and active["focus"]["labels"] == ["取消"], f"Admission did not own focus: {active}"
+            for direction in ("left", "right", "up", "down"):
+                h.key(f"dpad_{direction}", wait=.03)
+            assert snapshot("admission-trap", capture=False)["focus"] == active["focus"], "Focus escaped the admission dialog"
+            h.key("back", wait=.2)
+            returned = snapshot("admission-returned")
+            assert returned["focus"] == origin and "取消" not in returned["texts"], f"Back did not return to the play trigger: {returned}"
+            time.sleep(.4)
+            h.wait_for(d, lambda tree: "首页" in h.texts(tree) and "正在查找片源" not in h.texts(tree), timeout=3, interval=.15)
+        finally:
+            restore_network()
+        return {"before": active, "after": returned}
+
+    def source_admission_wait():
+        stage["name"] = "admission-wait:before-activation"
+        restart()
+        h.focus_top_bar(d)
+        h.move_focus_to_text(d, "首页", max_steps=12)
+        h.key("dpad_down")
+        h.move_focus_to_text(d, "播放", max_steps=8)
+        origin = snapshot("admission-wait-origin")["focus"]
+        assert origin and any(label == "播放" or label.startswith("继续播放") for label in origin["labels"])
+        block_network()
+        try:
+            stage["name"] = "admission-wait:blocked-home-play"
+            started = time.monotonic()
+            h.key("dpad_center", wait=.05)
+            h.wait_for(d, lambda nodes: "取消" in h.texts(nodes), timeout=5, interval=.1)
+            _, tree = h.wait_for(d, lambda nodes: "取消" not in h.texts(nodes) and any(
+                "暂时无法连接" in text or "超时" in text or "网络连接" in text for text in h.texts(nodes)
+            ), timeout=max(1, 27 - (time.monotonic() - started)), interval=.12)
+            elapsed = round((time.monotonic() - started) * 1000)
+            focused = h.find_focused(tree)
+            assert focused and focused["childTexts"] == origin["labels"], f"Admission error lost the Play trigger: {focused}"
+            assert "首页" in h.texts(tree) and not any(re.fullmatch(clock_pattern, text) for text in h.texts(tree)), "Failed admission left Home"
+            failure = snapshot("admission-wait-returned")
+        finally:
+            restore_network()
+        return {"errorObservedMs": elapsed, "before": origin, "after": failure}
+
     def next_episode():
+        stage["name"] = "episode-switch:initial-playback"
         restart()
         open_subject("三体", "8.8")
         h.key("enter", wait=.4)
@@ -204,6 +312,7 @@ def main():
         seek_clock = next(n["text"] for n in seek_nodes if " / " in n["text"])
         seek_position = h.parse_clock(seek_clock.split(" / ")[0]) or 0
         seek_started = time.monotonic()
+        stage["name"] = "episode-switch:precondition-seek-refill"
         h.wait_for(d, lambda ns: not any(n["class"] == "android.widget.ProgressBar" for n in ns) and any(
             " / " in n["text"] and (h.parse_clock(n["text"].split(" / ")[0]) or 0) >= seek_position + 2 for n in ns
         ), timeout=70)
@@ -214,6 +323,7 @@ def main():
         assert before["loadingRegionMaxRgb"] > 3, f"The first episode did not show a distinguishable video frame: {before}"
         block_network()
         try:
+            stage["name"] = "episode-switch:episode-2-loading"
             # Screenshot collection can hide an idle overlay. Reveal it again,
             # verify the actual D-pad focus, and activate the observed control.
             h.key("dpad_down", wait=.05)
@@ -233,10 +343,12 @@ def main():
             h.move_focus_to_text(d, "下一集", max_steps=12)
             h.key("dpad_center", wait=.05)
             time.sleep(.5)
+            stage["name"] = "episode-switch:episode-3-loading"
             third = snapshot("episode-3-loading")
             assert "第3集" in third["texts"] and third["clock"] == "00:00 / 00:00", f"Latest episode choice was lost: {third}"
         finally:
             restore_network()
+        stage["name"] = "episode-switch:episode-3-playback"
         wait_playing("第3集")
         after = snapshot("episode-3-playing")
         # A rendered frame and a nonzero clock can remain visible during a
@@ -268,7 +380,7 @@ def main():
         h.key("menu", wait=.1)
         h.key("dpad_down", wait=.1)
         restored = snapshot("player-restored-focus")
-        assert restored["focus"] and any(t in ["播放", "暂停"] for t in restored["focus"]["labels"]), f"Hidden controls lost their remote focus: {restored}"
+        assert restored["focus"] and "下一集" in restored["focus"]["labels"], f"Hidden controls lost the last active button: {restored}"
         return {"initial": initial, "next": selected, "restored": restored}
 
     def seek_control():
@@ -329,21 +441,90 @@ def main():
                 "recoveredClock": recovered_clock, "requestFeedbackMs": request_feedback_ms,
                 "seekRecoveryMs": round((time.monotonic() - started) * 1000), "steps": 6}
 
+    def media_controls():
+        restart()
+        open_subject("三体", "8.8")
+        h.key("dpad_center", wait=.3)
+        wait_playing()
+        h.key(127, wait=.2)
+        h.wait_for(d, lambda nodes: "播放" in h.texts(nodes) and "暂停" not in h.texts(nodes), timeout=5)
+        paused = snapshot("media-pause")
+        time.sleep(1.2)
+        still = snapshot("media-pause-stable", capture=False)
+        assert paused["clock"] == still["clock"], f"MEDIA_PAUSE did not hold the timeline: {paused} -> {still}"
+        h.key(126, wait=.2)
+        wait_playing()
+        resumed = snapshot("media-play")
+        helper_idle_started = time.monotonic()
+        h.wait_for(d, lambda nodes: not any(re.fullmatch(r"(?:\d+:)?\d{2}:\d{2} / (?:\d+:)?\d{2}:\d{2}", text)
+                                          for text in h.texts(nodes)), timeout=8, interval=.2)
+        auto_hide_ms = round((time.monotonic() - helper_idle_started) * 1000)
+        h.key("dpad_down", wait=.15)
+        revealed = snapshot("media-revealed")
+        assert revealed["clock"] and revealed["focus"], f"D-pad did not reveal focused controls: {revealed}"
+        h.key(85, wait=.2)
+        h.wait_for(d, lambda nodes: "播放" in h.texts(nodes) and "暂停" not in h.texts(nodes), timeout=5)
+        toggled = snapshot("media-toggle-pause")
+        h.key(85, wait=.2)
+        wait_playing()
+        h.key("menu", wait=.15)
+        hidden = snapshot("media-hidden", capture=False)
+        assert hidden["clock"] is None, f"Menu did not hide the overlay: {hidden}"
+        h.run_adb("shell", "input", "keyevent", "--duration", "1250", "23")
+        h.wait_for(d, lambda nodes: "播放" in h.texts(nodes) and "暂停" not in h.texts(nodes), timeout=5)
+        confirmed = snapshot("media-held-confirm")
+        time.sleep(.5)
+        stable = snapshot("media-held-confirm-stable", capture=False)
+        assert stable["clock"] == confirmed["clock"] and "暂停" not in stable["texts"], "Held Confirm activated playback more than once"
+        return {"pause": paused, "play": resumed, "togglePause": toggled, "hiddenConfirm": confirmed,
+                "heldConfirmMs": 1250, "pauseStableMs": 1200, "autoHideObservedMs": auto_hide_ms, "revealed": revealed}
+
+    def lifecycle_replay():
+        restart()
+        open_subject("三体", "8.8")
+        process = h.run_adb("shell", "pidof", PACKAGE).strip()
+        samples = []
+        for number in range(1, 7):
+            h.move_focus_to_text(d, "播放", max_steps=15)
+            h.key("dpad_center", wait=.2)
+            wait_playing()
+            for _ in range(3):
+                current = snapshot(f"lifecycle-{number}-back", capture=False)
+                if "演职员" in current["texts"]:
+                    break
+                h.key("back", wait=.15)
+            h.wait_for(d, lambda nodes: "演职员" in h.texts(nodes), timeout=10)
+            returned = snapshot(f"lifecycle-{number}-detail", capture=number in (1, 6))
+            assert returned["focus"] and any(label == "播放" or label.startswith("继续播放") for label in returned["focus"]["labels"]), \
+                f"Player Back did not restore the detail trigger: {returned}"
+            memory = h.run_adb("shell", "dumpsys", "meminfo", PACKAGE)
+            (out / f"lifecycle-{number}-memory.txt").write_text(memory, encoding="utf-8")
+            objects = re.search(r"Views:\s+(\d+)\s+ViewRootImpl:\s+(\d+)", memory)
+            activities = re.search(r"AppContexts:\s+(\d+)\s+Activities:\s+(\d+)", memory)
+            assert objects and activities, "Native view and activity counters were unavailable"
+            assert int(objects[2]) == 1 and int(activities[2]) == 1, f"Repeated playback retained extra windows or activities: {memory}"
+            assert h.run_adb("shell", "pidof", PACKAGE).strip() == process, "Lifecycle replay restarted the app instead of releasing the player"
+            samples.append({"cycle": number, "views": int(objects[1]), "viewRoots": int(objects[2]),
+                            "activities": int(activities[2]), "javaHeapPssKb": int(re.search(r"Java Heap:\s+(\d+)", memory)[1]),
+                            "nativeHeapPssKb": int(re.search(r"Native Heap:\s+(\d+)", memory)[1]), "focus": returned["focus"]})
+        return {"pid": process, "cycles": 6, "samples": samples,
+                "scope": "Finite same-process playback/Back replay and native object counters. The release APK is not debuggable; these counters do not prove long-duration or coroutine-queue leak freedom."}
+
     def speed_control():
         restart()
         open_subject("三体", "8.8")
         h.key("dpad_center", wait=.4)
         h.wait_for(d, lambda ns: "倍速" in h.texts(ns), timeout=35)
-        h.move_focus_to_text(d, "倍速", max_steps=12)
-        h.run_adb("logcat", "-c")
+        h.move_focus_to_text(d, "倍速", direction="dpad_right", max_steps=12)
+        measurement_pid = h.run_adb("shell", "pidof", PACKAGE).strip()
+        assert re.fullmatch(r"\d+", measurement_pid), "Playback process was not identified"
         states = [snapshot("speed-initial", capture=True)]
-        for _ in range(5):
-            if any("2.0×" in text or "2×" in text for text in h.texts(h.dump_nodes(d))):
-                break
-            h.key("dpad_center", wait=.15)
-            states.append(snapshot("speed-step-" + str(len(states) + 1), capture=True))
+        h.key("dpad_center", wait=.15)
+        h.move_focus_to_text(d, "2.0×", direction="dpad_down", max_steps=8)
+        states.append(snapshot("speed-option-2x", capture=True))
+        h.key("dpad_center", wait=.15)
         final = snapshot("speed-2x-selected", capture=True)
-        assert any("2.0×" in text or "2×" in text for text in final["texts"]), f"Remote speed cycle did not reach 2.0x: {final}"
+        assert final["focus"] and "2.0×" in final["focus"]["labels"], f"Speed selection did not return to the speed control: {final}"
         try:
             retries = wait_playing_with_retries(timeout=150)
         except TimeoutError as error:
@@ -401,7 +582,7 @@ def main():
                                             "samples": rate_samples, "renderedFrames": None, "droppedFrames": None}}
 
         log = subprocess.run(
-            [h.ADB, "-s", args.serial, "logcat", "-d", "-s", "PandaTV:I"],
+            [h.ADB, "-s", args.serial, "logcat", "-d", "--pid", measurement_pid, "-s", "PandaTV:I"],
             capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=20,
         ).stdout
         measurements = re.findall(r"\[speed\] (?:requested=\S+\s+)?rate=2\.0x elapsedMs=(\d+) (?:processed|rendered)Frames=(\d+) droppedFrames=(\d+)(?: offsetSamples=(\d+))?", log)
@@ -425,29 +606,39 @@ def main():
                 "rendererSample": renderer_sample}
 
     def line_switch():
+        stage["name"] = "line-switch:initial-playback"
         restart()
         open_subject(args.line_title)
         h.key("dpad_center", wait=.2)
         wait_playing()
-        h.key("dpad_down", wait=.1)
-        ns = h.dump_nodes(d)
-        if not any(t.startswith("线路:") for t in h.texts(ns)):
-            return {"status": "unavailable", "reason": "The real catalogue pool returned only one line; no alternate line can be selected."}
+        try:
+            h.wait_for(d, lambda tree: any(text.startswith("线路:") for text in h.texts(tree)), timeout=5, interval=.15)
+        except TimeoutError:
+            state = snapshot("line-control-unavailable")
+            assert state["clock"], f"Playback controls disappeared while waiting for the line trigger: {state}"
+            return {"status": "unavailable", "reason": "No alternate line became selectable in this playback sample.", "state": state}
         h.move_focus_to_text(d, "线路", max_steps=15)
+        stage["name"] = "line-switch:panel-focus"
+        controls = snapshot("line-switch-controls")
+        assert controls["focus"] and any(text.startswith("线路:") for text in controls["focus"]["labels"]), f"The line trigger was not focused: {controls}"
+        current_line = next(text.removeprefix("线路:").strip() for text in controls["texts"] if text.startswith("线路:"))
+        assert current_line, f"The active line name was unavailable: {controls}"
+        position = h.parse_clock((controls["clock"] or "").partition(" / ")[0])
+        assert position is not None and position >= 2, f"Missing playback clock before opening the line panel: {controls}"
         h.key("enter", wait=.2)
         ns = h.dump_nodes(d)
-        names = {row["name"] for row in json.loads((ROOT / "resources/play-sources.json").read_text(encoding="utf-8-sig"))["sources"]}
-        choices = [n["text"] for n in ns if n["text"] in names and not n["text"].endswith("✓")]
+        names = [row["name"] for row in json.loads((ROOT / "resources/play-sources.json").read_text(encoding="utf-8-sig"))["sources"]]
+        choices = [name for name in ("360资源", "金鹰资源", *names) if name != current_line and name in h.texts(ns)]
         if not choices:
             return {"status": "unavailable", "reason": "No second real source is present in the line panel."}
         selected = choices[0]
         h.move_focus_to_text(d, selected, max_steps=18)
         before = snapshot("line-switch-before")
-        assert before["focus"] and selected in before["focus"]["labels"], f"Alternate line was not focused: {before}"
-        position = h.parse_clock(before["clock"].split(" / ")[0])
+        assert selected != current_line and before["focus"] and selected in before["focus"]["labels"], f"A different real line was not focused: {before}"
         block_network()
         checks = []
         try:
+            stage["name"] = "line-switch:activation"
             h.key("dpad_center", wait=.1)
             for number in range(3):
                 time.sleep(.35)
@@ -457,10 +648,104 @@ def main():
             assert all(s["loadingRegionMaxRgb"] > 3 for s in checks), f"Switching a line blacked out the existing picture: {checks}"
         finally:
             restore_network()
-        wait_playing()
+        stage["name"] = "line-switch:recovery"
+        expected = f"线路: {selected}"
+        switched = None
+        until = time.monotonic() + 40
+        while time.monotonic() < until:
+            state = snapshot("line-switch-recovery", capture=False)
+            if "切换未成功，保留当前线路" in state["texts"]:
+                return {"status": "unavailable", "reason": f"{selected} could not replace the active line; the old picture and timeline stayed visible during the attempt.",
+                        "controls": controls, "panel": before, "pending": checks, "after": snapshot("line-switch-preserved")}
+            if expected in state["texts"] and not state["spinner"] and "暂停" in state["texts"]:
+                switched = h.parse_clock((state["clock"] or "").partition(" / ")[0])
+                if switched is not None and switched >= position:
+                    break
+            if not state["clock"]:
+                h.key("dpad_down", wait=.1)
+            time.sleep(.18)
+        else:
+            raise AssertionError(f"The active line did not switch to {selected} with a retained clock: {snapshot('line-switch-stalled')}")
+        h.wait_for(d, lambda tree: expected in h.texts(tree) and "暂停" in h.texts(tree) and not any(
+            node["class"] == "android.widget.ProgressBar" for node in tree
+        ) and any(
+            re.fullmatch(r"[\d:]+ / [\d:]+", text) and (h.parse_clock(text.partition(" / ")[0]) or 0) > switched
+            for text in h.texts(tree)), timeout=8, interval=.2)
         after = snapshot("line-switch-recovered")
-        assert (h.parse_clock(after["clock"].split(" / ")[0]) or 0) >= position, "Line recovery lost the viewing position"
-        return {"selectedLine": selected, "before": before, "pending": checks, "after": after}
+        return {"selectedLine": selected, "controls": controls, "before": before, "pending": checks, "after": after}
+
+    def loaded_detail_return():
+        stage["name"] = "loaded-detail-return:await-episodes"
+        restart()
+        open_subject("三体", "8.8")
+        h.wait_for(d, lambda tree: "选集" in h.texts(tree) and sum(
+            node["clickable"] and node["focusable"] and bool(re.fullmatch(r"\d+", node["text"])) for node in tree
+        ) >= 2, timeout=60)
+        h.move_focus_to_text(d, "播放", max_steps=10)
+        before = snapshot("loaded-detail-departure")
+        assert before["focus"] and any(text == "播放" or text.startswith("继续播放") for text in before["focus"]["labels"]), f"The actual departure trigger was not focused: {before}"
+        stage["name"] = "loaded-detail-return:playback"
+        h.key("dpad_center", wait=.1)
+        wait_playing()
+        stage["name"] = "loaded-detail-return:back"
+        h.key("back", wait=.1)
+        if "演职员" not in h.texts(h.dump_nodes(d)):
+            h.key("back", wait=.2)
+        h.wait_for(d, lambda tree: "演职员" in h.texts(tree), timeout=8)
+        returned = snapshot("loaded-detail-return")
+        assert returned["focus"] and any(text.startswith("继续播放") or text == "播放" for text in returned["focus"]["labels"]), f"Loaded episode grid replaced the departure focus on Back: before={before['focus']}, after={returned['focus']}"
+        return {"before": before, "returned": returned}
+
+    def playback_error_recovery():
+        stage["name"] = "playback-error:initial-playback"
+        restart()
+        open_subject("三体", "8.8")
+        detail = snapshot("error-detail")
+        assert detail["focus"] and any(text == "播放" or text.startswith("继续播放") for text in detail["focus"]["labels"]), f"The playback trigger was not focused: {detail}"
+        h.key("dpad_center", wait=.1)
+        wait_playing()
+        stage["name"] = "playback-error:focus-next"
+        h.move_focus_to_text(d, "下一集", max_steps=12)
+        trigger = snapshot("error-episode-trigger")
+        assert trigger["focus"] and "下一集" in trigger["focus"]["labels"], f"The episode transition trigger was not focused: {trigger}"
+        observation = {"detail": detail, "trigger": trigger}
+        stage["observation"] = observation
+        block_network()
+        try:
+            stage["name"] = "playback-error:blocked-next-episode"
+            started = time.monotonic()
+            h.key("dpad_center", wait=.1)
+            h.wait_for(d, lambda tree: "重试" in h.texts(tree) and any(
+                "暂时无法连接" in text or "超时" in text or "播放失败" in text for text in h.texts(tree)
+            ), timeout=45, interval=.2)
+            error_ms = round((time.monotonic() - started) * 1000)
+            error = snapshot("playback-error")
+            assert error["focus"], f"The error state had no focused control: {error}"
+            h.move_focus_to_text(d, "重试", max_steps=6)
+            ready = snapshot("playback-error-retry-focused")
+            assert ready["focus"] and "重试" in ready["focus"]["labels"], f"Retry was not D-pad reachable: {ready}"
+            observation.update(errorObservedMs=error_ms, error=error, retryFocus=ready)
+        finally:
+            restore_network()
+        stage["name"] = "playback-error:retry"
+        started = time.monotonic()
+        h.key("dpad_center", wait=.1)
+        episode_heading = next(text for text in trigger["texts"] if re.fullmatch(r"第\d+集", text))
+        target = f"第{int(episode_heading[1:-1]) + 1}集"
+        observation["retryTarget"] = target
+        wait_playing(heading=target, timeout=90)
+        recovered_ms = round((time.monotonic() - started) * 1000)
+        recovered = snapshot("playback-error-recovered")
+        observation.update(retryRecoveryMs=recovered_ms, recovered=recovered)
+        h.key("back", wait=.1)
+        if "演职员" not in h.texts(h.dump_nodes(d)):
+            h.key("back", wait=.2)
+        h.wait_for(d, lambda tree: "演职员" in h.texts(tree), timeout=8)
+        returned = snapshot("playback-error-return")
+        observation["returned"] = returned
+        assert returned["focus"] and any(text.startswith("继续播放") or text == "播放" for text in returned["focus"]["labels"]), f"Playback recovery lost the detail trigger on Back: {returned}"
+        return {"errorObservedMs": error_ms, "retryRecoveryMs": recovered_ms, "error": error,
+                "retryFocus": ready, "recovered": recovered, "returned": returned}
 
     def missing_source():
         restart()
@@ -527,6 +812,12 @@ def main():
         restart()
         if args.case in ["focus", "all"]:
             record("player-focus", player_focus)
+        if args.case in ["panel", "all"]:
+            record("episode-panel-focus", panel_focus)
+        if args.case in ["media", "all"]:
+            record("media-controls", media_controls)
+        if args.case in ["lifecycle", "all"]:
+            record("player-lifecycle", lifecycle_replay)
         if args.case in ["seek", "all"]:
             record("seek-control", seek_control)
         if args.case in ["speed", "all"]:
@@ -536,6 +827,17 @@ def main():
                 record(f"line-switch-{number + 1}", line_switch)
         if args.case in ["next", "all"]:
             record("episode-switch", next_episode)
+        if args.case in ["admission", "all"]:
+            record("admission-cancel", source_admission_cancel)
+        if args.case == "admission-wait":
+            for number in range(args.error_repeats):
+                record(f"admission-wait-{number + 1}", source_admission_wait)
+        if args.case in ["detail-return", "all"]:
+            for number in range(2):
+                record(f"loaded-detail-return-{number + 1}", loaded_detail_return)
+        if args.case in ["error", "all"]:
+            for number in range(args.error_repeats):
+                record(f"playback-error-recovery-{number + 1}", playback_error_recovery)
         if args.case in ["missing", "all"]:
             record("missing-source", missing_source)
     finally:
@@ -556,9 +858,12 @@ def main():
             h.run_adb("shell", "cp", "/data/local/tmp/panda-tv-playback-state.json", STATE)
             h.run_adb("shell", "rm", "/data/local/tmp/panda-tv-playback-state.json")
             report["userStateRestored"] = h.run_adb("shell", "cat", STATE) == original
-        report["firewallRulesRestored"] = not blocked
+        report["firewallRulesRestored"] = all(h.run_adb("shell", command, "-S", "OUTPUT") == original
+                                              for command, original in firewall_before.items())
         (out / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    assert report.get("userStateRestored") and report["firewallRulesRestored"] and report.get("sourceRulesRestored", True), "Replay did not restore device state"
     assert not report["failures"], f"{len(report['failures'])} TV playback transition regressions"
+    assert report["cases"], "No playback case actually ran to completion; check the unavailable section"
 
 
 if __name__ == "__main__":

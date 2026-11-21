@@ -23,9 +23,13 @@ Use Context7 to resolve and query current library documentation before relying o
 
 ## Verification
 
-`npm run typecheck`, `npm test` (offline), `npm run build`, then `npm run test:e2e` (needs the network; real Douban, real playback, prototype overlay). `npm run verify:design` checks the design baseline; `node design/tools/test-contract.mjs` checks the original contract (405 assertions). For the installer: `npm run dist`, `scripts/install-check.ps1`, the installed-app E2E with `PANDA_E2E_EXECUTABLE` pointing at the installed `Panda.exe`, `node scripts/asar-check.cjs <app.asar>`, `scripts/uninstall-check.ps1`; results go to `docs/evidence/install.txt`. The last full run is recorded in [final-verification.txt](docs/evidence/final-verification.txt).
+`npm run typecheck`, `npm test` (offline), `npm run build`, `npm run test:e2e:fixture` (hidden renderer with test data), and `npm run test:e2e` (production bridge and real network). Run live Electron tests serially. Never launch `design/preview` in app tests or use its screenshots as current UI evidence. For packaged/installed acceptance set `PANDA_E2E_EXECUTABLE` to that exact `Panda.exe` and record `app.asar` identity. Keep fixture, build-live and packaged/live evidence separate in `.tmp/` unless promoting reviewed evidence ([why](.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md)).
+
+`npm run verify:design` checks the design baseline; `node design/tools/test-contract.mjs` checks the original contract (405 assertions). For the installer: `npm run dist`, `node scripts/asar-check.cjs <app.asar>`, then live E2E on the chosen executable. `scripts/install-check.ps1` upgrades any existing install in place; do not run it over a user's installation just for UI validation. Use `scripts/uninstall-check.ps1` only for an install created by the test script.
 
 Keep tests and captured fixtures outside the shipped application. Reproduce fixes before and after, run the offline suite, and independently recheck audit findings before finalizing conclusions. Never report build-only success as playback or installation success. Numbers in documents come from a run on the final code, with the time of the run.
+
+Capture return-focus and scroll baselines at the actual departure point, after navigation helpers have moved there. Label auxiliary taps separately from D-pad reachability evidence; a helper's own scrolling is not an application return failure ([why](.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md)).
 
 ## Contributions and Memory
 

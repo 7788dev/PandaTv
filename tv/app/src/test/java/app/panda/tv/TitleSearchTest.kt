@@ -1,6 +1,8 @@
 package app.panda.tv
 
 import app.panda.tv.data.DoubanDataSource
+import app.panda.tv.data.DataError
+import app.panda.tv.data.DataErrorCode
 import app.panda.tv.data.HttpReply
 import app.panda.tv.data.MetadataFetcher
 import app.panda.tv.data.TitleSearchIndex
@@ -111,5 +113,68 @@ class TitleSearchTest {
         assertEquals("anime", found.first().type.wire)
         assertEquals(null, found.first().episodes)
         assertFalse(requested.contains("/rexxar/api/v2/movie/100"))
+    }
+
+    @Test
+    fun `an empty raw initials response cannot hide a failed Chinese query`() = runBlocking {
+        val fetcher = MetadataFetcher { url, _ ->
+            val uri = URI(url)
+            val query = uri.rawQuery?.split('&')?.associate {
+                val pair = it.split('=', limit = 2)
+                pair[0] to URLDecoder.decode(pair[1], "UTF-8")
+            }?.get("q")
+            when {
+                uri.path.endsWith("/search/movie") -> if (query == "LBXX")
+                    HttpReply(200, Json.stringify(mapOf("total" to 0, "items" to emptyList<Any>()))) else HttpReply(403, "{}")
+                uri.path == "/j/subject_suggest" -> HttpReply(200, Json.stringify(listOf(
+                    mapOf("id" to "1431683", "type" to "movie", "url" to "https://movie.douban.com/subject/1431683/"),
+                )))
+                uri.path.endsWith("/movie/1431683") -> HttpReply(400, "{}")
+                else -> error("Unexpected request ${uri.path}")
+            }
+        }
+        val data = DoubanDataSource(fetcher = fetcher, titleIndex = { index })
+        val failure = runCatching { data.search("LBXX") }.exceptionOrNull()
+        assertTrue("A failed Chinese query must remain an error", failure is DataError)
+        assertEquals(DataErrorCode.UPSTREAM, (failure as DataError).code)
+    }
+
+    @Test
+    fun `empty suggestion fallbacks do not turn blocked searches into empty results`() = runBlocking {
+        val fetcher = MetadataFetcher { url, _ ->
+            val uri = URI(url)
+            when {
+                uri.path.endsWith("/search/movie") -> HttpReply(403, "{}")
+                uri.path == "/j/subject_suggest" -> HttpReply(200, "[]")
+                uri.path == "/j/search_suggest" -> HttpReply(200, "{\"cards\":[]}")
+                else -> error("Unexpected request ${uri.path}")
+            }
+        }
+        val data = DoubanDataSource(fetcher = fetcher, titleIndex = { index })
+        for (query in listOf("未命中的查询", "另一个查询")) {
+            val failure = runCatching { data.search(query) }.exceptionOrNull()
+            assertTrue("A blocked request must retain its retry action", failure is DataError)
+            assertEquals(DataErrorCode.UPSTREAM, (failure as DataError).code)
+        }
+    }
+
+    @Test
+    fun `a search with no verified fallback retries the primary query immediately`() = runBlocking {
+        var blocked = true
+        val fetcher = MetadataFetcher { url, _ ->
+            val uri = URI(url)
+            when {
+                uri.path.endsWith("/search/movie") -> if (blocked) HttpReply(403, "{}") else HttpReply(200, Json.stringify(mapOf(
+                    "total" to 1, "items" to listOf(mapOf("id" to "26647087", "title" to "三体", "type" to "tv")),
+                )))
+                uri.path == "/j/subject_suggest" -> HttpReply(200, "[]")
+                uri.path == "/j/search_suggest" -> HttpReply(200, "{\"cards\":[]}")
+                else -> error("Unexpected request ${uri.path}")
+            }
+        }
+        val data = DoubanDataSource(fetcher = fetcher, titleIndex = { index })
+        assertTrue(runCatching { data.search("三体") }.exceptionOrNull() is DataError)
+        blocked = false
+        assertEquals(listOf("db-26647087"), data.search("三体").map { it.id })
     }
 }

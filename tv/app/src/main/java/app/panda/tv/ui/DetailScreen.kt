@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.panda.tv.model.Availability
@@ -121,19 +120,9 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         }
     }
 
-    private fun bindScrollTopOnHeroFocus(scroll: ScrollView, view: View) {
-        val existing = view.onFocusChangeListener
-        view.setOnFocusChangeListener { v, hasFocus ->
-            existing?.onFocusChange(v, hasFocus)
-            if (hasFocus && scroll.scrollY > 0) {
-                scroll.smoothScrollTo(0, 0)
-            }
-        }
-    }
-
     private fun render(item: MediaItem) {
         container.removeAllViews()
-        val scroll = ScrollView(ctx).apply {
+        val scroll = Theme.focusScrollView(ctx).apply {
             isFocusable = false
             isVerticalScrollBarEnabled = false
             clipChildren = true
@@ -174,7 +163,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(m.pageH, Theme.dp(ctx, 22), m.pageH, Theme.dp(ctx, 14))
+            setPadding(m.pageH, m.safeV + Theme.dp(ctx, 3), m.pageH, Theme.dp(ctx, 14))
         }
         val backRow = LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -186,7 +175,6 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         val backBtn = Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK, padH = 15, padV = 7, sp = 13.5f).apply {
             setOnClickListener { nav.back() }
         }
-        bindScrollTopOnHeroFocus(scroll, backBtn)
         backRow.addView(backBtn)
         heroContent.addView(backRow)
 
@@ -276,7 +264,6 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                         ((v as LinearLayout).getChildAt(0) as? TextView)?.text = if (expanded) Copy.Action.COLLAPSE else Copy.Action.EXPAND
                     }
                 }
-                bindScrollTopOnHeroFocus(scroll, toggle)
                 infoCol.addView(toggle)
             }
         }
@@ -299,7 +286,6 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 nav.openPlayer(cur.id, h?.episode ?: 1)
             }
         }
-        bindScrollTopOnHeroFocus(scroll, pBtn)
         playBtn = pBtn
         val fBtn = Theme.pillButton(ctx, Copy.Action.FAVORITE, icon = TvIcon.HEART, padH = 18, padV = 10, sp = 14.5f).apply {
             setOnClickListener {
@@ -309,7 +295,6 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 refreshStateViews(detailItem ?: item)
             }
         }
-        bindScrollTopOnHeroFocus(scroll, fBtn)
         favBtn = fBtn
         btnRow.addView(pBtn)
         btnRow.addView(fBtn)

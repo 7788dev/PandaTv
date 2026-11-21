@@ -1,0 +1,38 @@
+
+> panda-desktop@1.1.2 test
+> vitest run tests/search-recovery.test.ts
+
+
+ RUN  v5.1.0 E:/dev/项目/panda
+
+stderr | tests/search-recovery.test.ts > search endpoint recovery > retries the primary query immediately after fallback could not verify a match
+[douban] search:primary: UPSTREAM (Metadata HTTP 403)
+
+ ❯ tests/search-recovery.test.ts (7 tests | 1 failed) 12113ms
+   ❯ search endpoint recovery (7)
+     × retries the primary query immediately after fallback could not verify a match 3002ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/search-recovery.test.ts > search endpoint recovery > retries the primary query immediately after fallback could not verify a match
+DataError: Metadata HTTP 403
+ ❯ DoubanHttp.request src/main/data/http.ts:151:17
+    149|           if (Number.isFinite(after) && after > 0) retryDelay = Math.m…
+    150|           await response.body?.cancel();
+    151|           throw new DataError(status === 429 ? 'RATE_LIMITED' : status…
+       |                 ^
+    152|         }
+    153|         const declared = Number(response.headers.get('content-length')…
+ ❯ DoubanHttp.json src/main/data/http.ts:89:37
+ ❯ DoubanDataSource.searchRows src/main/data/douban.ts:496:19
+ ❯ DoubanDataSource.search src/main/data/douban.ts:554:27
+ ❯ tests/search-recovery.test.ts:96:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  11:42:56
+   Duration  12.32s (tests 99%)
+

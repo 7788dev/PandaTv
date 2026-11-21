@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.SearchRequestTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-21T10:08:51.911Z" hostname="DESKTOP-G3A3P0Q" time="0.047">
+  <properties/>
+  <testcase name="a completed search can still return a verified empty result" classname="app.panda.tv.SearchRequestTest" time="0.003"/>
+  <testcase name="cancelling an old search does not wait for its blocking metadata work" classname="app.panda.tv.SearchRequestTest" time="0.007"/>
+  <testcase name="a stalled metadata cleanup cannot prevent the search timeout from returning" classname="app.panda.tv.SearchRequestTest" time="0.035"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

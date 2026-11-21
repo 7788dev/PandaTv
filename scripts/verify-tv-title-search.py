@@ -5,7 +5,6 @@ Uses the real metadata service and D-pad keys. Complete user state is restored.
 
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -13,6 +12,7 @@ import re
 import time
 
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = "app.panda.tv"
@@ -22,18 +22,16 @@ KEYS = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") | {"␣", "⌫"}
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--serial", default="127.0.0.1:16416")
+    parser.add_argument("--serial", required=True)
     parser.add_argument("--label", required=True)
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--case", choices=["initials", "edit", "all"], default="all")
     parser.add_argument("--repeat", type=int, default=2)
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location("tv_helpers", ROOT / "scripts/verify-tv-mumu.py")
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     d = u2.connect(args.serial)
-    out = ROOT / "docs/evidence/runtime/tv-search" / args.label
+    out = args.output or ROOT / ".tmp/e2e-evidence/tv-title-search" / args.label
     out.mkdir(parents=True, exist_ok=True)
     scratch = ROOT / ".tmp/tv-search"
     scratch.mkdir(parents=True, exist_ok=True)

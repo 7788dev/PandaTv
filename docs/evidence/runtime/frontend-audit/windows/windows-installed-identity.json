@@ -1,0 +1,20 @@
+[
+  {
+    "path": "D:\\Programs\\Panda\\resources\\app.asar",
+    "bytes": 13785502,
+    "sha256": "823108D66FCFD4C8E690BB24977401576A992CE91E3794433081B819DFE31302",
+    "lastWrite": "2026-11-20T21:44:52.0000000+08:00"
+  },
+  {
+    "path": "E:\\dev\\项目\\panda\\release\\win-unpacked\\resources\\app.asar",
+    "bytes": 13785502,
+    "sha256": "823108D66FCFD4C8E690BB24977401576A992CE91E3794433081B819DFE31302",
+    "lastWrite": "2026-11-20T21:44:27.6716498+08:00"
+  },
+  {
+    "path": "E:\\dev\\项目\\panda\\.tmp\\frontend-audit\\windows-r3\\win-unpacked\\resources\\app.asar",
+    "bytes": 13787605,
+    "sha256": "27C4028F5C6B577C224F2B1DD5B0AAD3252CC98C7EBF0CAEB3772E2795A28CE4",
+    "lastWrite": "2026-11-21T11:47:46.2961414+08:00"
+  }
+]

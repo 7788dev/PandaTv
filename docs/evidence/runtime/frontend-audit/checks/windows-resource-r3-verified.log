@@ -1,0 +1,13 @@
+
+> panda-desktop@1.1.2 test:e2e
+> playwright test --project=desktop-live e2e/runtime-ui.spec.ts --output=.tmp/frontend-audit/windows-resource-r3-verified/results
+
+
+Running 1 test using 1 worker
+
+(node:48024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+desktop-packaged-live: file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html
+  ok 1 [desktop-live] › e2e\runtime-ui.spec.ts:34:1 › packaged live: UI frame samples and player resource release after repeated navigation (33.0s)
+
+  1 passed (33.6s)

@@ -1,0 +1,73 @@
+{
+  "at": "2026-11-21T07:31:36.448Z",
+  "start": {
+    "position": 1.005339,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 25,
+    "droppedFrames": 0
+  },
+  "pause": {
+    "position": 1.030478,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": true,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 25,
+    "droppedFrames": 0
+  },
+  "seekRecoveryMs": 1891,
+  "seek": {
+    "position": 501.636031,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 1,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 89,
+    "droppedFrames": 0
+  },
+  "speedPlayback": {
+    "requestedRate": 2,
+    "appliedRate": 2,
+    "observedRate": 1.989375135315179,
+    "wallSeconds": 12.009,
+    "mediaSeconds": 23.890405999999984,
+    "decodedFrames": 573,
+    "droppedFrames": 2,
+    "droppedFrameRatio": 0.0034904013961605585
+  },
+  "fullscreen": {
+    "maximized": false,
+    "fullscreen": true
+  },
+  "pictureInPicture": true,
+  "status": {
+    "position": 527.799664,
+    "duration": 10390.645999999999,
+    "width": 1280,
+    "height": 538,
+    "readyState": 4,
+    "paused": false,
+    "rate": 2,
+    "volume": 0.8,
+    "muted": true,
+    "decodedFrames": 717,
+    "droppedFrames": 2
+  },
+  "runtime": "desktop-packaged-live",
+  "renderer": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/frontend-audit/windows-r3/win-unpacked/resources/app.asar/out/renderer/index.html#/play/db-35267208"
+}

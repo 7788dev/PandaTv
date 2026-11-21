@@ -1,0 +1,110 @@
+{
+  "at": "2026-11-21T10:14:20.227356+00:00",
+  "apkSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "cases": [
+    {
+      "name": "loading",
+      "posterSampleRgb": [
+        [
+          29,
+          28,
+          24
+        ],
+        [
+          29,
+          28,
+          24
+        ],
+        [
+          29,
+          28,
+          24
+        ],
+        [
+          29,
+          28,
+          24
+        ],
+        [
+          29,
+          28,
+          24
+        ],
+        [
+          29,
+          28,
+          24
+        ]
+      ],
+      "gutterSampleRgb": [
+        14,
+        13,
+        11
+      ],
+      "sampleY": 367
+    },
+    {
+      "name": "channel",
+      "beforeItemNames": [
+        "8.4",
+        "8.9",
+        "9.1",
+        "9.4",
+        "9.6"
+      ],
+      "retryBounds": [
+        1008,
+        947,
+        1122,
+        1013
+      ],
+      "focusInNextPage": [
+        "哪吒之魔童闹海",
+        "8.4",
+        "哪吒之魔童闹海",
+        "剧情 / 喜剧 / 动画 / 奇幻"
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "name": "person",
+      "error": "Retry did not expose a new page: {'text': '', 'class': 'android.widget.LinearLayout', 'focused': True, 'focusable': True, 'selected': False, 'clickable': True, 'bounds': (97, 246, 366, 742), 'cx': 231, 'cy': 494, 'childTexts': ['7.6', '与狼共舞', '剧情']}",
+      "texts": [
+        "返回",
+        "全部作品",
+        "于和伟",
+        "7.6",
+        "与狼共舞",
+        "剧情",
+        "7.6",
+        "省委书记",
+        "剧情 / 犯罪",
+        "7.6",
+        "摇啊摇，摇到外婆桥",
+        "剧情 / 犯罪",
+        "7.6",
+        "楚汉传奇",
+        "历史 / 古装",
+        "7.5",
+        "理想之城",
+        "剧情",
+        "7.5",
+        "老马家的幸福往事",
+        "剧情 / 家庭",
+        "7.5",
+        "7.5",
+        "7.5",
+        "7.5",
+        "7.5",
+        "7.5"
+      ]
+    }
+  ],
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

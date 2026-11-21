@@ -79,6 +79,8 @@ object Copy {
         const val SORT_SCORE = "高分"
         const val EMPTY = "暂无内容"
         const val END = "没有更多了"
+        const val LOADING_MORE = "正在加载更多"
+        const val LOAD_MORE_FAILED = "下一页加载失败"
     }
 
     object Detail {
@@ -135,6 +137,9 @@ object Copy {
         const val UP_NEXT = "{n}秒后播放"
         const val PLAY_NOW = "立即播放"
         const val ERROR = "播放失败"
+        const val BUFFERING = "正在缓冲"
+        const val PREPARING = "正在准备播放"
+        const val SEEK_TO = "跳至 {time}"
         const val SECONDS = "{n}秒"
         const val TIMES = "{n}×"
     }

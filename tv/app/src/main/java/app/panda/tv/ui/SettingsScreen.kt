@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import app.panda.tv.model.Constants
 import app.panda.tv.model.Copy
@@ -15,10 +14,11 @@ import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
 
 class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
+    override val chromeFocusKey = "settings"
     override val activeTab: String? = null
 
     private val m = Theme.metrics(ctx)
-    private val scroll = ScrollView(ctx).apply {
+    private val scroll = Theme.focusScrollView(ctx).apply {
         isFocusable = false
         isVerticalScrollBarEnabled = false
         clipChildren = true
@@ -57,16 +57,6 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         syncValues()
     }
 
-    private fun bindScrollTop(v: View) {
-        val prev = v.onFocusChangeListener
-        v.setOnFocusChangeListener { target, hasFocus ->
-            prev?.onFocusChange(target, hasFocus)
-            if (hasFocus && scroll.scrollY > 0) {
-                scroll.smoothScrollTo(0, 0)
-            }
-        }
-    }
-
     private fun buildContent() {
         val s = nav.app.userStore.get().settings
 
@@ -88,7 +78,6 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
             setOnClickListener { nav.back() }
         }
-        bindScrollTop(backBtn)
         head.addView(backBtn)
         col.addView(head)
 
@@ -100,7 +89,6 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             nav.app.userStore.dispatch(StateAction.UpdateSettings(autoNext = !cur.autoNext))
             syncValues()
         }
-        bindScrollTop(firstRow)
         col.addView(firstRow)
 
         skipIntroSwitch = SwitchView(ctx, s.skipIntro)

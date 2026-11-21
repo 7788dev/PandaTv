@@ -1,0 +1,19 @@
+--------- beginning of main
+11-21 18:40:32.807  4396  4422 I PandaTV : [source] lzi (537ms): search: 网络请求失败或超时
+11-21 18:40:33.348  4396  4423 I PandaTV : [source] bfzy (1079ms): search: 网络请求失败或超时
+11-21 18:40:34.922  4396  4434 I PandaTV : [source] lzi (606ms): search: 网络请求失败或超时
+11-21 18:40:35.223  4396  4422 I PandaTV : [source] bfzy (907ms): search: 网络请求失败或超时
+11-21 18:40:38.612  4396  4557 I PandaTV : [source] lzi (467ms): search: 网络请求失败或超时
+11-21 18:40:38.934  4396  4545 I PandaTV : [source] bfzy (790ms): search: 网络请求失败或超时
+11-21 18:40:40.854  4396  4433 I PandaTV : [source] huya (761ms): probe: 网络请求失败或超时
+11-21 18:40:41.293  4396  4426 I PandaTV : [source] ffzy (9023ms): search: 网络请求失败或超时
+11-21 18:40:41.293  4396  4425 I PandaTV : [source] dyttzy (9024ms): search: 网络请求失败或超时
+11-21 18:40:41.457  4396  4420 I PandaTV : [source] subo (9188ms): search: 网络请求失败或超时
+11-21 18:40:43.322  4396  4435 I PandaTV : [source] subo (9006ms): search: 网络请求失败或超时
+11-21 18:40:43.322  4396  4436 I PandaTV : [source] dyttzy (9006ms): search: 网络请求失败或超时
+11-21 18:40:43.330  4396  4432 I PandaTV : [source] ffzy (9013ms): search: 网络请求失败或超时
+11-21 18:40:47.151  4396  4419 I PandaTV : [source] dyttzy (9006ms): search: 网络请求失败或超时
+11-21 18:40:47.151  4396  4423 I PandaTV : [source] subo (9007ms): search: 网络请求失败或超时
+11-21 18:40:47.624  4396  4557 I PandaTV : [source] ffzy (9012ms): search: 网络请求失败或超时
+11-21 18:41:04.176  4396  4426 I PandaTV : [source] huya (1073ms): probe: 网络请求失败或超时
+11-21 18:41:30.081  4396  4698 I PandaTV : [source] huya (967ms): probe: 网络请求失败或超时

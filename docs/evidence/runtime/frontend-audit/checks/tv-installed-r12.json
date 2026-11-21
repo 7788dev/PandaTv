@@ -1,0 +1,9 @@
+{
+  "at": "2026-11-21T18:14:18.4262234+08:00",
+  "serial": "127.0.0.1:16416",
+  "apkSha256": "7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed",
+  "candidateSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "userStateBefore": "a615482849cc550e38810680ef3e41f83f2409897cb709eaf1896492aa752d67  /data/user/0/app.panda.tv/files/user-state.json",
+  "userStateAfter": "a615482849cc550e38810680ef3e41f83f2409897cb709eaf1896492aa752d67  /data/user/0/app.panda.tv/files/user-state.json",
+  "userStateUnchanged": true
+}

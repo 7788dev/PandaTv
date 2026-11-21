@@ -1,0 +1,358 @@
+{
+  "at": "2026-11-21T08:37:00.766891+00:00",
+  "cases": [
+    {
+      "name": "line-switch-2",
+      "passed": true,
+      "selectedLine": "360资源",
+      "controls": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "0.0",
+          "暂停",
+          "00:04 / 2:53:11",
+          "线路: 红牛资源",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:04 / 2:53:11",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1199,
+            945,
+            1496,
+            1017
+          ],
+          "labels": [
+            "线路: 红牛资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 255
+      },
+      "before": {
+        "texts": [
+          "线路",
+          "虎牙资源",
+          "红牛资源 ✓",
+          "金鹰资源",
+          "360资源"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.TextView",
+          "bounds": [
+            1262,
+            480,
+            1810,
+            566
+          ],
+          "labels": [
+            "360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 117
+      },
+      "pending": [
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "正在切换线路",
+            "0.0",
+            "暂停",
+            "00:06 / 2:53:11",
+            "线路: 红牛资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:06 / 2:53:11",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 红牛资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 221
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:07 / 2:53:11",
+            "线路: 红牛资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:07 / 2:53:11",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 红牛资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 239
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:07 / 2:53:11",
+            "线路: 红牛资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:07 / 2:53:11",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 红牛资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 222
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "1.0",
+          "暂停",
+          "00:14 / 2:53:10",
+          "线路: 360资源",
+          "720P",
+          "倍速"
+        ],
+        "clock": "00:14 / 2:53:10",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1222,
+            945,
+            1510,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 237
+      }
+    }
+  ],
+  "unavailable": [
+    {
+      "name": "line-switch-1",
+      "status": "unavailable",
+      "reason": "虎牙资源 could not replace the active line; the old picture and timeline stayed visible during the attempt.",
+      "controls": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "0.0",
+          "暂停",
+          "00:02 / 2:53:10",
+          "线路: 360资源",
+          "720P",
+          "倍速"
+        ],
+        "clock": "00:02 / 2:53:10",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1222,
+            945,
+            1510,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 255
+      },
+      "panel": {
+        "texts": [
+          "线路",
+          "虎牙资源",
+          "红牛资源",
+          "360资源 ✓"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.TextView",
+          "bounds": [
+            1262,
+            162,
+            1810,
+            248
+          ],
+          "labels": [
+            "虎牙资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 108
+      },
+      "pending": [
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "正在切换线路",
+            "0.0",
+            "暂停",
+            "00:04 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1222,
+              945,
+              1510,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:04 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1222,
+              945,
+              1510,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "流浪地球2",
+            "0.0",
+            "暂停",
+            "00:05 / 2:53:10",
+            "线路: 360资源",
+            "720P",
+            "倍速"
+          ],
+          "clock": "00:05 / 2:53:10",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1222,
+              945,
+              1510,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "流浪地球2",
+          "切换未成功，保留当前线路",
+          "0.0",
+          "暂停",
+          "00:08 / 2:53:10",
+          "线路: 360资源",
+          "720P",
+          "倍速"
+        ],
+        "clock": "00:08 / 2:53:10",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1222,
+            945,
+            1510,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 213
+      }
+    }
+  ],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "CFDBF10A87A6230537FECE3C10AAA4EA359BCC9207F676B1F4DA559E210BBC80",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

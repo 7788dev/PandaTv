@@ -1,0 +1,96 @@
+{
+  "at": "2026-11-21T09:52:24.575548+00:00",
+  "apkSha256": "0836E3A314F630ACA798D09C45C3D88918983F3D67FDD1427FF5CB479F87C00E",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": true
+    },
+    {
+      "case": "channel_memory",
+      "pass": true
+    },
+    {
+      "case": "detail_return",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction_aux_click",
+      "pass": true
+    },
+    {
+      "case": "library_root_memory",
+      "pass": true
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "rootEviction": {
+    "navigation": "D-pad",
+    "departureFocus": [
+      "最新"
+    ],
+    "setupFocusNotReturnBaseline": [
+      "Pratyabartan",
+      "剧情"
+    ]
+  },
+  "rootEvictionAuxiliary": {
+    "navigation": "Auxiliary top-bar tap to focus, then Confirm; not remote reachability evidence",
+    "departureFocus": [
+      "Pratyabartan",
+      "剧情"
+    ],
+    "activations": [
+      {
+        "tab": "剧集",
+        "selected": [
+          [
+            "剧集"
+          ]
+        ]
+      },
+      {
+        "tab": "动漫",
+        "selected": [
+          [
+            "动漫"
+          ]
+        ]
+      },
+      {
+        "tab": "纪录片",
+        "selected": [
+          [
+            "纪录片"
+          ]
+        ]
+      },
+      {
+        "tab": "电影",
+        "selected": [
+          [
+            "电影"
+          ]
+        ]
+      }
+    ]
+  },
+  "userStateRestored": true
+}

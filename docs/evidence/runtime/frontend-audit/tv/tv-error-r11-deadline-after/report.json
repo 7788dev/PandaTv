@@ -1,0 +1,457 @@
+{
+  "at": "2026-11-21T09:38:28.809535+00:00",
+  "cases": [
+    {
+      "name": "playback-error-recovery-1",
+      "passed": true,
+      "errorObservedMs": 40131,
+      "retryRecoveryMs": 5635,
+      "error": {
+        "texts": [
+          "连接超时，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            895,
+            539,
+            1025,
+            617
+          ],
+          "labels": [
+            "重试"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "retryFocus": {
+        "texts": [
+          "连接超时，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            895,
+            539,
+            1025,
+            617
+          ],
+          "labels": [
+            "重试"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "recovered": {
+        "texts": [
+          "返回",
+          "三体",
+          "第2集",
+          "0.0",
+          "暂停",
+          "下一集",
+          "00:02 / 1:03:51",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 1:03:51",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "returned": {
+        "texts": [
+          "三体",
+          "8.8",
+          "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+          "导演：杨磊",
+          "主演：张鲁一 / 于和伟 / 陈瑾 / 王子文 / 林永健 / 李小冉",
+          "21世纪初，地球基础科学遭到前所未有的动摇，许多科学家绝望疯狂，自杀身亡。风暴即将到来的前夕，许多敏感的人隐隐嗅到毁灭的气息。这一天，纳米科学家汪淼（张鲁一 饰）被粗鲁的警官史强（于和伟 饰）请到联合作战中心，继而得知科学家们的死亡似乎和一个名为“科学边界（ETO）”的组织有关。作战中心希望汪淼潜入该组织，调查他们与死亡科学家乃至一款神秘游戏《三体》的关联。眼前不断倒计时的数字，ETO负责人申玉菲（李小冉 饰）所预测宇宙闪烁，以及《三体》中那不断毁灭又重生的文明，都令汪淼和大史深感困惑与好奇。而看似平凡的老年科学家叶文洁（陈瑾 饰），她的出现又将一切引向数光年外的未知……\n本片根据刘慈欣同名科幻小说改编。",
+          "展开",
+          "继续播放 第2集",
+          "已收藏",
+          "选集",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "演职员"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            506,
+            532,
+            844,
+            615
+          ],
+          "labels": [
+            "继续播放 第2集"
+          ]
+        },
+        "loadingRegionMaxRgb": 198
+      }
+    },
+    {
+      "name": "playback-error-recovery-2",
+      "passed": true,
+      "errorObservedMs": 40230,
+      "retryRecoveryMs": 5310,
+      "error": {
+        "texts": [
+          "连接超时，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            895,
+            539,
+            1025,
+            617
+          ],
+          "labels": [
+            "重试"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "retryFocus": {
+        "texts": [
+          "连接超时，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            895,
+            539,
+            1025,
+            617
+          ],
+          "labels": [
+            "重试"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "recovered": {
+        "texts": [
+          "返回",
+          "三体",
+          "第3集",
+          "0.0",
+          "暂停",
+          "下一集",
+          "00:02 / 53:29",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 53:29",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 254
+      },
+      "returned": {
+        "texts": [
+          "返回",
+          "三体",
+          "8.8",
+          "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+          "导演：杨磊",
+          "主演：张鲁一 / 于和伟 / 陈瑾 / 王子文 / 林永健 / 李小冉",
+          "21世纪初，地球基础科学遭到前所未有的动摇，许多科学家绝望疯狂，自杀身亡。风暴即将到来的前夕，许多敏感的人隐隐嗅到毁灭的气息。这一天，纳米科学家汪淼（张鲁一 饰）被粗鲁的警官史强（于和伟 饰）请到联合作战中心，继而得知科学家们的死亡似乎和一个名为“科学边界（ETO）”的组织有关。作战中心希望汪淼潜入该组织，调查他们与死亡科学家乃至一款神秘游戏《三体》的关联。眼前不断倒计时的数字，ETO负责人申玉菲（李小冉 饰）所预测宇宙闪烁，以及《三体》中那不断毁灭又重生的文明，都令汪淼和大史深感困惑与好奇。而看似平凡的老年科学家叶文洁（陈瑾 饰），她的出现又将一切引向数光年外的未知……\n本片根据刘慈欣同名科幻小说改编。",
+          "展开",
+          "继续播放 第3集",
+          "已收藏",
+          "选集",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "演职员"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            506,
+            690,
+            844,
+            773
+          ],
+          "labels": [
+            "继续播放 第3集"
+          ]
+        },
+        "loadingRegionMaxRgb": 197
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "0836E3A314F630ACA798D09C45C3D88918983F3D67FDD1427FF5CB479F87C00E",
+  "errorRecoveryObservation": {
+    "detail": {
+      "texts": [
+        "返回",
+        "三体",
+        "8.8",
+        "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+        "导演：杨磊",
+        "主演：张鲁一 / 于和伟 / 陈瑾 / 王子文 / 林永健 / 李小冉",
+        "21世纪初，地球基础科学遭到前所未有的动摇，许多科学家绝望疯狂，自杀身亡。风暴即将到来的前夕，许多敏感的人隐隐嗅到毁灭的气息。这一天，纳米科学家汪淼（张鲁一 饰）被粗鲁的警官史强（于和伟 饰）请到联合作战中心，继而得知科学家们的死亡似乎和一个名为“科学边界（ETO）”的组织有关。作战中心希望汪淼潜入该组织，调查他们与死亡科学家乃至一款神秘游戏《三体》的关联。眼前不断倒计时的数字，ETO负责人申玉菲（李小冉 饰）所预测宇宙闪烁，以及《三体》中那不断毁灭又重生的文明，都令汪淼和大史深感困惑与好奇。而看似平凡的老年科学家叶文洁（陈瑾 饰），她的出现又将一切引向数光年外的未知……\n本片根据刘慈欣同名科幻小说改编。",
+        "展开",
+        "继续播放 第2集",
+        "已收藏",
+        "选集",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "演职员"
+      ],
+      "clock": null,
+      "player": false,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          690,
+          844,
+          773
+        ],
+        "labels": [
+          "继续播放 第2集"
+        ]
+      },
+      "loadingRegionMaxRgb": 197
+    },
+    "trigger": {
+      "texts": [
+        "返回",
+        "三体",
+        "第2集",
+        "0.0",
+        "暂停",
+        "下一集",
+        "00:02 / 1:03:51",
+        "选集",
+        "1080P",
+        "倍速"
+      ],
+      "clock": "00:02 / 1:03:51",
+      "player": true,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          295,
+          945,
+          492,
+          1017
+        ],
+        "labels": [
+          "下一集"
+        ]
+      },
+      "nextTap": [
+        417,
+        981
+      ],
+      "loadingRegionMaxRgb": 255
+    },
+    "errorObservedMs": 40230,
+    "error": {
+      "texts": [
+        "连接超时，请重试",
+        "重试",
+        "返回"
+      ],
+      "clock": null,
+      "player": false,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          895,
+          539,
+          1025,
+          617
+        ],
+        "labels": [
+          "重试"
+        ]
+      },
+      "loadingRegionMaxRgb": 143
+    },
+    "retryFocus": {
+      "texts": [
+        "连接超时，请重试",
+        "重试",
+        "返回"
+      ],
+      "clock": null,
+      "player": false,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          895,
+          539,
+          1025,
+          617
+        ],
+        "labels": [
+          "重试"
+        ]
+      },
+      "loadingRegionMaxRgb": 143
+    },
+    "retryRecoveryMs": 5310,
+    "recovered": {
+      "texts": [
+        "返回",
+        "三体",
+        "第3集",
+        "0.0",
+        "暂停",
+        "下一集",
+        "00:02 / 53:29",
+        "选集",
+        "1080P",
+        "倍速"
+      ],
+      "clock": "00:02 / 53:29",
+      "player": true,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          102,
+          945,
+          277,
+          1017
+        ],
+        "labels": [
+          "暂停"
+        ]
+      },
+      "nextTap": [
+        416,
+        981
+      ],
+      "loadingRegionMaxRgb": 254
+    },
+    "returned": {
+      "texts": [
+        "返回",
+        "三体",
+        "8.8",
+        "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+        "导演：杨磊",
+        "主演：张鲁一 / 于和伟 / 陈瑾 / 王子文 / 林永健 / 李小冉",
+        "21世纪初，地球基础科学遭到前所未有的动摇，许多科学家绝望疯狂，自杀身亡。风暴即将到来的前夕，许多敏感的人隐隐嗅到毁灭的气息。这一天，纳米科学家汪淼（张鲁一 饰）被粗鲁的警官史强（于和伟 饰）请到联合作战中心，继而得知科学家们的死亡似乎和一个名为“科学边界（ETO）”的组织有关。作战中心希望汪淼潜入该组织，调查他们与死亡科学家乃至一款神秘游戏《三体》的关联。眼前不断倒计时的数字，ETO负责人申玉菲（李小冉 饰）所预测宇宙闪烁，以及《三体》中那不断毁灭又重生的文明，都令汪淼和大史深感困惑与好奇。而看似平凡的老年科学家叶文洁（陈瑾 饰），她的出现又将一切引向数光年外的未知……\n本片根据刘慈欣同名科幻小说改编。",
+        "展开",
+        "继续播放 第3集",
+        "已收藏",
+        "选集",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "演职员"
+      ],
+      "clock": null,
+      "player": false,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          690,
+          844,
+          773
+        ],
+        "labels": [
+          "继续播放 第3集"
+        ]
+      },
+      "loadingRegionMaxRgb": 197
+    }
+  },
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

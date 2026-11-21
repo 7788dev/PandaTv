@@ -1,0 +1,110 @@
+2026-11-21T18:19:05.4005919+08:00 tv-search-errors APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS retryable search error round 1
+PASS retryable search error round 2
+2026-11-21T18:20:11.2343944+08:00 tv-search-state APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS 刘德华: discovery stayed visible after clear
+PASS 西游记: discovery stayed visible after clear
+PASS 蜡笔小新: discovery stayed visible after clear
+2026-11-21T18:20:57.1931215+08:00 tv-title-search APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS initials round 1
+PASS re-edit round 1
+PASS initials round 2
+PASS re-edit round 2
+2026-11-21T18:21:43.9288103+08:00 tv-surfaces APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS bezel
+PASS channel_memory
+PASS detail_return
+PASS channel_eviction
+PASS channel_eviction_aux_click
+PASS library_root_memory
+PASS confirmation
+PASS keypad_back
+2026-11-21T18:22:51.4165667+08:00 tv-surfaces-720p APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS bezel
+PASS channel_memory
+PASS detail_return
+PASS channel_eviction
+PASS channel_eviction_aux_click
+PASS library_root_memory
+PASS confirmation
+PASS keypad_back
+2026-11-21T18:23:58.0206733+08:00 tv-surfaces-4k APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS bezel
+PASS channel_memory
+PASS detail_return
+PASS channel_eviction
+PASS channel_eviction_aux_click
+PASS library_root_memory
+PASS confirmation
+PASS keypad_back
+2026-11-21T18:25:05.8992447+08:00 tv-navigation APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS 动漫-1-normal: first movie=谷雨街后巷, up presses=9
+PASS 动漫-1-fast-right: first movie=千与千寻, up presses=9
+PASS 动漫筛选展开回顶
+PASS 电影-1-normal: first movie=可能的爱, up presses=9
+PASS 电影-1-fast-right: first movie=给阿嬷的情书, up presses=9
+PASS 电影筛选展开回顶
+PASS 剧集-1-normal: first movie=今天是太阳雨, up presses=9
+PASS 剧集-1-fast-right: first movie=幻视任务, up presses=9
+PASS 剧集筛选展开回顶
+PASS 综艺-1-normal: first movie=后会友期, up presses=9
+PASS 综艺-1-fast-right: first movie=现在就出发 第三季, up presses=9
+PASS 综艺筛选展开回顶
+PASS 纪录片-1-normal: first movie=生命奇观2, up presses=9
+PASS 纪录片-1-fast-right: first movie=脸庞，村庄, up presses=9
+PASS 纪录片筛选展开回顶
+FAIL 搜索结果回顶: Test did not scroll beyond the first row
+FAIL 搜索末行保持列: Test did not scroll beyond the first row
+PASS 影人作品回顶
+PASS 搜索与影人页面流程
+PASS 收藏列表回顶
+PASS 收藏详情返回位置
+PASS 历史列表回顶
+PASS 收藏历史流程
+Report: E:\dev\项目\panda\.tmp\frontend-audit\tv-navigation-r12-final\report.json
+Traceback (most recent call last):
+  File "E:\dev\项目\panda\scripts\verify-tv-navigation.py", line 298, in <module>
+    main()
+    ~~~~^^
+  File "E:\dev\项目\panda\scripts\verify-tv-navigation.py", line 294, in main
+    assert not report["failures"], f"{len(report['failures'])} TV navigation regressions"
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 TV navigation regressions
+2026-11-21T18:29:26.4036663+08:00 tv-more APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS 剧集榜-1: {'selected': ['剧集'], 'focused': ['剧集']}
+PASS 电影榜-1: {'selected': ['电影'], 'focused': ['电影']}
+PASS 动漫榜-1: {'selected': ['动漫'], 'focused': ['动漫']}
+PASS 剧集榜-2: {'selected': ['剧集'], 'focused': ['剧集']}
+PASS 电影榜-2: {'selected': ['电影'], 'focused': ['电影']}
+PASS 动漫榜-2: {'selected': ['动漫'], 'focused': ['动漫']}
+Report: E:\dev\项目\panda\.tmp\frontend-audit\tv-more-r12-final\report.json
+2026-11-21T18:30:02.8568434+08:00 tv-motion APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS home-1: {'totalFrames': 172, 'jankyFrames': 0, 'jankPct': 0.0, 'p90Ms': 5, 'p95Ms': 5}
+PASS channel-expanded-1: {'totalFrames': 269, 'jankyFrames': 0, 'jankPct': 0.0, 'p90Ms': 5, 'p95Ms': 5}
+PASS home-2: {'totalFrames': 173, 'jankyFrames': 0, 'jankPct': 0.0, 'p90Ms': 5, 'p95Ms': 5}
+PASS channel-expanded-2: {'totalFrames': 267, 'jankyFrames': 0, 'jankPct': 0.0, 'p90Ms': 5, 'p95Ms': 5}
+2026-11-21T18:30:59.3823656+08:00 tv-playback APK=7c00233aff37f5e964315cf66cdeb90d589fda502c230c383c7e841b606abeed
+PASS player-focus
+FAIL episode-panel-focus: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+FAIL media-controls: Playback did not advance; visible texts=['三国：天下归心', '半周年活动开启登录抽airpods4！', '百战无双', '无光勇者', '三国：天下归心', '笑傲江湖：群侠传', '我在古代有座城', '三国群英传：策定九州', '大航海时代：传说', '霸业', '游戏中心', 'KernelSU', '汽水音乐', 'ATX', 'Panda', '斗罗大陆：诛邪传说', '新故事新冒险，下载抽5060ti！', '设置', '图库', '文件', '浏览器', '应用分身', '18:33']
+FAIL player-lifecycle: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+FAIL seek-control: Playback did not advance after 0 retry actions; Playback did not advance; visible texts=['灵妖劫', '逆则仙，灵妖起！登录抽华为平板！', '百战无双', '无光勇者', '三国：天下归心', '笑傲江湖：群侠传', '我在古代有座城', '三国群英传：策定九州', '大航海时代：传说', '霸业', '游戏中心', 'KernelSU', '汽水音乐', 'ATX', 'Panda', '烈焰觉醒', '金牌讲师推荐，订阅赢苹果ipad！', '设置', '图库', '文件', '浏览器', '应用分身', '18:37']
+UNAVAILABLE speed-control: Playback did not advance after 0 retry actions; Playback did not advance; visible texts=['群星漫卡', '藏在卡包里的世界，预约抽平板！', '百战无双', '无光勇者', '三国：天下归心', '笑傲江湖：群侠传', '我在古代有座城', '三国群英传：策定九州', '大航海时代：传说', '霸业', '游戏中心', 'KernelSU', '汽水音乐', 'ATX', 'Panda', '斗罗大陆：诛邪传说', '新故事新冒险，下载抽5060ti！', '设置', '图库', '文件', '浏览器', '应用分身', '18:40']
+FAIL line-switch-1: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+FAIL line-switch-2: Playback did not advance; visible texts=['灵妖劫', '逆则仙，灵妖起！登录抽华为平板！', '百战无双', '无光勇者', '三国：天下归心', '笑傲江湖：群侠传', '我在古代有座城', '三国群英传：策定九州', '大航海时代：传说', '霸业', '游戏中心', 'KernelSU', '汽水音乐', 'ATX', 'Panda', '斗罗大陆：诛邪传说', '新故事新冒险，下载抽5060ti！', '设置', '图库', '文件', '浏览器', '应用分身', '18:43']
+UNAVAILABLE episode-switch: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+PASS admission-cancel
+FAIL loaded-detail-return-1: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+FAIL loaded-detail-return-2: Playback did not advance; visible texts=['三国：天下归心', '半周年活动开启登录抽airpods4！', '百战无双', '无光勇者', '三国：天下归心', '笑傲江湖：群侠传', '我在古代有座城', '三国群英传：策定九州', '大航海时代：传说', '霸业', '游戏中心', 'KernelSU', '汽水音乐', 'ATX', 'Panda', '斗罗大陆：诛邪传说', '新故事新冒险，下载抽5060ti！', '设置', '图库', '文件', '浏览器', '应用分身', '18:47']
+FAIL playback-error-recovery-1: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+FAIL playback-error-recovery-2: Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']
+PASS missing-source
+Traceback (most recent call last):
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 870, in <module>
+    main()
+    ~~~~^^
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 865, in main
+    assert not report["failures"], f"{len(report['failures'])} TV playback transition regressions"
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 10 TV playback transition regressions
+User state, source overrides, firewall and display restored.

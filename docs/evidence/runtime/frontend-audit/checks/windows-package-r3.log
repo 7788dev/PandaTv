@@ -1,0 +1,16 @@
+  • electron-builder  version=26.18.0 os=10.0.26100
+  • loaded configuration  file=package.json ("build" field)
+  • executing @electron/rebuild  electronVersion=45.3.2 arch=x64 buildFromSource=false workspaceRoot=E:\dev\项目\panda projectDir=./ appDir=./
+  • installing native dependencies  arch=x64
+  • completed installing native dependencies
+  • packaging       platform=win32 arch=x64 electron=45.3.2 appOutDir=.tmp\frontend-audit\windows-r3\win-unpacked
+  • downloaded      label=electron progress=100%
+  • downloaded electron zip extracted successfully  output=E:\dev\项目\panda\.tmp\frontend-audit\windows-r3\win-unpacked
+  • searching for node modules  pm=npm searchDir=E:\dev\项目\panda
+  • duplicate dependency references  dependencies=["@types/react@19.3.0","react-dom@19.3.1","react-dom@19.3.1","react-dom@19.3.1"]
+  • updating asar integrity executable resource  executablePath=.tmp\frontend-audit\windows-r3\win-unpacked\Panda.exe
+  • file signing skipped via signExecutable configuration  file=.tmp\frontend-audit\windows-r3\win-unpacked\Panda.exe
+  • building        target=nsis file=.tmp\frontend-audit\windows-r3\Panda-1.1.2-Setup.exe archs=x64 oneClick=false perMachine=false
+  • file signing skipped via signExecutable configuration  file=.tmp\frontend-audit\windows-r3\Panda-1.1.2-Setup.__uninstaller.exe
+  • file signing skipped via signExecutable configuration  file=.tmp\frontend-audit\windows-r3\Panda-1.1.2-Setup.exe
+  • building block map  blockMapFile=.tmp\frontend-audit\windows-r3\Panda-1.1.2-Setup.exe.blockmap

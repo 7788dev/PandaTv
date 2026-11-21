@@ -1,0 +1,58 @@
+{
+  "at": "2026-11-21T07:51:46.794682+00:00",
+  "apkSha256": "6F9687CD73613EF94E61F941B4B4389644A18BCBEB4C56349DA2C2EB2B426E29",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "channel_eviction_aux_click",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "rootEvictionAuxiliary": {
+    "navigation": "Auxiliary top-bar tap to focus, then Confirm; not remote reachability evidence",
+    "departureFocus": [
+      "Pili Channe",
+      "剧情"
+    ],
+    "activations": [
+      {
+        "tab": "剧集",
+        "selected": [
+          [
+            "剧集"
+          ]
+        ]
+      },
+      {
+        "tab": "动漫",
+        "selected": [
+          [
+            "动漫"
+          ]
+        ]
+      },
+      {
+        "tab": "纪录片",
+        "selected": [
+          [
+            "纪录片"
+          ]
+        ]
+      },
+      {
+        "tab": "电影",
+        "selected": [
+          [
+            "电影"
+          ]
+        ]
+      }
+    ]
+  },
+  "userStateRestored": true
+}

@@ -1,0 +1,30 @@
+
+> panda-desktop@1.1.2 test:e2e:fixture
+> playwright test --project=desktop-fixture --output=.tmp/frontend-audit/desktop-fixture-r3/results
+
+
+Running 19 tests using 1 worker
+
+(node:4724) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [desktop-fixture] › e2e\fixture.spec.ts:5:1 › fixture: loading, empty, error and offline surfaces remain usable (13.4s)
+  ok  2 [desktop-fixture] › e2e\fixture.spec.ts:27:1 › fixture: search keyboard, tabs, favorites, history undo, settings and dialog focus (31.1s)
+  ok  3 [desktop-fixture] › e2e\fixture.spec.ts:76:1 › fixture: player quality, volume, episode panel, intro, up-next and retry controls (21.9s)
+  ok  4 [desktop-fixture] › e2e\fixture.spec.ts:131:1 › fixture: window controls remain usable while a confirmation is open (5.2s)
+  ok  5 [desktop-fixture] › e2e\fixture.spec.ts:152:1 › fixture: a source that never starts recovers within thirty-five seconds (18.9s)
+  ok  6 [desktop-fixture] › e2e\fixture.spec.ts:164:1 › fixture: another line takes over where the first one was (16.2s)
+  ok  7 [desktop-fixture] › e2e\fixture.spec.ts:191:1 › fixture: sustained decoder drops lower playback speed automatically (12.7s)
+  ok  8 [desktop-fixture] › e2e\fixture.spec.ts:215:1 › fixture: a failed line switch falls back to the source pool without losing position (11.8s)
+  ok  9 [desktop-fixture] › e2e\fixture.spec.ts:236:1 › fixture: changing lines while paused keeps playback paused (14.0s)
+  ok 10 [desktop-fixture] › e2e\fixture.spec.ts:262:1 › fixture: failed replacements preserve a paused line and its controls (16.9s)
+  ok 11 [desktop-fixture] › e2e\fixture.spec.ts:284:1 › fixture: if both the selected line and source pool fail, the current picture keeps playing (14.7s)
+  ok 12 [desktop-fixture] › e2e\fixture.spec.ts:305:1 › fixture: a stalled replacement line keeps the last decoded frame visible (8.9s)
+  ok 13 [desktop-fixture] › e2e\fixture.spec.ts:324:1 › fixture: a stalled manual line falls back to the active source pool (24.9s)
+  ok 14 [desktop-fixture] › e2e\interaction.spec.ts:5:1 › fixture: search starts reverse navigation at the last option and Escape retains keyboard focus (4.0s)
+  ok 15 [desktop-fixture] › e2e\interaction.spec.ts:28:1 › fixture: episode panel owns focus and shortcuts and returns focus on every close (17.4s)
+  ok 16 [desktop-fixture] › e2e\layout.spec.ts:13:5 › desktop layout geometry › channel filters stay clear of the first row at compact size (21.2s)
+  ok 17 [desktop-fixture] › e2e\layout.spec.ts:13:5 › desktop layout geometry › channel filters stay clear of the first row at standard size (21.4s)
+  ok 18 [desktop-fixture] › e2e\layout.spec.ts:13:5 › desktop layout geometry › channel filters stay clear of the first row at wide size (26.2s)
+  ok 19 [desktop-fixture] › e2e\layout.spec.ts:55:3 › desktop layout geometry › primary pages and overlays remain within the desktop viewport (29.0s)
+
+  19 passed (5.5m)

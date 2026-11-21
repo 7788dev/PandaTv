@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-21T11:14:19.909739+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "episode-panel-focus",
+      "stage": "episode-panel-focus:entry",
+      "error": "Player reached the retry screen before the timeline advanced: ['播放失败，请重试', '重试', '返回']",
+      "state": {
+        "texts": [
+          "播放失败，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            895,
+            539,
+            1025,
+            617
+          ],
+          "labels": [
+            "重试"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "pid": "40313"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "7C00233AFF37F5E964315CF66CDEB90D589FDA502C230C383C7E841B606ABEED",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

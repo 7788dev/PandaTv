@@ -2,7 +2,6 @@
 
 import argparse
 import datetime
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -10,6 +9,7 @@ import re
 import time
 
 import uiautomator2 as u2
+import tv_runtime_helpers as h
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = "app.panda.tv"
@@ -17,17 +17,16 @@ PACKAGE = "app.panda.tv"
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--serial", default="127.0.0.1:16416")
+    parser.add_argument("--serial", required=True)
     parser.add_argument("--label", default="motion")
     parser.add_argument("--repeat", type=int, default=2)
+    parser.add_argument("--output", type=Path, help="Write to an isolated evidence directory")
+    parser.add_argument("--hold", action="store_true", help="Also exercise sustained D-pad input (requires input keyevent --duration)")
     args = parser.parse_args()
-    spec = importlib.util.spec_from_file_location("tv_helpers", ROOT / "scripts/verify-tv-mumu.py")
-    h = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(h)
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     d = u2.connect(args.serial)
-    out = ROOT / "docs/evidence/runtime/tv-motion" / args.label
+    out = args.output or ROOT / ".tmp/e2e-evidence/tv-motion" / args.label
     out.mkdir(parents=True, exist_ok=True)
     report = {
         "at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -48,10 +47,12 @@ def main():
         pid = h.run_adb("shell", "pidof", PACKAGE).strip()
         h.run_adb("shell", "dumpsys", "gfxinfo", PACKAGE, "reset")
         started = time.monotonic()
-        details = callback() or {}
-        time.sleep(.35)
-        raw = h.run_adb("shell", "dumpsys", "gfxinfo", PACKAGE)
-        (out / f"{name}-gfxinfo.txt").write_text(raw, encoding="utf-8")
+        try:
+            details = callback() or {}
+        finally:
+            time.sleep(.35)
+            raw = h.run_adb("shell", "dumpsys", "gfxinfo", PACKAGE)
+            (out / f"{name}-gfxinfo.txt").write_text(raw, encoding="utf-8")
         stats = h.parse_gfx_stats(raw)
         assert stats["totalFrames"] > 30, f"Insufficient rendered frames: {stats}"
         assert h.run_adb("shell", "pidof", PACKAGE).strip() == pid, "App process restarted during navigation"
@@ -68,6 +69,8 @@ def main():
 
         initial = h.dump_nodes(d)
         hero = next(n for n in initial if n["text"] == "播放" and n["cy"] > 140)
+        top = [node for node in initial if node["focusable"] and node["text"] in ("首页", "剧集", "我的")]
+        assert len(top) == 3, "Panda is not the foreground home screen"
         for _ in range(8):
             h.key("dpad_down", wait=.18)
             trace("down")
@@ -82,20 +85,44 @@ def main():
                 returned = next(n for n in ns if n["text"] == "播放" and n["cy"] > 140)
                 assert abs(returned["cy"] - hero["cy"]) <= 24, f"Home hero did not return fully: {hero} -> {returned}"
                 return {"heroReturnComplete": True, "initialHeroCy": hero["cy"], "returnedHeroCy": returned["cy"]}
-            assert not focus or focus["cy"] >= 140, "Home focus escaped before returning to the hero"
+            assert not focus or focus["cy"] >= 140, f"Home focus escaped before returning to the hero: {focus}"
             h.key("dpad_up", wait=.18)
         raise AssertionError("Home hero was not reachable")
 
     def grid_scroll():
-        # Single steps exercise focus animation; batches exercise held-key handling.
+        def grid_focus():
+            focus = h.find_focused(h.dump_nodes(d))
+            assert focus and focus["cy"] > 250 and focus["childTexts"], f"Focus did not remain on a card: {focus}"
+            return {"labels": focus["childTexts"], "bounds": focus["bounds"]}
+
+        h.move_focus_to_text(d, "剧情", max_steps=8)
+        h.key("dpad_down", wait=.35)
+        initial = grid_focus()
+        inputs = []
         for code in ["dpad_down", "dpad_up"]:
-            for _ in range(7):
+            for _ in range(5):
                 h.key(code, wait=.18)
-        for code in ["20", "19"]:
-            h.run_adb("shell", "input", "keyevent", *([code] * 9))
             time.sleep(.35)
+            inputs.append({"input": f"paced-{code}", "focus": grid_focus()})
+        for code in ["20", "19"]:
+            h.run_adb("shell", "input", "dpad", "keyevent", *([code] * 5))
+            time.sleep(.4)
+            inputs.append({"input": f"rapid-{code}", "focus": grid_focus()})
+        report["gridTrace"] = {"initial": initial, "inputs": inputs}
+        for index in (0, 2):
+            assert inputs[index]["focus"]["labels"] != initial["labels"], f"No downward move: {inputs[index]}"
+            assert inputs[index + 1]["focus"]["labels"] == initial["labels"], f"Up did not return to the initial card: {report['gridTrace']}"
+        if args.hold:
+            h.key("dpad_down", wait=.35)
+            one_tap = grid_focus()
+            h.key("dpad_up", wait=.35)
+            h.run_adb("shell", "input", "dpad", "keyevent", "--duration", "1250", "20")
+            time.sleep(.35)
+            held = grid_focus()
+            assert held["labels"] not in (one_tap["labels"], initial["labels"]), f"Held Down did not move beyond a single tap: {held}"
+            inputs.append({"input": "held-down-1250ms", "focus": held, "singleTap": one_tap})
         h.focus_top_bar(d)
-        return {"normalAndRapidInput": True}
+        return {"initialFocus": initial, "inputs": inputs}
 
     try:
         h.run_adb("shell", "am", "force-stop", PACKAGE)

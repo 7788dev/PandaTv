@@ -76,6 +76,17 @@ class PlayerScreen(
         indeterminateTintList = android.content.res.ColorStateList.valueOf(Theme.BAMBOO_400)
         visibility = View.VISIBLE
     }
+    private val bufferingText = Theme.label(ctx, Copy.Player.PREPARING, sp = 15f, bold = true)
+    private val bufferingCard = LinearLayout(ctx).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL
+        setPadding(Theme.dp(ctx, 15), Theme.dp(ctx, 9), Theme.dp(ctx, 18), Theme.dp(ctx, 9))
+        background = Theme.box(Theme.GLASS_STRONG, Theme.LINE_2, radiusDp = 999, ctx = ctx)
+        addView(centerSpinner, LinearLayout.LayoutParams(Theme.dp(ctx, 24), Theme.dp(ctx, 24)).apply {
+            rightMargin = Theme.dp(ctx, 10)
+        })
+        addView(bufferingText)
+    }
     private val osdBox = LinearLayout(ctx).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
@@ -94,7 +105,7 @@ class PlayerScreen(
         gravity = Gravity.CENTER_VERTICAL
         clipChildren = false
         clipToPadding = false
-        setPadding(m.pageH, Theme.dp(ctx, 24), m.pageH, Theme.dp(ctx, 22))
+        setPadding(m.pageH, m.safeV + Theme.dp(ctx, 4), m.pageH, Theme.dp(ctx, 22))
         background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xE00E0D0B.toInt(), Color.TRANSPARENT))
     }
     private val titleTv = Theme.label(ctx, sp = 20f, color = Theme.PAPER_100, bold = true, maxLines = 1)
@@ -104,7 +115,7 @@ class PlayerScreen(
         orientation = LinearLayout.VERTICAL
         clipChildren = false
         clipToPadding = false
-        setPadding(m.pageH, Theme.dp(ctx, 24), m.pageH, Theme.dp(ctx, 26))
+        setPadding(m.pageH, Theme.dp(ctx, 18), m.pageH, m.safeV + Theme.dp(ctx, 3))
         background = GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0xEB0E0D0B.toInt(), Color.TRANSPARENT))
     }
     private val seekBar = SeekBar(ctx).apply {
@@ -112,7 +123,10 @@ class PlayerScreen(
         isFocusable = true
         isFocusableInTouchMode = true
         progressTintList = android.content.res.ColorStateList.valueOf(Theme.BAMBOO_400)
-        thumbTintList = android.content.res.ColorStateList.valueOf(Theme.PAPER_50)
+        thumbTintList = android.content.res.ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(Theme.BAMBOO_400, Theme.PAPER_50),
+        )
+        background = Theme.focusBox(ctx, Color.TRANSPARENT, Theme.FILL, normalStroke = 0, radiusDp = 16)
     }
     private val timeTv = Theme.label(ctx, "00:00 / 00:00", sp = 13.5f, color = Theme.PAPER_70)
     private val playPauseBtn = Theme.pillButton(ctx, Copy.Player.PAUSE, primary = true, icon = TvIcon.PAUSE, padH = 18, padV = 8, sp = 13.5f)
@@ -127,13 +141,18 @@ class PlayerScreen(
     }
     private val speedBtn = Theme.pillButton(ctx, Copy.Player.SPEED, icon = TvIcon.SPEED, padH = 16, padV = 8, sp = 13.5f)
 
+    private val panelScrim = View(ctx).apply {
+        visibility = View.GONE
+        setBackgroundColor(Theme.SCRIM)
+        setOnClickListener { closePanel() }
+    }
     private val sidePanel = LinearLayout(ctx).apply {
         orientation = LinearLayout.VERTICAL
         visibility = View.GONE
         clipChildren = false
         clipToPadding = false
-        background = Theme.box(0xF7141311.toInt(), Theme.LINE, radiusDp = 0, strokeDp = 1, ctx = ctx)
-        setPadding(Theme.dp(ctx, 24), Theme.dp(ctx, 28), Theme.dp(ctx, 24), Theme.dp(ctx, 28))
+        background = Theme.box(Theme.INK_900, Theme.LINE, radiusDp = 0, strokeDp = 1, ctx = ctx)
+        setPadding(Theme.dp(ctx, 23), m.safeV + Theme.dp(ctx, 6), m.pageH, m.safeV)
     }
     private val sideTitleTv = Theme.label(ctx, sp = 18f, color = Theme.PAPER_100, bold = true)
     private val sideGrid = Theme.verticalGrid(ctx, sidePanel).apply {
@@ -144,17 +163,10 @@ class PlayerScreen(
         clipChildren = false
         setOnKeyInterceptListener { event ->
             if (event.action != KeyEvent.ACTION_DOWN || panelMode == null) return@setOnKeyInterceptListener false
-            when (event.keyCode) {
-                // The panel is anchored to the right edge. Left exits it;
-                // right must be consumed so focus never leaks back to the
-                // video surface or the bottom controls behind the panel.
-                KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    closePanel()
-                    true
-                }
-                KeyEvent.KEYCODE_DPAD_RIGHT -> true
-                else -> false
-            }
+            val last = (adapter?.itemCount ?: 1) - 1
+            event.keyCode == KeyEvent.KEYCODE_DPAD_LEFT || event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT ||
+                (event.keyCode == KeyEvent.KEYCODE_DPAD_UP && selectedPosition == 0) ||
+                (event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN && selectedPosition == last)
         }
     }
 
@@ -205,7 +217,11 @@ class PlayerScreen(
     private var upNextCancelled = false
     private var preparedNext = false
     private var overlayVisible = true
-    private var panelMode: String? = null // "episodes" | "lines" | null
+    private enum class Panel { EPISODES, LINES, QUALITY, SPEED }
+
+    private var panelMode: Panel? = null
+    private var lastControl: View? = null
+    private var consumedConfirmKey: Int? = null
     private var destroyed = false
     private var lastSavedAt = 0L
     private var userSeeking = false
@@ -223,6 +239,7 @@ class PlayerScreen(
     private var startupWatchJob: Job? = null
     private var preloadJob: Job? = null
     private var scrubbingOffJob: Job? = null
+    private var seekCommitJob: Job? = null
 
     override val view: View get() = root
 
@@ -234,6 +251,9 @@ class PlayerScreen(
 
     override fun onHidden() {
         screenShown = false
+        idleJob?.cancel()
+        seekCommitJob?.cancel()
+        pendingRemoteSeekMs = null
         saveHistory()
         exoPlayer?.pause()
     }
@@ -259,6 +279,7 @@ class PlayerScreen(
         startupWatchJob?.cancel()
         preloadJob?.cancel()
         scrubbingOffJob?.cancel()
+        seekCommitJob?.cancel()
         speedMeasureJob?.cancel()
         scrubbing = false
         pendingRemoteSeekMs = null
@@ -272,6 +293,11 @@ class PlayerScreen(
             closePanel()
             return true
         }
+        if (upNextBox.hasFocus()) {
+            upNextCancelled = true
+            hideUpNext(restoreFocus = true)
+            return true
+        }
         if (overlayVisible && sourceStarted && errorBox.visibility != View.VISIBLE) {
             setOverlayVisible(false)
             return true
@@ -282,12 +308,23 @@ class PlayerScreen(
     }
 
     override fun dispatchRemoteKey(event: KeyEvent): Boolean {
-        if (event.action != KeyEvent.ACTION_DOWN) return false
-        if (errorBox.visibility == View.VISIBLE || panelMode != null) return false
+        val mediaKey = when (event.keyCode) {
+            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_MEDIA_PLAY, KeyEvent.KEYCODE_MEDIA_PAUSE,
+            KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_MEDIA_REWIND -> true
+            else -> false
+        }
+        if (event.action != KeyEvent.ACTION_DOWN) {
+            if (consumedConfirmKey == event.keyCode) {
+                consumedConfirmKey = null
+                return true
+            }
+            return mediaKey
+        }
+        if (errorBox.visibility == View.VISIBLE || panelMode != null) return mediaKey
 
         when (event.keyCode) {
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
-                togglePlayPause()
+                if (event.repeatCount == 0) togglePlayPause()
                 showOverlay()
                 return true
             }
@@ -304,15 +341,15 @@ class PlayerScreen(
                 return true
             }
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
-                seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = !overlayVisible)
+                seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = !overlayVisible, repeat = event.repeatCount)
                 return true
             }
             KeyEvent.KEYCODE_MEDIA_REWIND -> {
-                seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = !overlayVisible)
+                seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = !overlayVisible, repeat = event.repeatCount)
                 return true
             }
             KeyEvent.KEYCODE_MENU -> {
-                setOverlayVisible(!overlayVisible)
+                if (event.repeatCount == 0) setOverlayVisible(!overlayVisible)
                 return true
             }
         }
@@ -327,14 +364,15 @@ class PlayerScreen(
             }
             when (event.keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = true)
+                    seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = true, repeat = event.repeatCount)
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = true)
+                    seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = true, repeat = event.repeatCount)
                     return true
                 }
-                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                    consumedConfirmKey = event.keyCode
                     togglePlayPause()
                     showOverlay()
                     return true
@@ -359,11 +397,13 @@ class PlayerScreen(
             }
         }
 
-        root.addView(centerSpinner, FrameLayout.LayoutParams(Theme.dp(ctx, 44), Theme.dp(ctx, 44), Gravity.CENTER))
+        root.addView(bufferingCard, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER))
 
         osdBox.addView(osdIcon)
         osdBox.addView(osdTv)
-        root.addView(osdBox, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER))
+        root.addView(osdBox, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply {
+            topMargin = m.safeV + Theme.dp(ctx, 64)
+        })
 
         // Top shade
         topShade.addView(Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK, padH = 15, padV = 7, sp = 13.5f).apply {
@@ -405,7 +445,7 @@ class PlayerScreen(
         }
         upNextCancelBtn.setOnClickListener {
             upNextCancelled = true
-            upNextBox.visibility = View.GONE
+            hideUpNext(restoreFocus = true)
         }
         upBtns.addView(upNextPlayBtn)
         upBtns.addView(upNextCancelBtn)
@@ -445,14 +485,15 @@ class PlayerScreen(
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             when (keyCode) {
                 KeyEvent.KEYCODE_DPAD_LEFT -> {
-                    seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = false)
+                    seekRelative(-Constants.SEEK_STEP_SECONDS, focusSeekBar = false, repeat = event.repeatCount)
                     true
                 }
                 KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                    seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = false)
+                    seekRelative(Constants.SEEK_STEP_SECONDS, focusSeekBar = false, repeat = event.repeatCount)
                     true
                 }
-                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER -> {
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                    consumedConfirmKey = keyCode
                     togglePlayPause()
                     scheduleIdleHide()
                     true
@@ -472,10 +513,10 @@ class PlayerScreen(
         }
         playPauseBtn.setOnClickListener { togglePlayPause(); scheduleIdleHide() }
         nextBtn.setOnClickListener { advanceToNext() }
-        episodesBtn.setOnClickListener { openPanel("episodes") }
-        lineBtn.setOnClickListener { openPanel("lines") }
-        qualityBtn.setOnClickListener { cycleQuality() }
-        speedBtn.setOnClickListener { cycleSpeed() }
+        episodesBtn.setOnClickListener { openPanel(Panel.EPISODES, episodesBtn) }
+        lineBtn.setOnClickListener { openPanel(Panel.LINES, lineBtn) }
+        qualityBtn.setOnClickListener { openPanel(Panel.QUALITY, qualityBtn) }
+        speedBtn.setOnClickListener { openPanel(Panel.SPEED, speedBtn) }
 
         fun addControl(v: View) {
             v.layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
@@ -509,13 +550,12 @@ class PlayerScreen(
         }
         sideListClip.addView(sideGrid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         sidePanel.addView(sideListClip, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
-        root.addView(sidePanel, FrameLayout.LayoutParams(Theme.dp(ctx, 340), ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END))
+        root.addView(panelScrim, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        root.addView(sidePanel, FrameLayout.LayoutParams(Theme.dp(ctx, 356), ViewGroup.LayoutParams.MATCH_PARENT, Gravity.END))
 
         root.addView(errorBox, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-        surfaceView.setOnClickListener {
-            if (panelMode != null) closePanel()
-            else setOverlayVisible(!overlayVisible)
-        }
+        surfaceView.setOnClickListener { if (errorBox.visibility != View.VISIBLE) setOverlayVisible(!overlayVisible) }
+        surfaceView.isFocusable = false
     }
 
     private fun buildPlayer() {
@@ -602,16 +642,16 @@ class PlayerScreen(
                             }
                         }
                         resetSpeedWindow()
-                        centerSpinner.visibility = View.VISIBLE
+                        showBuffering(true)
                     }
                     Player.STATE_READY -> {
-                        centerSpinner.visibility = View.GONE
+                        showBuffering(false)
                         if (scrubbing) endScrubbingSoon()
                         syncButtons()
                         scheduleIdleHide()
                     }
                     Player.STATE_ENDED -> {
-                        centerSpinner.visibility = View.GONE
+                        showBuffering(false)
                         val s = nav.app.userStore.get().settings
                         if (hasNextEpisode() && s.autoNext && !upNextCancelled) {
                             advanceToNext()
@@ -679,6 +719,7 @@ class PlayerScreen(
     }
 
     private fun loadAndStart(retry: Boolean, fromSource: String?) {
+        seekCommitJob?.cancel()
         scrubbingOffJob?.cancel()
         scrubbing = false
         pendingRemoteSeekMs = null
@@ -716,7 +757,7 @@ class PlayerScreen(
             seekBar.secondaryProgress = 0
             timeTv.text = "00:00 / 00:00"
             userSeeking = false
-            upNextBox.visibility = View.GONE
+            hideUpNext(restoreFocus = false)
             osdJob?.cancel()
             osdBox.visibility = View.GONE
             preparedNext = false
@@ -727,7 +768,7 @@ class PlayerScreen(
         showOverlay()
         if (!keepPlaying) {
             sourceStarted = false
-            centerSpinner.visibility = View.VISIBLE
+            showBuffering(true)
         }
         mediaItem?.let { updateHeader(it) }
         syncButtons()
@@ -735,29 +776,32 @@ class PlayerScreen(
         loadJob = scope.launch {
             try {
                 val item = mediaItem ?: return@launch
-                val hints = nav.app.douban.workHints(item.id)
-
-                var pb: Playback? = null
-                var lastErr: Throwable? = null
-                val maxTries = if (retry || fromSource != null) 1 else 3
-                for (attempt in 0 until maxTries) {
-                    try {
-                        pb = nav.app.playback.resolve(item, targetEpisode, targetQuality, retry = retry, hints = hints, from = fromSource)
-                        break
-                    } catch (cancelled: CancellationException) {
-                        throw cancelled
-                    } catch (t: Throwable) {
-                        lastErr = t
-                        val msg = t.message.orEmpty()
-                        val finalAnswer = msg in listOf(
-                            Copy.Extra.SOURCE_UNAVAILABLE, Copy.Extra.NO_EPISODE,
-                            Copy.Extra.NOT_FOUND, Copy.Extra.INVALID_INPUT, Copy.Extra.UNSUPPORTED_PLAYBACK,
-                        )
-                        if (finalAnswer || attempt == maxTries - 1) break
-                        delay(800L)
+                val dataSource = nav.app.douban
+                val playbackService = nav.app.playback
+                val (resolved, hints) = awaitScreenRequest(scope, timeoutMs = 40_000L) {
+                    val workHints = dataSource.workHints(item.id)
+                    var candidate: Playback? = null
+                    var lastError: Throwable? = null
+                    val maxTries = if (retry || fromSource != null) 1 else 3
+                    for (attempt in 0 until maxTries) {
+                        try {
+                            candidate = playbackService.resolve(item, targetEpisode, targetQuality, retry = retry, hints = workHints, from = fromSource)
+                            break
+                        } catch (cancelled: CancellationException) {
+                            throw cancelled
+                        } catch (error: Throwable) {
+                            lastError = error
+                            val message = error.message.orEmpty()
+                            val finalAnswer = message in listOf(
+                                Copy.Extra.SOURCE_UNAVAILABLE, Copy.Extra.NO_EPISODE,
+                                Copy.Extra.NOT_FOUND, Copy.Extra.INVALID_INPUT, Copy.Extra.UNSUPPORTED_PLAYBACK,
+                            )
+                            if (finalAnswer || attempt == maxTries - 1) break
+                            delay(800L)
+                        }
                     }
+                    (candidate ?: throw (lastError ?: IllegalStateException(Copy.Extra.PLAYER_RETRY))) to workHints
                 }
-                val resolved = pb ?: throw (lastErr ?: IllegalStateException(Copy.Extra.PLAYER_RETRY))
                 coroutineContext.ensureActive()
                 if (destroyed || generation != loadGeneration) return@launch
                 // During catalogue lookup the viewer can keep watching, pause or seek.
@@ -770,7 +814,7 @@ class PlayerScreen(
                 startExoPlayer(item, resolved, targetEpisode, position, generation)
 
                 launch {
-                    val srcs = runCatching { nav.app.playback.sources(item, targetEpisode, hints) }.getOrNull()
+                    val srcs = runCatching { playbackService.sources(item, targetEpisode, hints) }.getOrNull()
                     coroutineContext.ensureActive()
                     if (!destroyed && generation == loadGeneration && srcs != null) {
                         playSources = srcs
@@ -851,9 +895,10 @@ class PlayerScreen(
         exoPlayer?.pause()
         exoPlayer?.stop()
         exoPlayer?.clearMediaItems()
-        centerSpinner.visibility = View.GONE
-        panelMode = null
-        sidePanel.visibility = View.GONE
+        showBuffering(false)
+        closePanel(restoreFocus = false)
+        hideUpNext(restoreFocus = false)
+        osdBox.visibility = View.GONE
         topShade.visibility = View.GONE
         bottomShade.visibility = View.GONE
         topShade.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
@@ -873,8 +918,19 @@ class PlayerScreen(
         })
         errorBox.addView(box)
         errorBox.visibility = View.VISIBLE
-        val firstFocusable = (0 until box.childCount).map { box.getChildAt(it) }.firstOrNull { it.isFocusable }
-        (firstFocusable ?: box).post { (firstFocusable ?: box).requestFocus() }
+        box.post { if (!destroyed && errorBox.isShown) box.requestFocus() }
+    }
+
+    private fun showBuffering(visible: Boolean) {
+        if (visible) bufferingText.text = if (sourceStarted) Copy.Player.BUFFERING else Copy.Player.PREPARING
+        bufferingCard.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun hideUpNext(restoreFocus: Boolean) {
+        if (upNextBox.visibility != View.VISIBLE) return
+        val hadFocus = upNextBox.hasFocus()
+        upNextBox.visibility = View.GONE
+        if (hadFocus && restoreFocus) showOverlay(lastControl?.takeIf { it.visibility == View.VISIBLE } ?: playPauseBtn)
     }
 
     private fun startTickLoop() {
@@ -903,11 +959,13 @@ class PlayerScreen(
                 }
 
                 if (durMs > 0L && !userSeeking) {
-                    seekBar.progress = ((posMs * 1000L) / durMs).toInt().coerceIn(0, 1000)
+                    val shownPosition = pendingRemoteSeekMs ?: posMs
+                    seekBar.progress = ((shownPosition * 1000L) / durMs).toInt().coerceIn(0, 1000)
                     seekBar.secondaryProgress = ((p.bufferedPosition * 1000L) / durMs).toInt().coerceIn(0, 1000)
                     val posSec = posMs / 1000.0
                     val durSec = durMs / 1000.0
-                    timeTv.text = "${Rules.clock(posSec)} / ${Rules.clock(durSec)}"
+                    val clock = "${Rules.clock(shownPosition / 1000.0)} / ${Rules.clock(durSec)}"
+                    if (timeTv.text != clock) timeTv.text = clock
 
                     val settings = nav.app.userStore.get().settings
                     if (!preparedNext && durSec - posSec <= 90.0 && hasNextEpisode()) {
@@ -933,10 +991,10 @@ class PlayerScreen(
                         upNextLabelTv.text = Copy.fmt(Copy.Player.UP_NEXT, "n" to up)
                         upNextTitleTv.text = mediaItem?.let { Rules.episodeHeading(it, episode + 1) } ?: ""
                         if (wasGone && !overlayVisible) {
-                            upNextPlayBtn.post { upNextPlayBtn.requestFocus() }
+                            upNextPlayBtn.post { if (!destroyed && !overlayVisible && panelMode == null && upNextPlayBtn.isShown) upNextPlayBtn.requestFocus() }
                         }
                     } else {
-                        upNextBox.visibility = View.GONE
+                        hideUpNext(restoreFocus = true)
                     }
                 }
             }
@@ -994,20 +1052,31 @@ class PlayerScreen(
         }
     }
 
-    private fun seekRelative(deltaSec: Int, focusSeekBar: Boolean) {
+    private fun seekRelative(deltaSec: Int, focusSeekBar: Boolean, repeat: Int = 0) {
         val p = exoPlayer ?: return
         val dur = p.duration
         if (dur <= 0L) return
-        val target = RemoteSeekTarget.relative(p.currentPosition, pendingRemoteSeekMs, deltaSec * 1000L, dur) ?: return
+        val multiplier = when {
+            repeat >= 12 -> 3
+            repeat >= 5 -> 2
+            else -> 1
+        }
+        val target = RemoteSeekTarget.relative(p.currentPosition, pendingRemoteSeekMs, deltaSec * multiplier * 1000L, dur) ?: return
         pendingRemoteSeekMs = target
-        beginScrubbing()
-        p.seekTo(target)
-        endScrubbingSoon()
+        seekCommitJob?.cancel()
+        scrubbingOffJob?.cancel()
+        seekCommitJob = scope.launch {
+            delay(110L)
+            if (!screenShown || destroyed || exoPlayer !== p) return@launch
+            beginScrubbing()
+            p.seekTo(target)
+            endScrubbingSoon()
+        }
         seekBar.progress = ((target * 1000L) / dur).toInt().coerceIn(0, 1000)
         timeTv.text = "${Rules.clock(target / 1000.0)} / ${Rules.clock(dur / 1000.0)}"
         showOsd(
             if (deltaSec >= 0) TvIcon.FORWARD else TvIcon.REWIND,
-            Copy.fmt(Copy.Player.SECONDS, "n" to kotlin.math.abs(deltaSec)),
+            Copy.fmt(Copy.Player.SEEK_TO, "time" to Rules.clock(target / 1000.0)),
         )
         showOverlay(focusTarget = if (focusSeekBar) seekBar else null)
     }
@@ -1051,9 +1120,9 @@ class PlayerScreen(
         }
     }
 
-    private fun cycleSpeed() {
-        val idx = Constants.SPEEDS.indexOf(requestedSpeed)
-        requestedSpeed = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size]
+    private fun changeSpeed(next: Double) {
+        if (requestedSpeed == next) return
+        requestedSpeed = next
         speed = requestedSpeed
         speedCleanWindows = 0
         speedBufferingSample = PlaybackBufferingSample(0L, 0)
@@ -1109,13 +1178,12 @@ class PlayerScreen(
         }
     }
 
-    private fun cycleQuality() {
-        val qs = playbackData?.qualities?.takeIf { it.isNotEmpty() } ?: Constants.QUALITIES
-        val idx = qs.indexOf(quality)
-        quality = qs[(idx + 1) % qs.size]
+    private fun changeQuality(next: Quality) {
+        if (next == (actualQuality ?: playbackData?.quality ?: quality)) return
+        quality = next
         sessionQuality = quality
         exoPlayer?.let { if (it.currentPosition > 0L) resumeAtSec = it.currentPosition / 1000.0 }
-        loadAndStart(retry = false, fromSource = null)
+        loadAndStart(retry = false, fromSource = playSources?.current)
     }
 
     private fun hasNextEpisode(): Boolean {
@@ -1153,112 +1221,108 @@ class PlayerScreen(
         nav.app.userStore.dispatch(StateAction.RecordHistory(entry))
     }
 
-    private fun openPanel(mode: String) {
+    private fun openPanel(mode: Panel, anchor: View) {
+        val title: String
+        val count: Int
+        val selected: Int
+        val label: (Int) -> String
+        val pick: (Int) -> Unit
+        when (mode) {
+            Panel.EPISODES -> {
+                val item = mediaItem ?: return
+                count = item.episodes ?: return
+                selected = (episode - 1).coerceAtLeast(0).coerceAtMost(count - 1)
+                title = Copy.Player.EPISODES
+                label = { index ->
+                    val ep = index + 1
+                    val name = Rules.episodeLabel(item, ep)
+                    item.episodeTitles?.getOrNull(index)?.takeIf { it.isNotBlank() }?.let { "$name · $it" } ?: name
+                }
+                pick = { if (it != selected) selectEpisode(it + 1) }
+            }
+            Panel.LINES -> {
+                val sources = playSources ?: return
+                count = sources.list.size
+                selected = sources.list.indexOfFirst { it.key == sources.current }
+                title = Copy.Extra.LINE
+                label = { sources.list[it].name }
+                pick = { index ->
+                    if (index != selected) {
+                        exoPlayer?.let { if (it.currentPosition > 0L) resumeAtSec = it.currentPosition / 1000.0 }
+                        showOsd(TvIcon.REFRESH, Copy.Extra.SWITCHING_LINE)
+                        autoAttempts = 0
+                        loadAndStart(retry = false, fromSource = sources.list[index].key)
+                    }
+                }
+            }
+            Panel.QUALITY -> {
+                val qualities = playbackData?.qualities ?: return
+                count = qualities.size
+                selected = qualities.indexOf(actualQuality ?: playbackData?.quality ?: quality)
+                title = Copy.Player.QUALITY
+                label = { qualities[it].label }
+                pick = { changeQuality(qualities[it]) }
+            }
+            Panel.SPEED -> {
+                count = Constants.SPEEDS.size
+                selected = Constants.SPEEDS.indexOf(requestedSpeed)
+                title = Copy.Player.SPEED
+                label = { Rules.speedLabel(Constants.SPEEDS[it]) }
+                pick = { changeSpeed(Constants.SPEEDS[it]) }
+            }
+        }
+        if (count < 1) return
         panelMode = mode
-        lastPanelAnchor = if (mode == "episodes") episodesBtn else lineBtn
-        setOverlayVisible(true)
+        lastPanelAnchor = anchor
         idleJob?.cancel()
-        topShade.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-        bottomShade.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
-        sidePanel.animate().cancel()
-        sidePanel.visibility = View.VISIBLE
-        sidePanel.alpha = 0f
-        sidePanel.translationX = Theme.dp(ctx, 24).toFloat()
-        sidePanel.animate()
-            .alpha(1f)
-            .translationX(0f)
-            .setDuration(140L)
-            .setInterpolator(Theme.decelerate)
-            .start()
-        if (mode == "episodes") {
-            sideTitleTv.text = Copy.Player.EPISODES
-            val item = mediaItem ?: return
-            val count = item.episodes ?: 1
-            sideGrid.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun getItemCount(): Int = count
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-                    object : RecyclerView.ViewHolder(panelRowView()) {}
+        hideUpNext(restoreFocus = false)
+        osdBox.visibility = View.GONE
+        topShade.visibility = View.INVISIBLE
+        bottomShade.visibility = View.INVISIBLE
+        panelScrim.visibility = View.VISIBLE
+        sideTitleTv.text = title
+        sideGrid.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun getItemCount(): Int = count
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+                object : RecyclerView.ViewHolder(panelRowView()) {}
 
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                    val ep = position + 1
-                    val tv = holder.itemView as TextView
-                    val title = item.episodeTitles?.getOrNull(ep - 1)
-                    val active = ep == episode
-                    tv.text = if (!title.isNullOrEmpty()) "${Rules.episodeLabel(item, ep)} · $title" else Rules.episodeLabel(item, ep)
-                    tv.isSelected = active
-                    tv.setTextColor(
-                        android.content.res.ColorStateList(
-                            arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf(android.R.attr.state_selected), intArrayOf()),
-                            intArrayOf(Theme.PAPER_50, Theme.BAMBOO_400, Theme.PAPER_100),
-                        )
-                    )
-                    tv.setOnClickListener {
-                        if (ep != episode) {
-                            selectEpisode(ep)
-                        } else {
-                            closePanel()
-                        }
-                    }
-                }
-            }
-            val targetIdx = (episode - 1).coerceAtLeast(0)
-            sideGrid.post {
-                sideGrid.setSelectedPosition(targetIdx)
-                sideGrid.requestFocus()
-            }
-        } else {
-            sideTitleTv.text = Copy.Extra.LINE
-            val srcs = playSources ?: return
-            sideGrid.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun getItemCount(): Int = srcs.list.size
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-                    object : RecyclerView.ViewHolder(panelRowView()) {}
-
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                    val opt = srcs.list[position]
-                    val tv = holder.itemView as TextView
-                    val active = opt.key == srcs.current
-                    tv.text = if (active) "${opt.name} ✓" else opt.name
-                    tv.isSelected = active
-                    tv.setTextColor(
-                        android.content.res.ColorStateList(
-                            arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf(android.R.attr.state_selected), intArrayOf()),
-                            intArrayOf(Theme.PAPER_50, Theme.BAMBOO_400, Theme.PAPER_100),
-                        )
-                    )
-                    tv.setOnClickListener {
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val row = holder.itemView as TextView
+                row.isSelected = position == selected
+                val name = label(position)
+                row.text = if (row.isSelected && mode != Panel.EPISODES) "$name ✓" else name
+                row.setOnClickListener {
+                    if (panelMode == mode) {
                         closePanel()
-                        if (!active) {
-                            exoPlayer?.let { if (it.currentPosition > 0L) resumeAtSec = it.currentPosition / 1000.0 }
-                            showOsd(TvIcon.REFRESH, Copy.Extra.SWITCHING_LINE)
-                            autoAttempts = 0
-                            loadAndStart(retry = false, fromSource = opt.key)
-                        }
+                        pick(position)
                     }
                 }
             }
-            val targetIdx = srcs.list.indexOfFirst { it.key == srcs.current }.coerceAtLeast(0)
-            sideGrid.post {
-                sideGrid.setSelectedPosition(targetIdx)
-                sideGrid.requestFocus()
-            }
+        }
+        sidePanel.visibility = View.VISIBLE
+        sidePanel.animate().cancel()
+        sidePanel.alpha = 0.85f
+        sidePanel.translationX = Theme.dp(ctx, 14).toFloat()
+        sidePanel.animate().alpha(1f).translationX(0f).setDuration(135L).setInterpolator(Theme.decelerate).start()
+        sideGrid.selectedPosition = selected.coerceAtLeast(0)
+        sideGrid.requestFocus()
+        sideGrid.post {
+            if (!destroyed && panelMode == mode && !sideGrid.hasFocus()) sideGrid.requestFocus()
         }
     }
 
-    private fun closePanel() {
+    private fun closePanel(restoreFocus: Boolean = true) {
         if (panelMode == null) return
         panelMode = null
         sidePanel.animate().cancel()
         sidePanel.visibility = View.GONE
         sidePanel.alpha = 1f
         sidePanel.translationX = 0f
-        topShade.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
-        bottomShade.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
-        val restore = lastPanelAnchor?.takeIf { it.visibility == View.VISIBLE } ?: playPauseBtn
-        restore.post {
-            if (!destroyed && panelMode == null && overlayVisible && restore.visibility == View.VISIBLE) restore.requestFocus()
-        }
-        scheduleIdleHide()
+        sideGrid.adapter = null
+        panelScrim.visibility = View.GONE
+        val target = lastPanelAnchor?.takeIf { it.visibility == View.VISIBLE } ?: playPauseBtn
+        lastPanelAnchor = null
+        if (restoreFocus) showOverlay(target)
     }
 
     private fun panelRowView(): TextView = TextView(ctx).apply {
@@ -1270,23 +1334,34 @@ class PlayerScreen(
         isClickable = true
         setPadding(Theme.dp(ctx, 16), Theme.dp(ctx, 11), Theme.dp(ctx, 16), Theme.dp(ctx, 11))
         background = Theme.focusBox(ctx, Theme.INK_900, Theme.FILL_2, Theme.LINE, Theme.BAMBOO_400, radiusDp = 10)
+        setTextColor(android.content.res.ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf(android.R.attr.state_selected), intArrayOf()),
+            intArrayOf(Theme.PAPER_50, Theme.BAMBOO_400, Theme.PAPER_100),
+        ))
         layoutParams = RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     private fun showOverlay(focusTarget: View? = null) {
+        if (panelMode != null) return
         val wasVisible = overlayVisible
         val controlsHaveFocus = topShade.hasFocus() || bottomShade.hasFocus() || upNextBox.hasFocus()
-        val target = focusTarget ?: if (!wasVisible || !controlsHaveFocus) playPauseBtn else null
+        val target = focusTarget ?: if (!wasVisible || !controlsHaveFocus) lastControl?.takeIf { it.visibility == View.VISIBLE } ?: playPauseBtn else null
         setOverlayVisible(true, focusTarget = target)
         scheduleIdleHide()
     }
 
-    private fun setOverlayVisible(visible: Boolean, focusTarget: View? = if (visible) playPauseBtn else null) {
+    private fun setOverlayVisible(visible: Boolean, focusTarget: View? = if (visible) lastControl?.takeIf { it.visibility == View.VISIBLE } ?: playPauseBtn else null) {
+        if (!visible && overlayVisible) lastControl = topShade.findFocus() ?: bottomShade.findFocus() ?: lastControl
         overlayVisible = visible
         val vis = if (visible) View.VISIBLE else View.GONE
+        val wasVisible = bottomShade.visibility == View.VISIBLE
         topShade.visibility = vis
         bottomShade.visibility = vis
         if (visible) {
+            if (!wasVisible) {
+                Theme.reveal(topShade, -Theme.dp(ctx, 4))
+                Theme.reveal(bottomShade, Theme.dp(ctx, 4))
+            }
             focusTarget?.let { target ->
                 target.post {
                     if (!destroyed && overlayVisible && panelMode == null && errorBox.visibility != View.VISIBLE && target.isShown && !target.hasFocus()) {
@@ -1313,6 +1388,7 @@ class PlayerScreen(
     }
 
     private fun showOsd(icon: TvIcon, text: String) {
+        if (!screenShown || panelMode != null || errorBox.visibility == View.VISIBLE) return
         osdIcon.setIcon(icon)
         osdTv.text = text
         osdBox.visibility = View.VISIBLE

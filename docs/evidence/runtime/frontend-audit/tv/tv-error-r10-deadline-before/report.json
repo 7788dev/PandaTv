@@ -1,0 +1,167 @@
+{
+  "at": "2026-11-21T09:24:52.628721+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "playback-error-recovery-1",
+      "stage": "playback-error:blocked-next-episode",
+      "error": "Timed out after 45s; visible texts=['返回', '三体', '第2集', '正在准备播放', '0.0', '播放', '下一集', '00:00 / 00:00', '选集', '倍速']",
+      "state": {
+        "texts": [
+          "返回",
+          "三体",
+          "第2集",
+          "正在准备播放",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            295,
+            945,
+            492,
+            1017
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          417,
+          981
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "pid": "30054"
+    },
+    {
+      "name": "playback-error-recovery-2",
+      "stage": "playback-error:blocked-next-episode",
+      "error": "Timed out after 45s; visible texts=['返回', '三体', '第2集', '正在准备播放', '0.0', '播放', '下一集', '00:00 / 00:00', '选集', '倍速']",
+      "state": {
+        "texts": [
+          "返回",
+          "三体",
+          "第2集",
+          "正在准备播放",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            295,
+            945,
+            492,
+            1017
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          417,
+          981
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "pid": "31465"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "CFDBF10A87A6230537FECE3C10AAA4EA359BCC9207F676B1F4DA559E210BBC80",
+  "errorRecoveryObservation": {
+    "detail": {
+      "texts": [
+        "返回",
+        "三体",
+        "8.8",
+        "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+        "导演：杨磊",
+        "主演：张鲁一 / 于和伟 / 陈瑾 / 王子文 / 林永健 / 李小冉",
+        "21世纪初，地球基础科学遭到前所未有的动摇，许多科学家绝望疯狂，自杀身亡。风暴即将到来的前夕，许多敏感的人隐隐嗅到毁灭的气息。这一天，纳米科学家汪淼（张鲁一 饰）被粗鲁的警官史强（于和伟 饰）请到联合作战中心，继而得知科学家们的死亡似乎和一个名为“科学边界（ETO）”的组织有关。作战中心希望汪淼潜入该组织，调查他们与死亡科学家乃至一款神秘游戏《三体》的关联。眼前不断倒计时的数字，ETO负责人申玉菲（李小冉 饰）所预测宇宙闪烁，以及《三体》中那不断毁灭又重生的文明，都令汪淼和大史深感困惑与好奇。而看似平凡的老年科学家叶文洁（陈瑾 饰），她的出现又将一切引向数光年外的未知……\n本片根据刘慈欣同名科幻小说改编。",
+        "展开",
+        "继续播放 第1集",
+        "已收藏",
+        "选集",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "演职员"
+      ],
+      "clock": null,
+      "player": false,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          690,
+          844,
+          773
+        ],
+        "labels": [
+          "继续播放 第1集"
+        ]
+      },
+      "loadingRegionMaxRgb": 197
+    },
+    "trigger": {
+      "texts": [
+        "返回",
+        "三体",
+        "第1集",
+        "0.0",
+        "暂停",
+        "下一集",
+        "00:03 / 1:00:35",
+        "选集",
+        "1080P",
+        "倍速"
+      ],
+      "clock": "00:03 / 1:00:35",
+      "player": true,
+      "spinner": false,
+      "focus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          295,
+          945,
+          492,
+          1017
+        ],
+        "labels": [
+          "下一集"
+        ]
+      },
+      "nextTap": [
+        417,
+        981
+      ],
+      "loadingRegionMaxRgb": 236
+    }
+  },
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

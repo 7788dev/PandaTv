@@ -1,5 +1,7 @@
 # 播放链路审阅（2026-11-16）
 
+> **历史源和清单采样。** HTTP/清单/分片可读不等于播放器解码，也不证明当前线路可用；现版看[分端运行证据](ui-evidence-review.md)。
+
 审阅范围：见界的 `AGENTS.md`、`src-tauri/resources/play-sources.json`、`cms.rs`、`source_config.rs`、`play.rs`、`play_proxy.rs`、`network.rs`、`probe.rs`、`prototype/src/play.ts` 及内联测试、`e2e/source-audit.mjs`。见界文件与 Panda 原型未修改。
 
 ## 真实接口抽样
