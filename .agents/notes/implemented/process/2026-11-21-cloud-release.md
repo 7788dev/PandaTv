@@ -27,3 +27,5 @@ TV 只使用既有发行密钥，通过 Actions secrets 传入；校验证书 SH
 ## Consequences
 
 工作流需要提交并推送才会在 GitHub 生效；本地存在 YAML 不代表云端已成功。TV 签名 secret 必须完整配置，缺失时发布失败，不回退到 unsigned。安装包可从 Actions 下载，正式版可从 Releases 下载；自动更新服务与 Windows 代码签名仍是独立事项。
+
+Windows 干净检出会按 `core.autocrlf` 转换换行，破坏清单逐行比较和冻结设计的字节摘要。首次托管 CI 因此有 21 项播放测试失败；同样的干净检出还独立复现了设计检查失败。[根属性](../../../../.gitattributes)固定 `docs/evidence/manifest-*.m3u8` 的 LF 并禁止转换 `design/` 的文件，使两项检查跨平台一致，保留生产解析行为及原始文件内容。

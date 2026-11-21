@@ -1,0 +1,5 @@
+# Playback assertions compare captured manifest lines byte for byte.
+docs/evidence/manifest-*.m3u8 text eol=lf
+
+# The frozen design baseline hashes exact bytes, irrespective of checkout OS.
+design/** -text

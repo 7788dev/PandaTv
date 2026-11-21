@@ -77,3 +77,14 @@ LIMITS
 - Windows code signing and the in-app update service remain outside this change.
 - Full command logs and isolated helper scripts are ignored scratch under
   .tmp/ci-validation/; unrelated user evidence files were left untouched.
+
+FIRST HOSTED RUN (2026-11-21 23:47–23:51, UTC+08:00)
+- https://github.com/7788dev/PandaTv/actions/runs/44921040080
+- Commit 156c873a68a3c3d9359a5352514111978a18d431: unsigned TV build passed.
+  Windows failed 21/285 offline tests because Git converted the captured HLS
+  test manifests from LF to CRLF on checkout. The same Windows checkout mode
+  reproduced the same 21 playback failures locally, then passed all 44 playback
+  tests with a scoped LF checkout rule for the captured manifests.
+- The same Windows checkout mode also failed the design hash at
+  brand/app-icon.svg. Git preserves the exact frozen design bytes on checkout;
+  no design or captured HLS manifest was modified.
