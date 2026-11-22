@@ -101,3 +101,6 @@ FIRST HOSTED RUN (2026-11-21 23:47–23:51, UTC+08:00)
   build, asar check, fixture E2E 23/23, packaged-live serial playback 1/1, and
   TV testDebugUnitTest 53 / lintRelease / assembleRelease. No installed-app or
   TV device replay was performed.
+- Follow-up master commit 8612bc3 contains only testability extraction, named
+  prefetch/HLS regressions and documentation; the published 1.1.4 assets and
+  their hashes are unchanged.
