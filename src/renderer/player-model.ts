@@ -16,22 +16,6 @@ export function bufferedRanges(buffered: TimeRanges, duration: number): { start:
   if (!Number.isFinite(duration) || duration <= 0) return []
   return Array.from({ length: buffered.length }, (_, i) => ({ start: Math.max(0, buffered.start(i)), end: Math.min(duration, buffered.end(i)) })).filter(range => range.end > range.start)
 }
-export const PREPARE_NEXT_SECONDS = 90
-
-export const HLS_BUDGET = {
-  maxBufferLength: 90,
-  maxMaxBufferLength: 180,
-  maxBufferSize: 96 * 1024 * 1024,
-  backBufferLength: 30,
-  maxBufferHole: 0.2,
-  capLevelToPlayerSize: true,
-  startFragPrefetch: true,
-} as const
-
-export function nextEpisodeDue(remaining: number, prepared: boolean): boolean {
-  return !prepared && Number.isFinite(remaining) && remaining <= PREPARE_NEXT_SECONDS
-}
-
 /** Position when the media actually moved; undefined while it stands still or is seeking. */
 export function playbackProgress(previous: number, current: number, seeking: boolean): number | undefined {
   if (seeking || !Number.isFinite(current) || current < 0) return undefined

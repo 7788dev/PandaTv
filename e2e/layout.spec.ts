@@ -62,7 +62,7 @@ test.describe('desktop layout geometry', () => {
       const assertNoOverflow = async (label: string) => {
         const overflow = await page.evaluate(() => {
           const width = innerWidth, height = innerHeight
-          return [...document.querySelectorAll<HTMLElement>('main, .page__head, .filters, .grid, .section, .setgroup, .dialog, .search__panel, .menu')]
+          return [...document.querySelectorAll<HTMLElement>('main, .page__head, .filters, .grid, .section, .setgroup, .dialog, .search__panel, .menu, .feature')]
             .filter(element => element.getClientRects().length > 0)
             .filter(element => {
               const box = element.getBoundingClientRect()
@@ -78,7 +78,7 @@ test.describe('desktop layout geometry', () => {
       }
       for (const size of [{ width: 1080, height: 640 }, { width: 1440, height: 901 }]) {
         await page.setViewportSize(size)
-        for (const route of ['#/', '#/channel/movie', '#/detail/changye-jiangming', '#/me', '#/settings']) {
+        for (const route of ['#/', '#/channel/movie', '#/detail/changye-jiangming', '#/search?q=雾港来信', '#/me', '#/settings']) {
           await page.evaluate(route => { location.hash = route }, route)
           await settled(page)
           await assertNoOverflow(`${route} at ${size.width}x${size.height}`)
@@ -140,9 +140,11 @@ test.describe('desktop layout geometry', () => {
         const head = document.querySelector<HTMLElement>('.detail__head')!.getBoundingClientRect()
         const poster = document.querySelector<HTMLElement>('.detail__poster')!.getBoundingClientRect()
         const section = document.querySelector<HTMLElement>('.detail__head + .section')!.getBoundingClientRect()
-        return { headBottom: head.bottom, posterWidth: poster.width, sectionTop: section.top, height: innerHeight }
+        const cast = document.querySelector<HTMLElement>('.cast__item')
+        return { headBottom: head.bottom, posterWidth: poster.width, castWidth: cast ? Number.parseFloat(getComputedStyle(cast).width) : 0, sectionTop: section.top, height: innerHeight }
       })
       expect(geometry.posterWidth).toBeGreaterThanOrEqual(160)
+      expect(geometry.castWidth).toBe(76)
       expect(geometry.headBottom).toBeLessThan(geometry.height)
       expect(geometry.sectionTop).toBeLessThan(geometry.height)
       expect(run.errors).toEqual([])
@@ -190,6 +192,35 @@ test.describe('desktop layout geometry', () => {
       await page.evaluate(() => history.back())
       await expect(page.locator('.hero__title')).toHaveText('雾港来信')
       await expect.poll(() => viewport.evaluate(element => element.scrollTop)).toBe(wanted)
+      expect(run.errors).toEqual([])
+    } finally { await app.close() }
+  })
+
+  test('wide detail reflows the episode grid, cast row and search feature', async () => {
+    const run = await launchFixture()
+    const { app, page } = run
+    try {
+      await page.setViewportSize({ width: 2560, height: 1440 })
+      await page.evaluate(() => { location.hash = '#/detail/xiangshan-erxing' })
+      await expect(page.locator('.detail__title')).toHaveText('向山而行')
+      await expect(page.locator('.eplist--cols')).toBeVisible()
+      await settled(page)
+      const layout = await page.evaluate(() => {
+        const episodes = document.querySelector<HTMLElement>('.eplist--cols')!
+        const cast = document.querySelector<HTMLElement>('.cast__item')
+        return {
+          columns: getComputedStyle(episodes).gridTemplateColumns.split(' ').filter(Boolean).length,
+          castWidth: cast ? Number.parseFloat(getComputedStyle(cast).width) : 0,
+        }
+      })
+      expect(layout.columns).toBe(5)
+      expect(layout.castWidth).toBe(88)
+
+      await page.evaluate(() => { location.hash = '#/search?q=雾港来信' })
+      await expect(page.locator('.feature')).toBeVisible()
+      await settled(page)
+      const posterWidth = await page.locator('.feature__poster').evaluate(element => Number.parseFloat(getComputedStyle(element).width))
+      expect(posterWidth).toBeGreaterThanOrEqual(190)
       expect(run.errors).toEqual([])
     } finally { await app.close() }
   })

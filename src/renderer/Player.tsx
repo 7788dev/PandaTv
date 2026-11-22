@@ -12,7 +12,7 @@ import type { PlaySources } from '../shared/api'
 import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './components'
 import { errorText, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
-import { bufferedRanges, HLS_BUDGET, nextEpisodeDue, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
+import { bufferedRanges, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
 import { createFrameRateState, FRAME_SAMPLE_MS, sampleFrameRate } from './playback-adaptation'
 
 const sessionPreferences: { speed?: Speed; activeSpeed?: Speed; quality?: Quality } = {}
@@ -31,7 +31,8 @@ const FINAL_ANSWERS: string[] = [extra.sourceUnavailable, extra.noEpisode, extra
 const finalAnswer = (error: unknown) => error instanceof Error && FINAL_ANSWERS.includes(error.message)
 /** After this much unbroken playback an earlier failure no longer counts against the episode. */
 const HEALTHY_MS = 60_000
-
+/** The next episode is prepared when this little of the current one is left. */
+const PREPARE_NEXT_SECONDS = 90
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value))
 type ClockState = { position: number; duration: number; buffered: { start: number; end: number }[] }
 
@@ -405,8 +406,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       const current = latest.current
       if (autoAttempts.current && playingSince && Date.now() - playingSince > HEALTHY_MS) autoAttempts.current = 0
       // The next episode's source is chosen before this one ends, so it starts without a wait.
-      const remaining = v.duration > 0 ? v.duration - v.currentTime : Number.NaN
-      if (nextEpisodeDue(remaining, prepared.current) && current.item.episodes && episode < current.item.episodes) {
+      if (!prepared.current && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS && current.item.episodes && episode < current.item.episodes) {
         prepared.current = true
         void window.panda.data.playback(item.id, episode + 1, wantedQuality(current.settings)).catch(() => {})
       }
@@ -420,16 +420,15 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       // Keep a larger forward buffer for the rotating public CDNs, while bounding the reverse
       // buffer so long viewing sessions do not retain hundreds of megabytes in the renderer.
       // Failed fragments retry briefly, then the player watchdog can move to another source.
-const instance = new Hls({
+      const instance = new Hls({
         enableWorker: true,
-        capLevelToPlayerSize: HLS_BUDGET.capLevelToPlayerSize,
-        startFragPrefetch: HLS_BUDGET.startFragPrefetch,
-        maxBufferLength: HLS_BUDGET.maxBufferLength,
-        maxMaxBufferLength: HLS_BUDGET.maxMaxBufferLength,
-        maxBufferSize: HLS_BUDGET.maxBufferSize,
-        backBufferLength: HLS_BUDGET.backBufferLength,
-        maxBufferHole: HLS_BUDGET.maxBufferHole,
-
+        capLevelToPlayerSize: true,
+        startFragPrefetch: true,
+        maxBufferLength: 90,
+        maxMaxBufferLength: 180,
+        maxBufferSize: 96 * 1000 * 1000,
+        maxBufferHole: 0.2,
+        backBufferLength: 30,
         manifestLoadPolicy: {
           default: {
             maxTimeToFirstByteMs: 8_000,

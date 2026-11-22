@@ -11,7 +11,7 @@
 - 页面滚动位置按稳定路由键记录，并在离开页面的渲染阶段取样；返回首页/详情恢复实际位置。新增几何与滚动恢复用例在 `e2e/layout.spec.ts`。
 - 播放器 HLS 增加 `capLevelToPlayerSize`、`startFragPrefetch`、请求清晰度上限；看门狗以媒体时间是否真实前进为准，修复 `readyState >= 3` 时漏判解码冻结。
 
-复验：`npm run typecheck`、`npm test`（19 文件 290 项；发布构建时 288 项，发布后补 2 项预取/HLS 缓冲回归）、`npm run build`、`npm run test:e2e:fixture`（23/23，5.7 分钟）、`npm run verify:design`（206 文件不变）、`node design/tools/test-contract.mjs`（405 项）。最终 `release/win-unpacked/Panda.exe` 的真实剧集 HLS 用例 1/1（29.1 秒，第 1→2→3 集）；`out/` 构建同一用例 1/1（20.7 秒）。未安装 NSIS 包，未据此宣称安装或卸载通过。
+复验：`npm run typecheck`、`npm test`（21 文件 295 项；发布构建时 288 项，发布后补 4 项 HLS/LoadPolicy 静态回归与 3 项布局契约）、`npm run build`、`npm run test:e2e:fixture`（25/25，5.8 分钟）、`npm run verify:design`（206 文件不变）、`node design/tools/test-contract.mjs`（405 项）。最终 `release/win-unpacked/Panda.exe` 的真实剧集 HLS 用例 1/1（29.1 秒，第 1→2→3 集）；`out/` 构建同一用例 1/1（20.7 秒）。未安装 NSIS 包，未据此宣称安装或卸载通过。
 
 ## “测试前端”和真正应用是否相同
 

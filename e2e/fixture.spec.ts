@@ -15,11 +15,28 @@ test('fixture: loading, empty, error and offline surfaces remain usable', async 
       else await expect(page.locator('.empty__text')).toContainText(value === 'empty' ? '暂无内容' : value === 'offline' ? '网络未连接' : '加载失败')
       await captureFixture(page, 'state-' + value)
       if (value === 'error' || value === 'offline') {
+        await expect(page.locator('.empty[role="alert"]')).toBeVisible()
+        await expect(page.getByRole('button', { name: '重试', exact: true })).toBeVisible()
         await mode('normal')
         await page.getByRole('button', { name: '重试', exact: true }).click()
         await expect(page.locator('.card').first()).toBeVisible()
       }
     }
+    expect(run.errors).toEqual([])
+  } finally { await app.close() }
+})
+
+test('fixture: detail and search errors expose an alert and retry', async () => {
+  const run = await launchFixture()
+  const { app, page, mode } = run
+  try {
+    await mode('error')
+    await page.evaluate(() => { location.hash = '#/detail/changye-jiangming' })
+    await expect(page.locator('.empty[role="alert"]')).toBeVisible()
+    await expect(page.getByRole('button', { name: '重试', exact: true })).toBeVisible()
+    await page.evaluate(() => { location.hash = '#/search?q=雾港来信' })
+    await expect(page.locator('.empty[role="alert"]')).toBeVisible()
+    await expect(page.getByRole('button', { name: '重试', exact: true })).toBeVisible()
     expect(run.errors).toEqual([])
   } finally { await app.close() }
 })
