@@ -5,7 +5,7 @@ functional changes in douban.ts, normalize.ts, ipc.ts, preload/index.ts, shared/
 renderer/components.tsx, pages.tsx, App.tsx and app.css completed 20:50); test race fix in e2e/data.spec.ts at
 2026-11-18 04:39.
 Earlier logs in this directory (e2e-live.txt, e2e-data.txt, *-before.txt, baseline-*.txt) are history, not the final state.
-This host reaches the network through a local proxy that exits abroad; runs marked "Beijing" were made on a
+This host reaches the network through a local proxy; runs marked "Beijing" were made on a
 server in mainland China (see cn-sources.md).
 
 After the last change to shipped desktop code:

@@ -244,7 +244,7 @@ const vectors = {
       { wanted: '第20260104期特别加更', found: sameIssue(varietyRef.episodes[5]!, varietyRef, varietyOther)?.title ?? null },
       { wanted: '先导片上', found: sameIssue(varietyRef.episodes[0]!, varietyRef, varietyOther)?.title ?? null },
     ],
-    manifestVariants: manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n', new URL('https://cdn.example/master.m3u8')),
+    manifestVariants: manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1000\nhttp://[bad\n#EXT-X-STREAM-INF:BANDWIDTH=1500\njavascript:alert(1)\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n', new URL('https://cdn.example/master.m3u8')),
     referenceLine: (() => {
       const l1 = parseLines('m', Array.from({ length: 12 }, (_, i) => `第${i + 1}集$https://e/${i}.m3u8`).join('#'))[0]!;
       const l2 = parseLines('m', [...Array.from({ length: 12 }, (_, i) => `第${i + 1}集`), '第特别篇01集'].map((t, i) => `${t}$https://e/${i}.m3u8`).join('#'))[0]!;

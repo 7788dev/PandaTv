@@ -124,24 +124,29 @@ function Topbar({ path, query, routeKey, scrolled }: { path: string; query: stri
   </header>
 }
 
-const scrollPositions = new Map<number, number>()
-function PageScroll({ children, pageKey, index, onScroll }: { children: ReactNode; pageKey: string; index: number; onScroll: (top: number) => void }) {
+const scrollPositions = new Map<string, number>()
+function PageScroll({ children, pageKey, onScroll }: { children: ReactNode; pageKey: string; onScroll: (top: number) => void }) {
   const viewport = useRef<HTMLDivElement>(null)
   const content = useRef<HTMLDivElement>(null)
   const bar = useRef<HTMLDivElement>(null)
   const thumb = useRef<HTMLDivElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dragging = useRef<{ y: number; top: number; ratio: number } | null>(null)
-  const [overflow, setOverflow] = useState(false)
+const [overflow, setOverflow] = useState(false)
   const [scrolling, setScrolling] = useState(false)
+  const activeKey = useRef(pageKey)
+  if (activeKey.current !== pageKey) {
+    const leaving = viewport.current?.scrollTop
+    if (leaving !== undefined) scrollPositions.set(activeKey.current, leaving)
+    activeKey.current = pageKey
+  }
   useLayoutEffect(() => {
     const el = viewport.current
     const track = bar.current
     const handle = thumb.current
     if (!el || !track || !handle) return
-    const desired = scrollPositions.get(index) ?? 0
+    const desired = scrollPositions.get(pageKey) ?? 0
     let restored = desired === 0
-    let attempts = 0
     const sync = () => {
       const delta = el.scrollHeight - el.clientHeight
       setOverflow(delta > 0)
@@ -151,7 +156,7 @@ function PageScroll({ children, pageKey, index, onScroll }: { children: ReactNod
       handle.style.translate = `0 ${delta > 0 ? (track.clientHeight - height) * el.scrollTop / delta : 0}px`
       onScroll(el.scrollTop)
     }
-    const observedScroll = () => { sync(); setScrolling(true); if (timer.current) clearTimeout(timer.current); timer.current = setTimeout(() => setScrolling(false), 500) }
+    const observedScroll = () => { scrollPositions.set(pageKey, el.scrollTop); sync(); setScrolling(true); if (timer.current) clearTimeout(timer.current); timer.current = setTimeout(() => setScrolling(false), 500) }
     const touched = () => { restored = true }
     const observer = new ResizeObserver(sync)
     observer.observe(el)
@@ -159,8 +164,8 @@ function PageScroll({ children, pageKey, index, onScroll }: { children: ReactNod
     el.scrollTop = desired
     sync()
     el.addEventListener('scroll', observedScroll, { passive: true }); el.addEventListener('wheel', touched, { passive: true })
-    return () => { scrollPositions.set(index, el.scrollTop); observer.disconnect(); el.removeEventListener('scroll', observedScroll); el.removeEventListener('wheel', touched); if (timer.current) clearTimeout(timer.current) }
-  }, [pageKey, index])
+    return () => { observer.disconnect(); el.removeEventListener('scroll', observedScroll); el.removeEventListener('wheel', touched); if (timer.current) clearTimeout(timer.current) }
+  }, [pageKey])
   return <div className="scroll scroll--page"><div className="scroll__viewport" ref={viewport}><div ref={content}>{children}</div></div>
     <div className="scroll__bar" ref={bar} hidden={!overflow} data-scrolling={dataAttr(scrolling)} onPointerDown={event => {
       if (event.target !== event.currentTarget || !thumb.current || !viewport.current) return
@@ -176,6 +181,7 @@ function PageScroll({ children, pageKey, index, onScroll }: { children: ReactNod
 
 function AppContent() {
   const route = useRoute()
+  const scrollKey = route.path + (route.query.size ? `?${route.query.toString()}` : '')
   const user = useUser()
   const notify = useNotify()
   const [windowState, setWindowState] = useState<WindowState>({ maximized: false, fullscreen: false })
@@ -204,7 +210,7 @@ function AppContent() {
   else page = <main className="page"><EmptyState text={extra.pageNotFound}><a className="btn" href="#/">{t.nav.home}</a></EmptyState></main>
   return <div className="app" data-fullscreen={dataAttr(windowState.fullscreen)}>
     {!playing && <Topbar path={route.path} query={route.path === '/search' ? route.query.get('q') ?? '' : ''} routeKey={route.key} scrolled={scrolled} />}
-    {playing && user.ready && !user.error ? page : <PageScroll pageKey={route.key} index={route.index} onScroll={top => setScrolled(top > SCROLLED_PX)}>{page}</PageScroll>}
+    {playing && user.ready && !user.error ? page : <PageScroll pageKey={scrollKey} onScroll={top => setScrolled(top > SCROLLED_PX)}>{page}</PageScroll>}
     <WindowControls state={windowState} />
   </div>
 }

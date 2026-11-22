@@ -184,8 +184,14 @@ describe('CMS identity and source boundaries', () => {
     expect(lines[0].episodes[1].format).toBe('mp4')
   })
   it('only reports qualities from real variant resolution tags', () => {
-    expect(manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080.m3u8',base)[0].quality).toBe('1080P')
+    expect(manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080.m3u8',base)[0]).toMatchObject({ quality: '1080P', bandwidth: 2_000_000 })
     expect(manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000\nvideo.m3u8',base)[0].quality).toBeUndefined()
+  })
+  it('skips one malformed or non-http variant instead of losing the whole master', () => {
+    const variants = manifestVariants('#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1000\nhttp://[bad\n#EXT-X-STREAM-INF:BANDWIDTH=2000\njavascript:alert(1)\n#EXT-X-STREAM-INF:BANDWIDTH=3000,RESOLUTION=1920x1080\n1080.m3u8', base)
+    expect(variants).toHaveLength(1)
+    expect(variants[0]!.quality).toBe('1080P')
+    expect(variants[0]!.url).toBe('https://vip.ffzy-online2.com/1080.m3u8')
   })
   it('rejects private targets, credential URLs, malicious ports and bad source configuration', () => {
     for (const url of ['http://127.0.0.1/a','http://[::1]/','http://[::ffff:127.0.0.1]/','http://169.254.169.254/','http://192.168.1.2/','http://example.com:25/','https://example.com:22/','http://example.com:993/','http://example.com:6667/','http://example.com:10080/','http://example.com:5060/','file:///test','https://user:password@example.com/']) expect(() => validatePublicUrl(url)).toThrow()

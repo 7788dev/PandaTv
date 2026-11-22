@@ -308,8 +308,11 @@ export function manifestVariants(text: string, base: URL): Array<{ url: string; 
   const lines = text.split(/\r?\n/).map(l => l.trim())
   return lines.flatMap((line, index) => {
     if (!line.startsWith('#EXT-X-STREAM-INF:') || !lines[index + 1] || lines[index + 1]!.startsWith('#')) return []
+    let url: URL
+    try { url = new URL(lines[index + 1]!, base) } catch { return [] }
+    if (!['http:', 'https:'].includes(url.protocol)) return []
     const size = /RESOLUTION=(\d+)x(\d+)/.exec(line)
-    return [{ url: new URL(lines[index + 1]!, base).href, quality: size ? qualityFor(Number(size[1]), Number(size[2])) : undefined, bandwidth: Number(/(?:^|,)BANDWIDTH=(\d+)/.exec(line)?.[1] ?? 0) }]
+    return [{ url: url.href, quality: size ? qualityFor(Number(size[1]), Number(size[2])) : undefined, bandwidth: Number(/(?:^|[,:])BANDWIDTH=(\d+)/.exec(line)?.[1] ?? 0) }]
   })
 }
 

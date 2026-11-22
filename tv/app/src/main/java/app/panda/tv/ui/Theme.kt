@@ -615,7 +615,7 @@ object Theme {
         val card = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER
-            setPadding(dp(ctx, 28), dp(ctx, 22), dp(ctx, 28), dp(ctx, 20))
+            setPadding(dp(ctx, 28), dp(ctx, 24), dp(ctx, 28), dp(ctx, 20))
             background = box(INK_900, LINE, radiusDp = 18, ctx = ctx)
             layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER)
         }

@@ -12,7 +12,7 @@ import type { PlaySources } from '../shared/api'
 import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './components'
 import { errorText, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
-import { bufferedRanges, playbackHistory, resolutionQuality } from './player-model'
+import { bufferedRanges, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
 import { createFrameRateState, FRAME_SAMPLE_MS, sampleFrameRate } from './playback-adaptation'
 
 const sessionPreferences: { speed?: Speed; activeSpeed?: Speed; quality?: Quality } = {}
@@ -44,7 +44,7 @@ export function Player({ id, episode: requested }: { id: string; episode: number
   const episode = requested || historyEpisode.current
   if (!item.data) return <div className="player" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} onClick={() => back('/detail/' + id)} /></header>
-    <div className="player__center"><span className="spinner" /><div className="player__error empty"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
+    <div className="player__center"><span className="spinner" /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
   </div>
   const media: MediaItem = { ...item.data, ...availability.data, ...(item.data.type === 'variety' ? { unit: '期' as const } : {}) }
   return <PlayerMedia key={id + ':' + episode} item={media} episode={episode} />
@@ -111,7 +111,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [fullscreen, setFullscreen] = useState(false)
   const [idle, setIdle] = useState(false)
   const [osd, setOsd] = useState<{ name: IconName; text: string } | null>(null)
-  const [levels, setLevels] = useState<{ quality: Quality; index: number }[]>([])
+  const [levels, setLevels] = useState<{ quality: Quality; index: number; bitrate: number }[]>([])
   const [actualQuality, setActualQuality] = useState<Quality | undefined>()
   const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data })
   latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data }
@@ -226,8 +226,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   }
   const changeQuality = (value: Quality) => {
     sessionPreferences.quality = value
-    const match = levels.find(level => level.quality === value)
-    if (hls.current && match && levels.length > 1) { hls.current.currentLevel = match.index; setActualQuality(value); return }
+    const target = qualityLevelIndex(levels, value)
+    if (hls.current && target !== undefined && levels.length > 1) { hls.current.currentLevel = target; hls.current.autoLevelCapping = target; setActualQuality(value); return }
     keepPosition()
     setRequest(value => ({ ...value, retry: false }))
     setQuality(value)
@@ -335,6 +335,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     v.volume = latest.current.volume; v.muted = latest.current.muted; v.playbackRate = activeSpeed.current
     let active = true, failed = false, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now(), playingSince = 0
     let frameState = createFrameRateState()
+    let lastPosition = -1
     const startAt = (retryPosition.current ?? resumePosition(initialHistory.current, episode)) || startPosition(source, latest.current.settings)
     intended.current = startAt
     const alive = () => { progressAt = Date.now() }
@@ -421,6 +422,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       // Failed fragments retry briefly, then the player watchdog can move to another source.
       const instance = new Hls({
         enableWorker: true,
+        capLevelToPlayerSize: true,
+        startFragPrefetch: true,
         maxBufferLength: 90,
         maxMaxBufferLength: 180,
         maxBufferSize: 96 * 1000 * 1000,
@@ -455,10 +458,10 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       hls.current = instance
       instance.on(Hls.Events.FRAG_LOADED, alive); instance.on(Hls.Events.FRAG_BUFFERED, alive)
       instance.on(Hls.Events.MANIFEST_PARSED, (_event, manifest) => {
-        const actual = manifest.levels.flatMap((level, index) => { const quality = resolutionQuality(level.width, level.height); return quality ? [{ quality, index }] : [] })
+        const actual = manifest.levels.flatMap((level, index) => { const quality = resolutionQuality(level.width, level.height); return quality ? [{ quality, index, bitrate: level.bitrate }] : [] })
         setLevels(actual)
-        const preferred = actual.find(level => level.quality === (sessionPreferences.quality ?? quality))
-        if (preferred) instance.currentLevel = preferred.index
+        const preferred = qualityLevelIndex(actual, sessionPreferences.quality ?? quality)
+        if (preferred !== undefined) { instance.currentLevel = preferred; instance.autoLevelCapping = preferred }
       })
       instance.on(Hls.Events.LEVEL_SWITCHED, (_event, event) => {
         const level = instance.levels[event.level]
@@ -475,7 +478,9 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const startup = setTimeout(() => { if (active && !sourceStarted) fail() }, START_MS)
     // A source can die in the middle of an episode without ever reporting an error.
     const watchdog = setInterval(() => {
-      if (!sourceStarted || v.paused || v.ended || v.readyState >= 3 || latest.current.problem) alive()
+      if (!sourceStarted || v.paused || v.ended || latest.current.problem) { lastPosition = v.currentTime; alive(); return }
+      const advanced = playbackProgress(lastPosition, v.currentTime, v.seeking)
+      if (advanced !== undefined) { lastPosition = advanced; alive() }
       else if (Date.now() - progressAt > STALL_MS) { alive(); fail() }
     }, 2000)
     const frameMonitor = setInterval(() => {
@@ -531,8 +536,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     <video className="player__video" ref={video} playsInline preload="auto" crossOrigin="anonymous" poster={item.backdrop ?? undefined} onClick={play} onDoubleClick={toggleFullscreen} />
     <img className="player__handoff" ref={handoff} alt="" aria-hidden="true" />
     <div className="player__shade" />
-    <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title">{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
-    <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button><span className="spinner" /><div className="player__error empty"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
+    <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title" title={item.title}>{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
+    <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button><span className="spinner" /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
     <div className="osd" role="status" data-open={dataAttr(osd)}>{osd && <><Icon name={osd.name} /><span>{osd.text}</span></>}</div>
     <button className="btn btn--glass player__skip" data-open={dataAttr(showSkipIntro(time.position, playback.data ?? {}, state.settings) && upNext === null && !panelOpen)} onClick={() => { if (playback.data?.intro) seekTo(playback.data.intro.end) }}>{t.player.skipIntro}</button>
     <div className="upnext" data-open={dataAttr(upNext !== null && !panelOpen)}><div className="upnext__label">{upNext !== null && fmt(t.player.upNext, { n: upNext })}</div><div className="upnext__title">{episodeHeading(item, episode + 1)}</div><div className="upnext__actions"><button className="btn btn--primary btn--sm" onClick={next}>{t.player.playNow}</button><button className="btn btn--ghost btn--sm" onClick={() => setCancelled(true)}>{t.action.cancel}</button></div></div>

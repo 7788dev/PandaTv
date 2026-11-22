@@ -62,13 +62,13 @@ export function TooltipProvider({ children }: { children: ReactNode }) {
   return <Tooltip.Provider delay={TOOLTIP_DELAY_MS}>{children}</Tooltip.Provider>
 }
 
-export function EmptyState({ icon = 'film', text, children }: { icon?: IconName; text: string; children?: ReactNode }) {
-  return <div className="empty"><Icon name={icon} size="xl" /><p className="empty__text">{text}</p>{children}</div>
+export function EmptyState({ icon = 'film', text, children, alert = false }: { icon?: IconName; text: string; children?: ReactNode; alert?: boolean }) {
+  return <div className="empty" role={alert ? 'alert' : undefined}><Icon name={icon} size="xl" /><p className="empty__text">{text}</p>{children}</div>
 }
 
 export function ErrorState({ error, retry }: { error: unknown; retry?: () => void }) {
   const offline = !navigator.onLine || errorText(error) === t.state.offline
-  return <EmptyState icon={offline ? 'wifi-off' : 'cloud-off'} text={errorText(error)}>{retry && <button className="btn" onClick={retry}>{t.action.retry}</button>}</EmptyState>
+  return <EmptyState icon={offline ? 'wifi-off' : 'cloud-off'} text={errorText(error)} alert>{retry && <button className="btn" onClick={retry}>{t.action.retry}</button>}</EmptyState>
 }
 
 export function SkeletonCard({ wide = false }: { wide?: boolean }) {
@@ -95,7 +95,7 @@ export function MediaCard({ item, wide = false }: { item: MediaItem; wide?: bool
         <MediaImage src={wide ? wideImage(item) : item.poster} className="card__img" fallback={<span className="card__fallback">{item.title}</span>} />
         {item.tag && <span className="tag">{item.tag}</span>}{status && <span className="card__status">{status}</span>}{score && <span className="card__score">{score}</span>}
       </div>
-      <div className="card__title">{item.title}</div>{sub && <div className="card__sub">{sub}</div>}
+      <div className="card__title" title={item.title}>{item.title}</div>{sub && <div className="card__sub" title={sub}>{sub}</div>}
     </a>
     <div className="card__over"><a className="card__play" href={`#/play/${item.id}`} aria-label={`${t.action.play} ${item.title}`} tabIndex={-1}><Icon name="play" /></a></div>
   </div>
@@ -117,7 +117,7 @@ export function ContinueCard({ item, history }: { item: MediaItem; history: Hist
       <div className="card__media"><MediaImage src={wideImage(item)} className="card__img" fallback={<span className="card__fallback">{item.title}</span>} />
         {history.duration > 0 && <span className="card__progress"><i style={{ '--p': `${progressPercent(history)}%` } as CSSProperties} /></span>}
       </div>
-      <div className="card__title">{item.title}</div>{history.duration > 0 && <div className="card__sub">{progressText(item, history)}</div>}
+      <div className="card__title" title={item.title}>{item.title}</div>{history.duration > 0 && <div className="card__sub">{progressText(item, history)}</div>}
     </a>
     <div className="card__over"><span className="card__play card__play--center" aria-hidden="true"><Icon name="play" /></span><Tip label={t.action.remove}><button className="card__remove" aria-label={`${t.action.remove} ${item.title}`} disabled={removing} onClick={() => void remove()}><Icon name="close" size="sm" /></button></Tip></div>
   </div>
@@ -154,7 +154,10 @@ export function Shelf({ title, more, wide = false, children }: { title: string; 
     const el = track.current
     if (!el) return
     const css = getComputedStyle(el)
-    el.scrollBy({ left: direction * (el.clientWidth - parseFloat(css.paddingLeft) * 2 + parseFloat(css.columnGap)), behavior: 'smooth' })
+    const step = el.clientWidth - parseFloat(css.paddingLeft) * 2 + parseFloat(css.columnGap)
+    const max = Math.max(0, el.scrollWidth - el.clientWidth)
+    const target = direction > 0 ? Math.min(max, el.scrollLeft + step) : Math.max(0, el.scrollLeft - step)
+    el.scrollTo({ left: target, behavior: 'smooth' })
   }
   return <section className={`section shelf${wide ? ' shelf--wide' : ''}`} data-at-start={dataAttr(edge.start)} data-at-end={dataAttr(edge.end)}>
     <header className="section__head"><h2 className="section__title">{title}</h2>{more && <a className="text-btn" href={`#${more}`}>{t.action.more}<Icon name="chevron-right" /></a>}</header>
@@ -228,7 +231,7 @@ export function Cast({ people }: { people?: Credit[] }) {
   if (!people?.length) return null
   return <section className="section"><header className="section__head"><h2 className="section__title">{t.detail.cast}</h2></header><div className="section__body"><ul className="cast">{people.map((person, index) => {
     const key = `${index}:${person.name}`
-    const body = <><span className="cast__avatar"><MediaImage src={person.photo} fallback={avatarText(person.name)} /></span><span className="cast__name">{person.name}</span>{person.role && <span className="cast__role">{person.role}</span>}</>
+    const body = <><span className="cast__avatar"><MediaImage src={person.photo} fallback={avatarText(person.name)} /></span><span className="cast__name" title={person.name}>{person.name}</span>{person.role && <span className="cast__role" title={person.role}>{person.role}</span>}</>
     return person.id ? <li key={key}><a className="cast__item" href={`#/person/${person.id}`}>{body}</a></li> : <li className="cast__item" key={key}>{body}</li>
   })}</ul></div></section>
 }

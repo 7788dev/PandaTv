@@ -112,7 +112,7 @@ object PlaybackMatchers {
     private val ISSUE_DATE_RE = Regex("(?:^|\\D)(20\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01]))(?!\\d)")
     private val ISSUE_PREFIX_RE = Regex("^第?期")
     private val VARIANT_RES_RE = Regex("RESOLUTION=(\\d+)x(\\d+)")
-    private val VARIANT_BW_RE = Regex("(?:^|,)BANDWIDTH=(\\d+)")
+    private val VARIANT_BW_RE = Regex("(?:^|[,:])BANDWIDTH=(\\d+)")
 
     private fun nfkc(raw: String): String = Normalizer.normalize(raw, Normalizer.Form.NFKC)
 
@@ -366,6 +366,17 @@ object PlaybackMatchers {
             val line = lines[i]
             val next = lines[i + 1]
             if (!line.startsWith("#EXT-X-STREAM-INF:") || next.isEmpty() || next.startsWith("#")) continue
+            val resolved = try {
+                PublicNetwork.resolveUrl(baseUrl, next)
+            } catch (_: Exception) {
+                continue
+            }
+            val scheme = try {
+                URI(resolved).scheme?.lowercase(Locale.US)
+            } catch (_: Exception) {
+                null
+            }
+            if (scheme != "http" && scheme != "https") continue
             val size = VARIANT_RES_RE.find(line)
             val quality = size?.let {
                 val w = it.groupValues[1].toIntOrNull() ?: 0
@@ -373,7 +384,7 @@ object PlaybackMatchers {
                 Quality.forPicture(w, h)
             }
             val bw = VARIANT_BW_RE.find(line)?.groupValues?.get(1)?.toIntOrNull() ?: 0
-            out.add(ManifestVariant(PublicNetwork.resolveUrl(baseUrl, next), quality, bw))
+            out.add(ManifestVariant(resolved, quality, bw))
         }
         return out
     }

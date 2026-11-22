@@ -31,11 +31,11 @@ gh run download <run-id> --dir release/cloud
 
 1. 修改根 `package.json` 及 `package-lock.json` 的桌面版本；若更新 TV，同时递增 `tv/app/build.gradle.kts` 的 `versionName` 和 `versionCode`。两个客户端版本独立，发布标签跟随桌面版本。
 2. 提交、推送代码，等待该提交的 CI 通过。
-3. 为已验收的提交创建并推送 `v<桌面版本>` 标签。例如桌面版本为 `1.1.3` 时：
+3. 为已验收的提交创建并推送 `v<桌面版本>` 标签。例如桌面版本为 `1.1.4` 时：
 
    ```powershell
-   git tag -a v1.1.3 -m "Panda 1.1.3"
-   git push origin v1.1.3
+   git tag -a v1.1.4 -m "Panda 1.1.4"
+   git push origin v1.1.4
    ```
 
 4. [Release 工作流](../.github/workflows/release.yml)重新执行全部云端检查和构建，验证 TV v1/v2 签名及现有证书指纹，生成 `SHA256SUMS.txt`，再创建 GitHub Release。
@@ -45,7 +45,7 @@ Release 附件为 `Panda-<桌面版本>-Setup.exe`、`Panda-TV-<TV版本>.apk` �
 失败时先修正外部配置或网络问题，在 Actions 重跑该次失败任务。也可以选择已有版本标签手动运行 **Release**：
 
 ```powershell
-gh workflow run release.yml --ref v1.1.3
+gh workflow run release.yml --ref v1.1.4
 ```
 
 手动 Release 必须选择版本标签，选分支会失败。若修复需要改变源码，使用新版本和新标签，不移动已发布标签。

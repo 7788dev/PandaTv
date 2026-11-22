@@ -2,6 +2,17 @@
 
 日期：2026-11-21，UTC+8。本文只评估 Windows 的鼠标/键盘、悬停、窗口与 Electron renderer；不会按 TV 的 overscan、遥控器行列导航或大字号标准给桌面制造问题。TV 见[独立报告](frontend-audit-tv.md)。
 
+## 2026-11-22 排版与播放器复验（1.1.4）
+
+本轮在 `src/renderer/app.css` 覆盖层与生产组件内修复排版，不改 `design/`：
+
+- 1080×640：主推文案区宽度上限 560px，缩略图 64–92px 自适应，短窗口收紧标题/段落/按钮间距；详情页 ≤1200px 改为 168–220px 海报列；播放器底栏收紧控件与时间字号；搜索面板 ≤1240px 收窄到 360px。
+- 卡片/榜单/选集/演职员/推荐条/确认框/播放器控件间距统一使用 `--sp-*`；卡片、榜单、演职员截断文字增加原生标题提示；错误态统一 `role="alert"`。
+- 页面滚动位置按稳定路由键记录，并在离开页面的渲染阶段取样；返回首页/详情恢复实际位置。新增几何与滚动恢复用例在 `e2e/layout.spec.ts`。
+- 播放器 HLS 增加 `capLevelToPlayerSize`、`startFragPrefetch`、请求清晰度上限；看门狗以媒体时间是否真实前进为准，修复 `readyState >= 3` 时漏判解码冻结。
+
+复验：`npm run typecheck`、`npm test`（19 文件 288 项）、`npm run build`、`npm run test:e2e:fixture`（23/23，5.7 分钟）、`npm run verify:design`（206 文件不变）、`node design/tools/test-contract.mjs`（405 项）。最终 `release/win-unpacked/Panda.exe` 的真实剧集 HLS 用例 1/1（29.1 秒，第 1→2→3 集）；`out/` 构建同一用例 1/1（20.7 秒）。未安装 NSIS 包，未据此宣称安装或卸载通过。
+
 ## “测试前端”和真正应用是否相同
 
 旧 E2E 确实会另开一个 `design/preview` 原型窗口。原型和测试 renderer 都使用模拟数据，再做布局对照；这很容易被误认为当前 Windows 应用。本轮已移除原型窗口、HTTP 路由与两个成对对照用例，不再启动或维护它。

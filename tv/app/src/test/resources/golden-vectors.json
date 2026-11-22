@@ -1563,12 +1563,12 @@
       {
         "url": "https://cdn.example/1080/index.m3u8",
         "quality": "1080P",
-        "bandwidth": 0
+        "bandwidth": 2000000
       },
       {
         "url": "https://cdn.example/720/index.m3u8",
         "quality": "720P",
-        "bandwidth": 0
+        "bandwidth": 800000
       }
     ],
     "referenceLine": true,

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { playbackHistory, bufferedRanges, resolutionQuality } from '../src/renderer/player-model'
+import { playbackHistory, bufferedRanges, playbackProgress, qualityLevelIndex, resolutionQuality } from '../src/renderer/player-model'
 import { updateResult } from '../src/main/updates'
 import { rpc, safeError } from '../src/main/ipc'
 
@@ -15,6 +15,20 @@ describe('actual video state', () => {
     expect(bufferedRanges(ranges, 100)).toEqual([{ start: 0, end: 10 }, { start: 50, end: 60 }])
     expect(bufferedRanges(ranges, NaN)).toEqual([])
     expect(resolutionQuality(0, 0)).toBeUndefined()
+  })
+  it('only treats real media movement as progress for the stall watchdog', () => {
+    expect(playbackProgress(10, 10.02, false)).toBeUndefined()
+    expect(playbackProgress(10, 12, false)).toBe(12)
+    expect(playbackProgress(300, 5, false)).toBe(5)
+    expect(playbackProgress(10, 12, true)).toBeUndefined()
+    expect(playbackProgress(-1, 0.5, false)).toBe(0.5)
+    expect(playbackProgress(10, NaN, false)).toBeUndefined()
+  })
+  it('caps the picture at the highest-bitrate level the source really carries', () => {
+    const levels = [{ quality: '720P' as const, index: 0, bitrate: 1_000_000 }, { quality: '1080P' as const, index: 1, bitrate: 3_000_000 }, { quality: '1080P' as const, index: 2, bitrate: 5_000_000 }]
+    expect(qualityLevelIndex(levels, '1080P')).toBe(2)
+    expect(qualityLevelIndex(levels, '4K')).toBeUndefined()
+    expect(qualityLevelIndex(levels, undefined)).toBeUndefined()
   })
   it('does not report update success for malformed release data or leak internal errors', async () => {
     expect(updateResult('1.0.0', '1.0.1').status).toBe('available')

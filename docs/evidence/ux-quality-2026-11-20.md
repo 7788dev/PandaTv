@@ -25,7 +25,7 @@
 | TV 连续 seek 恢复 | 无同设备量测基线 | 360zy 单源一次连续 6 次遥控器 seek 后，缓冲结束至时间轴继续前进 5,375 ms | 这是命令 burst 的一次观测，不等价于单次 seek latency；实际体验仍受分片源与网络决定。 |
 | TV 冷 activity 启动 | 既有 TCL 设备历史记录 630 ms（环境不同） | MuMu 5 次 `am start -W TotalTime`：156–193 ms，median 164 ms | 仅系统 activity 启动时间，不包括首页网络数据和首屏海报，不可与实体电视直接比较。 |
 | TV 首屏 / 展开筛选导航动画 | 既有 MuMu 2 轮、4 场景 0 janky，p95 5 ms | 4 场景各 0 janky，p95 均为 5 ms | 在这台模拟设备上复现；未覆盖低端实体电视性能。 |
-| TV 2×实际帧率 | 无已验证帧率基线 | 最终 APK 单源 360zy 下媒体时间 12.64 s 前进 23 s（实测 1.82×）；10 s decoder counter 记录 577 rendered output buffers / 0 dropped output buffers | 该 MuMu / 360zy 样本的 dropped-buffer ratio 为 0/577；不代表所有编码器、片源或实体 Android 5.1 电视。全源网络测量仍受境外出口的超时与 403 限制。 |
+| TV 2×实际帧率 | 无已验证帧率基线 | 最终 APK 单源 360zy 下媒体时间 12.64 s 前进 23 s（实测 1.82×）；10 s decoder counter 记录 577 rendered output buffers / 0 dropped output buffers | 该 MuMu / 360zy 样本的 dropped-buffer ratio 为 0/577；不代表所有编码器、片源或实体 Android 5.1 电视。全源网络测量仍受本机网络的超时与 403 限制。 |
 
 Windows 测量来自打包的 `Panda.exe`；TV release APK 为 1,072,144 字节，SHA-256 `242F249E0A21D72DEB3F007342E9E6609EE9151F081715DD44FEB999FD52A498`（`1.0.7`, versionCode 8, minSdk 22），MuMu 安装文件哈希与发行 APK 相同。启动原始数据见 [`desktop-startup-1.1.0.json`](runtime/quality-1.1.0-tv-1.0.7/desktop-startup-1.1.0.json)，播放器数据见 [`desktop-live-movie-1.1.0.json`](runtime/quality-1.1.0-tv-1.0.7/desktop-live-movie-1.1.0.json)。
 
@@ -33,7 +33,7 @@ Windows 测量来自打包的 `Panda.exe`；TV release APK 为 1,072,144 字节�
 
 内置的 9 个源为速播、虎牙、暴风、电影天堂、量子、非凡、红牛、金鹰和 360。搜索目前每源 9 秒超时，命中后最多再等 1.2 秒收集其它目录；起播并发比较最多 3 条线路，按首片传输余量、实测画面与作品级近期失败降权排序；线路失败最多自动重试两次。解析器继续处理 HLS/MP4、密钥和清单 URI，去广告规则只删除有清单内证据的片段。应用不要求用户填写源地址或提供账号凭据。
 
-本机出口的 `probe:start` 在 16 个真实热门条目中有 13 个读到首片，成功样本总耗时 median 2442 ms、worst 4408 ms；获胜源 360zy 13 次。探测同时看到虎牙、金鹰 403，红牛连接重置，多个其它目录超时。这里是境外出口证据，不代表国内目录可用率；北京网络/目标 Android 5.1 电视仍需单独实测。证据见 [`desktop-source-probe-1.1.0.txt`](runtime/quality-1.1.0-tv-1.0.7/desktop-source-probe-1.1.0.txt)。
+本机网络的 `probe:start` 在 16 个真实热门条目中有 13 个读到首片，成功样本总耗时 median 2442 ms、worst 4408 ms；获胜源 360zy 13 次。探测同时看到虎牙、金鹰 403，红牛连接重置，多个其它目录超时。这里是本机网络证据，不代表国内目录可用率；北京网络/目标 Android 5.1 电视仍需单独实测。证据见 [`desktop-source-probe-1.1.0.txt`](runtime/quality-1.1.0-tv-1.0.7/desktop-source-probe-1.1.0.txt)。
 
 TV 导航覆盖 23 项、搜索清空 3 项全部通过，user-state 恢复标志为 true；焦点清单、搜索与动画报告见 [`tv-navigation-1.0.7.json`](runtime/quality-1.1.0-tv-1.0.7/tv-navigation-1.0.7.json)、[`tv-search-1.0.7.json`](runtime/quality-1.1.0-tv-1.0.7/tv-search-1.0.7.json) 和 [`tv-motion-1.0.7.json`](runtime/quality-1.1.0-tv-1.0.7/tv-motion-1.0.7.json)。最终哈希 APK 下 360zy 单源切集到第 3 集并更新历史通过。2.0×实测为 media time 1.82×（12.64 s wall / 23 s media），10 秒 decoder counter 为 577 rendered output buffers、0 dropped output buffers；仅代表 MuMu Android 15 / 360zy 样本。九源报告 [`tv-playback-1.0.7-final-run.json`](runtime/quality-1.1.0-tv-1.0.7/tv-playback-1.0.7-final-run.json) 中焦点、切集、无源重试通过，倍速因该次未解出首帧而不可测。上述报告的 user-state、防火墙、临时源规则恢复标志均为 true。
 

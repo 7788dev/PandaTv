@@ -12,12 +12,14 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import app.panda.tv.model.Availability
 import app.panda.tv.model.Copy
 import app.panda.tv.model.Credit
 import app.panda.tv.model.MediaItem
+import app.panda.tv.model.MediaType
 import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
 import kotlinx.coroutines.CancellationException
@@ -43,6 +45,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
     private var availability: Availability? = null
     private var relatedItems: List<MediaItem> = emptyList()
     private var loadJob: Job? = null
+    private var availabilityJob: Job? = null
     private var destroyed = false
     private var playBtn: LinearLayout? = null
     private var favBtn: LinearLayout? = null
@@ -63,11 +66,13 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
     override fun onDestroy() {
         destroyed = true
         loadJob?.cancel()
+        availabilityJob?.cancel()
         scope.cancel()
     }
 
     private fun load() {
         loadJob?.cancel()
+        availabilityJob?.cancel()
         container.removeAllViews()
         container.addView(Theme.loadingBox(ctx))
         loadJob = scope.launch {
@@ -76,22 +81,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 if (destroyed) return@launch
                 detailItem = item
                 render(item)
-                launch {
-                    val avail = runCatching {
-                        nav.app.playback.availability(item, nav.app.douban.workHints(item.id))
-                    }.getOrNull()
-                    coroutineContext.ensureActive()
-                    if (!destroyed && avail != null) {
-                        availability = avail
-                        val merged = item.copy(
-                            episodes = avail.episodes ?: item.episodes,
-                            episodeTitles = avail.episodeTitles ?: item.episodeTitles,
-                        )
-                        detailItem = merged
-                        refreshStateViews(merged)
-                        renderEpisodes(merged)
-                    }
-                }
+                loadAvailability(item)
                 launch {
                     val rel = runCatching { nav.app.douban.related(item.id) }.getOrNull() ?: emptyList()
                     coroutineContext.ensureActive()
@@ -118,6 +108,80 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 }
             }
         }
+    }
+
+    private fun loadAvailability(item: MediaItem) {
+        availabilityJob?.cancel()
+        if (item.type == MediaType.MOVIE) {
+            episodeSection?.apply {
+                removeAllViews()
+                visibility = View.GONE
+            }
+            return
+        }
+        showAvailabilityLoading()
+        availabilityJob = scope.launch {
+            try {
+                val avail = nav.app.playback.availability(item, nav.app.douban.workHints(item.id))
+                coroutineContext.ensureActive()
+                if (destroyed || detailItem?.id != item.id) return@launch
+                availability = avail
+                val merged = item.copy(
+                    episodes = avail.episodes ?: item.episodes,
+                    episodeTitles = avail.episodeTitles ?: item.episodeTitles,
+                )
+                detailItem = merged
+                refreshStateViews(merged)
+                renderEpisodes(merged)
+                if (container.findFocus() == null) playBtn?.requestFocus()
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Throwable) {
+                if (!destroyed && detailItem?.id == item.id) renderEpisodesError(error)
+            }
+        }
+    }
+
+    private fun showAvailabilityLoading() {
+        val sec = episodeSection ?: return
+        sec.removeAllViews()
+        sec.visibility = View.VISIBLE
+        sec.addView(Theme.sectionHeader(ctx, Copy.Detail.EPISODES, m.pageH, Theme.dp(ctx, 8)))
+        val row = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(m.pageH, Theme.dp(ctx, 8), m.pageH, Theme.dp(ctx, 8))
+        }
+        row.addView(ProgressBar(ctx).apply {
+            indeterminateTintList = ColorStateList.valueOf(Theme.BAMBOO_400)
+        }, LinearLayout.LayoutParams(Theme.dp(ctx, 24), Theme.dp(ctx, 24)).apply {
+            rightMargin = Theme.dp(ctx, 10)
+        })
+        row.addView(Theme.label(ctx, Copy.Extra.LOADING, sp = 13.5f, color = Theme.PAPER_70))
+        sec.addView(row)
+    }
+
+    private fun renderEpisodesError(error: Throwable) {
+        val sec = episodeSection ?: return
+        sec.removeAllViews()
+        sec.visibility = View.VISIBLE
+        sec.addView(Theme.sectionHeader(ctx, Copy.Detail.EPISODES, m.pageH, Theme.dp(ctx, 8)))
+        val row = LinearLayout(ctx).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(m.pageH, Theme.dp(ctx, 6), m.pageH, Theme.dp(ctx, 10))
+        }
+        row.addView(Theme.label(ctx, Copy.errorText(error), sp = 13.5f, color = Theme.PAPER_70, maxLines = 2), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        val retry = Theme.pillButton(ctx, Copy.Action.RETRY, padH = 14, padV = 6).apply {
+            setOnClickListener {
+                playBtn?.requestFocus()
+                detailItem?.let { loadAvailability(it) }
+            }
+        }
+        row.addView(retry, LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
+            leftMargin = Theme.dp(ctx, 14)
+        })
+        sec.addView(row)
     }
 
     private fun render(item: MediaItem) {
@@ -163,13 +227,13 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             orientation = LinearLayout.VERTICAL
             clipChildren = false
             clipToPadding = false
-            setPadding(m.pageH, m.safeV + Theme.dp(ctx, 3), m.pageH, Theme.dp(ctx, 14))
+            setPadding(m.pageH, m.safeV + Theme.dp(ctx, 3), m.pageH, Theme.dp(ctx, 16))
         }
         val backRow = LinearLayout(ctx).apply {
             orientation = LinearLayout.HORIZONTAL
             clipChildren = false
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                bottomMargin = Theme.dp(ctx, 18)
+                bottomMargin = Theme.dp(ctx, 16)
             }
         }
         val backBtn = Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK, padH = 15, padV = 7, sp = 13.5f).apply {
@@ -213,7 +277,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                topMargin = Theme.dp(ctx, 10)
+                topMargin = Theme.dp(ctx, 12)
             }
         }
         Rules.scoreText(item)?.let { sc ->
@@ -233,14 +297,14 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         item.directors?.takeIf { it.isNotEmpty() }?.let { dirs ->
             infoCol.addView(Theme.label(ctx, "${Copy.Detail.DIRECTOR}：${dirs.joinToString(" / ")}", sp = 13.5f, color = Theme.PAPER_70, maxLines = 1).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    topMargin = Theme.dp(ctx, 10)
+                    topMargin = Theme.dp(ctx, 12)
                 }
             })
         }
         item.cast?.takeIf { it.isNotEmpty() }?.let { c ->
             infoCol.addView(Theme.label(ctx, "${Copy.Detail.STARRING}：${c.joinToString(" / ") { it.name }}", sp = 13.5f, color = Theme.PAPER_70, maxLines = 1).apply {
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
-                    topMargin = Theme.dp(ctx, 5)
+                    topMargin = Theme.dp(ctx, 4)
                 }
             })
         }
@@ -330,7 +394,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             visibility = View.GONE
             clipChildren = true
             clipToPadding = false
-            setPadding(0, Theme.dp(ctx, 26), 0, 0)
+            setPadding(0, Theme.dp(ctx, 24), 0, 0)
         }
         relatedGridHolder = relSec
         page.addView(relSec)
@@ -373,14 +437,14 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         var activeRange = Rules.rangeOf(ranges, currentEp) ?: ranges.first()
 
         val epGrid = Theme.horizontalGrid(ctx).apply {
-            setItemSpacing(Theme.dp(ctx, 10))
+            setItemSpacing(Theme.dp(ctx, 12))
         }
         val epAdapter = EpisodeAdapter(item, currentEp) { ep -> nav.openPlayer(item.id, ep) }
         epGrid.adapter = epAdapter
 
         if (ranges.size > 1) {
             val tabRow = Theme.horizontalGrid(ctx).apply {
-                setItemSpacing(Theme.dp(ctx, 10))
+                setItemSpacing(Theme.dp(ctx, 12))
             }
             tabRow.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun getItemCount(): Int = ranges.size
@@ -449,11 +513,11 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             orientation = LinearLayout.VERTICAL
             clipChildren = true
             clipToPadding = false
-            setPadding(0, Theme.dp(ctx, 26), 0, 0)
+            setPadding(0, Theme.dp(ctx, 24), 0, 0)
         }
         sec.addView(Theme.sectionHeader(ctx, Copy.Detail.CAST, m.pageH, Theme.dp(ctx, 6)))
         val grid = Theme.horizontalGrid(ctx).apply {
-            setItemSpacing(Theme.dp(ctx, 14))
+            setItemSpacing(Theme.dp(ctx, 16))
             adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun getItemCount(): Int = people.size
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =

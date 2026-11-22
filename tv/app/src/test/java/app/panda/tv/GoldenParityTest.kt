@@ -338,12 +338,16 @@ class GoldenParityTest {
         assertEquals("mp4", parsed[1].episodes[0].format)
 
         val variants = PlaybackMatchers.manifestVariants(
-            "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n",
+            "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1000\nhttp://[bad\n#EXT-X-STREAM-INF:BANDWIDTH=1500\njavascript:alert(1)\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n",
             "https://cdn.example/master.m3u8",
         )
-        assertEquals(2, variants.size)
-        assertEquals("https://cdn.example/1080/index.m3u8", variants[0].url)
-        assertEquals("1080P", variants[0].quality?.label)
+        val expectedVariants = Json.list(svc["manifestVariants"]).map { Json.row(it) }
+        assertEquals(expectedVariants.size, variants.size)
+        for (i in expectedVariants.indices) {
+            assertEquals(expectedVariants[i]["url"], variants[i].url)
+            assertEquals(expectedVariants[i]["quality"], variants[i].quality?.label)
+            assertEquals((expectedVariants[i]["bandwidth"] as Number).toInt(), variants[i].bandwidth)
+        }
 
         val vRef = PlaybackMatchers.parseLines("m3u8", listOf("先导片上", "先导片下", "第20251023期", "第20251025期", "第20251026期", "第20260104期特别加更").mapIndexed { i, t -> "$t\$https://example.com/r$i.m3u8" }.joinToString("#"))[0]
         val vOther = PlaybackMatchers.parseLines("m3u8", listOf("20251018", "20251025上", "20260104(特别加更)", "第20251018期先导片上", "第20251019期先导片下").mapIndexed { i, t -> "$t\$https://example.com/o$i.m3u8" }.joinToString("#"))[0]

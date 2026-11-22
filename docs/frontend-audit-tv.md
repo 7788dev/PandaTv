@@ -2,6 +2,17 @@
 
 日期：2026-11-21，UTC+8。本文只评估 `tv/` 的原生 Android 客户端；不是 Electron 的 TV CSS 分支。Windows 结论见[独立报告](frontend-audit-windows.md)，旧材料的可信度见[证据审阅](ui-evidence-review.md)。
 
+## 2026-11-22 TV 1.0.14 复验
+
+本轮在 TV 原生端完成以下改动：
+
+- 新增 `PlaybackBufferPolicy`：`lowRamDevice`、总内存 ≤2 GB、`memoryClass` ≤192 MB 或最大堆 ≤192 MB 时使用 16 MiB / 10–30 秒缓冲，其余 32 MiB / 12–48 秒；播放器启动日志记录实际选择。
+- 详情页选集接口失败不再静默隐藏，显示错误行与“重试”；重试前把焦点放回播放按钮，成功后恢复选集。
+- 首页榜单、详情、播放器关键间距归一到 4/8/12/16/20 网格；不改变 960×540 基准、4.8% 安全区和唯一焦点环。
+- 与桌面同步 `manifestVariants`：单个畸形/非 HTTP 变体跳过；`BANDWIDTH` 解析修正；重导黄金向量并更新 `GoldenParityTest`。
+
+复验：`testDebugUnitTest` 53 项、`lintRelease`、`assembleRelease` 通过（离线缓存构建 1m25s）；最终 APK versionCode 15 / versionName 1.0.14 / minSdk 22，v1/v2 签名通过。`adb devices` 为空，未做 MuMu 或 TCL 真机导航/播放回归；本轮的 TV 结论只覆盖编译、单测、lint 与 APK 身份，不声称真机通过。
+
 ## 客户端与证据边界
 
 - 实际设备：MuMu 实例 1，Android 15，横屏 1920×1080，物理 density 280；另做 1280×720@160 与 3840×2160@480 覆盖，并恢复原显示设置。不是实体低端电视或高刷面板。

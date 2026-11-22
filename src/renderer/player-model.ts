@@ -16,3 +16,17 @@ export function bufferedRanges(buffered: TimeRanges, duration: number): { start:
   if (!Number.isFinite(duration) || duration <= 0) return []
   return Array.from({ length: buffered.length }, (_, i) => ({ start: Math.max(0, buffered.start(i)), end: Math.min(duration, buffered.end(i)) })).filter(range => range.end > range.start)
 }
+/** Position when the media actually moved; undefined while it stands still or is seeking. */
+export function playbackProgress(previous: number, current: number, seeking: boolean): number | undefined {
+  if (seeking || !Number.isFinite(current) || current < 0) return undefined
+  if (!Number.isFinite(previous) || previous < 0) return current
+  return Math.abs(current - previous) > 0.05 ? current : undefined
+}
+
+/** The highest-bitrate level carrying the requested picture, or undefined where the source lacks it. */
+export function qualityLevelIndex(levels: Array<{ quality?: Quality; index: number; bitrate?: number }>, target: Quality | undefined): number | undefined {
+  if (!target) return undefined
+  const matches = levels.filter(level => level.quality === target)
+  if (!matches.length) return undefined
+  return matches.reduce((best, level) => (level.bitrate ?? 0) > (best.bitrate ?? 0) ? level : best).index
+}

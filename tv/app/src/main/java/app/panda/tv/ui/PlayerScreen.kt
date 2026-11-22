@@ -1,5 +1,6 @@
 package app.panda.tv.ui
 
+import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -80,7 +81,7 @@ class PlayerScreen(
     private val bufferingCard = LinearLayout(ctx).apply {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        setPadding(Theme.dp(ctx, 15), Theme.dp(ctx, 9), Theme.dp(ctx, 18), Theme.dp(ctx, 9))
+        setPadding(Theme.dp(ctx, 16), Theme.dp(ctx, 8), Theme.dp(ctx, 16), Theme.dp(ctx, 8))
         background = Theme.box(Theme.GLASS_STRONG, Theme.LINE_2, radiusDp = 999, ctx = ctx)
         addView(centerSpinner, LinearLayout.LayoutParams(Theme.dp(ctx, 24), Theme.dp(ctx, 24)).apply {
             rightMargin = Theme.dp(ctx, 10)
@@ -91,7 +92,7 @@ class PlayerScreen(
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
         visibility = View.GONE
-        setPadding(Theme.dp(ctx, 22), Theme.dp(ctx, 11), Theme.dp(ctx, 22), Theme.dp(ctx, 11))
+        setPadding(Theme.dp(ctx, 20), Theme.dp(ctx, 10), Theme.dp(ctx, 20), Theme.dp(ctx, 10))
         background = Theme.box(Theme.GLASS_STRONG, Theme.LINE_2, radiusDp = 999, ctx = ctx)
     }
     private val osdIcon = TvIconView(ctx, TvIcon.FORWARD, Theme.PAPER_100).apply {
@@ -105,7 +106,7 @@ class PlayerScreen(
         gravity = Gravity.CENTER_VERTICAL
         clipChildren = false
         clipToPadding = false
-        setPadding(m.pageH, m.safeV + Theme.dp(ctx, 4), m.pageH, Theme.dp(ctx, 22))
+        setPadding(m.pageH, m.safeV + Theme.dp(ctx, 4), m.pageH, Theme.dp(ctx, 20))
         background = GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, intArrayOf(0xE00E0D0B.toInt(), Color.TRANSPARENT))
     }
     private val titleTv = Theme.label(ctx, sp = 20f, color = Theme.PAPER_100, bold = true, maxLines = 1)
@@ -115,7 +116,7 @@ class PlayerScreen(
         orientation = LinearLayout.VERTICAL
         clipChildren = false
         clipToPadding = false
-        setPadding(m.pageH, Theme.dp(ctx, 18), m.pageH, m.safeV + Theme.dp(ctx, 3))
+        setPadding(m.pageH, Theme.dp(ctx, 20), m.pageH, m.safeV + Theme.dp(ctx, 3))
         background = GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, intArrayOf(0xEB0E0D0B.toInt(), Color.TRANSPARENT))
     }
     private val seekBar = SeekBar(ctx).apply {
@@ -152,13 +153,13 @@ class PlayerScreen(
         clipChildren = false
         clipToPadding = false
         background = Theme.box(Theme.INK_900, Theme.LINE, radiusDp = 0, strokeDp = 1, ctx = ctx)
-        setPadding(Theme.dp(ctx, 23), m.safeV + Theme.dp(ctx, 6), m.pageH, m.safeV)
+        setPadding(Theme.dp(ctx, 24), m.safeV + Theme.dp(ctx, 6), m.pageH, m.safeV)
     }
     private val sideTitleTv = Theme.label(ctx, sp = 18f, color = Theme.PAPER_100, bold = true)
     private val sideGrid = Theme.verticalGrid(ctx, sidePanel).apply {
         setNumColumns(1)
-        setVerticalSpacing(Theme.dp(ctx, 10))
-        setPadding(Theme.dp(ctx, 4), Theme.dp(ctx, 6), Theme.dp(ctx, 4), Theme.dp(ctx, 12))
+        setVerticalSpacing(Theme.dp(ctx, 12))
+        setPadding(Theme.dp(ctx, 4), Theme.dp(ctx, 8), Theme.dp(ctx, 4), Theme.dp(ctx, 12))
         clipToPadding = false
         clipChildren = false
         setOnKeyInterceptListener { event ->
@@ -560,10 +561,18 @@ class PlayerScreen(
 
     private fun buildPlayer() {
         val maxMemMb = Runtime.getRuntime().maxMemory() / (1024L * 1024L)
-        val lowRam = maxMemMb <= 192L
+        val activityManager = ctx.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val memoryInfo = ActivityManager.MemoryInfo().also { activityManager.getMemoryInfo(it) }
+        val buffer = PlaybackBufferPolicy.forDevice(
+            maxMemoryMb = maxMemMb,
+            memoryClassMb = activityManager.memoryClass,
+            totalMemoryMb = memoryInfo.totalMem / (1024L * 1024L),
+            lowRamDevice = activityManager.isLowRamDevice,
+        )
+        Log.i("PandaTV", "[buffer] lowRamDevice=${activityManager.isLowRamDevice} memoryClassMb=${activityManager.memoryClass} totalMb=${memoryInfo.totalMem / (1024L * 1024L)} maxHeapMb=$maxMemMb minMs=${buffer.minBufferMs} maxMs=${buffer.maxBufferMs} bytes=${buffer.targetBytes}")
         val loadControl = DefaultLoadControl.Builder()
-            .setBufferDurationsMs(if (lowRam) 10_000 else 12_000, if (lowRam) 30_000 else 48_000, 1_000, 2_000)
-            .setTargetBufferBytes((if (lowRam) 16 else 32) * 1024 * 1024)
+            .setBufferDurationsMs(buffer.minBufferMs, buffer.maxBufferMs, 1_000, 2_000)
+            .setTargetBufferBytes(buffer.targetBytes)
             .setPrioritizeTimeOverSizeThresholds(true)
             .build()
         val renderers = DefaultRenderersFactory(ctx).setEnableDecoderFallback(true)
@@ -1332,7 +1341,7 @@ class PlayerScreen(
         isFocusable = true
         isFocusableInTouchMode = true
         isClickable = true
-        setPadding(Theme.dp(ctx, 16), Theme.dp(ctx, 11), Theme.dp(ctx, 16), Theme.dp(ctx, 11))
+        setPadding(Theme.dp(ctx, 16), Theme.dp(ctx, 12), Theme.dp(ctx, 16), Theme.dp(ctx, 12))
         background = Theme.focusBox(ctx, Theme.INK_900, Theme.FILL_2, Theme.LINE, Theme.BAMBOO_400, radiusDp = 10)
         setTextColor(android.content.res.ColorStateList(
             arrayOf(intArrayOf(android.R.attr.state_focused), intArrayOf(android.R.attr.state_selected), intArrayOf()),

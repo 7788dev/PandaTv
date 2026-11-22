@@ -442,7 +442,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 gravity = Gravity.BOTTOM
                 clipChildren = false
                 clipToPadding = false
-                setPadding(Theme.dp(ctx, 30), Theme.dp(ctx, 18), Theme.dp(ctx, 30), Theme.dp(ctx, 22))
+                setPadding(Theme.dp(ctx, 28), Theme.dp(ctx, 16), Theme.dp(ctx, 28), Theme.dp(ctx, 20))
             }
             col.addView(titleTv, LinearLayout.LayoutParams(maxTextW, ViewGroup.LayoutParams.WRAP_CONTENT))
 
@@ -572,7 +572,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         return HeroWrapperView(ctx).apply {
             clipChildren = false
             clipToPadding = false
-            setPadding(m.pageH, Theme.dp(ctx, 6), m.pageH, 0)
+            setPadding(m.pageH, Theme.dp(ctx, 8), m.pageH, 0)
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
     }
@@ -696,10 +696,10 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                     orientation = LinearLayout.VERTICAL
                     clipChildren = false
                     clipToPadding = false
-                    setPadding(Theme.dp(ctx, 18), Theme.dp(ctx, 16), Theme.dp(ctx, 18), Theme.dp(ctx, 14))
+                    setPadding(Theme.dp(ctx, 16), Theme.dp(ctx, 16), Theme.dp(ctx, 16), Theme.dp(ctx, 14))
                     background = Theme.box(Theme.INK_900, Theme.LINE, radiusDp = 16, ctx = ctx)
                     layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply {
-                        if (i < boards.lastIndex) rightMargin = Theme.dp(ctx, 18)
+                        if (i < boards.lastIndex) rightMargin = Theme.dp(ctx, 16)
                     }
                 }
                 val head = LinearLayout(ctx).apply {
@@ -725,7 +725,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                         isFocusable = true
                         isFocusableInTouchMode = true
                         isClickable = true
-                        setPadding(Theme.dp(ctx, 10), Theme.dp(ctx, 7), Theme.dp(ctx, 10), Theme.dp(ctx, 7))
+                        setPadding(Theme.dp(ctx, 12), Theme.dp(ctx, 8), Theme.dp(ctx, 12), Theme.dp(ctx, 8))
                         background = Theme.focusBox(ctx, Color.TRANSPARENT, Theme.INK_850, normalStroke = 0, radiusDp = 10)
                         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                             if (rankIdx < b.items.lastIndex) bottomMargin = Theme.dp(ctx, 4)

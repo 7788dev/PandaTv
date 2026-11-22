@@ -16,14 +16,14 @@ One timing-sensitive race test became nondeterministic under the new scheduling 
 From tv/: `gradlew.bat testDebugUnitTest lintRelease assembleRelease`: BUILD SUCCESSFUL.
 
 Live source probes
-`npm run probe:sources` at 2026-11-19 23:11: hot TV 14/14, movies 14/14, anime 14/14, variety 12/14, docs 10/14; serials 44/48, episode-range works 33/34. See source-coverage.json. Do not treat missed works as evidence against one catalogue: sources that answered did not carry them, and this probe ran from a foreign egress.
-`npm run probe:start` at 2026-11-19 23:14: 16 hot titles, 13 reached the first segment; successful total-time median 4,188 ms, worst 9,910 ms, 360zy won 13. This host exits abroad; mainland measurements remain in cn-sources.md.
+`npm run probe:sources` at 2026-11-19 23:11: hot TV 14/14, movies 14/14, anime 14/14, variety 12/14, docs 10/14; serials 44/48, episode-range works 33/34. See source-coverage.json. Do not treat missed works as evidence against one catalogue: sources that answered did not carry them, and this probe ran from the developer machine's network.
+`npm run probe:start` at 2026-11-19 23:14: 16 hot titles, 13 reached the first segment; successful total-time median 4,188 ms, worst 9,910 ms, 360zy won 13. This host's network differs from mainland; mainland measurements remain in cn-sources.md.
 
 Windows release
 `npm run dist` completed on 2026-11-20 00:49:52.
 release/Panda-1.0.1-Setup.exe: 132,630,453 bytes; SHA-256 F5C2A3491C433949E11B4A475FE756EB9E13244BFD95A1AF7051076C9B0ADF03.
 release/win-unpacked/resources/app.asar: 12,456,895 bytes; SHA-256 52062E447221294E631AA1071C5391843159A9178B651B6F37A67898E8413A4D; 268 entries, no node_modules, design mock/art/preview, fixtures, tests, e2e, scripts or source maps.
-The final `npm run test:e2e` against release/win-unpacked ran 19 cases: 16 passed, 3 failed. Real movie, serial, animation, catalogue, UI, startup and automatic source recovery passed. The 360zy ad-removal playback case passed. The forced single-source bfzy, dyttzy and lzi ad-removal tests timed out while waiting for decoded playback. Each test has multiple playback checkpoints (initial startup and seeking), and the available failure context does not identify which checkpoint timed out. These are material failed cases for those sources on this foreign egress; this full-suite result is not all-green.
+The final `npm run test:e2e` against release/win-unpacked ran 19 cases: 16 passed, 3 failed. Real movie, serial, animation, catalogue, UI, startup and automatic source recovery passed. The 360zy ad-removal playback case passed. The forced single-source bfzy, dyttzy and lzi ad-removal tests timed out while waiting for decoded playback. Each test has multiple playback checkpoints (initial startup and seeking), and the available failure context does not identify which checkpoint timed out. These are material failed cases for those sources on this developer machine's network; this full-suite result is not all-green.
 The package was not installed, and the existing 1.0.0 installation was not changed.
 
 Android TV release

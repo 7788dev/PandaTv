@@ -20,8 +20,8 @@ android {
         applicationId = "app.panda.tv"
         minSdk = 22
         targetSdk = 34
-        versionCode = 14
-        versionName = "1.0.13"
+        versionCode = 15
+        versionName = "1.0.14"
     }
 
     androidResources {
