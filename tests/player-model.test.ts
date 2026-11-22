@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { playbackHistory, bufferedRanges, playbackProgress, qualityLevelIndex, resolutionQuality } from '../src/renderer/player-model'
+import { HLS_BUDGET, PREPARE_NEXT_SECONDS, nextEpisodeDue, playbackHistory, bufferedRanges, playbackProgress, qualityLevelIndex, resolutionQuality } from '../src/renderer/player-model'
 import { updateResult } from '../src/main/updates'
 import { rpc, safeError } from '../src/main/ipc'
 
@@ -29,6 +29,24 @@ describe('actual video state', () => {
     expect(qualityLevelIndex(levels, '1080P')).toBe(2)
     expect(qualityLevelIndex(levels, '4K')).toBeUndefined()
     expect(qualityLevelIndex(levels, undefined)).toBeUndefined()
+  })
+  it('prepares the next episode only inside the last ninety seconds and only once', () => {
+    expect(PREPARE_NEXT_SECONDS).toBe(90)
+    expect(nextEpisodeDue(90, false)).toBe(true)
+    expect(nextEpisodeDue(91, false)).toBe(false)
+    expect(nextEpisodeDue(30, true)).toBe(false)
+    expect(nextEpisodeDue(Number.NaN, false)).toBe(false)
+  })
+  it('keeps a 90 to 180 second forward buffer and a 30 second back buffer', () => {
+    expect(HLS_BUDGET).toMatchObject({
+      maxBufferLength: 90,
+      maxMaxBufferLength: 180,
+      maxBufferSize: 96 * 1024 * 1024,
+      backBufferLength: 30,
+      maxBufferHole: 0.2,
+      capLevelToPlayerSize: true,
+      startFragPrefetch: true,
+    })
   })
   it('does not report update success for malformed release data or leak internal errors', async () => {
     expect(updateResult('1.0.0', '1.0.1').status).toBe('available')

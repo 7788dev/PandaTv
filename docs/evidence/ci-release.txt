@@ -88,3 +88,16 @@ FIRST HOSTED RUN (2026-11-21 23:47–23:51, UTC+08:00)
 - The same Windows checkout mode also failed the design hash at
   brand/app-icon.svg. Git preserves the exact frozen design bytes on checkout;
   no design or captured HLS manifest was modified.
+2026-11-22 LOCAL RELEASE (1.1.4 / 1.0.14)
+- The Release workflow was temporarily disabled only for the publish window so
+  a cloud rebuild could not overwrite the locally verified assets. It was
+  re-enabled immediately after gh release create; the workflow state is active.
+- Uploaded assets: Panda-1.1.4-Setup.exe (133,288,990 B, sha256
+  0868fc0f239231c264560b4a6dc49cc085b2e36f9c56512d13edb8430ae26be1),
+  Panda-TV-1.0.14.apk (1,821,909 B, sha256
+  25e9963471f04405a8da8ce76ff80345ecd069cd4360d3beb1d663b0d3001dd6)
+  and SHA256SUMS.txt.
+- The hosted workflow was not run for this tag. Release evidence is the local
+  build, asar check, fixture E2E 23/23, packaged-live serial playback 1/1, and
+  TV testDebugUnitTest 53 / lintRelease / assembleRelease. No installed-app or
+  TV device replay was performed.
