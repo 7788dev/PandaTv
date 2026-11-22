@@ -107,3 +107,12 @@ FIRST HOSTED RUN (2026-11-21 23:47–23:51, UTC+08:00)
   and hashes remain unchanged. New evidence: 295 offline tests (21 files),
   fixture E2E 25/25, and a literal npm run dist to .tmp/dist-check
   (133,205,969 B).
+2026-11-22 CLOUD CI (final master)
+- https://github.com/7788dev/PandaTv/actions/runs/44989033047
+- Commit 879a9a9837f2bc11cb4233de26c5dacc3a0f3b8e: CI completed success.
+  Windows and TV jobs passed typecheck, npm test, release self-tests, design
+  hash, design contract, installer build, offline UI/layout regression,
+  testDebugUnitTest, lintRelease, assembleRelease and signature checks.
+- This run validates master code, whose Player.tsx and player-model.ts match
+  the published a822f97 assets. It did not publish or replace Release assets;
+  the tag v1.1.4 Release workflow was not run.
