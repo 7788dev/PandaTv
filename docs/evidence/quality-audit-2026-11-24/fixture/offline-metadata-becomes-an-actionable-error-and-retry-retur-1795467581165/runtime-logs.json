@@ -1,0 +1,17 @@
+[
+  {
+    "at": 1795467584161,
+    "process": "main",
+    "message": "[failure] UPSTREAM Metadata HTTP 503"
+  },
+  {
+    "at": 1795467584522,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795467585524,
+    "process": "main",
+    "message": "[failure] UPSTREAM Metadata HTTP 503"
+  }
+]

@@ -1,0 +1,257 @@
+{
+  "at": "2026-11-24T11:39:33.855535+00:00",
+  "cases": [
+    {
+      "name": "media-controls",
+      "passed": true,
+      "selectedSubject": {
+        "requestedTitle": "三体",
+        "rating": "8.8",
+        "focusedLabels": [
+          "8.8",
+          "45分钟",
+          "三体",
+          "剧情 / 科幻"
+        ],
+        "bounds": [
+          97,
+          307,
+          366,
+          803
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "initialPause": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:02 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "pauseHistory": {
+        "id": "db-26647087",
+        "episode": 1,
+        "position": 2,
+        "duration": 2564.72,
+        "at": 1795520389644
+      },
+      "pause": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:02 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "play": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "1.0",
+          "暂停",
+          "下一集",
+          "00:03 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:03 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "togglePause": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "2.0",
+          "播放",
+          "下一集",
+          "00:06 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:06 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      },
+      "hiddenConfirm": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "3.0",
+          "播放",
+          "下一集",
+          "00:08 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:08 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "heldConfirmMs": 1250,
+      "pauseStableMs": 1200,
+      "autoHideObservedMs": 2873,
+      "revealed": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "2.0",
+          "暂停",
+          "下一集",
+          "00:06 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:06 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 255
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.UsageStateTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-11-22T19:49:00.095Z" hostname="DESKTOP-G3A3P0Q" time="0.762">
+  <properties/>
+  <testcase name="a damaged user file cannot be replaced by a new favorite action" classname="app.panda.tv.UsageStateTest" time="0.011"/>
+  <testcase name="large library pages return cached rows without reading cold entries outside the page" classname="app.panda.tv.UsageStateTest" time="0.004"/>
+  <testcase name="cached library rows survive an uncached server failure" classname="app.panda.tv.UsageStateTest" time="0.45"/>
+  <testcase name="a follower cancelling itself leaves its leader active and does not start another request" classname="app.panda.tv.UsageStateTest" time="0.004"/>
+  <testcase name="a bad backup does not authorize replacing a damaged state and reset stays explicit" classname="app.panda.tv.UsageStateTest" time="0.035"/>
+  <testcase name="the background writer retains committed state on failure and continues in serial order" classname="app.panda.tv.UsageStateTest" time="0.085"/>
+  <testcase name="a cancelled detail leader does not cancel a still active follower" classname="app.panda.tv.UsageStateTest" time="0.004"/>
+  <testcase name="normal detail errors are shared without a follower retry loop" classname="app.panda.tv.UsageStateTest" time="0.003"/>
+  <testcase name="explicit recovery uses a valid backup and keeps the damaged original bytes" classname="app.panda.tv.UsageStateTest" time="0.052"/>
+  <testcase name="leaving a library page stops its active workers and never starts the rest" classname="app.panda.tv.UsageStateTest" time="0.114"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

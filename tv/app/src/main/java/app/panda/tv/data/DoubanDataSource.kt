@@ -21,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
@@ -28,10 +30,14 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.net.URLEncoder
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.min
 
 class PartialPage(val rows: Int, val total: Int) :
     RuntimeException("Listing incomplete: $rows of $total titles")
+
+data class LibraryFailure(val id: String, val code: DataErrorCode)
+data class LibraryPage(val items: List<MediaItem>, val next: String?, val failures: List<LibraryFailure>, val pending: List<String>)
 
 class DoubanDataSource(
     private val cacheDir: File? = null,
@@ -561,8 +567,18 @@ class DoubanDataSource(
         }
     }
 
+    suspend fun subject(id: String): MediaItem {
+        val rawId = Normalize.subjectId(id)
+        val norm = readSubject(rawId)
+        currentCoroutineContext().ensureActive()
+        val item = norm.item.copy(cast = norm.item.cast?.take(LEAD_ACTORS))
+        return keep(listOf(norm.copy(item = item))).firstOrNull() ?: item
+    }
+
     suspend fun detail(id: String): MediaItem {
         val rawId = Normalize.subjectId(id)
+        while (true) {
+        currentCoroutineContext().ensureActive()
         var existing: CompletableDeferred<MediaItem>?
         var created: CompletableDeferred<MediaItem>? = null
         synchronized(flights) {
@@ -572,7 +588,14 @@ class DoubanDataSource(
                 flights[rawId] = created!!
             }
         }
-        if (existing != null) return existing!!.await()
+        if (existing != null) {
+            try { return existing!!.await() }
+            catch (cancelled: CancellationException) {
+                currentCoroutineContext().ensureActive()
+                synchronized(flights) { if (flights[rawId] === existing) flights.remove(rawId) }
+                continue
+            }
+        }
         val deferred = created!!
         return try {
             val loaded = loadDetail(rawId)
@@ -585,6 +608,7 @@ class DoubanDataSource(
             synchronized(flights) {
                 if (flights[rawId] === deferred) flights.remove(rawId)
             }
+        }
         }
     }
 
@@ -691,7 +715,7 @@ class DoubanDataSource(
 
     suspend fun related(id: String): List<MediaItem> {
         val rawId = Normalize.subjectId(id)
-        if (store.get("db-$rawId") == null) detail(rawId)
+        if (store.get("db-$rawId") == null) subject(rawId)
         val kind = store.get("db-$rawId")?.kind ?: "movie"
         val values = http.json(
             endpoint("$kind/$rawId/recommendations", mapOf("count" to "14")),
@@ -702,25 +726,59 @@ class DoubanDataSource(
     }
 
     suspend fun byIds(ids: List<String>): List<MediaItem> {
-        if (ids.size > 2500) throw DataError(DataErrorCode.INVALID_INPUT, "Too many metadata IDs")
+        // The user library holds up to 10000 IDs; the cache budget does not
+        // limit how many saved IDs can be read, including uncached titles.
+        if (ids.size > 10000) throw DataError(DataErrorCode.INVALID_INPUT, "Too many metadata IDs")
+        val output = ArrayList<MediaItem>()
+        var cursor: String? = null
+        var firstFailure: LibraryFailure? = null
+        do {
+            val page = libraryPage(ids, cursor)
+            output.addAll(page.items)
+            if (firstFailure == null) firstFailure = page.failures.firstOrNull { it.code != DataErrorCode.NOT_FOUND }
+            cursor = page.next
+        } while (cursor != null)
+        if (output.isEmpty() && firstFailure != null) throw DataError(firstFailure.code, "Library metadata could not be read", true)
+        return output
+    }
+
+    suspend fun libraryPage(ids: List<String>, cursor: String? = null, cachedOnly: Boolean = false): LibraryPage = coroutineScope {
+        if (ids.size > 10000) throw DataError(DataErrorCode.INVALID_INPUT, "Too many metadata IDs")
         val checked = ids.map { "db-${Normalize.subjectId(it)}" }
-        val output = ArrayList<MediaItem>(checked.size)
-        for (id in checked) {
-            val cached = store.get(id)
-            if (cached != null) {
-                if (System.currentTimeMillis() - cached.updatedAt > DETAIL_TTL) {
-                    warn(DataWarning("CACHED", "byIds:$id", "Showing saved metadata; freshness is not guaranteed", System.currentTimeMillis()))
-                }
-                output.add(cached.item)
-            } else {
-                try {
-                    output.add(detail(id))
-                } catch (e: DataError) {
-                    if (e.code == DataErrorCode.NOT_FOUND) diagnostic("byIds:$id", e) else throw e
+        val start = cursor?.toIntOrNull() ?: 0
+        if (cursor != null && (!Regex("^\\d{1,5}$").matches(cursor) || start % PAGE_SIZE != 0 || start >= checked.size)) throw DataError(DataErrorCode.INVALID_INPUT, "Invalid library cursor")
+        val chunk = checked.drop(start).take(PAGE_SIZE)
+        val rows = arrayOfNulls<MediaItem>(chunk.size)
+        val errors = arrayOfNulls<LibraryFailure>(chunk.size)
+        val pending = arrayOfNulls<String>(chunk.size)
+        val position = AtomicInteger(0)
+        List(minOf(3, chunk.size)) {
+            launch {
+                while (true) {
+                    currentCoroutineContext().ensureActive()
+                    val at = position.getAndIncrement()
+                    if (at >= chunk.size) break
+                    val id = chunk[at]
+                    val cached = store.get(id)
+                    if (cached != null) {
+                        if (System.currentTimeMillis() - cached.updatedAt > DETAIL_TTL) warn(DataWarning("CACHED", "byIds:$id", "Showing saved metadata; freshness is not guaranteed", System.currentTimeMillis()))
+                        rows[at] = cached.item
+                    } else if (cachedOnly) pending[at] = id
+                    else {
+                        try { rows[at] = subject(id) }
+                        catch (cancelled: CancellationException) { throw cancelled }
+                        catch (error: Throwable) {
+                            errors[at] = LibraryFailure(id, (error as? DataError)?.code ?: DataErrorCode.UNAVAILABLE)
+                            diagnostic("byIds:$id", error)
+                        }
+                    }
                 }
             }
-        }
-        return output
+        }.forEach { it.join() }
+        currentCoroutineContext().ensureActive()
+        val failures = errors.filterNotNull()
+        if (failures.isNotEmpty()) warn(DataWarning("PARTIAL", "library", "Some saved titles could not be read", System.currentTimeMillis()))
+        LibraryPage(rows.filterNotNull(), if (start + PAGE_SIZE < checked.size) (start + PAGE_SIZE).toString() else null, failures, pending.filterNotNull())
     }
 
     private suspend fun searchPage(q: String, start: Int, count: Int): Map<String, Any?> {

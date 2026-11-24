@@ -13,16 +13,17 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:release": "node --test scripts/ci-release.test.mjs",
+    "test:media": "python scripts/generate-fixture-hls.py",
     "build": "npm run typecheck && electron-vite build",
     "preview": "electron-vite preview",
     "pack": "npm run build && electron-builder --dir",
     "dist": "npm run build && electron-builder --win nsis --x64",
     "test:e2e": "playwright test --project=desktop-live",
     "test:e2e:fixture": "playwright test --project=desktop-fixture",
-    "verify:design": "node scripts/verify-design.mjs",
     "audit:ads": "esbuild scripts/audit-ads.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/audit-ads.cjs && node .tmp/audit-ads.cjs",
     "probe:filters": "esbuild scripts/probe-filters.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-filters.cjs && node .tmp/probe-filters.cjs",
     "probe:start": "esbuild scripts/probe-start.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-start.cjs && node .tmp/probe-start.cjs",
+    "probe:health": "esbuild scripts/probe-source-health.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-source-health.cjs && node .tmp/probe-source-health.cjs",
     "probe:sources": "esbuild scripts/probe-sources.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-sources.cjs && node .tmp/probe-sources.cjs",
     "probe:startup": "node scripts/probe-startup.mjs",
     "sync:search-titles": "esbuild scripts/sync-search-titles.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/sync-search-titles.cjs && node .tmp/sync-search-titles.cjs"
@@ -46,7 +47,7 @@
       "target": [
         "nsis"
       ],
-      "icon": "design/brand/app-icon.png",
+      "icon": "resources/app-icon.png",
       "signExecutable": false
     },
     "nsis": {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.ui.PlaybackBufferPolicyTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-22T18:16:49.049Z" hostname="DESKTOP-G3A3P0Q" time="0.002">
+  <properties/>
+  <testcase name="a 2 GB television stays on the small buffer at the boundary" classname="app.panda.tv.ui.PlaybackBufferPolicyTest" time="0.001"/>
+  <testcase name="a 4 GB television with a normal heap keeps the larger buffer" classname="app.panda.tv.ui.PlaybackBufferPolicyTest" time="0.0"/>
+  <testcase name="a small heap alone is enough to choose the small buffer" classname="app.panda.tv.ui.PlaybackBufferPolicyTest" time="0.001"/>
+  <testcase name="a device flagged low ram by the system uses the small buffer" classname="app.panda.tv.ui.PlaybackBufferPolicyTest" time="0.0"/>
+  <testcase name="a 1_5 GB television keeps the small buffer even with a large heap" classname="app.panda.tv.ui.PlaybackBufferPolicyTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

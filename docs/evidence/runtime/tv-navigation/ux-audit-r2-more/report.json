@@ -1,0 +1,64 @@
+{
+  "at": "2026-11-21T02:44:14.745324+00:00",
+  "version": "1.0.12",
+  "apkSha256": "6B827A61FFB24C5480CF0CB586F24545ABA0288C39C0CCDD0E39F492D973A7DD",
+  "cases": [
+    {
+      "name": "剧集榜-1",
+      "selected": [
+        "剧集"
+      ],
+      "focused": [
+        "剧集"
+      ],
+      "passed": true
+    },
+    {
+      "name": "电影榜-1",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "电影"
+      ],
+      "passed": true
+    },
+    {
+      "name": "动漫榜-1",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "动漫"
+      ],
+      "passed": true
+    },
+    {
+      "name": "电影榜-2",
+      "selected": [
+        "电影"
+      ],
+      "focused": [
+        "电影"
+      ],
+      "passed": true
+    },
+    {
+      "name": "动漫榜-2",
+      "selected": [
+        "动漫"
+      ],
+      "focused": [
+        "动漫"
+      ],
+      "passed": true
+    }
+  ],
+  "failures": [
+    {
+      "name": "剧集榜-2",
+      "error": "D-pad did not reach 剧集榜 More"
+    }
+  ],
+  "userStateRestored": true
+}

@@ -25,7 +25,7 @@ pnpm-debug.log*
 logs/
 **/logs/
 **/*token*
-!design/styles/tokens.css
+!src/renderer/styles/tokens.css
 **/*cookie*
 **/*secret*
 **/*api-key*
@@ -42,9 +42,6 @@ src-tauri/gen
 !.vscode/extensions.json
 .idea
 .DS_Store
-
-# 设计工具的临时输出
-design/tools/.out
 
 # Production outputs
 out/

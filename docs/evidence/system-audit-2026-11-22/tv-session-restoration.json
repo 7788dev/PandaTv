@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-22T11:16:11.615930+00:00",
+  "files": {
+    "user-state.json": true,
+    "play-sources.json": true
+  },
+  "displayRestored": true,
+  "firewallRulesRestored": true,
+  "finalApkStillInstalled": true
+}

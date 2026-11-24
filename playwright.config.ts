@@ -13,9 +13,9 @@ export default defineConfig({
   workers: 1,
   fullyParallel: false,
   projects: [
-    { name: 'desktop-live', testIgnore: /\/(fixture|layout|interaction)\.spec\.ts$/, outputDir: join('.tmp/e2e-results', liveRuntime) },
-    { name: 'desktop-fixture', testMatch: /\/(fixture|layout|interaction)\.spec\.ts$/, outputDir: '.tmp/e2e-results/desktop-fixture' },
+    { name: 'desktop-live', testMatch: '**/*.live.spec.ts', outputDir: join('.tmp/e2e-results', liveRuntime) },
+    { name: 'desktop-fixture', testMatch: '**/*.fixture.spec.ts', outputDir: '.tmp/e2e-results/desktop-fixture' },
   ],
   preserveOutput: 'failures-only',
-  reporter: [['list'], ['html', { outputFolder: process.env.PLAYWRIGHT_HTML_OUTPUT_DIR || join('.tmp/playwright-report', reportScope), open: 'never', title: `Panda E2E — ${reportScope}` }]],
+  reporter: [['list'], ['json', { outputFile: join('.tmp/e2e-reports', reportScope + '.json') }], ['html', { outputFolder: process.env.PLAYWRIGHT_HTML_OUTPUT_DIR || join('.tmp/playwright-report', reportScope), open: 'never', title: `Panda E2E — ${reportScope}` }]],
 })

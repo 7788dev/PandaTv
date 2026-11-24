@@ -1,0 +1,94 @@
+{
+  "at": "2026-11-24T11:27:28.754252+00:00",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": true
+    },
+    {
+      "case": "channel_memory",
+      "pass": true
+    },
+    {
+      "case": "detail_return",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction",
+      "pass": true
+    },
+    {
+      "case": "channel_eviction_aux_click",
+      "pass": true
+    },
+    {
+      "case": "library_root_memory",
+      "pass": true
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    1920,
+    1080
+  ],
+  "rootEviction": {
+    "navigation": "D-pad",
+    "departureFocus": [
+      "最新"
+    ],
+    "setupFocusNotReturnBaseline": [
+      "看着我，认识我"
+    ]
+  },
+  "rootEvictionAuxiliary": {
+    "navigation": "Auxiliary top-bar tap to focus, then Confirm; not remote reachability evidence",
+    "departureFocus": [
+      "看着我，认识我"
+    ],
+    "activations": [
+      {
+        "tab": "剧集",
+        "selected": [
+          [
+            "剧集"
+          ]
+        ]
+      },
+      {
+        "tab": "动漫",
+        "selected": [
+          [
+            "动漫"
+          ]
+        ]
+      },
+      {
+        "tab": "纪录片",
+        "selected": [
+          [
+            "纪录片"
+          ]
+        ]
+      },
+      {
+        "tab": "电影",
+        "selected": [
+          [
+            "电影"
+          ]
+        ]
+      }
+    ]
+  },
+  "userStateRestored": true
+}

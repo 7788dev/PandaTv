@@ -85,48 +85,40 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
 
         autoNextSwitch = SwitchView(ctx, s.autoNext)
         firstRow = rowShell(Copy.SettingsCopy.AUTO_NEXT, trailing = autoNextSwitch) {
-            val cur = nav.app.userStore.get().settings
-            nav.app.userStore.dispatch(StateAction.UpdateSettings(autoNext = !cur.autoNext))
-            syncValues()
+            nav.saveUser({ StateAction.UpdateSettings(autoNext = !it.settings.autoNext) }) { syncValues() }
         }
         col.addView(firstRow)
 
         skipIntroSwitch = SwitchView(ctx, s.skipIntro)
         col.addView(rowShell(Copy.SettingsCopy.SKIP_INTRO, trailing = skipIntroSwitch) {
-            val cur = nav.app.userStore.get().settings
-            nav.app.userStore.dispatch(StateAction.UpdateSettings(skipIntro = !cur.skipIntro))
-            syncValues()
+            nav.saveUser({ StateAction.UpdateSettings(skipIntro = !it.settings.skipIntro) }) { syncValues() }
         })
 
         qualityValueTv = Theme.label(ctx, s.quality.label, sp = 14f, color = Theme.PAPER_70, bold = true)
         col.addView(rowShell(Copy.SettingsCopy.QUALITY, trailing = qualityValueTv) {
-            val cur = nav.app.userStore.get().settings
-            val idx = Constants.QUALITIES.indexOf(cur.quality)
-            val next = Constants.QUALITIES[(idx + 1) % Constants.QUALITIES.size]
-            nav.app.userStore.dispatch(StateAction.UpdateSettings(quality = next))
-            syncValues()
+            nav.saveUser({
+                val idx = Constants.QUALITIES.indexOf(it.settings.quality)
+                StateAction.UpdateSettings(quality = Constants.QUALITIES[(idx + 1) % Constants.QUALITIES.size])
+            }) { syncValues() }
         })
 
         speedValueTv = Theme.label(ctx, Rules.speedLabel(s.speed), sp = 14f, color = Theme.PAPER_70, bold = true)
         col.addView(rowShell(Copy.SettingsCopy.SPEED, trailing = speedValueTv) {
-            val cur = nav.app.userStore.get().settings
-            val idx = Constants.SPEEDS.indexOf(cur.speed)
-            val next = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size]
-            nav.app.userStore.dispatch(StateAction.UpdateSettings(speed = next))
-            syncValues()
+            nav.saveUser({
+                val idx = Constants.SPEEDS.indexOf(it.settings.speed)
+                StateAction.UpdateSettings(speed = Constants.SPEEDS[(idx + 1) % Constants.SPEEDS.size])
+            }) { syncValues() }
         })
 
         col.addView(sectionLabel(Copy.SettingsCopy.DATA))
         col.addView(rowShell(Copy.SettingsCopy.CLEAR_HISTORY, trailing = Theme.label(ctx, Copy.Action.CLEAR, sp = 14f, color = Theme.CINNABAR_400, bold = true), danger = true) {
             nav.confirm(Copy.Me.CLEAR_HISTORY_TITLE, Copy.Action.CLEAR, destructive = true) {
-                nav.app.userStore.dispatch(StateAction.ClearHistory)
-                nav.toast(Copy.Toast.CLEARED)
+                nav.saveUser(StateAction.ClearHistory) { nav.toast(Copy.Toast.CLEARED) }
             }
         })
         col.addView(rowShell(Copy.SettingsCopy.CLEAR_SEARCHES, trailing = Theme.label(ctx, Copy.Action.CLEAR, sp = 14f, color = Theme.CINNABAR_400, bold = true), danger = true) {
             nav.confirm(Copy.SettingsCopy.CLEAR_SEARCHES_TITLE, Copy.Action.CLEAR, destructive = true) {
-                nav.app.userStore.dispatch(StateAction.ClearSearches)
-                nav.toast(Copy.Toast.CLEARED)
+                nav.saveUser(StateAction.ClearSearches) { nav.toast(Copy.Toast.CLEARED) }
             }
         })
 

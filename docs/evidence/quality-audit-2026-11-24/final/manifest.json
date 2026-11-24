@@ -1,0 +1,237 @@
+{
+  "at": "2026-11-24T23:40:00+08:00",
+  "scope": "Final green result set for docs/quality-audit-2026-11-24.md. Desktop runs used PANDA_E2E_SILENT_OUTPUT=2 and PANDA_E2E_SHOW_INACTIVE=1 so the test window never took focus or produced audio. Production build: out/ rebuilt 2026-11-24 20:05; TV APK is identified below.",
+  "desktop": {
+    "typecheck": "pass (npm run build includes tsc --noEmit; final/typecheck-final-after-harness.txt)",
+    "vitest": {
+      "passed": 36,
+      "total": 36,
+      "log": "final/vitest-final-green.txt"
+    },
+    "releaseTools": {
+      "passed": 6,
+      "total": 6,
+      "log": "final/release-tests-final-green.txt"
+    },
+    "fixture": {
+      "passed": 10,
+      "total": 10,
+      "log": "final/fixture-10-green-muted-inactive.txt",
+      "evidence": "final/fixture-green/",
+      "note": "Green after the test-only pointer-wake helper and inactive window. Includes test 5 (native disabled controls) and test 7 (real HLS source switch), which failed under the earlier silent-click harness."
+    },
+    "live": {
+      "passed": 2,
+      "total": 2,
+      "log": "final/live-2-green-muted-inactive.txt",
+      "evidence": "final/live-green/",
+      "metrics": {
+        "startupMs": 4947,
+        "seekMs": 480,
+        "decodedFrames": 92,
+        "droppedFrames": 0,
+        "historyPosition": 63,
+        "resumedAt": 63.889026,
+        "selectableSources": [
+          "360zy"
+        ],
+        "sourceSwitch": "unavailable: only 360zy returned a catalogue"
+      }
+    },
+    "packagedLive": {
+      "passed": 2,
+      "failed": 0,
+      "log": "final/packaged-live-2-green-muted-inactive.txt",
+      "report": "final/playwright-packaged-live-final-green.json",
+      "evidence": "final/packaged-live-green/",
+      "package": "windows-package-final-green/win-unpacked",
+      "metrics": {
+        "startupMs": 4587,
+        "seekMs": 1133,
+        "decodedFrames": 93,
+        "droppedFrames": 0,
+        "historyPosition": 63,
+        "resumedAt": 63.885603,
+        "selectableSources": [
+          "360zy"
+        ],
+        "sourceSwitch": "unavailable: only 360zy returned a catalogue"
+      }
+    },
+    "packageIdentity": {
+      "asarSha256": "8FFF87B5685CDAADDE4803232E9A320C0ABE92D4BF9E89581EEF56767E40E3EB",
+      "asarEntries": 271,
+      "pandaExeSha256": "89CA17B17DD41BC6A7CC31A0C54C442005F3A8EA67C8CEC85238E292A4FD6B26"
+    },
+    "harnessFix": {
+      "problem": "A stationary pointer lets the player hide its controls; the video layer then intercepts a synthetic click and page.screenshot can wait on an inactive compositor.",
+      "diagnostic": "final/player-idle-hit-diagnostic.txt",
+      "fix": "clickPlayerLocator/clickPlayerControl move the pointer onto the control box, wait for data-idle to clear, then click; screenshot falls back to a surface-less CDP capture; the main process shows the replay window with showInactive when PANDA_E2E_SHOW_INACTIVE=1.",
+      "verified": "fixture 10/10, live 2/2 and packaged live 2/2 green after the fix"
+    }
+  },
+  "tv": {
+    "apk": {
+      "apk": "Panda-TV-quality-ffzy.apk",
+      "bytes": 1846722,
+      "sha256": "7688BF38BFE8DBD751B485A6898B32EDF18ADC9917FC43B756E33820D798AB3B",
+      "versionName": "1.0.14",
+      "versionCode": 15,
+      "minSdk": 22,
+      "installedDevice": "MuMu Android 15 (127.0.0.1:16416)"
+    },
+    "build": {
+      "unitTests": 98,
+      "suites": 21,
+      "failures": 0,
+      "lintRelease": true,
+      "assembleRelease": true,
+      "log": "final/tv-build-final.txt",
+      "summary": "final/tv-unit-summary-final.json"
+    },
+    "completeCycle": {
+      "startupMs": 6832,
+      "episodeSwitch": true,
+      "seekMs": 3451,
+      "pausedSeconds": 22,
+      "exitSavedPosition": 66,
+      "reenteredClock": "01:06 / 43:14",
+      "sourceSwitch": "The cycle did not expose a second line under the live outage; the separate controlled switch case passed (final/tv/switch-mirror-final/report.json).",
+      "evidence": "final/tv/cycle-final/report.json"
+    },
+    "surfaces": {
+      "fhd": {
+        "viewport": [
+          1920,
+          1080
+        ],
+        "passed": 8,
+        "total": 8,
+        "evidence": "final/tv/surfaces-1080/report.json"
+      },
+      "720p": {
+        "viewport": [
+          1280,
+          720
+        ],
+        "passed": 3,
+        "total": 3,
+        "evidence": "final/tv/surfaces-720/report.json"
+      },
+      "4kFont115": {
+        "viewport": [
+          3840,
+          2160
+        ],
+        "passed": 3,
+        "total": 3,
+        "evidence": "final/tv/surfaces-4k-font/report.json"
+      }
+    },
+    "navigation": {
+      "passed": 8,
+      "total": 8,
+      "userStateRestored": true,
+      "libraryStateRestored": true,
+      "evidence": "final/tv/navigation-final/report.json"
+    },
+    "searchCancellation": {
+      "passed": 3,
+      "total": 3,
+      "evidence": "final/tv/search-state-final/report.json"
+    },
+    "motion": {
+      "passed": 4,
+      "total": 4,
+      "evidence": "final/tv/motion-final/report.json"
+    },
+    "errorRecovery": {
+      "passed": true,
+      "errorObservedMs": 40259,
+      "retryRecoveryMs": 4510,
+      "evidence": "final/tv/error-final/report.json"
+    },
+    "admissionCancel": {
+      "passed": true,
+      "evidence": "final/tv/admission-final/report.json"
+    },
+    "mediaControls": {
+      "passed": true,
+      "evidence": "final/tv/media-final-report.json"
+    },
+    "lifecycle": {
+      "cycles": 6,
+      "viewRoots": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "activities": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "evidence": "final/tv/lifecycle-final-report.json"
+    },
+    "extendedPlayback": {
+      "seconds": 301.85,
+      "renderedOutputBuffers": 7624,
+      "droppedOutputBuffers": 0,
+      "heapSamples": 6,
+      "evidence": "final/tv/long-final/report.json"
+    },
+    "sourceSwitch": {
+      "finalApkIndependent": {
+        "status": "passed",
+        "title": "八仙！",
+        "selectedLine": "360资源",
+        "beforeClock": "00:02 / 2:23:16",
+        "afterClock": "00:07 / 2:23:16",
+        "note": "After updating ffzy to https://api.ffzyapi.com and rebuilding the TV APK, the line panel exposed two independent sources and switched from 非凡资源 to 360资源 while retaining the timeline.",
+        "evidence": "docs/evidence/source-playback-audit-2026-11-24/tv-switch-ffzy/report.json"
+      },
+      "finalApkControlled": {
+        "status": "passed",
+        "note": "Previous controlled mirror-entrance cycle remains as UI/state-machine coverage.",
+        "evidence": "final/tv/cycle-mirror-final/report.json"
+      },
+      "unreachableIndependentSources": [
+        "电影天堂: current public endpoint unchanged; HTTP/HTTPS blocked from this network",
+        "虎牙/金鹰: TV 403, desktop timeout",
+        "红牛/速播/暴风/量子: timeout or connection reset"
+      ]
+    },
+    "completeCycleWithControlledSwitch": {
+      "startupMs": 5959,
+      "episodeSwitch": true,
+      "selectedLine": "360资源镜像",
+      "switchClock": "00:08 / 43:14",
+      "seekMs": 2756,
+      "seekClock": "01:09 / 43:14",
+      "pausedSeconds": 22,
+      "exitSavedPosition": 72,
+      "reenteredClock": "01:13 / 43:14",
+      "note": "One run on the final APK: play, switch to episode 2, switch to a second entrance of the same real 360zy upstream, seek, pause 22s, exit and re-enter. The rules override is a controlled source-config fixture; user state and firewall were restored.",
+      "evidence": "final/tv/cycle-mirror-final/report.json",
+      "rulesFixture": "final/tv/cycle-mirror-final/rules-fixture.json"
+    }
+  },
+  "restored": {
+    "tvOriginalApkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+    "tvUserStateSha256": "a615482849cc550e38810680ef3e41f83f2409897cb709eaf1896492aa752d67",
+    "display": "1080x1920 physical / 280 density / font_scale 1.0",
+    "tvApp": "force-stopped after restoring the original APK; rules override removed",
+    "tvRulesOverride": "removed; original APK/user state re-verified after the full controlled-switch cycle"
+  },
+  "limitations": [
+    "Physical audio output was not validated; desktop replay used --disable-audio-output and asserts media timeline/decoder state, not speaker audibility.",
+    "Most configured sources are still unreachable upstream (电影天堂/虎牙/金鹰/红牛/速播/暴风/量子: 403, timeout or connection reset). 360zy and the updated ffzy endpoint are the two playable independent sources in this network; no source was deleted or disabled to force a pass.",
+    "TV verification is on MuMu Android 15 (API 35), not a physical Android 5.1/API 22 television; minSdk 22 is covered by build/lint, not a device run."
+  ]
+}

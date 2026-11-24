@@ -1,0 +1,372 @@
+{
+  "baseline": {
+    "window": {
+      "__playwright_global_listeners_check__": 1,
+      "auxclick": 1,
+      "blur": 3,
+      "click": 1,
+      "contextmenu": 1,
+      "dblclick": 1,
+      "hashchange": 1,
+      "mousedown": 1,
+      "mousemove": 1,
+      "mouseup": 1,
+      "offline": 2,
+      "online": 1,
+      "pointerdown": 1,
+      "pointerup": 1,
+      "popstate": 1,
+      "touchcancel": 1,
+      "touchend": 1,
+      "touchstart": 1
+    },
+    "document": {
+      "emptied": 1,
+      "error": 1,
+      "keydown": 1,
+      "loadeddata": 1,
+      "loadedmetadata": 1,
+      "pause": 1,
+      "play": 1,
+      "playing": 1,
+      "pointerdown": 1,
+      "selectionchange": 1,
+      "stalled": 1,
+      "waiting": 1
+    }
+  },
+  "cycles": 6,
+  "samples": [
+    {
+      "cycle": 1,
+      "episode": 1,
+      "retained": [
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 7636144,
+        "totalSize": 8790016,
+        "embedderHeapUsedSize": 10318648,
+        "backingStorageSize": 1105383
+      }
+    },
+    {
+      "cycle": 2,
+      "episode": 2,
+      "retained": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 7919956,
+        "totalSize": 8790016,
+        "embedderHeapUsedSize": 10733248,
+        "backingStorageSize": 1105395
+      }
+    },
+    {
+      "cycle": 3,
+      "episode": 1,
+      "retained": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 8027124,
+        "totalSize": 8790016,
+        "embedderHeapUsedSize": 10524104,
+        "backingStorageSize": 1105395
+      }
+    },
+    {
+      "cycle": 4,
+      "episode": 2,
+      "retained": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 8237860,
+        "totalSize": 9314304,
+        "embedderHeapUsedSize": 10774032,
+        "backingStorageSize": 1105395
+      }
+    },
+    {
+      "cycle": 5,
+      "episode": 1,
+      "retained": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 8302652,
+        "totalSize": 9314304,
+        "embedderHeapUsedSize": 10348976,
+        "backingStorageSize": 1105395
+      }
+    },
+    {
+      "cycle": 6,
+      "episode": 2,
+      "retained": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "listeners": {
+        "window": {
+          "__playwright_global_listeners_check__": 1,
+          "auxclick": 1,
+          "blur": 3,
+          "click": 1,
+          "contextmenu": 1,
+          "dblclick": 1,
+          "hashchange": 1,
+          "mousedown": 1,
+          "mousemove": 1,
+          "mouseup": 1,
+          "offline": 2,
+          "online": 1,
+          "pointerdown": 1,
+          "pointerup": 1,
+          "popstate": 1,
+          "touchcancel": 1,
+          "touchend": 1,
+          "touchstart": 1
+        },
+        "document": {
+          "emptied": 1,
+          "error": 1,
+          "keydown": 1,
+          "loadeddata": 1,
+          "loadedmetadata": 1,
+          "pause": 1,
+          "play": 1,
+          "playing": 1,
+          "pointerdown": 1,
+          "selectionchange": 1,
+          "stalled": 1,
+          "waiting": 1
+        }
+      },
+      "heap": {
+        "usedSize": 8356504,
+        "totalSize": 9314304,
+        "embedderHeapUsedSize": 10651560,
+        "backingStorageSize": 1105395
+      }
+    }
+  ],
+  "scope": "Same renderer, alternating episodes, native cleanup and explicit GC. Finite retention evidence, not proof of all-duration memory behavior."
+}

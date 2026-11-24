@@ -1,0 +1,48 @@
+{
+  "at": "2026-11-22T11:15:51.148838+00:00",
+  "method": "Read-only replay of captured real observations, not another device playback run",
+  "helperSha256": "DAEA09BDD59D87203A79A633E122FFD88BB6BD365CC6D2D52A8EBD225C246419",
+  "cases": [
+    {
+      "origin": "tv-playback-verified/report.json",
+      "name": "playback-error-recovery-1",
+      "stage": "playback-error:initial-playback",
+      "clock": null,
+      "isRecoverySampleUnavailable": true,
+      "faultNotInjected": true,
+      "initialPlaybackFailureRetained": true,
+      "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+    },
+    {
+      "origin": "tv-playback-verified/report.json",
+      "name": "playback-error-recovery-2",
+      "stage": "playback-error:initial-playback",
+      "clock": null,
+      "isRecoverySampleUnavailable": true,
+      "faultNotInjected": true,
+      "initialPlaybackFailureRetained": true,
+      "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+    },
+    {
+      "origin": "tv-errors-final/report.json",
+      "name": "playback-error-recovery-2",
+      "stage": "playback-error:initial-playback",
+      "clock": "00:01 / 1:00:35",
+      "isRecoverySampleUnavailable": true,
+      "faultNotInjected": true,
+      "initialPlaybackFailureRetained": true,
+      "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '正在准备播放', '0.0', '播放', '下一集', '00:01 / 1:00:35', '选集', '1080P', '倍速']"
+    },
+    {
+      "origin": "tv-errors-final/report.json",
+      "name": "playback-error-recovery-1",
+      "stage": "playback-error:initial-playback",
+      "clock": null,
+      "isRecoverySampleUnavailable": true,
+      "faultNotInjected": true,
+      "initialPlaybackFailureRetained": true,
+      "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+    }
+  ],
+  "postInjectionDeadlinesRemainStrict": true
+}

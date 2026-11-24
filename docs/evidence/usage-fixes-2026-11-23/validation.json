@@ -1,0 +1,1323 @@
+{
+  "at": "2026-11-22T19:51:45.184030+00:00",
+  "timezone": "Asia/Shanghai",
+  "scope": "The seven defects and four improvements from usage-audit-2026-11-22; local uncommitted candidates, no publication or Windows installation upgrade.",
+  "baseline": {
+    "at": "2026-11-22T16:24:56.233Z",
+    "head": "4220d6dff973a55f42508a49a9c0c3d43d3b296a",
+    "baselineFileCount": 196,
+    "missingBaselineFiles": []
+  },
+  "headUnchanged": true,
+  "windowsCandidate": {
+    "at": "2026-11-23T03:14:48.5307449+08:00",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+    "executableSha256": "8F1E317D2004FBC4474B92A4439F880DB984A12E709C4766C37AFEE89ED879CE",
+    "asar": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\resources\\app.asar",
+    "asarBytes": 13812954,
+    "asarSha256": "3B5E3482747CDEDEDD63BBAA3AF65C0E8380EC5212897478717FC8304645D643"
+  },
+  "tvCandidate": {
+    "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\Panda-TV-1.0.14-usage.apk",
+    "bytes": 1842556,
+    "sha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+    "minSdk": 22,
+    "versionName": "1.0.14",
+    "versionCode": 15
+  },
+  "tvOffline": {
+    "tests": 70,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "timestamps": [
+      "2026-11-22T19:48:49.189Z",
+      "2026-11-22T19:48:49.574Z",
+      "2026-11-22T19:48:49.719Z",
+      "2026-11-22T19:48:49.947Z",
+      "2026-11-22T19:48:51.379Z",
+      "2026-11-22T19:48:52.411Z",
+      "2026-11-22T19:48:52.628Z",
+      "2026-11-22T19:48:52.809Z",
+      "2026-11-22T19:48:52.860Z",
+      "2026-11-22T19:49:00.859Z",
+      "2026-11-22T19:49:00.861Z",
+      "2026-11-22T19:49:00.863Z",
+      "2026-11-22T19:49:00.095Z"
+    ]
+  },
+  "desktopOffline": {
+    "files": 26,
+    "tests": 317,
+    "recordedStartTimeLocal": "03:02:50"
+  },
+  "fixture": {
+    "full": 40,
+    "usageRepeat": 28,
+    "recoveryRepeat": 4
+  },
+  "desktopLive": {
+    "build-live-complete": {
+      "startTime": "2026-11-22T19:14:49.778Z",
+      "duration": 339259.509,
+      "expected": 12,
+      "skipped": 2,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "packaged-live-complete": {
+      "startTime": "2026-11-22T19:20:29.461Z",
+      "duration": 407049.488,
+      "expected": 12,
+      "skipped": 1,
+      "unexpected": 4,
+      "flaky": 0
+    },
+    "initials-baseline-1": {
+      "startTime": "2026-11-22T19:29:55.819Z",
+      "duration": 22440.044,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "initials-baseline-2": {
+      "startTime": "2026-11-22T19:30:18.673Z",
+      "duration": 46985.200000000004,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "initials-after-1": {
+      "startTime": "2026-11-22T19:31:06.061Z",
+      "duration": 5324.877,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    },
+    "initials-after-2": {
+      "startTime": "2026-11-22T19:31:11.813Z",
+      "duration": 5788.321,
+      "expected": 0,
+      "skipped": 0,
+      "unexpected": 1,
+      "flaky": 0
+    }
+  },
+  "deviceCases": {
+    "storage-verified": {
+      "at": "2026-11-22T18:34:16.479441+00:00",
+      "passed": 2,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "recovery-verified": {
+      "at": "2026-11-22T18:34:39.259705+00:00",
+      "passed": 2,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "history-verified": {
+      "at": "2026-11-22T18:35:11.039083+00:00",
+      "passed": 2,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "surfaces-native": {
+      "at": "2026-11-22T18:26:05.744800+00:00",
+      "passed": 8,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "surfaces-720p-complete": {
+      "at": "2026-11-22T19:16:18.503536+00:00",
+      "passed": 8,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "surfaces-4k-complete": {
+      "at": "2026-11-22T19:17:28.616704+00:00",
+      "passed": 8,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "navigation": {
+      "at": "2026-11-22T18:38:25.739797+00:00",
+      "passed": 23,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "nav-selection": {
+      "at": "2026-11-22T18:46:44.716913+00:00",
+      "passed": 6,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "search": {
+      "at": "2026-11-22T18:43:03.097159+00:00",
+      "passed": 3,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "pagination": {
+      "at": "2026-11-22T18:45:32.216039+00:00",
+      "passed": 0,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "motion": {
+      "at": "2026-11-22T18:47:21.533169+00:00",
+      "passed": 4,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    },
+    "playback-all": {
+      "at": "2026-11-22T18:52:46.406104+00:00",
+      "passed": 13,
+      "failed": 0,
+      "unavailable": [
+        {
+          "name": "line-switch-1",
+          "reason": "No alternate line became selectable in this playback sample."
+        },
+        {
+          "name": "line-switch-2",
+          "reason": "No alternate line became selectable in this playback sample."
+        }
+      ],
+      "failures": []
+    },
+    "line-switch-movie": {
+      "at": "2026-11-22T19:04:06.845150+00:00",
+      "passed": 2,
+      "failed": 0,
+      "unavailable": [],
+      "failures": []
+    }
+  },
+  "startup": {
+    "at": "2026-11-22T19:27:16.845Z",
+    "unit": "ms after process creation",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+    "firstStarts": {
+      "count": 20,
+      "failed": 0,
+      "artworkComplete": 20,
+      "wholePageComplete": 20,
+      "statisticsMs": {
+        "skeleton": {
+          "median": 438.0,
+          "p95NearestRank": 513,
+          "max": 549
+        },
+        "topOfPage": {
+          "median": 713.0,
+          "p95NearestRank": 856,
+          "max": 858
+        },
+        "visibleArtwork": {
+          "median": 1174.5,
+          "p95NearestRank": 1424,
+          "max": 2445
+        },
+        "wholePage": {
+          "median": 1698.5,
+          "p95NearestRank": 1998,
+          "max": 2088
+        }
+      }
+    },
+    "repeatStarts": {
+      "count": 3,
+      "failed": 0,
+      "artworkComplete": 3,
+      "wholePageComplete": 3,
+      "statisticsMs": {
+        "skeleton": {
+          "median": 444,
+          "p95NearestRank": 505,
+          "max": 505
+        },
+        "topOfPage": {
+          "median": 600,
+          "p95NearestRank": 655,
+          "max": 655
+        },
+        "visibleArtwork": {
+          "median": 690,
+          "p95NearestRank": 792,
+          "max": 792
+        },
+        "wholePage": {
+          "median": 600,
+          "p95NearestRank": 655,
+          "max": 655
+        }
+      }
+    }
+  },
+  "restoration": {
+    "at": "2026-11-22T19:18:42.846798+00:00",
+    "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+    "completeUserStateRestored": true,
+    "directoryPermissionsRestored": true,
+    "firewallRulesRestored": true,
+    "displaySettingsRestored": true,
+    "emulatorInitiallyOff": true,
+    "emulatorFinallyOff": true,
+    "mumuSettingsEqual": true
+  },
+  "initials": {
+    "searchAlgorithmTextUnchanged": true,
+    "beforeSha256": "08A51645DB92AB0456406540EB1B1E099E2B3508A01B60D78EC0E98E5067436E",
+    "afterSha256": "08A51645DB92AB0456406540EB1B1E099E2B3508A01B60D78EC0E98E5067436E",
+    "baselineFailures": 2,
+    "finalFailures": 2,
+    "boundary": "Same original four-query test, sequential fresh profiles; the first failed query can vary. These failures remain failures."
+  },
+  "files": {
+    ".tmp/usage-fixes-2026-11-23/baseline.json": {
+      "sha256": "D6C389E56C1FECA6F2F01D740D3FBEB0817F7245EB7091D2CFEBC1D599870EC0",
+      "bytes": 31065,
+      "lastWriteUtc": "2026-11-22T16:24:56.300218+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/baseline.json": {
+      "sha256": "D6C389E56C1FECA6F2F01D740D3FBEB0817F7245EB7091D2CFEBC1D599870EC0",
+      "bytes": 31065,
+      "lastWriteUtc": "2026-11-22T19:51:44.672254+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-desktop-unit.log": {
+      "sha256": "ACA913E3893146C8EA366F4269F209E8803F8FB9A38BE9691F2F17E90E2B5AFD",
+      "bytes": 1123,
+      "lastWriteUtc": "2026-11-22T16:28:53.902533+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-desktop-unit.log": {
+      "sha256": "ACA913E3893146C8EA366F4269F209E8803F8FB9A38BE9691F2F17E90E2B5AFD",
+      "bytes": 1123,
+      "lastWriteUtc": "2026-11-22T19:51:44.680260+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-desktop-unit-second.log": {
+      "sha256": "39A9E02F1B055C284BFCD03EB8EFA3A1BB3483163351B1728F4D0EAF28C33C72",
+      "bytes": 5569,
+      "lastWriteUtc": "2026-11-22T16:38:41.961641+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-desktop-unit-second.log": {
+      "sha256": "39A9E02F1B055C284BFCD03EB8EFA3A1BB3483163351B1728F4D0EAF28C33C72",
+      "bytes": 5569,
+      "lastWriteUtc": "2026-11-22T19:51:44.682947+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-source-races-red-1.log": {
+      "sha256": "8817BA5287F17425B22F5EFA4E592472956CEE8AE1C54744EA695099DA742A80",
+      "bytes": 2073,
+      "lastWriteUtc": "2026-11-22T17:40:11.428327+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-source-races-red-1.log": {
+      "sha256": "8817BA5287F17425B22F5EFA4E592472956CEE8AE1C54744EA695099DA742A80",
+      "bytes": 2073,
+      "lastWriteUtc": "2026-11-22T19:51:44.685400+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-source-races-red-2.log": {
+      "sha256": "596A54DF8E701DE8CB0EE6461944E51F5F1A03D438E430F95AEAA1F0C0281A11",
+      "bytes": 2083,
+      "lastWriteUtc": "2026-11-22T17:42:08.189590+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-source-races-red-2.log": {
+      "sha256": "596A54DF8E701DE8CB0EE6461944E51F5F1A03D438E430F95AEAA1F0C0281A11",
+      "bytes": 2083,
+      "lastWriteUtc": "2026-11-22T19:51:44.687910+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-fixture-corrected.log": {
+      "sha256": "FD754DD28EE5C70CE71D7D3FFE31BA21B9E5B14EF733B65BAE70B6E40165B0C6",
+      "bytes": 18968,
+      "lastWriteUtc": "2026-11-22T17:06:40.799885+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-fixture-corrected.log": {
+      "sha256": "FD754DD28EE5C70CE71D7D3FFE31BA21B9E5B14EF733B65BAE70B6E40165B0C6",
+      "bytes": 18968,
+      "lastWriteUtc": "2026-11-22T19:51:44.689920+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-fixture-extended-red.log": {
+      "sha256": "57651FAAA3B11885FB25245B2FA56713AAD50FA9738D52F4EE6E399F4C6BD886",
+      "bytes": 21448,
+      "lastWriteUtc": "2026-11-22T17:58:01.261653+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-fixture-extended-red.log": {
+      "sha256": "57651FAAA3B11885FB25245B2FA56713AAD50FA9738D52F4EE6E399F4C6BD886",
+      "bytes": 21448,
+      "lastWriteUtc": "2026-11-22T19:51:44.695954+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-recovery.log": {
+      "sha256": "61776F4D72524FF89E14597DAFB42ED6FA2A45F7362D17D17B810B958F71C087",
+      "bytes": 8401,
+      "lastWriteUtc": "2026-11-22T18:00:39.512983+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-recovery.log": {
+      "sha256": "61776F4D72524FF89E14597DAFB42ED6FA2A45F7362D17D17B810B958F71C087",
+      "bytes": 8401,
+      "lastWriteUtc": "2026-11-22T19:51:44.702319+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-tv-state.xml": {
+      "sha256": "220A32AA35C31A7733FFC43D35B8F286264BA26B7BB9B967412B148935383FE9",
+      "bytes": 4734,
+      "lastWriteUtc": "2026-11-22T16:29:08.330471+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-tv-state.xml": {
+      "sha256": "220A32AA35C31A7733FFC43D35B8F286264BA26B7BB9B967412B148935383FE9",
+      "bytes": 4734,
+      "lastWriteUtc": "2026-11-22T19:51:44.707939+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-tv-state-and-cancel.xml": {
+      "sha256": "A65BF218C5F8CD54FF5FE598DDE1FB8E2B4444F783030C20023D11EFBDDA5E1D",
+      "bytes": 11420,
+      "lastWriteUtc": "2026-11-22T16:38:45.101956+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-tv-state-and-cancel.xml": {
+      "sha256": "A65BF218C5F8CD54FF5FE598DDE1FB8E2B4444F783030C20023D11EFBDDA5E1D",
+      "bytes": 11420,
+      "lastWriteUtc": "2026-11-22T19:51:44.710939+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-tv-preferences-first.xml": {
+      "sha256": "2BE689204E713EFA8502FBC4CF2A23EC0D6B4DB3F258CC216D6CD965FD20508D",
+      "bytes": 16102,
+      "lastWriteUtc": "2026-11-22T17:56:53.914507+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-tv-preferences-first.xml": {
+      "sha256": "2BE689204E713EFA8502FBC4CF2A23EC0D6B4DB3F258CC216D6CD965FD20508D",
+      "bytes": 16102,
+      "lastWriteUtc": "2026-11-22T19:51:44.717852+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/before-tv-preferences-second.xml": {
+      "sha256": "E114D845103B8929C740526647BA7CEE9C920B5A27DA693C1F11485FA0BDF468",
+      "bytes": 16102,
+      "lastWriteUtc": "2026-11-22T18:00:42.114116+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/before-tv-preferences-second.xml": {
+      "sha256": "E114D845103B8929C740526647BA7CEE9C920B5A27DA693C1F11485FA0BDF468",
+      "bytes": 16102,
+      "lastWriteUtc": "2026-11-22T19:51:44.723265+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-before-probe-adapter.json": {
+      "sha256": "17C909454E250152C37D23A864ABC64932A3B1E3B739C2B2EC50700C212CF07F",
+      "bytes": 434,
+      "lastWriteUtc": "2026-11-22T17:56:40.888738+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-before-probe-adapter.json": {
+      "sha256": "17C909454E250152C37D23A864ABC64932A3B1E3B739C2B2EC50700C212CF07F",
+      "bytes": 434,
+      "lastWriteUtc": "2026-11-22T19:51:44.731157+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-desktop-unit-first.log": {
+      "sha256": "C15DA34AB413024A29E8D94C811D19B32F59C3C0B52219A54B375ACEE074B786",
+      "bytes": 345,
+      "lastWriteUtc": "2026-11-22T16:58:23.617684+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-desktop-unit-first.log": {
+      "sha256": "C15DA34AB413024A29E8D94C811D19B32F59C3C0B52219A54B375ACEE074B786",
+      "bytes": 345,
+      "lastWriteUtc": "2026-11-22T19:51:44.733953+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-unit-extended-first.log": {
+      "sha256": "AF1C94EC832CFAF8EAE96214C617201A84B77CC42F385442FB351B9B4D291E1B",
+      "bytes": 178,
+      "lastWriteUtc": "2026-11-22T17:49:35.115509+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-unit-extended-first.log": {
+      "sha256": "AF1C94EC832CFAF8EAE96214C617201A84B77CC42F385442FB351B9B4D291E1B",
+      "bytes": 178,
+      "lastWriteUtc": "2026-11-22T19:51:44.738966+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/offline-complete.log": {
+      "sha256": "195AF6636B2F7445FA76C1BDED6D84D1870D15EE109D3CCCAA4D5E57A74C4999",
+      "bytes": 229,
+      "lastWriteUtc": "2026-11-22T19:03:12.740489+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/offline-complete.log": {
+      "sha256": "195AF6636B2F7445FA76C1BDED6D84D1870D15EE109D3CCCAA4D5E57A74C4999",
+      "bytes": 229,
+      "lastWriteUtc": "2026-11-22T19:51:44.743476+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/usage-complete.log": {
+      "sha256": "63094153CFCF797038B4BE9960DAB2110FD4142CFEF4639AE7A826889E976BDC",
+      "bytes": 4380,
+      "lastWriteUtc": "2026-11-22T19:04:41.561284+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/usage-complete.log": {
+      "sha256": "63094153CFCF797038B4BE9960DAB2110FD4142CFEF4639AE7A826889E976BDC",
+      "bytes": 4380,
+      "lastWriteUtc": "2026-11-22T19:51:44.745473+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/fixture-complete.log": {
+      "sha256": "B90A01377900CBC55D2DAED8A05AE81F1985E84453E6639AAA83FF2BF8E78265",
+      "bytes": 6208,
+      "lastWriteUtc": "2026-11-22T19:11:27.575982+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/fixture-complete.log": {
+      "sha256": "B90A01377900CBC55D2DAED8A05AE81F1985E84453E6639AAA83FF2BF8E78265",
+      "bytes": 6208,
+      "lastWriteUtc": "2026-11-22T19:51:44.746887+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-recovery-verified.log": {
+      "sha256": "CD7C355902B39D11B7FEE84590DC9DB5DED85E17FDFA1BC15FC5ECBBA3C8A27E",
+      "bytes": 1521,
+      "lastWriteUtc": "2026-11-22T18:26:35.530585+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-recovery-verified.log": {
+      "sha256": "CD7C355902B39D11B7FEE84590DC9DB5DED85E17FDFA1BC15FC5ECBBA3C8A27E",
+      "bytes": 1521,
+      "lastWriteUtc": "2026-11-22T19:51:44.748895+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-tv-usage-second.log": {
+      "sha256": "397A4891D313F5F2C178F6C574E7088CF2C000C1D5F29ACBC309DB7E2B9B5B0E",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T18:19:49.633140+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-tv-usage-second.log": {
+      "sha256": "397A4891D313F5F2C178F6C574E7088CF2C000C1D5F29ACBC309DB7E2B9B5B0E",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T19:51:44.751554+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-checks-final-first.log": {
+      "sha256": "61E5D93E88D205ECE9E9DD4B0A2D39B329412BA8C1B5470C863B59872C46B0FD",
+      "bytes": 4388,
+      "lastWriteUtc": "2026-11-22T18:17:40.366535+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-checks-final-first.log": {
+      "sha256": "61E5D93E88D205ECE9E9DD4B0A2D39B329412BA8C1B5470C863B59872C46B0FD",
+      "bytes": 4388,
+      "lastWriteUtc": "2026-11-22T19:51:44.753174+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-final-signature.log": {
+      "sha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "bytes": 1818,
+      "lastWriteUtc": "2026-11-22T18:20:05.211046+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-final-signature.log": {
+      "sha256": "AE5D35D2B04F25AF830E49084E01842E5FC5D850AE04BC278A8531639F3B2126",
+      "bytes": 1818,
+      "lastWriteUtc": "2026-11-22T19:51:44.755189+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/build-complete.log": {
+      "sha256": "805C3590CE4E091F5BA9D0AD88CEF831F8A0694C3A11390A49417FB591B30D78",
+      "bytes": 20647,
+      "lastWriteUtc": "2026-11-22T19:02:57.035110+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/build-complete.log": {
+      "sha256": "805C3590CE4E091F5BA9D0AD88CEF831F8A0694C3A11390A49417FB591B30D78",
+      "bytes": 20647,
+      "lastWriteUtc": "2026-11-22T19:51:44.760910+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/asar-check-complete.log": {
+      "sha256": "BE31653890B3EA50DED10782DE5DC8B294A262D49422978FAD7B1D3724A030A9",
+      "bytes": 174,
+      "lastWriteUtc": "2026-11-22T19:14:49.356981+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/asar-check-complete.log": {
+      "sha256": "BE31653890B3EA50DED10782DE5DC8B294A262D49422978FAD7B1D3724A030A9",
+      "bytes": 174,
+      "lastWriteUtc": "2026-11-22T19:51:44.768927+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/windows-final-identity.json": {
+      "sha256": "9AFC67DE3D8D41FEBF05C731271675C6073E90D8C1F4471281A97F0C2695C5F3",
+      "bytes": 481,
+      "lastWriteUtc": "2026-11-22T19:14:49.255900+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/windows-final-identity.json": {
+      "sha256": "9AFC67DE3D8D41FEBF05C731271675C6073E90D8C1F4471281A97F0C2695C5F3",
+      "bytes": 481,
+      "lastWriteUtc": "2026-11-22T19:51:44.771132+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/windows-final-checks.json": {
+      "sha256": "DF34E04A2D6B26212BC3AAAE6AF698F1C707623E16A988DFC036E4C4FB151C08",
+      "bytes": 2495,
+      "lastWriteUtc": "2026-11-22T19:27:58.913546+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/windows-final-checks.json": {
+      "sha256": "DF34E04A2D6B26212BC3AAAE6AF698F1C707623E16A988DFC036E4C4FB151C08",
+      "bytes": 2495,
+      "lastWriteUtc": "2026-11-22T19:51:44.777295+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/design-complete.log": {
+      "sha256": "08C268F10BD89D916474FA3F15BF00EC744FA1164C22EBA4F5872DEEAB14FDBE",
+      "bytes": 104,
+      "lastWriteUtc": "2026-11-22T19:21:54.650695+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/design-complete.log": {
+      "sha256": "08C268F10BD89D916474FA3F15BF00EC744FA1164C22EBA4F5872DEEAB14FDBE",
+      "bytes": 104,
+      "lastWriteUtc": "2026-11-22T19:51:44.780398+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/contract-complete.log": {
+      "sha256": "0CDD7F55D5ED98870784A188DA00B4408AF0951293FBC90A23D42A26B4742D31",
+      "bytes": 469,
+      "lastWriteUtc": "2026-11-22T19:21:54.818040+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/contract-complete.log": {
+      "sha256": "0CDD7F55D5ED98870784A188DA00B4408AF0951293FBC90A23D42A26B4742D31",
+      "bytes": 469,
+      "lastWriteUtc": "2026-11-22T19:51:44.781751+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/release-tools-final.log": {
+      "sha256": "F04724D2CF79DA182A43F777D2B12D9697057150F0FD787A5BC8C788CE27389F",
+      "bytes": 722,
+      "lastWriteUtc": "2026-11-22T18:29:00.242061+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/release-tools-final.log": {
+      "sha256": "F04724D2CF79DA182A43F777D2B12D9697057150F0FD787A5BC8C788CE27389F",
+      "bytes": 722,
+      "lastWriteUtc": "2026-11-22T19:51:44.784297+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/history-focus-red.log": {
+      "sha256": "BEF6727B2ECD320BD2091BDD8005F93120341E65DB75A9CC9F46C1710187D4AC",
+      "bytes": 3432,
+      "lastWriteUtc": "2026-11-22T18:59:13.449578+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/history-focus-red.log": {
+      "sha256": "BEF6727B2ECD320BD2091BDD8005F93120341E65DB75A9CC9F46C1710187D4AC",
+      "bytes": 3432,
+      "lastWriteUtc": "2026-11-22T19:51:44.790586+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/library-focus-corrected-red.log": {
+      "sha256": "5C5EC2B53AEBD09EBF2C05B4CDAD24489DDF29B0846AAF62EFC01CA4C4F0A1B2",
+      "bytes": 4510,
+      "lastWriteUtc": "2026-11-22T18:20:48.989494+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/library-focus-corrected-red.log": {
+      "sha256": "5C5EC2B53AEBD09EBF2C05B4CDAD24489DDF29B0846AAF62EFC01CA4C4F0A1B2",
+      "bytes": 4510,
+      "lastWriteUtc": "2026-11-22T19:51:44.793581+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/empty-memory-red.log": {
+      "sha256": "67B9DB8BE0F0658D89AD22ADDD9B8E88B5CFBA686E7AE8746052220E0E0E0D7A",
+      "bytes": 2954,
+      "lastWriteUtc": "2026-11-22T18:40:52.738970+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/empty-memory-red.log": {
+      "sha256": "67B9DB8BE0F0658D89AD22ADDD9B8E88B5CFBA686E7AE8746052220E0E0E0D7A",
+      "bytes": 2954,
+      "lastWriteUtc": "2026-11-22T19:51:44.799582+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/empty-memory-verified.log": {
+      "sha256": "C4D24AD88D75163BBD687CB5D7125173D204BB82E33E73C726BF030DB9FA1C31",
+      "bytes": 655,
+      "lastWriteUtc": "2026-11-22T18:43:11.865942+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/empty-memory-verified.log": {
+      "sha256": "C4D24AD88D75163BBD687CB5D7125173D204BB82E33E73C726BF030DB9FA1C31",
+      "bytes": 655,
+      "lastWriteUtc": "2026-11-22T19:51:44.801580+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/network/sources-first.json": {
+      "sha256": "93DF05E18E23D9120393214D387278C52BF1A983AD07555C6DEC9AF322F1D89C",
+      "bytes": 19046,
+      "lastWriteUtc": "2026-11-22T18:19:50.928161+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/network/sources-first.json": {
+      "sha256": "93DF05E18E23D9120393214D387278C52BF1A983AD07555C6DEC9AF322F1D89C",
+      "bytes": 19046,
+      "lastWriteUtc": "2026-11-22T19:51:44.804580+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/network/sources-second.json": {
+      "sha256": "229D4A551E0BA9CB3B9E06A8CF2E5D2C2A2C267E21F24D3E07740E51824A19E2",
+      "bytes": 19015,
+      "lastWriteUtc": "2026-11-22T18:31:15.972582+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/network/sources-second.json": {
+      "sha256": "229D4A551E0BA9CB3B9E06A8CF2E5D2C2A2C267E21F24D3E07740E51824A19E2",
+      "bytes": 19015,
+      "lastWriteUtc": "2026-11-22T19:51:44.811089+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/network/start-first.log": {
+      "sha256": "FB457E87C344B0DD1CAD9D72084B5C1119799FBF999667A87920A9F34F1B8EC6",
+      "bytes": 6626,
+      "lastWriteUtc": "2026-11-22T18:22:08.794892+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/network/start-first.log": {
+      "sha256": "FB457E87C344B0DD1CAD9D72084B5C1119799FBF999667A87920A9F34F1B8EC6",
+      "bytes": 6626,
+      "lastWriteUtc": "2026-11-22T19:51:44.817092+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/network/start-second.log": {
+      "sha256": "D101D85D587634B7008BBABD338B72F1780B9649226EE9C3A0763FE92F81B6A0",
+      "bytes": 6422,
+      "lastWriteUtc": "2026-11-22T18:31:55.822167+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/network/start-second.log": {
+      "sha256": "D101D85D587634B7008BBABD338B72F1780B9649226EE9C3A0763FE92F81B6A0",
+      "bytes": 6422,
+      "lastWriteUtc": "2026-11-22T19:51:44.819268+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/startup-complete/startup-timing.json": {
+      "sha256": "23F0DE7939F4ABEAA25413F6471C1CDC19AFEC2C4762ADC1BE5AD1C066FA13BD",
+      "bytes": 4002,
+      "lastWriteUtc": "2026-11-22T19:27:58.891453+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/startup-complete/startup-timing.json": {
+      "sha256": "23F0DE7939F4ABEAA25413F6471C1CDC19AFEC2C4762ADC1BE5AD1C066FA13BD",
+      "bytes": 4002,
+      "lastWriteUtc": "2026-11-22T19:51:44.821472+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/single-sources-diagnostic.json": {
+      "sha256": "4064AC012FF7F3BC91D1E927C2883D4DD0571C3812CF1582B5080CC00338D0FE",
+      "bytes": 2716,
+      "lastWriteUtc": "2026-11-22T19:34:44.514343+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/single-sources-diagnostic.json": {
+      "sha256": "4064AC012FF7F3BC91D1E927C2883D4DD0571C3812CF1582B5080CC00338D0FE",
+      "bytes": 2716,
+      "lastWriteUtc": "2026-11-22T19:51:44.828063+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/single-sources-catalogue-diagnostic.json": {
+      "sha256": "3767F9113E3F3CD2E3183AC0992BFCEC939E33E8B7E24210C1BA634502532AE6",
+      "bytes": 6456,
+      "lastWriteUtc": "2026-11-22T19:38:36.996028+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/single-sources-catalogue-diagnostic.json": {
+      "sha256": "3767F9113E3F3CD2E3183AC0992BFCEC939E33E8B7E24210C1BA634502532AE6",
+      "bytes": 6456,
+      "lastWriteUtc": "2026-11-22T19:51:44.830127+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/initials-comparison-checks.json": {
+      "sha256": "3A22C6CE5A19E1747D1EE8BC5609D571EDE821D191F9DEB431971E6D49081C08",
+      "bytes": 1719,
+      "lastWriteUtc": "2026-11-22T19:31:17.623698+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/initials-comparison-checks.json": {
+      "sha256": "3A22C6CE5A19E1747D1EE8BC5609D571EDE821D191F9DEB431971E6D49081C08",
+      "bytes": 1719,
+      "lastWriteUtc": "2026-11-22T19:51:44.832142+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-before-1.log": {
+      "sha256": "CF132217BAF3F1C909C5DCC8A49A7555A41D71AFFF9D0DDAD9C2AE1191CCB51D",
+      "bytes": 1848,
+      "lastWriteUtc": "2026-11-22T19:48:12.137580+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-before-1.log": {
+      "sha256": "CF132217BAF3F1C909C5DCC8A49A7555A41D71AFFF9D0DDAD9C2AE1191CCB51D",
+      "bytes": 1848,
+      "lastWriteUtc": "2026-11-22T19:51:44.839306+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-before-2.log": {
+      "sha256": "CC522D6F787B627580525D2373CA0AC758F5EB4DADD3944CF962B041D72E198A",
+      "bytes": 1848,
+      "lastWriteUtc": "2026-11-22T19:48:23.429978+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-before-2.log": {
+      "sha256": "CC522D6F787B627580525D2373CA0AC758F5EB4DADD3944CF962B041D72E198A",
+      "bytes": 1848,
+      "lastWriteUtc": "2026-11-22T19:51:44.846328+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-after-1.log": {
+      "sha256": "C6227A86F7EFD8BD529013C0553647753947FAD70D7DD9277E151CE77F11126A",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T19:48:35.484288+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-after-1.log": {
+      "sha256": "C6227A86F7EFD8BD529013C0553647753947FAD70D7DD9277E151CE77F11126A",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T19:51:44.852013+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-after-2.log": {
+      "sha256": "694A29848B4EED73F15056226AB6F4F27A66126677FF48EE0E05AA4D915070E6",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T19:48:46.964903+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-after-2.log": {
+      "sha256": "694A29848B4EED73F15056226AB6F4F27A66126677FF48EE0E05AA4D915070E6",
+      "bytes": 1374,
+      "lastWriteUtc": "2026-11-22T19:51:44.858233+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-before-1.xml": {
+      "sha256": "F6E70B21BDCC438B1BD462C777B2DD1FBBA223FB3B9967348F60B4266791AC6E",
+      "bytes": 6122,
+      "lastWriteUtc": "2026-11-22T19:48:11.925706+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-before-1.xml": {
+      "sha256": "F6E70B21BDCC438B1BD462C777B2DD1FBBA223FB3B9967348F60B4266791AC6E",
+      "bytes": 6122,
+      "lastWriteUtc": "2026-11-22T19:51:44.866251+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-before-2.xml": {
+      "sha256": "7674558CFB6B1D4177F3F380F3D9946E209F65A825ABC5A9839F9F6C2E8A4147",
+      "bytes": 6122,
+      "lastWriteUtc": "2026-11-22T19:48:23.197447+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-before-2.xml": {
+      "sha256": "7674558CFB6B1D4177F3F380F3D9946E209F65A825ABC5A9839F9F6C2E8A4147",
+      "bytes": 6122,
+      "lastWriteUtc": "2026-11-22T19:51:44.868620+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-after-1.xml": {
+      "sha256": "EBD93DE3639D97266F0295295A25279E90131F99F6650A9F79EA01AE24E60312",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:48:35.309052+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-after-1.xml": {
+      "sha256": "EBD93DE3639D97266F0295295A25279E90131F99F6650A9F79EA01AE24E60312",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:51:44.871760+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-after-2.xml": {
+      "sha256": "63291191A4F08E1DD81E0A3B6B2A5EDB0002747B65F12E03C1AB976143F9A400",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:48:46.784531+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-after-2.xml": {
+      "sha256": "63291191A4F08E1DD81E0A3B6B2A5EDB0002747B65F12E03C1AB976143F9A400",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:51:44.874409+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-admission-adapter.json": {
+      "sha256": "61ABB74494642779A584619DA1B0F18989329C8D0EB98BF0B2B1A1928832750B",
+      "bytes": 729,
+      "lastWriteUtc": "2026-11-22T19:47:58.695936+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-admission-adapter.json": {
+      "sha256": "61ABB74494642779A584619DA1B0F18989329C8D0EB98BF0B2B1A1928832750B",
+      "bytes": 729,
+      "lastWriteUtc": "2026-11-22T19:51:44.876513+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-primary-final-checks.json": {
+      "sha256": "3100B0CD42D37D07E2A80519543FFC1F8A6069BB1A0A8BDED0B1598EA0DE5CB7",
+      "bytes": 2364,
+      "lastWriteUtc": "2026-11-22T19:49:01.494631+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-primary-final-checks.json": {
+      "sha256": "3100B0CD42D37D07E2A80519543FFC1F8A6069BB1A0A8BDED0B1598EA0DE5CB7",
+      "bytes": 2364,
+      "lastWriteUtc": "2026-11-22T19:51:44.883085+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-checks-complete.log": {
+      "sha256": "AF050DE728536F48FC61D38102ACEA08AA00E1458835251D281EA4A627FC0B24",
+      "bytes": 4306,
+      "lastWriteUtc": "2026-11-22T19:49:01.447464+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-checks-complete.log": {
+      "sha256": "AF050DE728536F48FC61D38102ACEA08AA00E1458835251D281EA4A627FC0B24",
+      "bytes": 4306,
+      "lastWriteUtc": "2026-11-22T19:51:44.894813+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.GoldenParityTest.xml": {
+      "sha256": "341BB2535D118312D881DA24E45B90EA2A8400067934113A8BFC813550620C48",
+      "bytes": 1212,
+      "lastWriteUtc": "2026-11-22T18:16:49.183372+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.GoldenParityTest.xml": {
+      "sha256": "341BB2535D118312D881DA24E45B90EA2A8400067934113A8BFC813550620C48",
+      "bytes": 1212,
+      "lastWriteUtc": "2026-11-22T19:51:44.896890+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.MetadataFlightTest.xml": {
+      "sha256": "E458CB3F80FAFD139DF982223E6EFA41841CD541BBCCAE48B1E5DBAFE439DD8F",
+      "bytes": 477,
+      "lastWriteUtc": "2026-11-22T18:16:49.183372+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.MetadataFlightTest.xml": {
+      "sha256": "E458CB3F80FAFD139DF982223E6EFA41841CD541BBCCAE48B1E5DBAFE439DD8F",
+      "bytes": 477,
+      "lastWriteUtc": "2026-11-22T19:51:44.898632+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.MetadataStoreTest.xml": {
+      "sha256": "193B43E27F810141A0C26E6B0F1349AF58BE2F8E7479DCE5AAC20E7A60CE535D",
+      "bytes": 731,
+      "lastWriteUtc": "2026-11-22T18:16:49.183372+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.MetadataStoreTest.xml": {
+      "sha256": "193B43E27F810141A0C26E6B0F1349AF58BE2F8E7479DCE5AAC20E7A60CE535D",
+      "bytes": 731,
+      "lastWriteUtc": "2026-11-22T19:51:44.901091+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.PlaybackPreferencesTest.xml": {
+      "sha256": "8D9BA37DDE3640E51DACB755F248E285CB02AF215AB661BA22CCE85930E37358",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.PlaybackPreferencesTest.xml": {
+      "sha256": "8D9BA37DDE3640E51DACB755F248E285CB02AF215AB661BA22CCE85930E37358",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T19:51:44.903186+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.PlaybackSearchTest.xml": {
+      "sha256": "9C1008EFE5753645E3E4DE0FDFF65968343952469A119A4B9E3C7FABD60C1164",
+      "bytes": 1504,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.PlaybackSearchTest.xml": {
+      "sha256": "9C1008EFE5753645E3E4DE0FDFF65968343952469A119A4B9E3C7FABD60C1164",
+      "bytes": 1504,
+      "lastWriteUtc": "2026-11-22T19:51:44.905097+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.RuntimeCoreTest.xml": {
+      "sha256": "CAB19339E56890D2F758D4675F25E464567BE62FF3BD763DF9EBC92BC61FEC06",
+      "bytes": 1793,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.RuntimeCoreTest.xml": {
+      "sha256": "CAB19339E56890D2F758D4675F25E464567BE62FF3BD763DF9EBC92BC61FEC06",
+      "bytes": 1793,
+      "lastWriteUtc": "2026-11-22T19:51:44.912102+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.SearchRequestTest.xml": {
+      "sha256": "D497D1F97381918245F27C2908BF9F6AA000C2823D9258DB6933614F98EF3ECB",
+      "bytes": 767,
+      "lastWriteUtc": "2026-11-22T18:16:49.183372+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.SearchRequestTest.xml": {
+      "sha256": "D497D1F97381918245F27C2908BF9F6AA000C2823D9258DB6933614F98EF3ECB",
+      "bytes": 767,
+      "lastWriteUtc": "2026-11-22T19:51:44.915261+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.TitleSearchTest.xml": {
+      "sha256": "F41272F2BF658210E65124C8CEBA73F092D22802479C0CAED2987E22C5B28C1F",
+      "bytes": 1352,
+      "lastWriteUtc": "2026-11-22T18:16:49.183372+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.TitleSearchTest.xml": {
+      "sha256": "F41272F2BF658210E65124C8CEBA73F092D22802479C0CAED2987E22C5B28C1F",
+      "bytes": 1352,
+      "lastWriteUtc": "2026-11-22T19:51:44.921262+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackBufferPolicyTest.xml": {
+      "sha256": "9E62BB6D9228D3B226FF8F486D979CFD77C353E96E105486E60FD55A5C34E7FA",
+      "bytes": 1075,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackBufferPolicyTest.xml": {
+      "sha256": "9E62BB6D9228D3B226FF8F486D979CFD77C353E96E105486E60FD55A5C34E7FA",
+      "bytes": 1075,
+      "lastWriteUtc": "2026-11-22T19:51:44.923692+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml": {
+      "sha256": "E553EC7E4FCD085B4D49809F5E598CB4CF7C0E300E7D6B49FFA4A56A6FB62ECF",
+      "bytes": 799,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml": {
+      "sha256": "E553EC7E4FCD085B4D49809F5E598CB4CF7C0E300E7D6B49FFA4A56A6FB62ECF",
+      "bytes": 799,
+      "lastWriteUtc": "2026-11-22T19:51:44.925697+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml": {
+      "sha256": "A487278B62FE7551B6E68144EAB0C7CA129846B66954E6F905947A5D9AAC83E4",
+      "bytes": 1708,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml": {
+      "sha256": "A487278B62FE7551B6E68144EAB0C7CA129846B66954E6F905947A5D9AAC83E4",
+      "bytes": 1708,
+      "lastWriteUtc": "2026-11-22T19:51:44.926692+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.UsageStateTest.xml": {
+      "sha256": "CA0ED6D67D4CBFA9A5EECC483CC03C80C3E5F25AFC508320081EBBBFBE73272C",
+      "bytes": 1812,
+      "lastWriteUtc": "2026-11-22T18:16:49.182067+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-final-first/TEST-app.panda.tv.UsageStateTest.xml": {
+      "sha256": "CA0ED6D67D4CBFA9A5EECC483CC03C80C3E5F25AFC508320081EBBBFBE73272C",
+      "bytes": 1812,
+      "lastWriteUtc": "2026-11-22T19:51:44.933692+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.GoldenParityTest.xml": {
+      "sha256": "F39B764B02BEDC74DACAD603B886DEACE32DAAFC7C36873D70A7BEC025DD10C8",
+      "bytes": 1211,
+      "lastWriteUtc": "2026-11-22T19:49:00.917620+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.GoldenParityTest.xml": {
+      "sha256": "F39B764B02BEDC74DACAD603B886DEACE32DAAFC7C36873D70A7BEC025DD10C8",
+      "bytes": 1211,
+      "lastWriteUtc": "2026-11-22T19:51:44.937897+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.MetadataFlightTest.xml": {
+      "sha256": "6370CE92696976ADD427DBC68DA5556E70BE36DAA6CBDB8B8D298C91122A7A82",
+      "bytes": 477,
+      "lastWriteUtc": "2026-11-22T19:49:00.916622+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.MetadataFlightTest.xml": {
+      "sha256": "6370CE92696976ADD427DBC68DA5556E70BE36DAA6CBDB8B8D298C91122A7A82",
+      "bytes": 477,
+      "lastWriteUtc": "2026-11-22T19:51:44.939903+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.MetadataStoreTest.xml": {
+      "sha256": "29D09C36AF568082FB7CB662D486DC74B491AF775005EEB7575A058C749CB2DF",
+      "bytes": 731,
+      "lastWriteUtc": "2026-11-22T19:49:00.917620+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.MetadataStoreTest.xml": {
+      "sha256": "29D09C36AF568082FB7CB662D486DC74B491AF775005EEB7575A058C749CB2DF",
+      "bytes": 731,
+      "lastWriteUtc": "2026-11-22T19:51:44.942899+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackPreferencesTest.xml": {
+      "sha256": "6C18DBAB678F24AE531DE5ED1F2A91B21AA3DA139612996D13E44C9C93569F2A",
+      "bytes": 788,
+      "lastWriteUtc": "2026-11-22T19:49:00.917620+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackPreferencesTest.xml": {
+      "sha256": "6C18DBAB678F24AE531DE5ED1F2A91B21AA3DA139612996D13E44C9C93569F2A",
+      "bytes": 788,
+      "lastWriteUtc": "2026-11-22T19:51:44.945897+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackSearchTest.xml": {
+      "sha256": "F0FEE7B4F652E5AD72B82012E89CB730387FB3A916A82CF3FEF5173D60922AD9",
+      "bytes": 1504,
+      "lastWriteUtc": "2026-11-22T19:49:00.917620+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackSearchTest.xml": {
+      "sha256": "F0FEE7B4F652E5AD72B82012E89CB730387FB3A916A82CF3FEF5173D60922AD9",
+      "bytes": 1504,
+      "lastWriteUtc": "2026-11-22T19:51:44.948897+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PrimaryMetadataTest.xml": {
+      "sha256": "F9D786BCA83AA1371D2D62D8FF9E62AF38A82150A738D347B59FF88B0152BD20",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PrimaryMetadataTest.xml": {
+      "sha256": "F9D786BCA83AA1371D2D62D8FF9E62AF38A82150A738D347B59FF88B0152BD20",
+      "bytes": 494,
+      "lastWriteUtc": "2026-11-22T19:51:44.950895+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.RuntimeCoreTest.xml": {
+      "sha256": "E79CE69356D2FC252331902F65657C660F7EC9DC565E849E4665BC57F62BA6B6",
+      "bytes": 1790,
+      "lastWriteUtc": "2026-11-22T19:49:00.917620+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.RuntimeCoreTest.xml": {
+      "sha256": "E79CE69356D2FC252331902F65657C660F7EC9DC565E849E4665BC57F62BA6B6",
+      "bytes": 1790,
+      "lastWriteUtc": "2026-11-22T19:51:44.953897+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.SearchRequestTest.xml": {
+      "sha256": "93B7AD559F0DEC3461CB7FD40C7FB4FA97EF93D6AD89B43C54EF1379EDFF3E4B",
+      "bytes": 767,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.SearchRequestTest.xml": {
+      "sha256": "93B7AD559F0DEC3461CB7FD40C7FB4FA97EF93D6AD89B43C54EF1379EDFF3E4B",
+      "bytes": 767,
+      "lastWriteUtc": "2026-11-22T19:51:44.957896+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.TitleSearchTest.xml": {
+      "sha256": "08E4804CCD1C29957241FCF06652ECDF51E7ACCF577417D74C31A5EC998B032F",
+      "bytes": 1352,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.TitleSearchTest.xml": {
+      "sha256": "08E4804CCD1C29957241FCF06652ECDF51E7ACCF577417D74C31A5EC998B032F",
+      "bytes": 1352,
+      "lastWriteUtc": "2026-11-22T19:51:44.959898+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackBufferPolicyTest.xml": {
+      "sha256": "084C114020CF1A5DC058F0EFB772CEEC038B787077015E312DBBB75AC6862F75",
+      "bytes": 1073,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackBufferPolicyTest.xml": {
+      "sha256": "084C114020CF1A5DC058F0EFB772CEEC038B787077015E312DBBB75AC6862F75",
+      "bytes": 1073,
+      "lastWriteUtc": "2026-11-22T19:51:44.963472+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml": {
+      "sha256": "63CED1711FEF1ECF799AB341D2FFD68FCCA772A935567647AA5CA5C44F7C0BDB",
+      "bytes": 799,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackProgressPolicyTest.xml": {
+      "sha256": "63CED1711FEF1ECF799AB341D2FFD68FCCA772A935567647AA5CA5C44F7C0BDB",
+      "bytes": 799,
+      "lastWriteUtc": "2026-11-22T19:51:44.966742+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml": {
+      "sha256": "7A096F6F60D33AE4C972E59A4E72AFE43463DB2F245680E181F67C7CF31F3BCB",
+      "bytes": 1708,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.ui.PlaybackSpeedPolicyTest.xml": {
+      "sha256": "7A096F6F60D33AE4C972E59A4E72AFE43463DB2F245680E181F67C7CF31F3BCB",
+      "bytes": 1708,
+      "lastWriteUtc": "2026-11-22T19:51:44.969743+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.UsageStateTest.xml": {
+      "sha256": "69D50888B0C12B6C274B139F03EBDE6DE90868FEFDAB143BD776A6482CDB5164",
+      "bytes": 1814,
+      "lastWriteUtc": "2026-11-22T19:49:00.918621+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.UsageStateTest.xml": {
+      "sha256": "69D50888B0C12B6C274B139F03EBDE6DE90868FEFDAB143BD776A6482CDB5164",
+      "bytes": 1814,
+      "lastWriteUtc": "2026-11-22T19:51:44.971740+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-tv-state-expanded-final-first.xml": {
+      "sha256": "CA0ED6D67D4CBFA9A5EECC483CC03C80C3E5F25AFC508320081EBBBFBE73272C",
+      "bytes": 1812,
+      "lastWriteUtc": "2026-11-22T18:16:49.182067+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-tv-state-expanded-final-first.xml": {
+      "sha256": "CA0ED6D67D4CBFA9A5EECC483CC03C80C3E5F25AFC508320081EBBBFBE73272C",
+      "bytes": 1812,
+      "lastWriteUtc": "2026-11-22T19:51:44.975416+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-tv-state-expanded-final-second.xml": {
+      "sha256": "781D106440CFC4C3F4CBB51EEC161ADD7E35C7BF6CCB9EB9FEC4E40E115329DB",
+      "bytes": 1815,
+      "lastWriteUtc": "2026-11-22T18:19:49.431871+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-tv-state-expanded-final-second.xml": {
+      "sha256": "781D106440CFC4C3F4CBB51EEC161ADD7E35C7BF6CCB9EB9FEC4E40E115329DB",
+      "bytes": 1815,
+      "lastWriteUtc": "2026-11-22T19:51:44.982908+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-tv-preferences-final-first.xml": {
+      "sha256": "8D9BA37DDE3640E51DACB755F248E285CB02AF215AB661BA22CCE85930E37358",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T18:16:49.184690+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-tv-preferences-final-first.xml": {
+      "sha256": "8D9BA37DDE3640E51DACB755F248E285CB02AF215AB661BA22CCE85930E37358",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T19:51:44.985899+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/after-tv-preferences-final-second.xml": {
+      "sha256": "AA6D4D9D9C27C0ADA837A2F9649BD4B0578CBCD32199C64EBFF7BDDA96EA509E",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T18:19:49.431871+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/after-tv-preferences-final-second.xml": {
+      "sha256": "AA6D4D9D9C27C0ADA837A2F9649BD4B0578CBCD32199C64EBFF7BDDA96EA509E",
+      "bytes": 789,
+      "lastWriteUtc": "2026-11-22T19:51:44.987904+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/build-live-complete-results.json": {
+      "sha256": "C2F585ED70D3DFB48B9CD4C665D9371AEAE9DA6F416314AE23E51D5E2D1AEE13",
+      "bytes": 40335,
+      "lastWriteUtc": "2026-11-22T19:20:29.041843+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/build-live-complete.json": {
+      "sha256": "B90EFF5627235268623A91CF14441353CF40650208E4D3DBFE9F917809386C98",
+      "bytes": 6949,
+      "lastWriteUtc": "2026-11-22T19:51:44.990902+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/packaged-live-complete-results.json": {
+      "sha256": "2EFDD5033BF7556230D3FB5C1FF0FF16F7401BF868FAE38990FB944B2354D467",
+      "bytes": 45354,
+      "lastWriteUtc": "2026-11-22T19:27:16.515494+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/packaged-live-complete.json": {
+      "sha256": "49CABF92B2C88CE884CA229698A9508630FA60D5ACE6A9A0C51974E9C4C91FB3",
+      "bytes": 7063,
+      "lastWriteUtc": "2026-11-22T19:51:44.993415+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/initials-baseline-1-results.json": {
+      "sha256": "3E4AD7CBDE21A4C15DA9085A37DA919CDF951DA8F8E60034FFBE929742E81B38",
+      "bytes": 8668,
+      "lastWriteUtc": "2026-11-22T19:30:18.261809+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/initials-baseline-1.json": {
+      "sha256": "85500F1E24D8E637201F764E3E3EC3B99ABE107A680F0099231EE5FB3E5885FC",
+      "bytes": 781,
+      "lastWriteUtc": "2026-11-22T19:51:44.995417+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/initials-baseline-2-results.json": {
+      "sha256": "FB88FBE25FA1274B26E3A13CCB9E81EF1816271BA4133A4A704A596569694EBB",
+      "bytes": 8677,
+      "lastWriteUtc": "2026-11-22T19:31:05.661492+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/initials-baseline-2.json": {
+      "sha256": "7970B923C5ACADE14A876A2666C9AB3441D66358FDA61A583F1B6AE2B34D1390",
+      "bytes": 790,
+      "lastWriteUtc": "2026-11-22T19:51:44.998414+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/initials-after-1-results.json": {
+      "sha256": "DC2A037319B27C55725F3198B128E060E3E3FF4F68BCDFE41E1DDC17FEB1EF19",
+      "bytes": 8686,
+      "lastWriteUtc": "2026-11-22T19:31:11.389567+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/initials-after-1.json": {
+      "sha256": "51F4E82321388DCFADD5F6C699A432BA4A91E46F557ABC63B9B99EC7C6B16A21",
+      "bytes": 776,
+      "lastWriteUtc": "2026-11-22T19:51:45.005162+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/initials-after-2-results.json": {
+      "sha256": "E453C35F0DECE6B7A82DC567B61EAAE5E596BF3E1AF570F67CB894DCD15AF8E4",
+      "bytes": 8686,
+      "lastWriteUtc": "2026-11-22T19:31:17.605670+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/checks/initials-after-2.json": {
+      "sha256": "FFEF11D69BE18833B1125B66038355DB21B23654CECB4D88536606390A5E411D",
+      "bytes": 776,
+      "lastWriteUtc": "2026-11-22T19:51:45.007240+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/storage-verified/report.json": {
+      "sha256": "5DE56AE77848D7606768232373673ADBA38F9CCBA0F64BAD994002CBC24F34E5",
+      "bytes": 1018,
+      "lastWriteUtc": "2026-11-22T18:34:37.657228+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/storage-verified.json": {
+      "sha256": "0E03F8BF71DED7C296B4FAD81B9B263058387A94B529F5DDAD7936EB9A03BFE5",
+      "bytes": 1141,
+      "lastWriteUtc": "2026-11-22T19:51:45.013052+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/recovery-verified/report.json": {
+      "sha256": "1EDABE1FB73FE2C7FF9DD7838FECDC56D2B580303F685BBFBC44FC6E199FA5CC",
+      "bytes": 1030,
+      "lastWriteUtc": "2026-11-22T18:35:09.341204+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/recovery-verified.json": {
+      "sha256": "203503C98B469BC16BE424E79E0F83BDE6CAFA0EB5A7AED87E6E00D983BE4D69",
+      "bytes": 1290,
+      "lastWriteUtc": "2026-11-22T19:51:45.015712+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/history-verified/report.json": {
+      "sha256": "6471DA856977A320B478BA45325FB8E17EA3C53B7D83D6315619A689E9ABBA3A",
+      "bytes": 1270,
+      "lastWriteUtc": "2026-11-22T18:36:04.298436+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/history-verified.json": {
+      "sha256": "7E2C3BDEC0D7D3DEC81B6CE6A80EDDED9DCC872AE7D6BC305BE4093E693F4C04",
+      "bytes": 1293,
+      "lastWriteUtc": "2026-11-22T19:51:45.018323+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/surfaces-native/report.json": {
+      "sha256": "F9FD0AEDFACFCBC494DBB2BA5E127F49F4D7219E8C0C030069BD15C279C43FEE",
+      "bytes": 1772,
+      "lastWriteUtc": "2026-11-22T18:27:12.617126+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/surfaces-native.json": {
+      "sha256": "7AA051FBAB543BBD0DFA29BFED7EA8C671390CD28A84EB4172589A56CCAE7894",
+      "bytes": 1411,
+      "lastWriteUtc": "2026-11-22T19:51:45.020334+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/surfaces-720p-complete/report.json": {
+      "sha256": "9FA439C67796AE2DDD4845666ACC0F502E725E3D8CEEA3D04637FB631608136D",
+      "bytes": 1794,
+      "lastWriteUtc": "2026-11-22T19:17:23.638856+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/surfaces-720p-complete.json": {
+      "sha256": "F28BC11C2E2781252EB72FC6E5E414496042091C6E0DD3FFCAE0BC9FBA3F8323",
+      "bytes": 1440,
+      "lastWriteUtc": "2026-11-22T19:51:45.023497+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/surfaces-4k-complete/report.json": {
+      "sha256": "AC0C514B11DAD0FB00D8BC78886639D6B03CA0C3DCC67C76BD9CAC4352E5946D",
+      "bytes": 1773,
+      "lastWriteUtc": "2026-11-22T19:18:36.666452+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/surfaces-4k-complete.json": {
+      "sha256": "EA7DDAA6D479715C2DD82909EE70F2156C1B7A315AD52F8664A28837670DC59D",
+      "bytes": 1439,
+      "lastWriteUtc": "2026-11-22T19:51:45.026496+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/navigation/report.json": {
+      "sha256": "16752263D0D06CB1B063344003EE25136C6C686B1BAFE1C8BFF0D043F0878EBA",
+      "bytes": 57635,
+      "lastWriteUtc": "2026-11-22T18:43:01.467098+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/navigation.json": {
+      "sha256": "CE082F46D6F9AF80CF68CEB1AA4C431E7FAEA1249499115AF9FB75E43F6C8420",
+      "bytes": 2811,
+      "lastWriteUtc": "2026-11-22T19:51:45.029501+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/nav-selection/report.json": {
+      "sha256": "53247FCEAF5F9005BA34F458294B2B62F113C04E73B8EBAD8EF93931533F7DF2",
+      "bytes": 1208,
+      "lastWriteUtc": "2026-11-22T18:47:20.570128+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/nav-selection.json": {
+      "sha256": "D6637040F65C772A9EA7EDA071B436E4CFC2C534A065C63D6FDCCE3502889ADF",
+      "bytes": 910,
+      "lastWriteUtc": "2026-11-22T19:51:45.032497+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/search/report.json": {
+      "sha256": "0670A41BCE65DE3901C3B5188078E8DFBE600076783D94E8DAB3C9C775279C6C",
+      "bytes": 515,
+      "lastWriteUtc": "2026-11-22T18:43:47.751020+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/search.json": {
+      "sha256": "0123D07B570C773CE139B5B85A983F0D144F4FD0D87CAE0D1967F1865C00F7C0",
+      "bytes": 675,
+      "lastWriteUtc": "2026-11-22T19:51:45.034498+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/pagination/report.json": {
+      "sha256": "243B4EAB7F3DE5F0BAC1E8DDE592AFEA2CD7D9383297E5FEF994E8EE0A42B6C3",
+      "bytes": 7312,
+      "lastWriteUtc": "2026-11-22T18:46:43.818270+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/pagination.json": {
+      "sha256": "811D462FF28B53E3364CC078FD12D0AE129943BFCCC08946938B620112166801",
+      "bytes": 752,
+      "lastWriteUtc": "2026-11-22T19:51:45.041495+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/motion/report.json": {
+      "sha256": "87CAF0BDDD434CC3B99FE18522E7D856A55AAEF12679A73830BDFB80D3E909EF",
+      "bytes": 23432,
+      "lastWriteUtc": "2026-11-22T18:48:18.242020+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/motion.json": {
+      "sha256": "8E102F93CC991C7FB139305DD944269AA13485FBC0BB16B9657D29F8002D6D44",
+      "bytes": 1810,
+      "lastWriteUtc": "2026-11-22T19:51:45.045477+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/playback-all/report.json": {
+      "sha256": "744030E6A9221739D006F6884D0A074E91041EDC6839CDFDD1698447D82E1B59",
+      "bytes": 53221,
+      "lastWriteUtc": "2026-11-22T18:58:43.786227+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/playback-all.json": {
+      "sha256": "B41589E1BA8EE6D10BF42EF7C59D4444C9DFCC523E9FBD8F095FB88D90C28430",
+      "bytes": 1915,
+      "lastWriteUtc": "2026-11-22T19:51:45.051947+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/device/line-switch-movie/report.json": {
+      "sha256": "7DB464CE148FE6C773E1C6DF6282C846C0FE480265C9647B6C43BE5991D06681",
+      "bytes": 9536,
+      "lastWriteUtc": "2026-11-22T19:04:49.588158+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device/line-switch-movie.json": {
+      "sha256": "A4EF0DD58ED8E2067CDC2D55C2D08856A880F3AFF3A50BD55D3EB8A9170F4FB9",
+      "bytes": 1006,
+      "lastWriteUtc": "2026-11-22T19:51:45.053968+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/startup-summary.json": {
+      "sha256": "82BFC80F9F9C430262F9E5417D0DB4065EE8450B0DFA33276F2EB4762E425BA7",
+      "bytes": 1377,
+      "lastWriteUtc": "2026-11-22T19:51:45.056965+00:00"
+    },
+    ".tmp/usage-fixes-2026-11-23/packaged-live-complete/desktop-packaged-live/ui-performance-lifecycle.json": {
+      "sha256": "55D8696EB0DA879B97A90A82033C40C78DEAE93CE42D3FACAC3C964842786716",
+      "bytes": 45818,
+      "lastWriteUtc": "2026-11-22T19:26:40.664280+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/ui-performance-lifecycle-summary.json": {
+      "sha256": "438623E484BEFA4F8A4DEFCAB43022A3B090E66F02B1D3CF1DB0B68DFBF94952",
+      "bytes": 7555,
+      "lastWriteUtc": "2026-11-22T19:51:45.059969+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/final-source-identity.json": {
+      "sha256": "A6D9D347DA198B428A0020DF20729E35476172F3E70B2CBC05309416454139D4",
+      "bytes": 18127,
+      "lastWriteUtc": "2026-11-22T19:51:45.093043+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/device-restoration-summary.json": {
+      "sha256": "CD17747BEBEEC58078CE3E7BE0E0DBCDD8376A8C48E895636F3EAC63D19494C3",
+      "bytes": 377,
+      "lastWriteUtc": "2026-11-22T19:51:45.161542+00:00"
+    },
+    "docs/evidence/usage-fixes-2026-11-23/initials-comparison-summary.json": {
+      "sha256": "8E497C5A87BBB4752D2CCDAAAF3DD653968E3B07965637CBABFFE716FB1EE4DF",
+      "bytes": 409,
+      "lastWriteUtc": "2026-11-22T19:51:45.171030+00:00"
+    }
+  }
+}

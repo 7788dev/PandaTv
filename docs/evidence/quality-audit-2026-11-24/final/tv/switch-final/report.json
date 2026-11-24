@@ -1,0 +1,78 @@
+{
+  "at": "2026-11-24T11:35:28.043608+00:00",
+  "cases": [],
+  "unavailable": [
+    {
+      "name": "line-switch-1",
+      "selectedSubject": {
+        "requestedTitle": "三体",
+        "rating": null,
+        "focusedLabels": [
+          "8.8",
+          "45分钟",
+          "三体",
+          "剧情 / 科幻"
+        ],
+        "bounds": [
+          97,
+          399,
+          366,
+          895
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "status": "unavailable",
+      "reason": "No alternate line became selectable in this playback sample.",
+      "state": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "2.0",
+          "暂停",
+          "下一集",
+          "00:07 / 42:44",
+          "选集",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:07 / 42:44",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            102,
+            945,
+            277,
+            1017
+          ],
+          "labels": [
+            "暂停"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 0
+      }
+    }
+  ],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

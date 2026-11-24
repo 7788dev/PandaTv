@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-22T18:34:39.259705+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "recovery-1",
+      "passed": true,
+      "normalWritesBlocked": true,
+      "cancelPreservesOriginal": true,
+      "backPreservesOriginal": true,
+      "backupRestored": true,
+      "invalidBackupOmitted": true,
+      "confirmedReset": true,
+      "originalBytesArchived": true,
+      "healthyRestart": true
+    },
+    {
+      "name": "recovery-2",
+      "passed": true,
+      "normalWritesBlocked": true,
+      "cancelPreservesOriginal": true,
+      "backPreservesOriginal": true,
+      "backupRestored": true,
+      "invalidBackupOmitted": true,
+      "confirmedReset": true,
+      "originalBytesArchived": true,
+      "healthyRestart": true
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "completeUserStateRestored": true,
+    "firewallRulesRestored": true,
+    "displaySettingsRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/recovery-verified/report.json",
+  "rawSha256": "1EDABE1FB73FE2C7FF9DD7838FECDC56D2B580303F685BBFBC44FC6E199FA5CC"
+}

@@ -18,6 +18,8 @@ async function start(profile) {
   const env = Object.fromEntries(Object.entries(process.env).filter(entry => typeof entry[1] === 'string'))
   env.PANDA_USER_DATA_DIR = profile
   delete env.ELECTRON_RUN_AS_NODE
+  delete env.ELECTRON_RENDERER_URL
+  delete env.NODE_OPTIONS
   const app = await _electron.launch({ executablePath: process.env.PANDA_E2E_EXECUTABLE, args: process.env.PANDA_E2E_EXECUTABLE ? [] : [root], cwd: root, env, timeout: 30000 })
   // What the main process reports about slow or failed artwork and metadata requests.
   const notices = []

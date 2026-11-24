@@ -1,0 +1,1210 @@
+[
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/movie_latest/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/tv_hot/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/movie_real_time_hotest/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/tv_animation/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2001.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2003.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1001.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1002.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2004.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2002.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2005.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1003.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1004.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1005.png",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/2001",
+    "status": 200
+  },
+  {
+    "host": "a.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归剧集",
+    "status": 200
+  },
+  {
+    "host": "b.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归剧集",
+    "status": 200
+  },
+  {
+    "host": "c.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归剧集",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/2001/recommendations",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2006.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2009.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2008.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2007.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2011.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2010.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2012.png",
+    "status": 200
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-1.m3u8",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-1.m3u8",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-001.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-002.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-003.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-004.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-005.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-006.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-007.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-008.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-009.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-010.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-011.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-012.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-013.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-014.ts",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-015.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-016.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-017.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-018.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-019.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-020.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-021.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-022.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-023.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-024.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-025.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-026.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-027.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-028.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-029.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-030.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-031.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-032.ts",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-033.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-034.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-035.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-036.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-037.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-038.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-039.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-040.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-041.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-042.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-043.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-044.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-045.ts",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/2001/credits",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/2001/photos",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-2.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-2.m3u8",
+    "status": 200
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-2.m3u8",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-001.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-002.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-003.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-004.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-005.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-006.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-007.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-008.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-009.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-010.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-011.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-012.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-013.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-014.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-015.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-016.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-017.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-018.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-019.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-020.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-021.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-022.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-023.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-024.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-025.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-026.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-027.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-028.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-029.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-030.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-031.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-032.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-033.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-034.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-035.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-036.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-037.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-038.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-039.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-040.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-041.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-042.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-043.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-044.ts",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/1080/segment-045.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-2.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-001.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-002.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-003.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-004.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-005.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-006.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-007.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-008.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-009.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-010.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-011.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-012.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-013.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-014.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-015.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-016.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-017.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-018.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-019.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-020.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-021.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-022.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-023.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-024.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-025.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-026.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-027.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-028.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-029.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-030.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-031.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-032.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-033.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-034.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-035.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-036.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-037.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-038.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-039.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-040.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-041.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-042.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-043.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-044.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-045.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-3.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/index.m3u8",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-046.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-000.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-047.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-048.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-049.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-050.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-051.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-052.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-053.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-054.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-055.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-056.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-057.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-058.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-059.ts",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/backdrop.png",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-031.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-032.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-033.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-034.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-035.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-036.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-037.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-038.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-039.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-040.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-041.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-042.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-043.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-044.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-045.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-046.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-047.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-048.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-049.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-050.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-051.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-052.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-053.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-054.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-055.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-056.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-057.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-058.ts",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/720/segment-059.ts",
+    "status": 200
+  }
+]

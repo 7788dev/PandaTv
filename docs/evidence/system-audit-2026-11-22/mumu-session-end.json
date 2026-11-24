@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-22T11:16:54.900819+00:00",
+  "instance": "1",
+  "command": "mumu-cli.exe control --vmindex 1 shutdown",
+  "shutdownResult": "{\n  \"errcode\": 0,\n  \"errmsg\": \"\"\n}",
+  "initiallyStopped": true,
+  "finallyStopped": true
+}

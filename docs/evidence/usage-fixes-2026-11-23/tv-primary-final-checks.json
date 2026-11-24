@@ -1,0 +1,71 @@
+[
+  {
+    "name": "tv-primary-before-1",
+    "startedAt": "2026-11-23T03:47:58.7038162+08:00",
+    "finishedAt": "2026-11-23T03:48:12.1621616+08:00",
+    "directory": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\before-tv-probe\\tv",
+    "arguments": [
+      ":app:testDebugUnitTest",
+      "--tests",
+      "app.panda.tv.PrimaryMetadataTest",
+      "--rerun-tasks"
+    ],
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\tv-primary-before-1.log"
+  },
+  {
+    "name": "tv-primary-before-2",
+    "startedAt": "2026-11-23T03:48:12.1766192+08:00",
+    "finishedAt": "2026-11-23T03:48:23.4532598+08:00",
+    "directory": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\before-tv-probe\\tv",
+    "arguments": [
+      ":app:testDebugUnitTest",
+      "--tests",
+      "app.panda.tv.PrimaryMetadataTest",
+      "--rerun-tasks"
+    ],
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\tv-primary-before-2.log"
+  },
+  {
+    "name": "tv-primary-after-1",
+    "startedAt": "2026-11-23T03:48:23.4598681+08:00",
+    "finishedAt": "2026-11-23T03:48:35.5099138+08:00",
+    "directory": "E:\\dev\\项目\\panda\\tv",
+    "arguments": [
+      ":app:testDebugUnitTest",
+      "--tests",
+      "app.panda.tv.PrimaryMetadataTest",
+      "--rerun-tasks"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\tv-primary-after-1.log"
+  },
+  {
+    "name": "tv-primary-after-2",
+    "startedAt": "2026-11-23T03:48:35.5163965+08:00",
+    "finishedAt": "2026-11-23T03:48:46.9889079+08:00",
+    "directory": "E:\\dev\\项目\\panda\\tv",
+    "arguments": [
+      ":app:testDebugUnitTest",
+      "--tests",
+      "app.panda.tv.PrimaryMetadataTest",
+      "--rerun-tasks"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\tv-primary-after-2.log"
+  },
+  {
+    "name": "tv-checks-complete",
+    "startedAt": "2026-11-23T03:48:46.9945416+08:00",
+    "finishedAt": "2026-11-23T03:49:01.4944484+08:00",
+    "directory": "E:\\dev\\项目\\panda\\tv",
+    "arguments": [
+      "testDebugUnitTest",
+      "lintRelease",
+      "assembleRelease"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\tv-checks-complete.log"
+  }
+]

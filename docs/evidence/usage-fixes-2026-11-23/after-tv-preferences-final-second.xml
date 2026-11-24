@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.PlaybackPreferencesTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-22T18:19:47.147Z" hostname="DESKTOP-G3A3P0Q" time="1.528">
+  <properties/>
+  <testcase name="late next episode preload cannot overwrite a committed manual choice" classname="app.panda.tv.PlaybackPreferencesTest" time="0.995"/>
+  <testcase name="a superseded manual result cannot replace a newer successful source" classname="app.panda.tv.PlaybackPreferencesTest" time="0.208"/>
+  <testcase name="manual choice replaces a previously completed next episode preload" classname="app.panda.tv.PlaybackPreferencesTest" time="0.319"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

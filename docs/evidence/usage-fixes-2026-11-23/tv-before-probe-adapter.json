@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-22T17:56:40.887Z",
+  "originalSha256": "42a2abb9bc3ff9b8117bbf657125e73591001b5ca2da556a423cdaa8525c5903",
+  "adaptedSha256": "d1abf95f0ebce0257a27d8723768c07975c1462b30b155a678a15a26635c53ab",
+  "adapterOnly": "Constructor media reader and three IO call substitutions; preference, cache and winner logic is unchanged.",
+  "destination": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\before-tv-probe\\tv"
+}

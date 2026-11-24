@@ -1,0 +1,67 @@
+[
+  {
+    "at": 1795522242948,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522243124,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":4,\"identities\":4}"
+  },
+  {
+    "at": 1795522244950,
+    "process": "main",
+    "message": "[source] hongniu search: 网络请求失败或超时 / ECONNRESET 302ms"
+  },
+  {
+    "at": 1795522245655,
+    "process": "main",
+    "message": "[source] jyzy search: 上游服务暂不可用（403） 1007ms"
+  },
+  {
+    "at": 1795522246770,
+    "process": "main",
+    "message": "[source] huya search: 上游服务暂不可用（403） 2123ms"
+  },
+  {
+    "at": 1795522248709,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":12,\"removedSeconds\":52.701,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  },
+  {
+    "at": 1795522253648,
+    "process": "main",
+    "message": "[source] subo search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522253648,
+    "process": "main",
+    "message": "[source] bfzy search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522253648,
+    "process": "main",
+    "message": "[source] dyttzy search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522253648,
+    "process": "main",
+    "message": "[source] lzi search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522253648,
+    "process": "main",
+    "message": "[source] ffzy search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522253863,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":12,\"removedSeconds\":52.701,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  },
+  {
+    "at": 1795522257832,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":12,\"removedSeconds\":52.701,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  }
+]

@@ -13,6 +13,8 @@ const bridge: PandaBridge = {
     home: () => call('data.home'), filters: type => call('data.filters', type),
     channel: (type, query, cursor) => call('data.channel', type, query, cursor),
     detail: id => call('data.detail', id), related: id => call('data.related', id),
+    subject: id => call('data.subject', id), libraryPage: (ids, cursor, request, cachedOnly) => call('data.libraryPage', ids, cursor, request, cachedOnly),
+    cancelLibrary: request => call('data.cancelLibrary', request),
     person: id => call('data.person', id), personWorks: (id, cursor) => call('data.personWorks', id, cursor),
     byIds: ids => call('data.byIds', ids), search: q => call('data.search', q),
     suggest: q => call('data.suggest', q), hotSearches: () => call('data.hotSearches'),
@@ -24,7 +26,10 @@ const bridge: PandaBridge = {
     playbackFrom: (id, episode, source, quality) => call('data.playbackFrom', id, episode, source, quality),
     onHome: callback => subscribe('panda:home', callback)
   },
-  user: { get: () => call('user.get'), dispatch: action => call('user.dispatch', action), subscribe: callback => subscribe('panda:user', callback) },
+  user: {
+    get: () => call('user.get'), dispatch: action => call('user.dispatch', action), subscribe: callback => subscribe('panda:user', callback),
+    recovery: () => call('user.recovery'), recover: restoreBackup => call('user.recover', restoreBackup), exportRecovery: () => call('user.exportRecovery')
+  },
   window: { minimize: () => call('window.minimize'), maximize: () => call('window.maximize'), close: () => call('window.close'), fullscreen: value => call('window.fullscreen', value), getState: () => call('window.state'), subscribe: callback => subscribe('panda:window', callback) },
   app: {
     info: () => call('app.info'), checkUpdate: () => call('app.checkUpdate'),

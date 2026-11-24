@@ -1,11 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type DependencyList, type ReactNode } from 'react'
 import { Toast } from '@base-ui/react/toast'
 import { AlertDialog } from '@base-ui/react/alert-dialog'
-import type { UserState } from '../../design/contract/types'
-import { DEFAULT_SETTINGS, TOAST_ACTION_MS, TOAST_MS } from '../../design/contract/constants'
-import { t } from '../../design/contract/copy'
+import type { UserState } from '../contract/types'
+import { DEFAULT_SETTINGS, TOAST_ACTION_MS, TOAST_MS } from '../contract/constants'
+import { t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import type { StateAction } from '../shared/api'
+import { playbackPreferences } from './playback-preferences'
 
 const emptyUser: UserState = { favorites: [], history: [], searches: [], settings: { ...DEFAULT_SETTINGS } }
 const UserContext = createContext<{
@@ -39,6 +40,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, [revision])
   const dispatch = useCallback(async (action: StateAction) => {
     const next = await window.panda.user.dispatch(action)
+    if (action.type === 'settings') playbackPreferences.defaultsSaved(action.patch)
     setState(next)
     return next
   }, [])

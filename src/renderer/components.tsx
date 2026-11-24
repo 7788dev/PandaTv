@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from 'react'
 import { Menu } from '@base-ui/react/menu'
 import { Tooltip } from '@base-ui/react/tooltip'
-import type { IconName } from '../../design/icons/names'
-import type { HistoryEntry, MediaItem } from '../../design/contract/types'
-import { avatarText, cardSub, episodeLabel, episodeState, metaParts, progressPercent, progressText, scoreText, statusText, wideImage } from '../../design/contract/rules'
-import { POPUP_OFFSET_PX, SHELF_EDGE_PX, TOOLTIP_DELAY_MS } from '../../design/contract/constants'
-import { t } from '../../design/contract/copy'
-import sprite from '../../design/icons/sprite.svg?url'
+import type { IconName } from './icons/names'
+import type { HistoryEntry, MediaItem } from '../contract/types'
+import { avatarText, cardSub, episodeLabel, episodeState, metaParts, progressPercent, progressText, scoreText, statusText, wideImage } from '../contract/rules'
+import { POPUP_OFFSET_PX, SHELF_EDGE_PX, TOOLTIP_DELAY_MS } from '../contract/constants'
+import { t } from '../contract/copy'
+import sprite from './icons/sprite.svg?url'
 import type { Credit } from '../shared/api'
 import { errorText, useNotify, useUser } from './state'
 import { go } from './router'
@@ -41,7 +41,7 @@ export function IconButton({ name, label, shortcut, onClick, className = '', siz
   name: IconName; label: string; shortcut?: string; onClick?: () => void; className?: string; size?: 'sm' | 'lg'; disabled?: boolean; side?: 'top' | 'bottom'
 }) {
   return <Tooltip.Root>
-    <Tooltip.Trigger className={`icon-btn ${className}`} aria-label={label} onClick={onClick} disabled={disabled}><Icon name={name} size={size} /></Tooltip.Trigger>
+    <Tooltip.Trigger render={<button type="button" disabled={disabled} />} className={`icon-btn ${className}`} aria-label={label} onClick={onClick} disabled={disabled}><Icon name={name} size={size} /></Tooltip.Trigger>
     <Tooltip.Portal><Tooltip.Positioner className="layer-tooltip" side={side} sideOffset={POPUP_OFFSET_PX}>
       <Tooltip.Popup className="tooltip">{label}{shortcut && <kbd className="kbd">{shortcut}</kbd>}</Tooltip.Popup>
     </Tooltip.Positioner></Tooltip.Portal>

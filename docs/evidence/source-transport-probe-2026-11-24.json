@@ -1,0 +1,107 @@
+{
+  "at": "2026-11-24T14:10:36.719Z",
+  "term": "三体",
+  "rows": [
+    {
+      "key": "subo",
+      "name": "速播资源",
+      "configuredEnabled": true,
+      "url": "https://subocaiji.com/api.php/provide/vod/",
+      "ms": 8001,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "huya",
+      "name": "虎牙资源",
+      "configuredEnabled": true,
+      "url": "https://www.huyaapi.com/api.php/provide/vod/",
+      "ms": 8002,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "bfzy",
+      "name": "暴风资源",
+      "configuredEnabled": true,
+      "url": "https://bfzyapi.com/api.php/provide/vod/",
+      "ms": 8001,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "dyttzy",
+      "name": "电影天堂",
+      "configuredEnabled": true,
+      "url": "https://caiji.dyttzyapi.com/api.php/provide/vod/",
+      "ms": 8000,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "lzi",
+      "name": "量子资源",
+      "configuredEnabled": true,
+      "url": "https://cj.lziapi.com/api.php/provide/vod/",
+      "ms": 8002,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "ffzy",
+      "name": "非凡资源",
+      "configuredEnabled": true,
+      "url": "https://cj.ffzyapi.com/api.php/provide/vod/",
+      "ms": 8000,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "hongniu",
+      "name": "红牛资源",
+      "configuredEnabled": true,
+      "url": "https://www.hongniuzy2.com/api.php/provide/vod/",
+      "ms": 8001,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "jyzy",
+      "name": "金鹰资源",
+      "configuredEnabled": true,
+      "url": "https://jyzyapi.com/api.php/provide/vod/",
+      "ms": 8001,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "360zy",
+      "name": "360资源",
+      "configuredEnabled": true,
+      "url": "https://360zy.com/api.php/provide/vod/",
+      "ms": 621,
+      "status": 200,
+      "contentType": "text/html;charset=utf-8",
+      "bytes": 25452,
+      "cloudflare": false
+    },
+    {
+      "key": "piaoling2",
+      "name": "飘零资源",
+      "configuredEnabled": false,
+      "url": "https://p2100.net/api.php/provide/vod/",
+      "ms": 8002,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    },
+    {
+      "key": "jszy",
+      "name": "极速资源",
+      "configuredEnabled": false,
+      "url": "https://jszyapi.com/api.php/provide/vod/",
+      "ms": 8001,
+      "error": "TimeoutError",
+      "message": "The operation was aborted due to timeout"
+    }
+  ]
+}

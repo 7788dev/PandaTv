@@ -143,9 +143,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             } catch (t: Throwable) {
                 if (!destroyed && feed == null) {
                     container.removeAllViews()
-                    val errBox = Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY) { load() }
+                    val errBox = Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY, focusRetry = true) { load() }
                     container.addView(errBox)
-                    errBox.post { errBox.requestFocus() }
                 }
             }
         }

@@ -1,0 +1,94 @@
+{
+  "at": "2026-11-24T12:12:13.018Z",
+  "runtime": "production packaged executable with real network",
+  "search": [
+    {
+      "id": "db-37247814",
+      "title": "神探之痕迹‎",
+      "type": "movie",
+      "year": 2026
+    },
+    {
+      "id": "db-35068655",
+      "title": "试探",
+      "type": "movie",
+      "year": 2026
+    },
+    {
+      "id": "db-37134449",
+      "title": "双兔",
+      "type": "tv",
+      "year": 2024
+    },
+    {
+      "id": "db-26000205",
+      "title": "鲨滩",
+      "type": "movie",
+      "year": 2016
+    },
+    {
+      "id": "db-26647087",
+      "title": "三体",
+      "type": "tv",
+      "year": 2023
+    },
+    {
+      "id": "db-21335171",
+      "title": "三体",
+      "type": "movie",
+      "year": 2030
+    },
+    {
+      "id": "db-34444648",
+      "title": "三体",
+      "type": "anime",
+      "year": 2022
+    },
+    {
+      "id": "db-25780594",
+      "title": "渗透",
+      "type": "tv",
+      "year": 2013
+    },
+    {
+      "id": "db-34807868",
+      "title": "双探",
+      "type": "tv",
+      "year": 2021
+    },
+    {
+      "id": "db-2027938",
+      "title": "神探",
+      "type": "movie",
+      "year": 2007
+    },
+    {
+      "id": "db-3287562",
+      "title": "神偷奶爸",
+      "type": "anime",
+      "year": 2010
+    },
+    {
+      "id": "db-36231281",
+      "title": "三体II：黑暗森林（上）",
+      "type": "tv",
+      "year": 2026
+    },
+    {
+      "id": "db-36689621",
+      "title": "今天是太阳雨",
+      "type": "tv",
+      "year": 2026
+    },
+    {
+      "id": "db-37937084",
+      "title": "你好、我是受心上人所托来做恋爱药的魔女。",
+      "type": "anime",
+      "year": 2026
+    }
+  ],
+  "channel": {
+    "first": 14,
+    "after": 14
+  }
+}

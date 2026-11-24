@@ -1,0 +1,190 @@
+{
+  "cases": [
+    {
+      "at": "2026-11-22T15:12:58.593Z",
+      "round": 1,
+      "savedDefaultSpeed": 1.5,
+      "initial": {
+        "rate": 1,
+        "defaultRate": 1,
+        "width": 1280
+      },
+      "initialLabel": "1.5×",
+      "manualRate": 2,
+      "reloaded": {
+        "rate": 1,
+        "defaultRate": 1,
+        "width": 640
+      },
+      "reloadedLabel": "2.0×",
+      "trace": [
+        {
+          "event": "script-assignment",
+          "value": 1.5,
+          "src": "",
+          "at": 470.29999999701977
+        },
+        {
+          "event": "ratechange",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 471.8999999985099
+        },
+        {
+          "event": "loadstart",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 490.5
+        },
+        {
+          "event": "loadedmetadata",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 503.79999999701977
+        },
+        {
+          "event": "playing",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 559.3999999985099
+        },
+        {
+          "event": "script-assignment",
+          "value": 2,
+          "src": "http://127.0.0.1:63034/__media-720.mp4",
+          "at": 3434.199999999255
+        },
+        {
+          "event": "ratechange",
+          "value": 2,
+          "defaultRate": 1,
+          "at": 3523.099999997765
+        },
+        {
+          "event": "script-assignment",
+          "value": 2,
+          "src": "http://127.0.0.1:63034/__media-720.mp4",
+          "at": 5504.099999997765
+        },
+        {
+          "event": "ratechange",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5504.699999999255
+        },
+        {
+          "event": "loadstart",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5510.199999999255
+        },
+        {
+          "event": "loadedmetadata",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5513.5
+        },
+        {
+          "event": "playing",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5575
+        }
+      ],
+      "evidence": "fresh production renderer session and real local MP4; script setter trace distinguishes native load reset from an app assignment or auto adaptation"
+    },
+    {
+      "at": "2026-11-22T15:13:05.518Z",
+      "round": 2,
+      "savedDefaultSpeed": 1.5,
+      "initial": {
+        "rate": 1,
+        "defaultRate": 1,
+        "width": 1280
+      },
+      "initialLabel": "1.5×",
+      "manualRate": 2,
+      "reloaded": {
+        "rate": 1,
+        "defaultRate": 1,
+        "width": 640
+      },
+      "reloadedLabel": "2.0×",
+      "trace": [
+        {
+          "event": "script-assignment",
+          "value": 1.5,
+          "src": "",
+          "at": 458.30000000074506
+        },
+        {
+          "event": "ratechange",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 460.1000000014901
+        },
+        {
+          "event": "loadstart",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 462.4000000022352
+        },
+        {
+          "event": "loadedmetadata",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 492
+        },
+        {
+          "event": "playing",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 529.2000000029802
+        },
+        {
+          "event": "script-assignment",
+          "value": 2,
+          "src": "http://127.0.0.1:63073/__media-720.mp4",
+          "at": 3425.300000000745
+        },
+        {
+          "event": "ratechange",
+          "value": 2,
+          "defaultRate": 1,
+          "at": 3508.60000000149
+        },
+        {
+          "event": "script-assignment",
+          "value": 2,
+          "src": "http://127.0.0.1:63073/__media-720.mp4",
+          "at": 5487.5
+        },
+        {
+          "event": "ratechange",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5487.800000000745
+        },
+        {
+          "event": "loadstart",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5494.300000000745
+        },
+        {
+          "event": "loadedmetadata",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5497.60000000149
+        },
+        {
+          "event": "playing",
+          "value": 1,
+          "defaultRate": 1,
+          "at": 5560
+        }
+      ],
+      "evidence": "fresh production renderer session and real local MP4; script setter trace distinguishes native load reset from an app assignment or auto adaptation"
+    }
+  ]
+}

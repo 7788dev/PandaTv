@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-21T02:04:34.579568+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "episode-panel-focus",
+      "error": "Episode focus crosses right safe inset: (1296, 149, 1864, 235) on 1920x1080"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

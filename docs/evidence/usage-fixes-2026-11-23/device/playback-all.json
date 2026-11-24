@@ -1,0 +1,82 @@
+{
+  "at": "2026-11-22T18:52:46.406104+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "player-focus",
+      "passed": true
+    },
+    {
+      "name": "episode-panel-focus",
+      "passed": true
+    },
+    {
+      "name": "media-controls",
+      "passed": true
+    },
+    {
+      "name": "player-lifecycle",
+      "passed": true
+    },
+    {
+      "name": "seek-control",
+      "passed": true
+    },
+    {
+      "name": "speed-control",
+      "passed": true
+    },
+    {
+      "name": "episode-switch",
+      "passed": true
+    },
+    {
+      "name": "admission-cancel",
+      "passed": true
+    },
+    {
+      "name": "loaded-detail-return-1",
+      "passed": true
+    },
+    {
+      "name": "loaded-detail-return-2",
+      "passed": true
+    },
+    {
+      "name": "playback-error-recovery-1",
+      "passed": true
+    },
+    {
+      "name": "playback-error-recovery-2",
+      "passed": true
+    },
+    {
+      "name": "missing-source",
+      "passed": true,
+      "verdict": "retryable"
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "unavailable": [
+    {
+      "name": "line-switch-1",
+      "reason": "No alternate line became selectable in this playback sample."
+    },
+    {
+      "name": "line-switch-2",
+      "reason": "No alternate line became selectable in this playback sample."
+    }
+  ],
+  "failures": [],
+  "restoration": {
+    "userStateRestored": true,
+    "firewallRulesRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/playback-all/report.json",
+  "rawSha256": "744030E6A9221739D006F6884D0A074E91041EDC6839CDFDD1698447D82E1B59",
+  "missingBoundary": "missing-source passed its retryable-error surface; verdict=retryable does not establish catalogue absence"
+}

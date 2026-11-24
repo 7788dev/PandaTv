@@ -1,0 +1,14 @@
+{
+  "at": "2026-11-22T11:25:46.356543+00:00",
+  "scopeChecked": true,
+  "trackedChanges": 16,
+  "originalUntrackedEntriesPreserved": 53,
+  "unchangedHead": "4220d6dff973a55f42508a49a9c0c3d43d3b296a",
+  "localDocumentLinksChecked": 25,
+  "report": "docs/system-audit-2026-11-22.md",
+  "reportSha256": "D510F4CDF9E1DB1B3732B3A73F5B05F060B5ABC64CF13490953D6589986173E3",
+  "productionAndCandidateIdentitiesMatch": true,
+  "originalReleaseAndWindowsInstallMatch": true,
+  "rawTvReportsPreserved": true,
+  "classificationAndRestorationCopiesMatch": true
+}

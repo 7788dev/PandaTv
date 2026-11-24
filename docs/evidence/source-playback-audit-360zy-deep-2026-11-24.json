@@ -1,0 +1,353 @@
+{
+ "at": "2026-11-24T14:12:10.037Z",
+ "route": "system route",
+ "perType": 5,
+ "method": "Douban hot subject → one source forced at a time → sources() + resolve() → playlist and real segment bytes",
+ "sources": [
+  {
+   "key": "360zy",
+   "name": "360资源",
+   "configuredEnabled": true,
+   "verdict": "playable",
+   "tests": 20,
+   "playable": 17,
+   "present": 17,
+   "blocked": 0,
+   "noMatch": 3,
+   "mediaFailed": 0,
+   "failures": [
+    "probe: 片源响应超时 10002ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 12,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 125509,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 5970
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 24,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 125723,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 2216
+    },
+    {
+     "type": "tv",
+     "title": "我的有罪之人",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 11,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 173993,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6020
+    },
+    {
+     "type": "tv",
+     "title": "小城良方",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 29,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 125184,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 5174
+    },
+    {
+     "type": "tv",
+     "title": "嫁金钗",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 30,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 130780,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 4295
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 447890,
+     "segmentStatus": 206,
+     "segmentBytes": 27840,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 5450
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 389414,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 10202
+    },
+    {
+     "type": "movie",
+     "title": "饥饿游戏：收获日出",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 2706
+    },
+    {
+     "type": "movie",
+     "title": "空枪",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 437676,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 5460
+    },
+    {
+     "type": "movie",
+     "title": "生化危机：爆发夜",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 255446,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 4090
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 5,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 71255,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 10304
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 389414,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 187
+    },
+    {
+     "type": "anime",
+     "title": "赛博朋克：边缘行者 第二季",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 10,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 77401,
+     "segmentStatus": 206,
+     "segmentBytes": 38176,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 3698
+    },
+    {
+     "type": "anime",
+     "title": "疯狂动物城",
+     "year": 2016,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 2694
+    },
+    {
+     "type": "anime",
+     "title": "斗破苍穹 年番4",
+     "year": 2025,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 62,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 60622,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 24432
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 23,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 307843,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6800
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 291
+    },
+    {
+     "type": "variety",
+     "title": "现在就出发 第四季",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 61,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 130549,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6647
+    },
+    {
+     "type": "variety",
+     "title": "女子推理社 第二季",
+     "year": 2024,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 40,
+     "format": "hls",
+     "quality": "480P",
+     "status": 200,
+     "manifestBytes": 125667,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 8165
+    },
+    {
+     "type": "variety",
+     "title": "女子推理社 第一季",
+     "year": 2023,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 38,
+     "format": "hls",
+     "quality": "480P",
+     "status": 200,
+     "manifestBytes": 176511,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 2437
+    }
+   ]
+  }
+ ]
+}

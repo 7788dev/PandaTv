@@ -7,8 +7,9 @@ internal object PlaybackProgressPolicy {
     private const val MIN_PROGRESS_MS = 80L
     private const val SEEK_RESET_MS = 1_000L
 
-    fun observe(positionMs: Long, nowMs: Long, previous: PlaybackProgressSample): PlaybackProgressSample {
+    fun observe(positionMs: Long, nowMs: Long, previous: PlaybackProgressSample, monitoring: Boolean = true): PlaybackProgressSample {
         val position = positionMs.coerceAtLeast(0L)
+        if (!monitoring) return PlaybackProgressSample(position, nowMs)
         val delta = position - previous.positionMs
         return when {
             delta >= MIN_PROGRESS_MS || delta <= -SEEK_RESET_MS -> PlaybackProgressSample(position, nowMs)

@@ -1,0 +1,18 @@
+
+> panda-desktop@1.1.4 test:release
+> node --test scripts/ci-release.test.mjs
+
+✔ metadata matches independent desktop / TV versions and the release tag (13.6895ms)
+✔ signing requires all secrets and rejects malformed base64 without creating files (2.9704ms)
+✔ signing properties preserve special characters and are cleaned after use (15.0908ms)
+✔ preparing or cleaning CI signing never replaces a developer configuration (14.3204ms)
+✔ unsigned CI APK cannot pass the release artifact gate (6.3739ms)
+✔ release requires both nonempty packages and hashes the exact bytes (21.4934ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 259.979

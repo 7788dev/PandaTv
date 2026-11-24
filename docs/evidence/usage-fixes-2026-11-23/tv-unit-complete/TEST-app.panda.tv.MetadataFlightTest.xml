@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.MetadataFlightTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-11-22T19:48:49.574Z" hostname="DESKTOP-G3A3P0Q" time="0.143">
+  <properties/>
+  <testcase name="cancelled suggestion leader cannot cancel a submitted search follower" classname="app.panda.tv.MetadataFlightTest" time="0.143"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

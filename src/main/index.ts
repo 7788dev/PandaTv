@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
-import { t } from '../../design/contract/copy'
+import { t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import { DoubanDataSource } from './data/douban'
 import { createTransport } from './data/transport'
@@ -27,6 +27,9 @@ let closingNonce: string | undefined
 let closeTimer: ReturnType<typeof setTimeout> | undefined
 let boundsTimer: ReturnType<typeof setTimeout> | undefined
 let canClose = false
+// Automated UI replay must not take focus away from the person using the machine.
+// This only changes how the test window is shown; normal launches still focus it.
+const showInactive = process.env.PANDA_E2E_SHOW_INACTIVE === '1'
 
 function trustedUrl(raw: string): boolean {
   try {
@@ -146,7 +149,9 @@ async function createWindow() {
   const getUser = () => user ??= new UserStore(userPath)
   const services: Services = {
     data, playback: new PlaybackService({ proxy, rules, onSourceFailure: (source, reason, ms) => console.info('[source]', source, reason, ms + 'ms') }), user: getUser,
-    changed: () => mainWindow?.webContents.send('panda:user', getUser().get())
+    changed: () => mainWindow?.webContents.send('panda:user', getUser().get()),
+    recovery: () => UserStore.recovery(userPath),
+    recover: restoreBackup => { user = UserStore.recover(userPath, restoreBackup); return user.get() }
   }
   mainWindow = new BrowserWindow({
     width: 1440, height: 900, minWidth: 1080, minHeight: 640, ...restoredWindow.bounds,
@@ -179,6 +184,18 @@ async function createWindow() {
           mainWindow!.setFullScreen(args[0]); return
         case 'app.info': return { version: app.getVersion() }
         case 'app.checkUpdate': return checkUpdate(app.getVersion())
+        case 'user.exportRecovery': {
+          const contents = UserStore.recoveryExport(userPath)
+          const result = await dialog.showSaveDialog(mainWindow!, {
+            title: extra.exportRecovery, defaultPath: join(app.getPath('documents'), 'Panda-recovery.json'),
+            filters: [{ name: 'JSON', extensions: ['json'] }], properties: ['dontAddToRecent'],
+          })
+          if (result.canceled || !result.filePath) return { status: 'cancelled' }
+          if ([userPath, `${userPath}.bak`].some(path => resolve(path).toLowerCase() === resolve(result.filePath).toLowerCase())) throw new Error('INVALID_INPUT')
+          try { writeFileSync(result.filePath, contents, { mode: 0o600, flush: true }) }
+          catch (cause) { throw new Error('STATE_WRITE_FAILED', { cause }) }
+          return { status: 'saved' }
+        }
         default: return invokeData(method, args, services)
       }
     }, method === 'data.playback' || method === 'data.retryPlayback' || method === 'data.playbackFrom' || method === 'data.availability')
@@ -194,7 +211,7 @@ async function createWindow() {
   mainWindow.on('unmaximize', scheduleSaveBounds)
   mainWindow.on('enter-full-screen', emitWindowState)
   mainWindow.on('leave-full-screen', emitWindowState)
-  mainWindow.once('ready-to-show', () => mainWindow?.show())
+  mainWindow.once('ready-to-show', () => showInactive ? mainWindow?.showInactive() : mainWindow?.show())
   mainWindow.on('close', event => {
     if (canClose) return
     event.preventDefault()
@@ -203,7 +220,7 @@ async function createWindow() {
     mainWindow!.webContents.send('panda:closing', closingNonce)
     closeTimer = setTimeout(() => void finishClose(), 2000)
   })
-  mainWindow.on('closed', () => { mainWindow = undefined; void proxy?.close() })
+  mainWindow.on('closed', () => { services.libraryRequests?.forEach(controller => controller.abort()); mainWindow = undefined; void proxy?.close() })
   await loadRenderer(mainWindow)
 }
 
@@ -211,6 +228,7 @@ if (!app.requestSingleInstanceLock()) app.quit()
 else {
   app.on('second-instance', () => {
     if (mainWindow?.isMinimized()) mainWindow.restore()
+    if (showInactive) { mainWindow?.showInactive(); return }
     mainWindow?.show(); mainWindow?.focus()
   })
   app.whenReady().then(createWindow).catch(async error => {

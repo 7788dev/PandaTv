@@ -1,15 +1,16 @@
-import { Component, useEffect, useLayoutEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react'
+import { Component, useEffect, useId, useLayoutEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
-import type { MediaItem, MediaType } from '../../design/contract/types'
-import { SCROLLED_PX } from '../../design/contract/constants'
-import { t } from '../../design/contract/copy'
-import logo from '../../design/brand/logo-mark.svg?url'
+import type { MediaItem, MediaType } from '../contract/types'
+import { SCROLLED_PX } from '../contract/constants'
+import { t } from '../contract/copy'
+import logo from './brand/logo-mark.svg?url'
 import type { WindowState } from '../shared/api'
 import { extra } from '../copy.extra'
 import { dataAttr, EmptyState, ErrorState, Icon, IconButton, Spinner, Tip, TooltipProvider } from './components'
 import { errorText, UiProvider, useNotify, useRemote, UserProvider, useUser, useWindowControlsContainer } from './state'
-import { back, go, useRoute } from './router'
-import { ChannelPage, DetailPage, HomePage, LibraryPage, mediaTypes, PersonPage, SearchPage, SettingsPage } from './pages'
+import { back, go, onRouteLeave, useRoute } from './router'
+import { pageMemory, pageMemoryKey } from './page-memory'
+import { ChannelPage, DetailPage, HomePage, LibraryPage, mediaTypes, PersonPage, RecoveryPage, SearchPage, SettingsPage } from './pages'
 import { Player } from './Player'
 
 function WindowControls({ state }: { state: WindowState }) {
@@ -52,6 +53,7 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   useEffect(() => {
     const pointer = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) close() }
     const keyboard = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || document.querySelector('[role="dialog"],[role="menu"]')) return
       const typing = (event.target as HTMLElement)?.matches('input,textarea,[contenteditable=true]')
       if ((event.key.toLowerCase() === 'k' && (event.ctrlKey || event.metaKey)) || (event.key === '/' && !typing)) {
         event.preventDefault(); setOpen(true); input.current?.focus(); input.current?.select()
@@ -67,8 +69,9 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   const suggestions = results.data?.suggestions ?? []
   const titles = results.data?.titles ?? []
   const hot = results.data?.hot ?? []
-  const hasPanel = !query || waiting || Boolean(results.error) || suggestions.length > 0 || titles.length > 0
-  const targets = waiting || results.error ? [] : query ? results.data?.titles ? titles.map(title => `/search?q=${encodeURIComponent(title)}`) : suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
+  const empty = Boolean(query) && !waiting && !results.error && suggestions.length === 0 && titles.length === 0
+  const hasPanel = !query || waiting || Boolean(results.error) || suggestions.length > 0 || titles.length > 0 || empty
+  const targets = waiting || results.error ? [] : query ? titles.length > 0 ? titles.map(title => `/search?q=${encodeURIComponent(title)}`) : suggestions.map(item => `/detail/${item.id}`) : hot.map(word => `/search?q=${encodeURIComponent(word)}`)
   const choose = (index: number) => {
     if (query && suggestions[index]) void dispatch({ type: 'search:add', query: suggestions[index].title }).catch(error => notify(errorText(error)))
     if (query && titles[index]) void dispatch({ type: 'search:add', query: titles[index] }).catch(error => notify(errorText(error)))
@@ -77,7 +80,7 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
   return <div className="search" role="search" ref={root} data-open={dataAttr(open)} onBlur={event => { if (!root.current?.contains(event.relatedTarget as Node)) close() }}>
     <label className="field" data-filled={dataAttr(value)}><Icon name="search" size="sm" className="field__icon" />
       <input className="field__input" type="search" ref={input} value={value} placeholder={extra.searchInitialsPlaceholder} aria-label={t.search.label} autoComplete="off" spellCheck={false}
-        role="combobox" aria-expanded={open && hasPanel} aria-controls="search-suggestions" aria-activedescendant={open && active >= 0 && active < targets.length ? `search-item-${active}` : undefined}
+        role="combobox" aria-autocomplete="list" aria-haspopup="listbox" aria-expanded={open && hasPanel} aria-controls="search-suggestions" aria-activedescendant={open && active >= 0 && active < targets.length ? `search-item-${active}` : undefined}
         onChange={event => { setActive(-1); setValue(event.target.value); setOpen(true) }} onFocus={() => setOpen(true)} onClick={() => setOpen(true)} onKeyDown={event => {
           if (event.nativeEvent.isComposing) return
           const step = event.key === 'ArrowDown' ? 1 : event.key === 'ArrowUp' ? -1 : 0
@@ -93,10 +96,10 @@ function SearchBox({ currentQuery, routeKey }: { currentQuery: string; routeKey:
         }} />
       <kbd className="kbd field__hint">Ctrl K</kbd><button className="field__clear" type="button" aria-label={t.action.clearInput} tabIndex={-1} onClick={() => { setActive(-1); setValue(''); input.current?.focus(); setOpen(true) }}><Icon name="close" size="sm" /></button>
     </label>
-    <div id="search-suggestions" className="search__panel" ref={panel} inert={!open || !hasPanel} data-open={dataAttr(open && hasPanel)} onMouseDown={event => event.preventDefault()} onPointerMove={event => { if (event.movementX || event.movementY) setActive(-1) }}>
-      {query ? waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : results.data?.titles ? titles.map((title, index) => <a className="suggest__item" id={`search-item-${index}`} key={title} href={`#/search?q=${encodeURIComponent(title)}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text">{title}</span></a>) : suggestions.map((item, index) => <a className="suggest__item" id={`search-item-${index}`} key={item.id} href={`#/detail/${item.id}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: item.title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text"><Highlight title={item.title} query={query} /></span><span className="suggest__type">{t.nav[item.type]}</span></a>) : <>
+    <div id="search-suggestions" className="search__panel" ref={panel} role={query && !waiting && !results.error && (titles.length > 0 || suggestions.length > 0) ? 'listbox' : undefined} aria-label={query ? t.search.label : undefined} inert={!open || !hasPanel} data-open={dataAttr(open && hasPanel)} onMouseDown={event => event.preventDefault()} onPointerMove={event => { if (event.movementX || event.movementY) setActive(-1) }}>
+      {query ? waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : titles.length > 0 ? titles.map((title, index) => <a className="suggest__item" role="option" aria-selected={active === index} id={`search-item-${index}`} key={title} href={`#/search?q=${encodeURIComponent(title)}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text">{title}</span></a>) : suggestions.length > 0 ? suggestions.map((item, index) => <a className="suggest__item" role="option" aria-selected={active === index} id={`search-item-${index}`} key={item.id} href={`#/detail/${item.id}`} data-highlighted={dataAttr(active === index)} onClick={() => { void dispatch({ type: 'search:add', query: item.title }).catch(error => notify(errorText(error))) }}><Icon name="search" size="sm" /><span className="suggest__text"><Highlight title={item.title} query={query} /></span><span className="suggest__type">{t.nav[item.type]}</span></a>) : open ? <EmptyState icon="search-x" text={t.search.empty} /> : null : <>
         {state.searches.length > 0 && <div className="search__group"><div className="search__head"><span className="search__label">{t.search.recent}</span><button className="text-btn" onClick={() => { void dispatch({ type: 'search:clear' }).catch(error => notify(errorText(error))) }}>{t.action.clear}</button></div><div className="search__chips">{state.searches.map(word => <a className="chip chip--solid" key={word} href={`#/search?q=${encodeURIComponent(word)}`}>{word}</a>)}</div></div>}
-        <div className="search__group"><div className="search__head"><span className="search__label">{t.search.hot}</span></div>{waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : <div className="hotlist" aria-label={extra.hotSearchSource}>{hot.map((word, index) => <a className="hotlist__item" id={`search-item-${index}`} href={`#/search?q=${encodeURIComponent(word)}`} key={word} data-highlighted={dataAttr(index === active)}><span className="hotlist__rank">{index + 1}</span><span className="hotlist__title">{word}</span></a>)}</div>}</div>
+        <div className="search__group"><div className="search__head"><span className="search__label">{t.search.hot}</span></div>{waiting ? <Spinner /> : results.error ? <ErrorState error={results.error} retry={results.reload} /> : <div className="hotlist" role="listbox" aria-label={extra.hotSearchSource}>{hot.map((word, index) => <a className="hotlist__item" role="option" aria-selected={index === active} id={`search-item-${index}`} href={`#/search?q=${encodeURIComponent(word)}`} key={word} data-highlighted={dataAttr(index === active)}><span className="hotlist__rank">{index + 1}</span><span className="hotlist__title">{word}</span></a>)}</div>}</div>
       </>}
     </div>
   </div>
@@ -124,50 +127,66 @@ function Topbar({ path, query, routeKey, scrolled }: { path: string; query: stri
   </header>
 }
 
-const scrollPositions = new Map<string, number>()
 function PageScroll({ children, pageKey, onScroll }: { children: ReactNode; pageKey: string; onScroll: (top: number) => void }) {
   const viewport = useRef<HTMLDivElement>(null)
+  const viewportId = useId()
   const content = useRef<HTMLDivElement>(null)
   const bar = useRef<HTMLDivElement>(null)
   const thumb = useRef<HTMLDivElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const dragging = useRef<{ y: number; top: number; ratio: number } | null>(null)
-const [overflow, setOverflow] = useState(false)
+  const [overflow, setOverflow] = useState(false)
   const [scrolling, setScrolling] = useState(false)
-  const activeKey = useRef(pageKey)
-  if (activeKey.current !== pageKey) {
-    const leaving = viewport.current?.scrollTop
-    if (leaving !== undefined) scrollPositions.set(activeKey.current, leaving)
-    activeKey.current = pageKey
-  }
   useLayoutEffect(() => {
     const el = viewport.current
     const track = bar.current
     const handle = thumb.current
     if (!el || !track || !handle) return
-    const desired = scrollPositions.get(pageKey) ?? 0
+    const memory = pageMemory.get(pageKey)
+    const desired = memory?.top ?? 0
+    const href = memory?.href
     let restored = desired === 0
+    let focusRestored = !href
     const sync = () => {
       const delta = el.scrollHeight - el.clientHeight
       setOverflow(delta > 0)
       if (!restored && delta >= desired) { el.scrollTop = desired; restored = true }
+      if (restored && !focusRestored && href) {
+        const target = el.querySelector<HTMLElement>(`a[href="${CSS.escape(href)}"]`)
+        if (target) { target.focus({ preventScroll: true }); focusRestored = true }
+      }
       const height = Math.max(40, track.clientHeight * el.clientHeight / Math.max(1, el.scrollHeight))
       handle.style.setProperty('--scroll-area-thumb-height', `${height}px`)
       handle.style.translate = `0 ${delta > 0 ? (track.clientHeight - height) * el.scrollTop / delta : 0}px`
+      track.setAttribute('aria-valuemax', String(Math.max(0, delta)))
+      track.setAttribute('aria-valuenow', String(el.scrollTop))
       onScroll(el.scrollTop)
     }
-    const observedScroll = () => { scrollPositions.set(pageKey, el.scrollTop); sync(); setScrolling(true); if (timer.current) clearTimeout(timer.current); timer.current = setTimeout(() => setScrolling(false), 500) }
-    const touched = () => { restored = true }
+    const observedScroll = () => { if (restored) pageMemory.saveScroll(pageKey, el.scrollTop); sync(); setScrolling(true); if (timer.current) clearTimeout(timer.current); timer.current = setTimeout(() => setScrolling(false), 500) }
+    const touched = () => { restored = true; focusRestored = true }
+    const leave = onRouteLeave(() => {
+      const focused = el.contains(document.activeElement) ? document.activeElement?.closest('a[href]') : null
+      if (restored) pageMemory.savePosition(pageKey, el.scrollTop, focused?.getAttribute('href') ?? undefined)
+    })
     const observer = new ResizeObserver(sync)
     observer.observe(el)
     if (content.current) observer.observe(content.current)
     el.scrollTop = desired
     sync()
     el.addEventListener('scroll', observedScroll, { passive: true }); el.addEventListener('wheel', touched, { passive: true })
-    return () => { observer.disconnect(); el.removeEventListener('scroll', observedScroll); el.removeEventListener('wheel', touched); if (timer.current) clearTimeout(timer.current) }
+    el.addEventListener('pointerdown', touched, { passive: true }); el.addEventListener('keydown', touched)
+    return () => { leave(); observer.disconnect(); el.removeEventListener('scroll', observedScroll); el.removeEventListener('wheel', touched); el.removeEventListener('pointerdown', touched); el.removeEventListener('keydown', touched); if (timer.current) clearTimeout(timer.current) }
   }, [pageKey])
-  return <div className="scroll scroll--page"><div className="scroll__viewport" ref={viewport}><div ref={content}>{children}</div></div>
-    <div className="scroll__bar" ref={bar} hidden={!overflow} data-scrolling={dataAttr(scrolling)} onPointerDown={event => {
+  return <div className="scroll scroll--page"><div className="scroll__viewport" ref={viewport} id={viewportId} tabIndex={0} role="region" aria-label={extra.pageScroll}><div ref={content}>{children}</div></div>
+    <div className="scroll__bar" ref={bar} hidden={!overflow} role="scrollbar" aria-orientation="vertical" aria-label={extra.pageScroll} aria-controls={viewportId} aria-valuemin={0} aria-valuemax={0} aria-valuenow={0} tabIndex={0} data-scrolling={dataAttr(scrolling)} onKeyDown={event => {
+      const el = viewport.current
+      if (!el) return
+      const page = el.clientHeight * 0.9
+      const step = event.key === 'ArrowDown' ? 40 : event.key === 'ArrowUp' ? -40 : event.key === 'PageDown' ? page : event.key === 'PageUp' ? -page : event.key === 'Home' ? -el.scrollTop : event.key === 'End' ? el.scrollHeight : undefined
+      if (step === undefined) return
+      event.preventDefault()
+      el.scrollBy({ top: step, behavior: 'auto' })
+    }} onPointerDown={event => {
       if (event.target !== event.currentTarget || !thumb.current || !viewport.current) return
       viewport.current.scrollBy({ top: (event.clientY < thumb.current.getBoundingClientRect().top ? -1 : 1) * viewport.current.clientHeight * 0.9, behavior: 'smooth' })
     }}><div className="scroll__thumb" ref={thumb} onPointerDown={event => {
@@ -181,7 +200,7 @@ const [overflow, setOverflow] = useState(false)
 
 function AppContent() {
   const route = useRoute()
-  const scrollKey = route.path + (route.query.size ? `?${route.query.toString()}` : '')
+  const scrollKey = pageMemoryKey(route.path, route.query)
   const user = useUser()
   const notify = useNotify()
   const [windowState, setWindowState] = useState<WindowState>({ maximized: false, fullscreen: false })
@@ -197,7 +216,7 @@ function AppContent() {
   }, [])
   const playing = route.path.match(/^\/play\/([^/]+)(?:\/(\d+))?$/)
   let page: ReactNode
-  if (user.error) page = <main className="page"><ErrorState error={user.error} retry={user.reload} /></main>
+  if (user.error) page = <RecoveryPage error={user.error} />
   else if (!user.ready) page = <main className="page"><Spinner /></main>
   else if (playing) page = <Player key={playing[1]} id={playing[1]} episode={Number(playing[2]) || 0} />
   else if (route.path === '/') page = <HomePage />

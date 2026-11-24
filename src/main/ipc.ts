@@ -1,6 +1,6 @@
-import type { ChannelQuery, MediaType, Quality } from '../../design/contract/types'
-import { QUALITIES } from '../../design/contract/constants'
-import { t } from '../../design/contract/copy'
+import type { ChannelQuery, MediaType, Quality } from '../contract/types'
+import { QUALITIES } from '../contract/constants'
+import { t } from '../contract/copy'
 import type { RpcResult } from '../shared/rpc'
 import type { StateAction } from '../shared/api'
 import { extra } from '../copy.extra'
@@ -15,6 +15,9 @@ export interface Services {
   playback: PlaybackService
   user: () => UserStore
   changed: () => void
+  libraryRequests?: Map<string, AbortController>
+  recovery?: () => import('../shared/api').StateRecovery
+  recover?: (restoreBackup: boolean) => import('../contract/types').UserState
 }
 export function safeError(error: unknown, playback = false): { code: string; message: string } {
   if (error instanceof DataError) {
@@ -22,8 +25,10 @@ export function safeError(error: unknown, playback = false): { code: string; mes
     return { code: error.code, message: messages[error.code] }
   }
   const message = error instanceof Error ? error.message : ''
+  if (error instanceof Error && error.name === 'AbortError') return { code: 'CANCELLED', message: extra.unknownError }
   if (message === 'INVALID_INPUT') return { code: 'INVALID_INPUT', message: extra.invalidInput }
   if (message === 'STATE_CORRUPT') return { code: 'STORAGE', message: extra.stateCorrupt }
+  if (message === 'STATE_WRITE_FAILED') return { code: 'STORAGE', message: extra.saveError }
   // Only our finite operational copy crosses IPC; never upstream URLs or stack traces.
   if ((Object.values(extra) as string[]).includes(message)) return { code: 'UNAVAILABLE', message }
   return { code: playback ? 'PLAYBACK' : 'INTERNAL', message: playback ? extra.playerRetry : extra.unknownError }
@@ -66,6 +71,7 @@ export async function invokeData(method: string, args: unknown[], services: Serv
     case 'data.filters': return data.filters(type(args[0]))
     case 'data.channel': return data.channel(type(args[0]), query(args[1]), args[2] === undefined ? undefined : string(args[2], 2000))
     case 'data.detail': return data.detail(id(args[0]))
+    case 'data.subject': return data.subject(id(args[0]))
     case 'data.person':
     case 'data.personWorks': {
       const who = person(args[0]), cursor = args[1] === undefined ? undefined : string(args[1], 8)
@@ -78,12 +84,33 @@ export async function invokeData(method: string, args: unknown[], services: Serv
       if (!Array.isArray(args[0]) || args[0].length > 10000) return invalid()
       return data.byIds(args[0].map(id))
     }
+    case 'data.libraryPage': {
+      if (!Array.isArray(args[0]) || args[0].length > 10000 || (args[3] !== undefined && typeof args[3] !== 'boolean')) return invalid()
+      const ids = args[0].map(id), cursor = args[1] === undefined ? undefined : string(args[1], 5)
+      const request = args[2] === undefined ? undefined : string(args[2], 80)
+      if (request !== undefined && !/^[\w-]{1,80}$/.test(request)) return invalid()
+      const requests = services.libraryRequests ??= new Map<string, AbortController>()
+      if (request === undefined) return data.libraryPage(ids, cursor, undefined, args[3] === true)
+      if (requests.size >= 8 && !requests.has(request)) throw new DataError('RATE_LIMITED', 'Too many library requests')
+      requests.get(request)?.abort()
+      const controller = new AbortController()
+      requests.set(request, controller)
+      try { return await data.libraryPage(ids, cursor, controller.signal, args[3] === true) }
+      finally { if (requests.get(request) === controller) requests.delete(request) }
+    }
+    case 'data.cancelLibrary': {
+      const request = string(args[0], 80)
+      if (!/^[\w-]{1,80}$/.test(request)) return invalid()
+      services.libraryRequests?.get(request)?.abort()
+      services.libraryRequests?.delete(request)
+      return
+    }
     case 'data.search': return data.search(string(args[0]))
     case 'data.titleHints': return data.titleHints(string(args[0]))
     case 'data.suggest': return data.suggest(string(args[0]))
     case 'data.hotSearches': return data.hotSearches()
     case 'data.availability': {
-      const item = await data.detail(id(args[0]))
+      const item = await data.subject(id(args[0]))
       return playback.availability(item, hints(data, item.id))
     }
     case 'data.playback':
@@ -94,15 +121,22 @@ export async function invokeData(method: string, args: unknown[], services: Serv
       if (quality !== undefined && !QUALITIES.includes(quality as Quality)) return invalid()
       const from = picked ? string(args[2], 40) : undefined
       if (from !== undefined && !/^[\w-]+$/.test(from)) return invalid()
-      const item = await data.detail(id(args[0]))
+      const item = await data.subject(id(args[0]))
       return playback.resolve(item, episode, quality as Quality | undefined, method === 'data.retryPlayback', hints(data, item.id), from)
     }
     case 'data.sources': {
       const episode = number(args[1])
-      const item = await data.detail(id(args[0]))
+      const item = await data.subject(id(args[0]))
       return playback.sources(item, episode, hints(data, item.id))
     }
     case 'user.get': return services.user().get()
+    case 'user.recovery': return services.recovery?.() ?? invalid()
+    case 'user.recover': {
+      if (typeof args[0] !== 'boolean' || !services.recover) return invalid()
+      const next = services.recover(args[0])
+      services.changed()
+      return next
+    }
     case 'user.dispatch': {
       const next = services.user().dispatch(args[0] as StateAction)
       services.changed()

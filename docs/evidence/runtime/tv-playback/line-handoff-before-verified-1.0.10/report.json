@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-20T10:33:09.842188+00:00",
+  "cases": [],
+  "unavailable": [
+    {
+      "name": "line-switch-1",
+      "reason": "Playback did not advance; visible texts=['暂时无法连接，请重试', '重试', '返回']",
+      "state": {
+        "texts": [
+          "暂时无法连接，请重试",
+          "重试",
+          "返回"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            871,
+            639,
+            1049,
+            717
+          ],
+          "labels": [
+            "返回"
+          ]
+        },
+        "loadingRegionMaxRgb": 143
+      },
+      "detail": "Catalogues returned retryable network errors before this real playback sample could run."
+    }
+  ],
+  "failures": [
+    {
+      "name": "line-switch-2",
+      "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '0.0', '播放', '下一集', '00:00 / 00:00', '选集', '倍速']"
+    }
+  ],
+  "version": "1.0.10",
+  "apkSha256": "3DB39556756BAD635A6E76F620E21736FBAD5F24DBAE1700872D1C779A5E6D48",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

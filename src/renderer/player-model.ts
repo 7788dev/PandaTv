@@ -1,5 +1,5 @@
-import type { HistoryEntry, Quality } from '../../design/contract/types'
-import { isFinished } from '../../design/contract/rules'
+import type { HistoryEntry, Quality } from '../contract/types'
+import { isFinished } from '../contract/rules'
 
 export function playbackHistory(id: string, episode: number, position: number, duration: number, hasNext: boolean, at = Date.now()): HistoryEntry | null {
   if (!Number.isFinite(duration) || duration <= 0 || !Number.isFinite(position) || position < 0) return null

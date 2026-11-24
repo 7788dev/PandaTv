@@ -1,0 +1,42 @@
+[
+  {
+    "name": "initials-baseline-1",
+    "startedAt": "2026-11-23T03:29:55.4259658+08:00",
+    "finishedAt": "2026-11-23T03:30:18.2769016+08:00",
+    "runtime": "desktop-build-live",
+    "appPath": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\before-source",
+    "executable": "",
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\initials-baseline-1.log"
+  },
+  {
+    "name": "initials-baseline-2",
+    "startedAt": "2026-11-23T03:30:18.2909115+08:00",
+    "finishedAt": "2026-11-23T03:31:05.6767824+08:00",
+    "runtime": "desktop-build-live",
+    "appPath": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\before-source",
+    "executable": "",
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\initials-baseline-2.log"
+  },
+  {
+    "name": "initials-after-1",
+    "startedAt": "2026-11-23T03:31:05.6801302+08:00",
+    "finishedAt": "2026-11-23T03:31:11.4083791+08:00",
+    "runtime": "desktop-packaged-live",
+    "appPath": "",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\initials-after-1.log"
+  },
+  {
+    "name": "initials-after-2",
+    "startedAt": "2026-11-23T03:31:11.4124191+08:00",
+    "finishedAt": "2026-11-23T03:31:17.6232318+08:00",
+    "runtime": "desktop-packaged-live",
+    "appPath": "",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\initials-after-2.log"
+  }
+]

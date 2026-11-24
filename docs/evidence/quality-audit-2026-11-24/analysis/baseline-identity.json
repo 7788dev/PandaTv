@@ -1,0 +1,800 @@
+{
+  "at": "2026-11-23T18:02:36.660743+00:00",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "43ae0457eb158305072a7c04525db9b8a77b61e4c267a12979a9718d9d91752e",
+      "bytes": 797
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "504f26105e38763ded49976de9ad0723133767078c5c2b13918012ec5d7495a8",
+      "bytes": 2862
+    },
+    {
+      "path": "electron.vite.config.ts",
+      "sha256": "78698c734036249f8ea595f92cad68bbbe35cf7d5b566eb6ee47c03c2535e71c",
+      "bytes": 393
+    },
+    {
+      "path": "git-head.txt",
+      "sha256": "f69dd5931dc9b1a593bcfb2fe552c1b169a31a50b9262f6eb9446767ffc159b9",
+      "bytes": 41
+    },
+    {
+      "path": "identity.json",
+      "sha256": "b186df540d65a291113b168d82067c40692f56cfb44e52de39488091840e0c4b",
+      "bytes": 114
+    },
+    {
+      "path": "package.json",
+      "sha256": "8e1a2c2876c5f69e23f9b9d818910597b7659d8efe110b026f2268059f157bcc",
+      "bytes": 3078
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "568615b01ed282d0a7494f5e4c1161936c5da450037c0fa01a3fc729e677d835",
+      "bytes": 1059
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "6084919c6ad0fc83416c0b48d40e5bc3ec5fa0ea46d7e491e545d91de7d93aa8",
+      "bytes": 515
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "84f34948e6d28f02666c726a03020d2ae1ecbf56fe7e424d372d723bc87fb65d",
+      "bytes": 160
+    },
+    {
+      "path": "resources/play-sources.json",
+      "sha256": "da049729ee6c683d403fda14c4201989fd97b9e92b714ca3b27f70cb1382d2b0",
+      "bytes": 2147
+    },
+    {
+      "path": "resources/search-initials.json",
+      "sha256": "3e0645d605c95de69fc6ce23359f8da871cba024570237ed31dce8cf3b7081e3",
+      "bytes": 53820
+    },
+    {
+      "path": "scripts/asar-check.cjs",
+      "sha256": "bba73e8ae9466f5f515a5799a38b0d2a93024c41de02df54afabfe4b0c48ff3b",
+      "bytes": 930
+    },
+    {
+      "path": "scripts/audit-ads.ts",
+      "sha256": "9badb74478b9e9e8f63d34aa86d9cd08ca91a87c51c38fa5ae1278ac923f1952",
+      "bytes": 8591
+    },
+    {
+      "path": "scripts/ci-release.mjs",
+      "sha256": "6faec9b2c1bc1481e7996f1ebbf2e5ccfccbd7aad8d4b08a5abbd347c6a676f6",
+      "bytes": 7490
+    },
+    {
+      "path": "scripts/ci-release.test.mjs",
+      "sha256": "ccdebfe28859888de83190ef14571d55aeb8150ed649dedb6f7c005c86244d1b",
+      "bytes": 4361
+    },
+    {
+      "path": "scripts/export-tv-vectors.mjs",
+      "sha256": "cd34b8d770a09f1010ba53d26e2603b0eaac82078d78e4300002fe44d99c4a9e",
+      "bytes": 566
+    },
+    {
+      "path": "scripts/export-tv-vectors.ts",
+      "sha256": "a68b39727b9dd578167a3ee0c884d3e826086fad71da46d8729a5e6724051e97",
+      "bytes": 26491
+    },
+    {
+      "path": "scripts/generate-fixture-hls.py",
+      "sha256": "5af762fb84d5923571c6c0005fe3b62db954ee66b7975597a9951a9a6bb88113",
+      "bytes": 1312
+    },
+    {
+      "path": "scripts/install-check.ps1",
+      "sha256": "f3583ea7de9658437db5ee07c408c67d218ef93dece013535a99ccfa9fa6dea7",
+      "bytes": 2868
+    },
+    {
+      "path": "scripts/licenses.mjs",
+      "sha256": "d3ff29ebc8a4b80ab4a662e5e1f329bba006bc2c7dec7d6813c6db0d012ffe8a",
+      "bytes": 1747
+    },
+    {
+      "path": "scripts/probe-filters.ts",
+      "sha256": "ab54e6583e3fdc82c1f16c1a62e488582375c440f3d0a7bc1dffabdd99381e23",
+      "bytes": 3688
+    },
+    {
+      "path": "scripts/probe-sources.ts",
+      "sha256": "71f6fc11725c24b1fb72e0abac3f9d86198a2febc608d2ddd32c250b851bc872",
+      "bytes": 4621
+    },
+    {
+      "path": "scripts/probe-start.ts",
+      "sha256": "014dbd9659522ee06f660d6bc7c10b0d6c69399c8018e1fa1d88c1c52e7f6f8d",
+      "bytes": 5683
+    },
+    {
+      "path": "scripts/probe-startup.mjs",
+      "sha256": "c3ce3278365ba6bafbd5e7e011c3e1d5f38c05bee71404d4fb817a03cb9b4090",
+      "bytes": 3992
+    },
+    {
+      "path": "scripts/sync-search-titles.ts",
+      "sha256": "944e7eede6dca4c3cadff662e643144530ce2e566d5f20c60be059c07e4831f8",
+      "bytes": 9363
+    },
+    {
+      "path": "scripts/tv-device-state.py",
+      "sha256": "ad94ca4b88c3a356d8fe867fdae25379392f81c3ac0e04d9d415de748aafdaba",
+      "bytes": 8413
+    },
+    {
+      "path": "scripts/tv_runtime_helpers.py",
+      "sha256": "e200174aca70baed0ed6330f25f782838636ceefe1bae00612497414cb49183c",
+      "bytes": 7137
+    },
+    {
+      "path": "scripts/uninstall-check.ps1",
+      "sha256": "3f849e1c514e9d7e2608ec7e5f854f73922cc3ce6b92a0e7e65996214bb0975a",
+      "bytes": 1895
+    },
+    {
+      "path": "scripts/verify-tv-motion.py",
+      "sha256": "45574dbfd4314ebec39183a6cdaba91c7322fe2e6a7b79ba9641b20c165aac98",
+      "bytes": 7545
+    },
+    {
+      "path": "scripts/verify-tv-nav-selection.py",
+      "sha256": "f131f6490a57503aedc9507770321a587f0b90e9dbd3119963f2d6f33235117f",
+      "bytes": 6222
+    },
+    {
+      "path": "scripts/verify-tv-navigation.py",
+      "sha256": "985cfa3ad6c246d71ca476ab8d576957fe265bec76d359924c986fca1b03ad00",
+      "bytes": 18278
+    },
+    {
+      "path": "scripts/verify-tv-pagination.py",
+      "sha256": "c4452bf72a239b3c32c2168796b4db3f02b2de7d658e7f30449f96eb0967cf7b",
+      "bytes": 12321
+    },
+    {
+      "path": "scripts/verify-tv-playback-transitions.py",
+      "sha256": "daea09bdd59d87203a79a633e122ffd88bb6bd365cc6d2d52a8ebd225c246419",
+      "bytes": 56061
+    },
+    {
+      "path": "scripts/verify-tv-search-errors.py",
+      "sha256": "8905beaf6973ec2f32a001a11a9c61b0ef7198a8dff5bf1d7ddfca5a7a33910e",
+      "bytes": 7636
+    },
+    {
+      "path": "scripts/verify-tv-search-state.py",
+      "sha256": "807d2426bd522083d1a06b283b48e3288803ef53bc4eaa3d8f1ba2fccfea86a4",
+      "bytes": 4770
+    },
+    {
+      "path": "scripts/verify-tv-state-recovery.py",
+      "sha256": "d068e7572800f8b8b6e6eddf4657da9fd6231ac5753748b6556470d2208283a3",
+      "bytes": 16910
+    },
+    {
+      "path": "scripts/verify-tv-surfaces.py",
+      "sha256": "d08bfd0099ca4f03248490291c553dea3e5d1c38fc8be290f01dd0fbddd7fe34",
+      "bytes": 14546
+    },
+    {
+      "path": "scripts/verify-tv-title-search.py",
+      "sha256": "2bf405a4c6c8f709092ab1adbc93deb82f242bbe703f3ce7fc0b5bf6eb11db0e",
+      "bytes": 8290
+    },
+    {
+      "path": "src/copy.extra.ts",
+      "sha256": "ef39c6d96343cafdb921c940299fc0bd261f851de7f2e7e649b4f5d2dfc004ee",
+      "bytes": 2262
+    },
+    {
+      "path": "tv/app/build.gradle.kts",
+      "sha256": "1074c477bf8e7c11ef5b8081d22845a03b1f2b8e07aa6d91cc1801b91756f6e3",
+      "bytes": 3304
+    },
+    {
+      "path": "tv/app/src/main/res/drawable-xhdpi/tv_banner.png",
+      "sha256": "6fe12e9ff5ed4bf035965bf33d86d2d7877f461adaa9011c1560b95319b5eef1",
+      "bytes": 8673
+    },
+    {
+      "path": "tv/app/src/main/res/layout/tv_home_list.xml",
+      "sha256": "163cd5270c188e503b95019b6bfae5a9aac5a89488a6a7d2abcf54f578d76620",
+      "bytes": 465
+    },
+    {
+      "path": "tv/app/src/main/res/layout/tv_horizontal_grid.xml",
+      "sha256": "ce17613337594cfcc4279ae4fcddf5fc5898f8a49fb52b1d4a8f143567b24b89",
+      "bytes": 467
+    },
+    {
+      "path": "tv/app/src/main/res/layout/tv_vertical_grid.xml",
+      "sha256": "99895428b97f752509fa6042ec6f91464d919fedd884459417eb04b0b22b8f92",
+      "bytes": 464
+    },
+    {
+      "path": "tv/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "1f167088a24ad9d8fd337b1c6e6bf584ef78c14d80fc3a2b4388d0f3ebdb6c36",
+      "bytes": 2918
+    },
+    {
+      "path": "tv/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "1b453160603b7ba14ffe7faf1c05287966cbb1c04c9d7ce0c5b45b4f76106f3b",
+      "bytes": 1964
+    },
+    {
+      "path": "tv/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "3e86a6dc4b4859d098f9f2e79ccb0c689e449e1645e6c4ef39feaffdbaf3b591",
+      "bytes": 3923
+    },
+    {
+      "path": "tv/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "c394bf67ceacd15ac7b6c1009dad8e72aab0d6c252caef12cae76c5f3d0e94f3",
+      "bytes": 5942
+    },
+    {
+      "path": "tv/app/src/main/res/values/colors.xml",
+      "sha256": "77e57d456b1c02cbe97b5f4b6e6e8b72f62fc38a4abf3922d86a92de5dacf668",
+      "bytes": 154
+    },
+    {
+      "path": "tv/app/src/main/res/values/ids.xml",
+      "sha256": "1ddf9084e9514e852c9de2741672280bb4349435664f5f455d8f1346e17370ca",
+      "bytes": 152
+    },
+    {
+      "path": "tv/app/src/main/res/values/strings.xml",
+      "sha256": "4d03f8fd80cec79480e1937546c07a36785380c5ca9e4f132a4c277b2c4d5838",
+      "bytes": 107
+    },
+    {
+      "path": "tv/app/src/main/res/values/styles.xml",
+      "sha256": "44b1926f3b8d05ca46b4d9b4c3f0f88050444b3af4f9bfd380c461609265fe41",
+      "bytes": 553
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/PandaTvApp.kt",
+      "sha256": "4b6b8124acaaa0ff6afa6cc567f6037b39924541aa52e935ba322369fcaa6753",
+      "bytes": 3084
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/DoubanDataSource.kt",
+      "sha256": "37b3aa4e745836162cc0f60d1d87b55ead15ac75a305115e258e2602701274b8",
+      "bytes": 43147
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/DoubanHttp.kt",
+      "sha256": "a22521ce1e7540936b505645cde3ddb65bfe8477dac6375c2547dc993e313053",
+      "bytes": 11826
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/HotSearch.kt",
+      "sha256": "cb10524583a7a5f35aae1b2c6f8ff87bfe29e9e43cee394b959cac690df2f53f",
+      "bytes": 1712
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/MetadataStore.kt",
+      "sha256": "79e473819851f0ea958560fcc4ef8bfe3336afe5082af2158ad79713f6e42c21",
+      "bytes": 9111
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/Normalize.kt",
+      "sha256": "e296b19c67bb30ce70c4ade7730470c9d62b46dfa2a27fb523f96a18e37df852",
+      "bytes": 10554
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/Taxonomy.kt",
+      "sha256": "149d0cba49cfbff91c8f2ba09480f18db1210cd82349d1ebb8628bd2c0ccc830",
+      "bytes": 6810
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/data/TitleSearchIndex.kt",
+      "sha256": "d08dde02960d8d6f52df59a3f55ffb72740db5b90cd5445eee16007b1473bb4f",
+      "bytes": 6585
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/image/ImageLoader.kt",
+      "sha256": "b63c43a1b0a468a6c40cd520b96cc7fa93c3074cbda413da16a295a14838d129",
+      "bytes": 13735
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/model/Adult.kt",
+      "sha256": "1fc266f4d697082a8cae080fb6be8bd7600ebb880dd22844d8fbc1d884550d99",
+      "bytes": 843
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/model/Copy.kt",
+      "sha256": "2b41d99b2d1d155ebae58ba37e985cbba44700e4ebc16a06c399bf6b86e85871",
+      "bytes": 8920
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/model/Json.kt",
+      "sha256": "45cc5316066f9febae9822ca61e8a437bdbfcfdbb51bcf2f3b1cb3513b7052fc",
+      "bytes": 12018
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/model/Rules.kt",
+      "sha256": "0495e7abaddf170c3f25a27c08bd91e8306b1d20c83b0f450738097ed0c61d8f",
+      "bytes": 7300
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/model/Types.kt",
+      "sha256": "eb1b08064832fef3737fc8226a9bbf0f18dd38a620b81751a1a0c567de3125aa",
+      "bytes": 5160
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/net/PublicNetwork.kt",
+      "sha256": "79c02f8548aa83c6e56c3de8870988a419a24dfeeb114e44929f3a9addd169ae",
+      "bytes": 11569
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/net/TlsCompat.kt",
+      "sha256": "ce81b4b133cdff2adf3c22acd88c270ea10bd2d407cf5c6a36cb71873ee7492d",
+      "bytes": 6740
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/DeliverySpeed.kt",
+      "sha256": "61cdfafcc8a1e7b94449ac49e5c7c645741e8988c93c10f989bb5a5920c6babc",
+      "bytes": 1604
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/MediaFetcher.kt",
+      "sha256": "5b5a86f5e32ac4e005b186537d9219ed75bfb47b6793123581b8d01a612a7475",
+      "bytes": 345
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/PandaMediaDataSource.kt",
+      "sha256": "9915a7a82dd3c7340b99d46a21f20c14c9226640a476c0b73323fb4931ab0367",
+      "bytes": 8154
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/PictureSize.kt",
+      "sha256": "f2e615e8355c9ee640fa84c5bab446836d18faa2ba5391aed388ca37e0a5005a",
+      "bytes": 7015
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/PlaybackService.kt",
+      "sha256": "ef09afe8887d97011cdbd880eab21d8e9bb4b7d906aa330cb1d40e73afb97988",
+      "bytes": 64234
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/PlaylistFilter.kt",
+      "sha256": "523761c8204ee91e0d20f597268dbcb7ca6d3f3b157e4ec51a33e255b2a18ef2",
+      "bytes": 10880
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/RemoteSeekTarget.kt",
+      "sha256": "9048f1a9880633b17962c27448c8f13e3829865e0d891397b0b9b85747bcb05c",
+      "bytes": 661
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/SourceRules.kt",
+      "sha256": "3fc99c16f8d3c1e3cf9dcf7432b510cc41c63296efd223c9b8c7e01d90e3e91a",
+      "bytes": 4816
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/playback/WarmMediaCache.kt",
+      "sha256": "cb574fc576d7673bc6a187fe2fd01c7e91bda0e38c5e52c8a88087de049674bf",
+      "bytes": 11381
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/state/UserStateWriter.kt",
+      "sha256": "b5c241c64e016d352b517f4424d2fd3f1489bcafc1a61d4c7d847f96e7a8cebe",
+      "bytes": 2000
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/state/UserStore.kt",
+      "sha256": "96b916948078a0a0318ee7419c2b3634debca962be1bc1d6ab0788e70e3bcc35",
+      "bytes": 10433
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/ChannelPageState.kt",
+      "sha256": "2cdd5d2d980f95c0e10f6157dc64a789881e1d0f358e107f79471c7776b34091",
+      "bytes": 430
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/ChannelScreen.kt",
+      "sha256": "3f5c8ee62ff2378a28f473c1df6b81ba959bc66d38921e22ba6a1e2176ce3c7d",
+      "bytes": 20283
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/DetailScreen.kt",
+      "sha256": "4383579342114efe16679ca1aafea012c150f6420dfa3a395f968450e755eb47",
+      "bytes": 32869
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/HomeScreen.kt",
+      "sha256": "f12340314bc060cc85a22bb72a73a1c761102f063026b0de874b8f9d2aa4cd4b",
+      "bytes": 35341
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/MainActivity.kt",
+      "sha256": "7306dc39371da5d5e0584c19daf1f4d25a1c7161fe2a61863474fcef1c674047",
+      "bytes": 24369
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/MeScreen.kt",
+      "sha256": "cf96af8b12fc729889a6262ec1e8b89c4893928cba1ad30b92b504680970d43c",
+      "bytes": 15975
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PersonScreen.kt",
+      "sha256": "f09754ff6c04248540b31fcdd9d3097b2cb4d6ee0c59705874faad9fa187bfbf",
+      "bytes": 9867
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PlaybackBufferPolicy.kt",
+      "sha256": "384b919346914e5466ce2c7b87c518512648769963bbce0858d785d8bdb505d7",
+      "bytes": 756
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PlaybackPreferences.kt",
+      "sha256": "ccc6c80d759f73acdc3d5c4553d649f0abc5c7b1cb6a854528e76999c42487f3",
+      "bytes": 820
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PlaybackProgressPolicy.kt",
+      "sha256": "3bf3064eea0c99d1823a40ce33c0b34bde751e579f44015d5965a31ecbbd6aa9",
+      "bytes": 867
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PlaybackSpeedPolicy.kt",
+      "sha256": "3eaafbfc310ee8ddb67b02419bb2f1c642232f722914b9b1665738b038ddde20",
+      "bytes": 3809
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PlayerScreen.kt",
+      "sha256": "a34cb0e3c0cfa3e2581f811f58b124f70d36caeedaf695f65f087f2b7790399a",
+      "bytes": 64164
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/PosterPage.kt",
+      "sha256": "8bdfd0751c30feca57596cc57b006ed2c529cae5d74678d58bdbf30a20e1752a",
+      "bytes": 6295
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/RecoveryScreen.kt",
+      "sha256": "aaab4322a7cf3fea9ccf284bc3db4b35e4d9bbceb1209c64e92c2079df859a28",
+      "bytes": 2966
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/Screen.kt",
+      "sha256": "6bcc75dd2573c63c71d13dc9f1abe020f1c752fb6fea70225ecc1259807efdef",
+      "bytes": 3800
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/SearchRequest.kt",
+      "sha256": "dad4c828901f522feafa9811ff3f47b3e3d284f8ae0b2f043aa24a9152abf0ee",
+      "bytes": 789
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/SearchScreen.kt",
+      "sha256": "5979efa7a5f9fecc10efd4e67c3d54187b7981bcb31baf81ad0020966fc36f2b",
+      "bytes": 26711
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/SettingsScreen.kt",
+      "sha256": "9a80548226febebd7e1d5c98a26d60c089f53fd2073cf58b8dabc143e45d7fd4",
+      "bytes": 8214
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/Theme.kt",
+      "sha256": "6f9c91a3171bbab86ed204567b2a296a264700dd8c4f7670b219da3ba0abd270",
+      "bytes": 38986
+    },
+    {
+      "path": "tv/app/src/main/java/app/panda/tv/ui/TvIcons.kt",
+      "sha256": "c968586d0ba00a5af940030eee64bbaa2ae05d773ed8943b147bee85bf3a2322",
+      "bytes": 9409
+    },
+    {
+      "path": "src/contract/constants.ts",
+      "sha256": "a4b2206c2e13c4e6eeef73514e4694a16796bd06e90f8a1f8b9f21d36ccdbe2c",
+      "bytes": 3251
+    },
+    {
+      "path": "src/contract/copy.ts",
+      "sha256": "f328dcf7820cd5ef783d22c2c99b987a119429956de1ab31f84edb9272cf450b",
+      "bytes": 678
+    },
+    {
+      "path": "src/contract/rules.ts",
+      "sha256": "894b4139f27d9d1ed272b10e08def84f30abdf5f8d46f1f9ee518484a9facf9e",
+      "bytes": 10738
+    },
+    {
+      "path": "src/contract/types.ts",
+      "sha256": "c945f51e9198d33b1e9699a66d4e32872e2a65f730d29d3e946d310f1e93c912",
+      "bytes": 7980
+    },
+    {
+      "path": "src/contract/zh-CN.json",
+      "sha256": "b99d4aa24f26313cbcef5cdb991fada686c6b1cd2f0818efeddf5d0fc945ea07",
+      "bytes": 3710
+    },
+    {
+      "path": "src/main/adult.ts",
+      "sha256": "5578e8c997a136510bc2b74baa685791369ae766d42902fdc7f0867fc833eb59",
+      "bytes": 702
+    },
+    {
+      "path": "src/main/egress.ts",
+      "sha256": "ec725e66fc7c3dfa1264e750d0fa8b9f9ec0ea4e5519529e38df78d4f19e0e7f",
+      "bytes": 4475
+    },
+    {
+      "path": "src/main/handshake.ts",
+      "sha256": "e97c29522e209102fbbb332545a4810e909c3de71f030b9ba6671508464d6ca7",
+      "bytes": 1259
+    },
+    {
+      "path": "src/main/index.ts",
+      "sha256": "9a562070ea57b7c6725418382d039bb7385c9f7975220919d1b0a8df474c5d13",
+      "bytes": 13114
+    },
+    {
+      "path": "src/main/ipc.ts",
+      "sha256": "eb57acbe32f898895881233f0c7f09c78ac5839561c7fd31a634ba19367f6660",
+      "bytes": 8327
+    },
+    {
+      "path": "src/main/state.ts",
+      "sha256": "e824ec46e3e6bbcd90ccaa532eaacb467bc4547c1638d9fefa1a09fcdcc5c858",
+      "bytes": 7076
+    },
+    {
+      "path": "src/main/updates.ts",
+      "sha256": "028e700c464b1ef51c379ae87bb8e7b3bc998fcec6c524443008a1e5c4cb0163",
+      "bytes": 1304
+    },
+    {
+      "path": "src/preload/index.ts",
+      "sha256": "ffb02c2f468a35bfc783247682af68ed9e2d4c75caa92858122fea16e6cd042c",
+      "bytes": 3037
+    },
+    {
+      "path": "src/renderer/app.css",
+      "sha256": "a0b10dac3f839a7be7d2d1efa0e489a802ffa6f494fddf9bf8f25c5d3c57ce3f",
+      "bytes": 7133
+    },
+    {
+      "path": "src/renderer/App.tsx",
+      "sha256": "8ad8b40314d858f85d2c34d47c04ac174b50d9855f7fd8156a204d1df7512d9a",
+      "bytes": 18949
+    },
+    {
+      "path": "src/renderer/components.tsx",
+      "sha256": "65c859c4570bbba45109084ae8ea5f9718c70e748902b9919b1e4297ca31ffb4",
+      "bytes": 15802
+    },
+    {
+      "path": "src/renderer/index.html",
+      "sha256": "95c2cba64b3b5aaa1a1675e59f1269d3aafde1ba2cee4fe79fc69e0910b7369f",
+      "bytes": 629
+    },
+    {
+      "path": "src/renderer/library.ts",
+      "sha256": "017845408ee395f3cbe5e53453b2c74d26506c86011ac25b6a88a72f7f0d6ccf",
+      "bytes": 3798
+    },
+    {
+      "path": "src/renderer/main.tsx",
+      "sha256": "553539056b5a701400888c76c940f7f5f251b6c3b0b90db0b381a9eeffee3062",
+      "bytes": 306
+    },
+    {
+      "path": "src/renderer/page-memory.ts",
+      "sha256": "288137bbe911c94929c6380366b04e257fede7a0402c6634165ef38c23bb3d84",
+      "bytes": 2794
+    },
+    {
+      "path": "src/renderer/pages.tsx",
+      "sha256": "74a270d9e60f9752dc6f5adf78b8712c6b10b6acf40758a88e65afe186e79679",
+      "bytes": 31030
+    },
+    {
+      "path": "src/renderer/playback-adaptation.ts",
+      "sha256": "500a30ce1b3259c9b2a09be471f313838938442eede883a98d500981a98e486d",
+      "bytes": 2206
+    },
+    {
+      "path": "src/renderer/playback-preferences.ts",
+      "sha256": "f0ba460339c49326c6b96a9a0816f657adc6e59696ae9e415662a1cd47c3c184",
+      "bytes": 1258
+    },
+    {
+      "path": "src/renderer/player-model.ts",
+      "sha256": "cff9a027999060707822adc645ed4e6359dfbafd7573192dfc64a260ce93bb49",
+      "bytes": 2301
+    },
+    {
+      "path": "src/renderer/Player.tsx",
+      "sha256": "6de99d2644af21790cf986004bed5c044c8a4eabfce0a5627de7ef8a38c3c148",
+      "bytes": 39027
+    },
+    {
+      "path": "src/renderer/router.ts",
+      "sha256": "74619a0cec919a33620ab8fea7f765df7a2c158257111dbabd4e0ff7f0c10b0c",
+      "bytes": 1889
+    },
+    {
+      "path": "src/renderer/state.tsx",
+      "sha256": "0a1ac0ef1eaae47bc427a900b881350ed0ac9d66b03975a8ee97285874a77345",
+      "bytes": 8285
+    },
+    {
+      "path": "src/shared/api.ts",
+      "sha256": "427e9ce6b5e7e4a4515ae087a1fc4715634e3f4e3f77a7b84ccefb3fdb6cfa76",
+      "bytes": 3906
+    },
+    {
+      "path": "src/shared/rpc.ts",
+      "sha256": "4e1b2d8d7837a250390935092149db95e7b653fa7eb6488c2a38a31f44424c5b",
+      "bytes": 284
+    },
+    {
+      "path": "src/shared/title-search.ts",
+      "sha256": "f89f58571ccf60953ed76b83a21db2cf194bb71ceb48c57d547fcf8d74e69fe8",
+      "bytes": 5528
+    },
+    {
+      "path": "src/renderer/brand/logo-mark.svg",
+      "sha256": "859962e4afd7d1bbba52d59048617f76949736082ba33b62944256da3f59b1e2",
+      "bytes": 630
+    },
+    {
+      "path": "src/renderer/icons/names.ts",
+      "sha256": "be38217839a7e5857bd27fceeb755d8f2fc211dfe8e704c17393523f0bda8ee4",
+      "bytes": 1026
+    },
+    {
+      "path": "src/renderer/icons/sprite.svg",
+      "sha256": "7d84276b77d4da81e568fb46c6f14ce93a4cfffe180318fca3a610899ee6eb7a",
+      "bytes": 11092
+    },
+    {
+      "path": "src/renderer/styles/base.css",
+      "sha256": "0594393d98bdc66c7148a3c0655f47f35e0958d7a02a750299b41df4461f832c",
+      "bytes": 5304
+    },
+    {
+      "path": "src/renderer/styles/controls.css",
+      "sha256": "b8087781ddc0dd8e1d9a650a11544b8ee01f0ed0bd78201c14a65199ce66db87",
+      "bytes": 13045
+    },
+    {
+      "path": "src/renderer/styles/index.css",
+      "sha256": "e14b38a2f2f5a5b721606f1fb9788adf37ef458b3cae32d20c6aeb873afb6a6e",
+      "bytes": 934
+    },
+    {
+      "path": "src/renderer/styles/layout.css",
+      "sha256": "877a7eb7db547a3d17cbfceb0ae5944ca309e65f805e661bb14175b3de8a772d",
+      "bytes": 7608
+    },
+    {
+      "path": "src/renderer/styles/media.css",
+      "sha256": "575a7e504468a2f7c0cadc3b692988624a82d14ceafbffdb9e38289a992a9179",
+      "bytes": 19433
+    },
+    {
+      "path": "src/renderer/styles/motion.css",
+      "sha256": "451405bb6ae79449954c112c9c9f3c69bc697ae56f9f201605106f74aabcfafc",
+      "bytes": 2555
+    },
+    {
+      "path": "src/renderer/styles/overlays.css",
+      "sha256": "82e7c5c8fe0f45d69a765603e6195a11f69d1eb890d30e2e128d2c9c1e99263a",
+      "bytes": 6321
+    },
+    {
+      "path": "src/renderer/styles/pages.css",
+      "sha256": "66505e07512495136793d49e982f1e97942b203a8b6d47312afba932de3d5ad6",
+      "bytes": 5575
+    },
+    {
+      "path": "src/renderer/styles/player.css",
+      "sha256": "920a1044621d68c48399f490e3f8dedec2611f79444157ac9b1c71bee026accd",
+      "bytes": 11829
+    },
+    {
+      "path": "src/renderer/styles/tokens.css",
+      "sha256": "d5106097bc246ef0a5a267dd42e9962f88d8041430472b38df34160de9524e3b",
+      "bytes": 6509
+    },
+    {
+      "path": "src/renderer/styles/topbar.css",
+      "sha256": "4c5ecfdf5e620d4a8fa07adeb979794cf5629161b633dce5ae9b68cd7f954751",
+      "bytes": 7809
+    },
+    {
+      "path": "src/main/data/douban.ts",
+      "sha256": "dade3d2503edb73966cbfb19d00da05177e5a96df9fc63ed206670e86e49d7c5",
+      "bytes": 38239
+    },
+    {
+      "path": "src/main/data/hot-search.ts",
+      "sha256": "8e967a734b045aec1a68ffa73d14cb280aa25b525b3364ead51ad86949fa6c7b",
+      "bytes": 1402
+    },
+    {
+      "path": "src/main/data/http.ts",
+      "sha256": "72cbb3e612d7a6a9d9a6faebbc916e019755b7b0131f3b188a45afc23c242fa4",
+      "bytes": 10961
+    },
+    {
+      "path": "src/main/data/normalize.ts",
+      "sha256": "24e90fca2b790547db3a4573a10f5705ff14b569f319c7a90d4f9e08b5abfa27",
+      "bytes": 9900
+    },
+    {
+      "path": "src/main/data/store.ts",
+      "sha256": "e696c7d886f3cabc8ae18f093f67f11bf3c9aa46c0ccf6d7ba88f8b22798034c",
+      "bytes": 4991
+    },
+    {
+      "path": "src/main/data/taxonomy.ts",
+      "sha256": "aa19f040cc0d146044498e5944e411d9e96de3eff65ec9a2290919215d29109e",
+      "bytes": 6977
+    },
+    {
+      "path": "src/main/data/title-search.ts",
+      "sha256": "7da90b4eeaff4a32c18ed678d34b48b438ade4be08e4ee24f2b93eaced98f541",
+      "bytes": 1170
+    },
+    {
+      "path": "src/main/data/transport.ts",
+      "sha256": "6f494cc6772101018985001a8ac782a7850bcd8485e765e389fd94271d0f3e94",
+      "bytes": 3854
+    },
+    {
+      "path": "src/main/playback/delivery.ts",
+      "sha256": "3ef293e1753f1a5b92371148582991305ea00e2dd0dd07d65a3bb4c50b5f29a4",
+      "bytes": 1673
+    },
+    {
+      "path": "src/main/playback/filter.ts",
+      "sha256": "21418174f731732708863f56f5d3e8d745bfb64b99e4a6b4d704031b4e25cf20",
+      "bytes": 9330
+    },
+    {
+      "path": "src/main/playback/image-cache.ts",
+      "sha256": "f79e16d0b5cb3706c520faebcd8ed6576b1605cc5a5a3f669dca24530444b231",
+      "bytes": 5130
+    },
+    {
+      "path": "src/main/playback/network.ts",
+      "sha256": "ff9d230a963d76b9e7ed362987ea3ce47e2ca22868d1cfcd27428db6cbd36724",
+      "bytes": 11984
+    },
+    {
+      "path": "src/main/playback/picture.ts",
+      "sha256": "fc5d1d0416b2c6d5279fcbdcad141ad8d311489c2e6557d7cb5988deb81433f9",
+      "bytes": 5414
+    },
+    {
+      "path": "src/main/playback/proxy.ts",
+      "sha256": "be5f0d187899d528436c32631326ba6106817f4acf485604efdaea92b582b44b",
+      "bytes": 20154
+    },
+    {
+      "path": "src/main/playback/service.ts",
+      "sha256": "2662b9529e00314797ecea6cd7a48dbd05182f4d05c4c0dae3370891a2d6926d",
+      "bytes": 55748
+    },
+    {
+      "path": "src/main/playback/sources.ts",
+      "sha256": "f5020e6bf4b12edf7ee7d33963fe09aaaeec4ed083d12f7de7d294449a452b6b",
+      "bytes": 3773
+    }
+  ]
+}

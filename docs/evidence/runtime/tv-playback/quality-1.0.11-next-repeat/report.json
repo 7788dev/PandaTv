@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-20T14:54:19.916236+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "episode-switch",
+      "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '0.0', '暂停', '下一集', '00:00 / 1:00:35', '选集', '1080P', '倍速']"
+    }
+  ],
+  "version": "1.0.11",
+  "apkSha256": "DBE87AB2DA072E008CDE164655A7E8BB02EE158AE0A77752E310BC16A65BC363",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

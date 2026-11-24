@@ -1,0 +1,209 @@
+{
+  "at": "2026-11-24T15:26:33.139420+00:00",
+  "cases": [
+    {
+      "name": "line-switch-1",
+      "passed": true,
+      "selectedSubject": {
+        "requestedTitle": "八仙！",
+        "rating": null,
+        "focusedLabels": [
+          "8.2",
+          "八仙！",
+          "喜剧 / 动画 / 奇幻 / 冒险"
+        ],
+        "bounds": [
+          97,
+          399,
+          366,
+          895
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "selectedLine": "360资源",
+      "controls": {
+        "texts": [
+          "返回",
+          "八仙！",
+          "0.0",
+          "暂停",
+          "00:02 / 2:23:16",
+          "线路: 非凡资源",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:02 / 2:23:16",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1199,
+            945,
+            1496,
+            1017
+          ],
+          "labels": [
+            "线路: 非凡资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 255
+      },
+      "before": {
+        "texts": [
+          "线路",
+          "非凡资源 ✓",
+          "360资源"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.TextView",
+          "bounds": [
+            1264,
+            280,
+            1810,
+            370
+          ],
+          "labels": [
+            "360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 119
+      },
+      "pending": [
+        {
+          "texts": [
+            "返回",
+            "八仙！",
+            "正在切换线路",
+            "0.0",
+            "暂停",
+            "00:04 / 2:23:16",
+            "线路: 非凡资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:23:16",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 非凡资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "八仙！",
+            "0.0",
+            "暂停",
+            "00:04 / 2:23:16",
+            "线路: 非凡资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:04 / 2:23:16",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 非凡资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        },
+        {
+          "texts": [
+            "返回",
+            "八仙！",
+            "0.0",
+            "暂停",
+            "00:05 / 2:23:16",
+            "线路: 非凡资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:05 / 2:23:16",
+          "player": true,
+          "spinner": false,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1199,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 非凡资源"
+            ]
+          },
+          "loadingRegionMaxRgb": 255
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "八仙！",
+          "0.0",
+          "暂停",
+          "00:07 / 2:23:16",
+          "线路: 360资源",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:07 / 2:23:16",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1208,
+            945,
+            1496,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源"
+          ]
+        },
+        "loadingRegionMaxRgb": 190
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "7688BF38BFE8DBD751B485A6898B32EDF18ADC9917FC43B756E33820D798AB3B",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

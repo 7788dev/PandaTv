@@ -8,14 +8,49 @@ import app.panda.tv.model.Settings
 import app.panda.tv.model.StateAction
 import app.panda.tv.model.UserState
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.UUID
+
+data class StateRecovery(val needed: Boolean, val canRestore: Boolean)
 
 class UserStore(private val file: File) {
     private val lock = Any()
     private val listeners = ArrayList<(UserState) -> Unit>()
-    private var state: UserState = loadOrDefault()
+    private var state: UserState = initialUserState()
+    private var loadError: Exception? = null
+    private val backup = File(file.parentFile, "${file.name}.bak")
 
-    fun get(): UserState = synchronized(lock) { state }
+    init {
+        if (file.exists()) {
+            try { state = parse(file.readText(Charsets.UTF_8)) }
+            catch (error: Exception) { loadError = error }
+        }
+    }
+
+    fun get(): UserState = synchronized(lock) { requireHealthy(); state }
+
+    fun recovery(): StateRecovery = synchronized(lock) {
+        if (loadError == null) StateRecovery(false, false) else StateRecovery(true, backupState() != null)
+    }
+
+    fun recover(restoreBackup: Boolean): UserState = synchronized(lock) {
+        if (loadError == null) throw IllegalStateException("INVALID_INPUT")
+        val next = if (restoreBackup) backupState() ?: throw IOException("STATE_CORRUPT") else initialUserState()
+        // Recovery is explicit. Keep the original bytes before replacing the active file.
+        if (file.exists()) writeAtomic(File(file.parentFile, "${file.name}.corrupt-${UUID.randomUUID()}"), file.readBytes())
+        if (backup.exists()) writeAtomic(File(file.parentFile, "${backup.name}.recovery-${UUID.randomUUID()}"), backup.readBytes())
+        writeAtomic(file, serialize(next).toByteArray(Charsets.UTF_8))
+        state = next
+        loadError = null
+        next
+    }
+
+    private fun requireHealthy() {
+        loadError?.let { throw IllegalStateException("STATE_CORRUPT", it) }
+    }
+
+    private fun backupState(): UserState? = try { parse(backup.readText(Charsets.UTF_8)) } catch (_: Exception) { null }
 
     fun subscribe(listener: (UserState) -> Unit): () -> Unit {
         synchronized(lock) { listeners.add(listener) }
@@ -26,8 +61,9 @@ class UserStore(private val file: File) {
         val snapshot: UserState
         val targets: List<(UserState) -> Unit>
         synchronized(lock) {
+            requireHealthy()
             val next = reduce(state, action)
-            saveAtomic(next)
+            saveAtomic(next, if (file.exists()) state else next)
             state = next
             snapshot = next
             targets = listeners.toList()
@@ -36,27 +72,39 @@ class UserStore(private val file: File) {
         return snapshot
     }
 
-    private fun loadOrDefault(): UserState {
-        if (!file.exists()) return initialUserState()
-        return try {
-            val root = Json.parseObject(file.readText(Charsets.UTF_8))
+    private fun parse(text: String): UserState {
+            val root = Json.parseObject(text)
+            require(root["favorites"] is List<*> && root["history"] is List<*> && root["searches"] is List<*> && root["settings"] is Map<*, *>) { "STATE_CORRUPT" }
             val favs = Json.list(root["favorites"]).mapNotNull { it as? String }.filter { VALID_ID.matches(it) }.distinct().take(10000)
             val hist = Json.list(root["history"]).mapNotNull { parseHistory(it) }.take(10000)
             val searches = Json.list(root["searches"]).mapNotNull { it as? String }.filter { it.length <= 200 }.take(Constants.RECENT_SEARCH_MAX)
             val settings = parseSettings(Json.row(root["settings"]))
-            UserState(favs, hist, searches, settings)
-        } catch (_: Exception) {
-            initialUserState()
-        }
+            return UserState(favs, hist, searches, settings)
     }
 
-    private fun saveAtomic(next: UserState) {
-        file.parentFile?.mkdirs()
-        val tmp = File(file.parentFile, "${file.name}.${UUID.randomUUID()}.tmp")
-        tmp.writeText(serialize(next), Charsets.UTF_8)
-        if (!tmp.renameTo(file)) {
-            file.writeText(tmp.readText(Charsets.UTF_8), Charsets.UTF_8)
+    private fun saveAtomic(next: UserState, previous: UserState) {
+        // Back up a known valid snapshot before committing the active file.
+        writeAtomic(backup, serialize(previous).toByteArray(Charsets.UTF_8))
+        writeAtomic(file, serialize(next).toByteArray(Charsets.UTF_8))
+    }
+
+    private fun writeAtomic(target: File, bytes: ByteArray) {
+        val parent = target.parentFile ?: throw IOException("Missing state directory")
+        if (!parent.isDirectory && !parent.mkdirs()) throw IOException("Cannot create state directory")
+        val tmp = File(parent, "${target.name}.${UUID.randomUUID()}.tmp")
+        val rollback = File(parent, "${target.name}.${UUID.randomUUID()}.rollback")
+        try {
+            FileOutputStream(tmp).use { output -> output.write(bytes); output.fd.sync() }
+            if (tmp.renameTo(target)) return
+            // Windows cannot rename over an existing file. Never fall back to truncating it.
+            if (!target.isFile || !target.renameTo(rollback)) throw IOException("Cannot replace state file")
+            if (!tmp.renameTo(target)) {
+                if (!rollback.renameTo(target)) throw IOException("Cannot restore state file")
+                throw IOException("Cannot commit state file")
+            }
+        } finally {
             tmp.delete()
+            if (target.isFile) rollback.delete()
         }
     }
 

@@ -1,0 +1,79 @@
+{
+  "at": "2026-11-22T18:47:21.533169+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "home-1",
+      "passed": true,
+      "frames": {
+        "totalFrames": 171,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "heroReturnComplete": true
+    },
+    {
+      "name": "channel-expanded-1",
+      "passed": true,
+      "frames": {
+        "totalFrames": 270,
+        "jankyFrames": 1,
+        "jankPct": 0.37,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "inputTypes": [
+        "paced-dpad_down",
+        "paced-dpad_up",
+        "rapid-20",
+        "rapid-19",
+        "held-down-1250ms"
+      ]
+    },
+    {
+      "name": "home-2",
+      "passed": true,
+      "frames": {
+        "totalFrames": 171,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "heroReturnComplete": true
+    },
+    {
+      "name": "channel-expanded-2",
+      "passed": true,
+      "frames": {
+        "totalFrames": 270,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "inputTypes": [
+        "paced-dpad_down",
+        "paced-dpad_up",
+        "rapid-20",
+        "rapid-19",
+        "held-down-1250ms"
+      ]
+    }
+  ],
+  "passed": 4,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {},
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/motion/report.json",
+  "rawSha256": "87CAF0BDDD434CC3B99FE18522E7D856A55AAEF12679A73830BDFB80D3E909EF"
+}

@@ -105,7 +105,7 @@ object Rules {
         hasNext: Boolean,
     ): HistoryEntry {
         return if (hasNext && isFinished(position, duration)) {
-            HistoryEntry(id, episode + 1, 0.0, duration, 0L)
+            HistoryEntry(id, episode + 1, 0.0, 0.0, 0L)
         } else {
             HistoryEntry(id, episode, floor(position), duration, 0L)
         }

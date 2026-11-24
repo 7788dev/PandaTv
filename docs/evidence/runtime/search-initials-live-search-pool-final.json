@@ -1,0 +1,597 @@
+{
+  "at": "2026-11-20T10:01:51.479Z",
+  "cases": [
+    {
+      "query": "LBXX",
+      "expectedTitle": "蜡笔小新",
+      "searchMs": 2609,
+      "results": [
+        {
+          "id": "db-1431683",
+          "title": "蜡笔小新",
+          "type": "anime",
+          "year": 1992
+        },
+        {
+          "id": "db-26334999",
+          "title": "蜡笔小新SP10",
+          "type": "movie",
+          "year": 2001
+        },
+        {
+          "id": "db-26894593",
+          "title": "蜡笔小新：宇宙人来袭！！",
+          "type": "anime",
+          "year": 2017
+        },
+        {
+          "id": "db-3044835",
+          "title": "蜡笔小新：云黑斋的野心",
+          "type": "anime",
+          "year": 1995
+        },
+        {
+          "id": "db-1958667",
+          "title": "蜡笔小新：大人王国的反击",
+          "type": "anime",
+          "year": 2001
+        },
+        {
+          "id": "db-35693381",
+          "title": "蜡笔小新：好别致的影分身",
+          "type": "anime",
+          "year": 2022
+        },
+        {
+          "id": "db-26660834",
+          "title": "蜡笔小新：梦境世界大突击",
+          "type": "anime",
+          "year": 2016
+        },
+        {
+          "id": "db-36680405",
+          "title": "蜡笔小新：我们的恐龙日记",
+          "type": "anime",
+          "year": 2024
+        },
+        {
+          "id": "db-3044878",
+          "title": "蜡笔小新：奇异乐园大冒险",
+          "type": "anime",
+          "year": 1996
+        },
+        {
+          "id": "db-1722041",
+          "title": "蜡笔小新：黑暗珠珠大追击",
+          "type": "anime",
+          "year": 1997
+        },
+        {
+          "id": "db-26915519",
+          "title": "蜡笔小新外传2 玩具大战",
+          "type": "anime",
+          "year": 2016
+        },
+        {
+          "id": "db-27021118",
+          "title": "蜡笔小新外传3 带家之狼",
+          "type": "anime",
+          "year": 2017
+        },
+        {
+          "id": "db-3044673",
+          "title": "蜡笔小新：呼唤传说！跳吧！朋友！",
+          "type": "anime",
+          "year": 2006
+        },
+        {
+          "id": "db-3053397",
+          "title": "蜡笔小新：电击！猪之蹄大作战",
+          "type": "anime",
+          "year": 1998
+        },
+        {
+          "id": "db-37161026",
+          "title": "蜡笔小新：灼热的春日部舞者们",
+          "type": "anime",
+          "year": 2025
+        },
+        {
+          "id": "db-3055303",
+          "title": "蜡笔小新：呼风唤雨！战国大合战",
+          "type": "anime",
+          "year": 2002
+        },
+        {
+          "id": "db-2333699",
+          "title": "蜡笔小新：呼风唤雨的热带雨林",
+          "type": "anime",
+          "year": 2000
+        },
+        {
+          "id": "db-36188869",
+          "title": "蜡笔小新：新次元！超能力大决战",
+          "type": "anime",
+          "year": 2023
+        },
+        {
+          "id": "db-3732550",
+          "title": "蜡笔小新：呐喊！春日部野生王国",
+          "type": "anime",
+          "year": 2009
+        },
+        {
+          "id": "db-3054944",
+          "title": "蜡笔小新：爆发！温泉火热大决战",
+          "type": "anime",
+          "year": 1999
+        },
+        {
+          "id": "db-3041773",
+          "title": "蜡笔小新：呼风唤雨！金矛之勇者",
+          "type": "anime",
+          "year": 2008
+        },
+        {
+          "id": "db-27191288",
+          "title": "蜡笔小新外传4 妖怪与新之助",
+          "type": "anime",
+          "year": 2017
+        },
+        {
+          "id": "db-6960858",
+          "title": "蜡笔小新：风起云涌！我的宇宙公主",
+          "type": "anime",
+          "year": 2012
+        },
+        {
+          "id": "db-1926812",
+          "title": "蜡笔小新：动感超人大战泳装魔王",
+          "type": "anime",
+          "year": 1993
+        },
+        {
+          "id": "db-26860066",
+          "title": "蜡笔小新外传 外星人vs新之助",
+          "type": "anime",
+          "year": 2016
+        },
+        {
+          "id": "db-35185532",
+          "title": "蜡笔小新×假面骑士卌骑 特别联动",
+          "type": "anime",
+          "year": 2012
+        },
+        {
+          "id": "db-35286583",
+          "title": "蜡笔小新：谜团！花之天下春日部学院",
+          "type": "anime",
+          "year": 2021
+        },
+        {
+          "id": "db-20438548",
+          "title": "蜡笔小新：超级美味！B级美食大逃亡！",
+          "type": "anime",
+          "year": 2013
+        },
+        {
+          "id": "db-3041614",
+          "title": "蜡笔小新：呼风唤雨！光荣的烤肉之路",
+          "type": "anime",
+          "year": 2003
+        },
+        {
+          "id": "db-1926790",
+          "title": "蜡笔小新：卟哩卟哩王国的秘密宝藏",
+          "type": "anime",
+          "year": 1994
+        },
+        {
+          "id": "db-4907844",
+          "title": "蜡笔小新 超时空！呼风唤雨的我的新娘",
+          "type": "anime",
+          "year": 2010
+        },
+        {
+          "id": "db-34811098",
+          "title": "蜡笔小新：激战！涂鸦王国和约四位勇士",
+          "type": "anime",
+          "year": 2020
+        },
+        {
+          "id": "db-25792824",
+          "title": "蜡笔小新：决一胜负！逆袭的机器人爸爸",
+          "type": "anime",
+          "year": 2014
+        },
+        {
+          "id": "db-26280899",
+          "title": "蜡笔小新：我的搬家物语 仙人掌大袭击",
+          "type": "anime",
+          "year": 2015
+        },
+        {
+          "id": "db-5387015",
+          "title": "蜡笔小新：呼风唤雨！黄金的间谍大作战",
+          "type": "anime",
+          "year": 2011
+        },
+        {
+          "id": "db-2363855",
+          "title": "蜡笔小新：呼风唤雨！会唱歌的屁股炸弹",
+          "type": "anime",
+          "year": 2007
+        },
+        {
+          "id": "db-3056455",
+          "title": "蜡笔小新：呼唤传说！三分钟嘎巴大进攻",
+          "type": "anime",
+          "year": 2005
+        },
+        {
+          "id": "db-1962611",
+          "title": "蜡笔小新：呼风唤雨！夕阳下的春日部男孩",
+          "type": "anime",
+          "year": 2004
+        },
+        {
+          "id": "db-30394807",
+          "title": "蜡笔小新：新婚旅行飓风之遗失的野原广志",
+          "type": "anime",
+          "year": 2019
+        },
+        {
+          "id": "db-35918569",
+          "title": "蜡笔小新SP 盛夏之夜 老子，登场! 呼风唤雨! 假面骑士电王VS新王",
+          "type": "anime",
+          "year": 2007
+        },
+        {
+          "id": "db-37937711",
+          "title": "电影蜡笔小新 离奇古怪！我的妖怪假期",
+          "type": "anime",
+          "year": 2026
+        },
+        {
+          "id": "db-37315509",
+          "title": "另一个蜡笔小新 茶壶家族登场了喔～！第一季",
+          "type": "tv",
+          "year": 2025
+        },
+        {
+          "id": "db-38413018",
+          "title": "另一个蜡笔小新 茶壶家族登场了喔～！第二季",
+          "type": "tv",
+          "year": 2026
+        },
+        {
+          "id": "db-38602364",
+          "title": "拿着锤子的蜡笔小新和叮七",
+          "type": "movie",
+          "year": 1998
+        },
+        {
+          "id": "db-3338873",
+          "title": "伊丽卡·鲁克斯",
+          "type": "movie",
+          "year": 2010
+        },
+        {
+          "id": "db-1892452",
+          "title": "暗域魔舰 第一季",
+          "type": "tv",
+          "year": 1997
+        },
+        {
+          "id": "db-25723960",
+          "title": "暗域魔舰 第二季",
+          "type": "tv",
+          "year": 1998
+        },
+        {
+          "id": "db-4230525",
+          "title": "暗域魔舰：黑暗地带",
+          "type": "tv",
+          "year": 1997
+        },
+        {
+          "id": "db-25723965",
+          "title": "暗域魔舰 第三季",
+          "type": "tv",
+          "year": 2000
+        },
+        {
+          "id": "db-25723969",
+          "title": "暗域魔舰 第四季",
+          "type": "tv",
+          "year": 2001
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1431683",
+          "title": "蜡笔小新"
+        },
+        {
+          "id": "db-26334999",
+          "title": "蜡笔小新SP10"
+        },
+        {
+          "id": "db-26894593",
+          "title": "蜡笔小新：宇宙人来袭！！"
+        },
+        {
+          "id": "db-3044835",
+          "title": "蜡笔小新：云黑斋的野心"
+        },
+        {
+          "id": "db-1958667",
+          "title": "蜡笔小新：大人王国的反击"
+        },
+        {
+          "id": "db-35693381",
+          "title": "蜡笔小新：好别致的影分身"
+        },
+        {
+          "id": "db-26660834",
+          "title": "蜡笔小新：梦境世界大突击"
+        },
+        {
+          "id": "db-36680405",
+          "title": "蜡笔小新：我们的恐龙日记"
+        }
+      ]
+    },
+    {
+      "query": "cqsl",
+      "expectedTitle": "重庆森林",
+      "searchMs": 314,
+      "results": [
+        {
+          "id": "db-1291999",
+          "title": "重庆森林",
+          "type": "movie",
+          "year": 1994
+        },
+        {
+          "id": "db-26022303",
+          "title": "重庆森林",
+          "type": "doc",
+          "year": 2014
+        },
+        {
+          "id": "db-35209288",
+          "title": "重庆森林2020",
+          "type": "movie",
+          "year": 2028
+        },
+        {
+          "id": "db-35460371",
+          "title": "“青春恰时来”五四青春歌会",
+          "type": "variety",
+          "year": 2021
+        },
+        {
+          "id": "db-26820465",
+          "title": "冷暖人生 走进重庆森林",
+          "type": "tv",
+          "year": 2015
+        },
+        {
+          "id": "db-34909192",
+          "title": "Cas'l",
+          "type": "anime",
+          "year": 2010
+        },
+        {
+          "id": "db-5135385",
+          "title": "光辉岁月",
+          "type": "tv",
+          "year": 2002
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1291999",
+          "title": "重庆森林"
+        },
+        {
+          "id": "db-26022303",
+          "title": "重庆森林"
+        },
+        {
+          "id": "db-35209288",
+          "title": "重庆森林2020"
+        },
+        {
+          "id": "db-35460371",
+          "title": "“青春恰时来”五四青春歌会"
+        },
+        {
+          "id": "db-26820465",
+          "title": "冷暖人生 走进重庆森林"
+        },
+        {
+          "id": "db-34909192",
+          "title": "Cas'l"
+        },
+        {
+          "id": "db-5135385",
+          "title": "光辉岁月"
+        }
+      ]
+    },
+    {
+      "query": "ZHC",
+      "expectedTitle": "甄嬛传",
+      "searchMs": 8732,
+      "results": [
+        {
+          "id": "db-5139195",
+          "title": "Dayte nam muzhchin!",
+          "type": "movie",
+          "year": 1985
+        },
+        {
+          "id": "db-5318640",
+          "title": "醉红尘",
+          "type": "tv",
+          "year": 2010
+        },
+        {
+          "id": "db-27181010",
+          "title": "藏海传",
+          "type": "tv",
+          "year": 2025
+        },
+        {
+          "id": "db-4922787",
+          "title": "后宫·甄嬛传",
+          "type": "tv",
+          "year": 2011
+        },
+        {
+          "id": "db-36619921",
+          "title": "再会长江",
+          "type": "doc",
+          "year": 2024
+        },
+        {
+          "id": "db-35778779",
+          "title": "再会长江",
+          "type": "doc",
+          "year": 2022
+        },
+        {
+          "id": "db-30334075",
+          "title": "坐火车旅行",
+          "type": "movie",
+          "year": 2019
+        },
+        {
+          "id": "db-37855030",
+          "title": "再会～沉默的真相～",
+          "type": "tv",
+          "year": 2026
+        },
+        {
+          "id": "db-38457894",
+          "title": "藏海传2",
+          "type": "tv",
+          "year": 2028
+        },
+        {
+          "id": "db-26346934",
+          "title": "甄嬛传(美版)",
+          "type": "tv",
+          "year": 2015
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-5139195",
+          "title": "Dayte nam muzhchin!"
+        },
+        {
+          "id": "db-5318640",
+          "title": "醉红尘"
+        },
+        {
+          "id": "db-27181010",
+          "title": "藏海传"
+        },
+        {
+          "id": "db-4922787",
+          "title": "后宫·甄嬛传"
+        },
+        {
+          "id": "db-36619921",
+          "title": "再会长江"
+        },
+        {
+          "id": "db-35778779",
+          "title": "再会长江"
+        },
+        {
+          "id": "db-30334075",
+          "title": "坐火车旅行"
+        },
+        {
+          "id": "db-37855030",
+          "title": "再会～沉默的真相～"
+        }
+      ]
+    },
+    {
+      "query": "AQZC",
+      "expectedTitle": "阿Q正传",
+      "searchMs": 4461,
+      "results": [
+        {
+          "id": "db-1306506",
+          "title": "阿Q正传",
+          "type": "movie",
+          "year": 1981
+        }
+      ],
+      "suggestions": [
+        {
+          "id": "db-1306506",
+          "title": "阿Q正传"
+        }
+      ]
+    }
+  ],
+  "diagnostics": [
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":50}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":26}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":7}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":7}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[metadata] search:primary UPSTREAM\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":10}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":4}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":2,\"identities\":2}\n[search] {\"stage\":\"fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":7}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"results\",\"returned\":1}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":1}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"results\",\"returned\":1}\n",
+    "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":1}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}\n",
+    "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}\n",
+    "[search] {\"stage\":\"results\",\"returned\":2}\n"
+  ],
+  "errors": []
+}

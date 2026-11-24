@@ -1,0 +1,620 @@
+{
+  "at": "2026-11-24T11:31:15.484158+00:00",
+  "version": "1.0.14",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [
+    {
+      "name": "搜索结果回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 9,
+      "firstMovie": "白衣逆行者",
+      "trace": [
+        {
+          "title": "龙在边缘",
+          "labels": [
+            "7.3",
+            "龙在边缘",
+            "惊悚"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "至尊三十六计之偷天换日",
+          "labels": [
+            "7.1",
+            "至尊三十六计之偷天换日",
+            "喜剧 / 动作"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "江湖",
+          "labels": [
+            "7.3",
+            "江湖",
+            "剧情 / 动作 / 犯罪"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "无间道(正序版)",
+          "labels": [
+            "9.2",
+            "无间道(正序版)",
+            "剧情 / 犯罪"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "大块头有大智慧",
+          "labels": [
+            "6.9",
+            "大块头有大智慧",
+            "剧情 / 动作 / 惊悚"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "黑金",
+          "labels": [
+            "7.8",
+            "黑金",
+            "剧情 / 动作 / 犯罪"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "门徒",
+          "labels": [
+            "8.1",
+            "门徒",
+            "剧情 / 惊悚 / 犯罪"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "白衣逆行者",
+          "labels": [
+            "白衣逆行者",
+            "剧情"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "全部",
+          "labels": [
+            "全部"
+          ],
+          "bounds": [
+            100,
+            294,
+            216,
+            359
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "搜索末行保持列",
+      "passed": true,
+      "fast": true,
+      "column": 5,
+      "upPressesToHeader": 9,
+      "firstMovie": "天下无贼",
+      "trace": [
+        {
+          "title": "龙在江湖",
+          "labels": [
+            "7.2",
+            "龙在江湖",
+            "剧情 / 动作 / 犯罪"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "侠盗联盟",
+          "labels": [
+            "5.2",
+            "侠盗联盟",
+            "动作 / 冒险"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "三国之见龙卸甲",
+          "labels": [
+            "5.6",
+            "三国之见龙卸甲",
+            "剧情 / 动作 / 历史 / 战争"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "瘦身男女",
+          "labels": [
+            "7.0",
+            "瘦身男女",
+            "喜剧 / 爱情"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "拆弹专家",
+          "labels": [
+            "6.2",
+            "拆弹专家",
+            "动作 / 悬疑 / 犯罪"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "人潮汹涌",
+          "labels": [
+            "6.5",
+            "人潮汹涌",
+            "喜剧 / 犯罪"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "拆弹专家2",
+          "labels": [
+            "7.4",
+            "拆弹专家2",
+            "动作 / 犯罪"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "天下无贼",
+          "labels": [
+            "8.2",
+            "天下无贼",
+            "剧情 / 动作 / 犯罪"
+          ],
+          "bounds": [
+            1552,
+            399,
+            1821,
+            895
+          ],
+          "focused": true
+        },
+        {
+          "title": "全部",
+          "labels": [
+            "全部"
+          ],
+          "bounds": [
+            100,
+            294,
+            216,
+            359
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "影人作品回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 5,
+      "firstMovie": "岁月",
+      "trace": [
+        {
+          "title": "极：《悬崖之上》电影纪录片",
+          "labels": [
+            "7.8",
+            "极：《悬崖之上》电影纪录片",
+            "纪录片"
+          ],
+          "bounds": [
+            97,
+            246,
+            366,
+            742
+          ],
+          "focused": true
+        },
+        {
+          "title": "大军师司马懿之军师联盟",
+          "labels": [
+            "8.2",
+            "大军师司马懿之军师联盟",
+            "剧情 / 爱情 / 历史 / 战争 / 古装"
+          ],
+          "bounds": [
+            97,
+            246,
+            366,
+            742
+          ],
+          "focused": true
+        },
+        {
+          "title": "今日影评·表演者言 第二季",
+          "labels": [
+            "8.7",
+            "今日影评·表演者言 第二季",
+            "脱口秀"
+          ],
+          "bounds": [
+            97,
+            246,
+            366,
+            742
+          ],
+          "focused": true
+        },
+        {
+          "title": "岁月",
+          "labels": [
+            "9.4",
+            "岁月",
+            "剧情"
+          ],
+          "bounds": [
+            97,
+            246,
+            366,
+            742
+          ],
+          "focused": true
+        },
+        {
+          "title": "返回",
+          "labels": [
+            "返回"
+          ],
+          "bounds": [
+            99,
+            90,
+            265,
+            160
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "搜索与影人页面流程",
+      "passed": true
+    },
+    {
+      "name": "收藏列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 6,
+      "firstMovie": "流浪地球2",
+      "trace": [
+        {
+          "title": "复活男",
+          "labels": [
+            "5.4",
+            "复活男",
+            "剧情 / 动作 / 奇幻"
+          ],
+          "bounds": [
+            97,
+            297,
+            366,
+            793
+          ],
+          "focused": true
+        },
+        {
+          "title": "非常治疗师",
+          "labels": [
+            "6.2",
+            "非常治疗师",
+            "喜剧"
+          ],
+          "bounds": [
+            97,
+            297,
+            366,
+            793
+          ],
+          "focused": true
+        },
+        {
+          "title": "多萝西",
+          "labels": [
+            "8.0",
+            "多萝西",
+            "剧情 / 动作 / 爱情 / 犯罪 / 冒险"
+          ],
+          "bounds": [
+            97,
+            297,
+            366,
+            793
+          ],
+          "focused": true
+        },
+        {
+          "title": "第四幕",
+          "labels": [
+            "第四幕",
+            "剧情"
+          ],
+          "bounds": [
+            97,
+            297,
+            366,
+            793
+          ],
+          "focused": true
+        },
+        {
+          "title": "流浪地球2",
+          "labels": [
+            "8.3",
+            "流浪地球2",
+            "科幻 / 冒险 / 灾难"
+          ],
+          "bounds": [
+            97,
+            297,
+            366,
+            793
+          ],
+          "focused": true
+        },
+        {
+          "title": "收藏",
+          "labels": [
+            "收藏"
+          ],
+          "bounds": [
+            99,
+            186,
+            279,
+            262
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏详情返回位置",
+      "passed": true,
+      "movie": "非常治疗师"
+    },
+    {
+      "name": "历史列表回顶",
+      "passed": true,
+      "fast": false,
+      "column": 0,
+      "upPressesToHeader": 8,
+      "firstMovie": "流浪地球2",
+      "trace": [
+        {
+          "title": "复活男",
+          "labels": [
+            "5.4",
+            "复活男",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "人性本兽",
+          "labels": [
+            "5.8",
+            "人性本兽",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "伯顿先生",
+          "labels": [
+            "6.7",
+            "伯顿先生",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "多萝西",
+          "labels": [
+            "8.0",
+            "多萝西",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "双喜",
+          "labels": [
+            "7.5",
+            "双喜",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "奥德赛",
+          "labels": [
+            "8.6",
+            "奥德赛",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "流浪地球2",
+          "labels": [
+            "8.3",
+            "流浪地球2",
+            "剩余1分钟"
+          ],
+          "bounds": [
+            95,
+            299,
+            511,
+            655
+          ],
+          "focused": true
+        },
+        {
+          "title": "历史",
+          "labels": [
+            "历史"
+          ],
+          "bounds": [
+            293,
+            186,
+            473,
+            262
+          ],
+          "focused": true
+        }
+      ]
+    },
+    {
+      "name": "收藏历史流程",
+      "passed": true
+    }
+  ],
+  "failures": [],
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "libraryUserStateRestored": true,
+  "userStateRestored": true
+}

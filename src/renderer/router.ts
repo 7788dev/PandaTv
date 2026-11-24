@@ -7,13 +7,17 @@ if (!history.state || typeof history.state.pandaIndex !== 'number') {
 }
 
 const listeners = new Set<() => void>()
+const leaving = new Set<() => void>()
+let observedHash = location.hash
 function changed() {
+  if (location.hash !== observedHash) { leaving.forEach(listener => listener()); observedHash = location.hash }
   if (typeof history.state?.pandaIndex !== 'number') {
     index += 1
     history.replaceState({ ...history.state, pandaIndex: index }, '')
   } else index = history.state.pandaIndex
   listeners.forEach(listener => listener())
 }
+export function onRouteLeave(listener: () => void) { leaving.add(listener); return () => { leaving.delete(listener) } }
 addEventListener('hashchange', changed)
 addEventListener('popstate', changed)
 

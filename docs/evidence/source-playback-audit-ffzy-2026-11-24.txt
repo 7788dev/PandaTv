@@ -1,0 +1,13 @@
+
+> panda-desktop@1.1.4 probe:health
+> esbuild scripts/probe-source-health.ts --bundle --platform=node --format=cjs --log-level=warning --outfile=.tmp/probe-source-health.cjs && node .tmp/probe-source-health.cjs 2 ffzy .tmp/source-discovery/ffzy-official-health.json
+
+{"source":"ffzy","type":"tv","title":"两京十五日","year":2026,"present":["ffzy"],"sourceEpisodes":12,"format":"hls","quality":"720P","status":200,"manifestBytes":66608,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":6339}
+{"source":"ffzy","type":"tv","title":"今天是太阳雨","year":2026,"present":["ffzy"],"sourceEpisodes":24,"error":"片源暂时无法连接，请重试","failureKind":"playback-error","ms":1294}
+{"source":"ffzy","type":"movie","title":"可能的爱","year":2026,"present":["ffzy"],"format":"hls","quality":"1080P","status":200,"manifestBytes":240026,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":13125}
+{"source":"ffzy","type":"anime","title":"八仙！","year":2026,"present":["ffzy"],"format":"hls","quality":"1080P","status":200,"manifestBytes":206330,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":13524}
+{"source":"ffzy","type":"anime","title":"谷雨街后巷","year":2026,"present":["ffzy"],"sourceEpisodes":5,"format":"hls","quality":"1080P","status":200,"manifestBytes":37724,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":6654}
+{"source":"ffzy","type":"anime","title":"八仙！","year":2026,"present":["ffzy"],"format":"hls","quality":"1080P","status":200,"manifestBytes":206330,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":3375}
+{"source":"ffzy","type":"variety","title":"后会友期","year":2026,"present":["ffzy"],"sourceEpisodes":18,"format":"hls","quality":"1080P","status":200,"manifestBytes":164282,"segmentStatus":206,"segmentBytes":65536,"midStatus":206,"midBytes":65536,"ms":6893}
+{"source":"ffzy","type":"variety","title":"不栩此行","year":2026,"present":[],"error":"未找到这一集的可用片源","failureKind":"no-match","ms":228}
+{"summary":{"key":"ffzy","name":"非凡资源","configuredEnabled":true,"verdict":"partial","tests":8,"playable":6,"present":7,"blocked":0,"noMatch":1,"mediaFailed":1,"failures":["search: 网络请求失败或超时 / ECONNRESET 15ms"]}}

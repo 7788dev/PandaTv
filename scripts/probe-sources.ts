@@ -1,6 +1,6 @@
 /**
  * Replays the metadata → play source chain against the live services, the way the app does it:
- * Douban detail (with aliases and episode count) → matching source records → episode 1 resolved
+ * Douban subject (with aliases and episode count) → matching source records → episode 1 resolved
  * and its first media bytes read.
  *
  *   npm run probe:sources            hot titles of every channel + the split serials below
@@ -16,7 +16,7 @@ import { PlaybackService } from '../src/main/playback/service'
 import { MediaProxy } from '../src/main/playback/proxy'
 import { createTransport } from '../src/main/data/transport'
 import { describeEgress } from '../src/main/egress'
-import type { MediaItem, MediaType } from '../design/contract/types'
+import type { MediaItem, MediaType } from '../src/contract/types'
 
 /** Long serials Douban files as one subject per run; play sources keep one cumulative record. */
 const SERIALS = ['凡人修仙传', '斗破苍穹', '斗罗大陆', '完美世界', '吞噬星空', '仙逆']
@@ -39,7 +39,7 @@ async function main() {
     const started = Date.now()
     const row: Row = { group, id: card.id, title: card.title, year: card.year, type: card.type, ok: false, ms: 0 }
     try {
-      const item = await data.detail(card.id)
+      const item = await data.subject(card.id)
       const record = data.getMetadata(item.id)
       const hints = { single: record?.kind === 'movie', aliases: record?.aliases, totalEpisodes: record?.totalEpisodes }
       row.title = item.title; row.year = item.year; row.type = item.type
@@ -74,7 +74,7 @@ async function main() {
   const out = process.argv[3] ?? join(__dirname, '..', 'docs', 'evidence', 'source-coverage.json')
   writeFileSync(out, JSON.stringify({
     at: new Date().toISOString(), route: describeEgress(),
-    method: 'DoubanDataSource.detail → PlaybackService.availability + resolve(episode 1); ok = first media bytes read',
+    method: 'DoubanDataSource.subject → PlaybackService.availability + resolve(episode 1); ok = first media bytes read',
     perChannel, summary, rows,
   }, null, 1) + '\n')
   console.log('\n' + JSON.stringify(summary))

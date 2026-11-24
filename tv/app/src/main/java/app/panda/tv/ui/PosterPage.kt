@@ -15,14 +15,18 @@ import app.panda.tv.model.Copy
 /** The footer has a fixed slot below the collection, so its state never covers a card. */
 internal class PosterPageFooter(
     ctx: Context,
-    private val grid: VerticalGridView,
+    private var grid: VerticalGridView,
     onRetry: () -> Unit,
 ) : LinearLayout(ctx) {
     private val metrics = Theme.metrics(ctx)
     private val message = Theme.label(ctx, sp = 13f, color = Theme.PAPER_70, maxLines = 1)
     val retry = Theme.pillButton(ctx, Copy.Action.RETRY, padH = 14, padV = 6)
+    private val more = Theme.pillButton(ctx, Copy.Extra.LOAD_MORE, padH = 14, padV = 6)
+    private var onMore: (() -> Unit)? = null
     val failed: Boolean get() = retry.visibility == VISIBLE
     private var departure: Int? = null
+
+    fun bindGrid(target: VerticalGridView) { grid = target; departure = null }
 
     init {
         orientation = HORIZONTAL
@@ -35,10 +39,15 @@ internal class PosterPageFooter(
         addView(retry, LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
             marginStart = Theme.dp(ctx, 14)
         })
+        addView(more, LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply { marginStart = Theme.dp(ctx, 14) })
+        more.visibility = GONE
         message.accessibilityLiveRegion = ACCESSIBILITY_LIVE_REGION_POLITE
         retry.setOnKeyListener { _, code, event ->
             if (event.action == KeyEvent.ACTION_DOWN && code == KeyEvent.KEYCODE_DPAD_UP) {
                 restoreCard()
+                true
+            } else if (event.action == KeyEvent.ACTION_DOWN && code == KeyEvent.KEYCODE_DPAD_RIGHT && more.visibility == VISIBLE) {
+                more.requestFocus()
                 true
             } else {
                 code == KeyEvent.KEYCODE_DPAD_DOWN || code == KeyEvent.KEYCODE_DPAD_LEFT || code == KeyEvent.KEYCODE_DPAD_RIGHT
@@ -48,6 +57,12 @@ internal class PosterPageFooter(
             restoreCard()
             onRetry()
         }
+        more.setOnKeyListener { _, code, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && code == KeyEvent.KEYCODE_DPAD_UP) { restoreCard(); true }
+            else if (event.action == KeyEvent.ACTION_DOWN && code == KeyEvent.KEYCODE_DPAD_LEFT && retry.visibility == VISIBLE) { retry.requestFocus(); true }
+            else code in setOf(KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT)
+        }
+        more.setOnClickListener { restoreCard(); onMore?.invoke() }
         show()
     }
 
@@ -56,6 +71,8 @@ internal class PosterPageFooter(
         retry.visibility = if (retryable) VISIBLE else GONE
         visibility = if (text != null) VISIBLE else INVISIBLE
     }
+
+    fun showMore(action: (() -> Unit)?) { onMore = action; more.visibility = if (action == null) GONE else VISIBLE }
 
     fun onGridEnd(position: Int, isNewPress: Boolean, loadMore: () -> Unit) {
         if (failed) {

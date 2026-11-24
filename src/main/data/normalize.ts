@@ -1,4 +1,4 @@
-import type { MediaItem, MediaType, Person } from '../../../design/contract/types';
+import type { MediaItem, MediaType, Person } from '../../contract/types';
 import type { Credit } from '../../shared/api';
 import { DataError } from './http';
 import { ADULT_GENRE } from '../adult';

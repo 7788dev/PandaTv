@@ -1,0 +1,191 @@
+{
+  "at": "2026-11-22T19:38:36.995Z",
+  "route": "system route",
+  "scope": "Production playback service using the verified normalized records from the same failed live-E2E cases; metadata lookup skipped to isolate catalogue/media transport. This does not establish video decoding or the cause of an earlier failure.",
+  "rows": [
+    {
+      "at": "2026-11-22T19:37:14.141Z",
+      "round": 1,
+      "source": "bfzy",
+      "title": "漫长的季节",
+      "type": "tv",
+      "stage": "catalogue-admission",
+      "firstBytesRead": false,
+      "warnings": [],
+      "failures": [
+        {
+          "source": "bfzy",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9015
+        },
+        {
+          "source": "bfzy",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9013
+        }
+      ],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-bfzy-res-34276--the-cut-and-keeps-decoding-desktop-live\\profile-o8FeMl\\cache\\metadata-v1.json",
+        "sha256": "4FD4C4BE68E3FE2CF7853F535BEF570581884242E30F6742D7C860470882AE35"
+      },
+      "id": "db-35588177",
+      "error": "暂时无法连接，请重试",
+      "totalMs": 19045
+    },
+    {
+      "at": "2026-11-22T19:37:33.186Z",
+      "round": 1,
+      "source": "dyttzy",
+      "title": "三体",
+      "type": "tv",
+      "stage": "first-bytes-read",
+      "firstBytesRead": true,
+      "warnings": [],
+      "failures": [],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-dyttzy-d-4a576--the-cut-and-keeps-decoding-desktop-live\\profile-bdcUsS\\cache\\metadata-v1.json",
+        "sha256": "89AB3836A31A20A07AF7EFE536335E0A02F580F1B99B449D683C9DE430E228DF"
+      },
+      "id": "db-26647087",
+      "availability": {
+        "episodes": 30
+      },
+      "lines": {
+        "list": [
+          {
+            "key": "dyttzy",
+            "name": "电影天堂"
+          }
+        ]
+      },
+      "format": "hls",
+      "quality": "1080P",
+      "bytes": 625664,
+      "totalMs": 5104
+    },
+    {
+      "at": "2026-11-22T19:37:38.291Z",
+      "round": 1,
+      "source": "lzi",
+      "title": "庆余年 第二季",
+      "type": "tv",
+      "stage": "catalogue-admission",
+      "firstBytesRead": false,
+      "warnings": [],
+      "failures": [
+        {
+          "source": "lzi",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9005
+        },
+        {
+          "source": "lzi",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9010
+        }
+      ],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-lzi-CMS--c7431--the-cut-and-keeps-decoding-desktop-live\\profile-OFNcMH\\cache\\metadata-v1.json",
+        "sha256": "9D1A34E7BB09E2D9A899EFF8B23DC4668CEF95483BF48DCEFE8ACBE45A673562"
+      },
+      "id": "db-34937650",
+      "error": "暂时无法连接，请重试",
+      "totalMs": 19028
+    },
+    {
+      "at": "2026-11-22T19:37:57.319Z",
+      "round": 2,
+      "source": "bfzy",
+      "title": "漫长的季节",
+      "type": "tv",
+      "stage": "catalogue-admission",
+      "firstBytesRead": false,
+      "warnings": [],
+      "failures": [
+        {
+          "source": "bfzy",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9004
+        },
+        {
+          "source": "bfzy",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9006
+        }
+      ],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-bfzy-res-34276--the-cut-and-keeps-decoding-desktop-live\\profile-o8FeMl\\cache\\metadata-v1.json",
+        "sha256": "4FD4C4BE68E3FE2CF7853F535BEF570581884242E30F6742D7C860470882AE35"
+      },
+      "id": "db-35588177",
+      "error": "暂时无法连接，请重试",
+      "totalMs": 19026
+    },
+    {
+      "at": "2026-11-22T19:38:16.345Z",
+      "round": 2,
+      "source": "dyttzy",
+      "title": "三体",
+      "type": "tv",
+      "stage": "first-bytes-read",
+      "firstBytesRead": true,
+      "warnings": [],
+      "failures": [],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-dyttzy-d-4a576--the-cut-and-keeps-decoding-desktop-live\\profile-bdcUsS\\cache\\metadata-v1.json",
+        "sha256": "89AB3836A31A20A07AF7EFE536335E0A02F580F1B99B449D683C9DE430E228DF"
+      },
+      "id": "db-26647087",
+      "availability": {
+        "episodes": 30
+      },
+      "lines": {
+        "list": [
+          {
+            "key": "dyttzy",
+            "name": "电影天堂"
+          }
+        ]
+      },
+      "format": "hls",
+      "quality": "1080P",
+      "bytes": 625664,
+      "totalMs": 1627
+    },
+    {
+      "at": "2026-11-22T19:38:17.972Z",
+      "round": 2,
+      "source": "lzi",
+      "title": "庆余年 第二季",
+      "type": "tv",
+      "stage": "catalogue-admission",
+      "firstBytesRead": false,
+      "warnings": [],
+      "failures": [
+        {
+          "source": "lzi",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9009
+        },
+        {
+          "source": "lzi",
+          "reason": "search: 请求已取消 / ABORT_ERR",
+          "ms": 9003
+        }
+      ],
+      "metadataSource": {
+        "kind": "Saved verified record from the failed live-E2E profile",
+        "path": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete-output\\ads-ad-removal-on-lzi-CMS--c7431--the-cut-and-keeps-decoding-desktop-live\\profile-OFNcMH\\cache\\metadata-v1.json",
+        "sha256": "9D1A34E7BB09E2D9A899EFF8B23DC4668CEF95483BF48DCEFE8ACBE45A673562"
+      },
+      "id": "db-34937650",
+      "error": "暂时无法连接，请重试",
+      "totalMs": 19022
+    }
+  ]
+}

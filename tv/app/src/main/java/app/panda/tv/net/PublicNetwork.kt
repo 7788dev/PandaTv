@@ -141,6 +141,7 @@ object PublicNetwork {
         connectTimeoutMs: Int = 8000,
         readTimeoutMs: Int = 12000,
         depth: Int = 0,
+        onConnection: (HttpURLConnection) -> Unit = {},
     ): PublicResponse {
         val uri = validatePublicUrl(rawUrl)
         if (depth > 5) throw PublicNetworkException("网络重定向次数过多")
@@ -171,6 +172,7 @@ object PublicNetwork {
                 setRequestProperty(k, v)
             }
         }
+        try { onConnection(conn) } catch (error: Exception) { conn.disconnect(); throw error }
         val status = try {
             conn.responseCode
         } catch (e: Exception) {
@@ -183,7 +185,7 @@ object PublicNetwork {
             conn.disconnect()
             if (!location.isNullOrBlank()) {
                 val next = resolveUrl(uri.toString(), location)
-                return openPublic(next, method, headers, connectTimeoutMs, readTimeoutMs, depth + 1)
+                return openPublic(next, method, headers, connectTimeoutMs, readTimeoutMs, depth + 1, onConnection)
             }
         }
         val stream = try {
@@ -225,8 +227,9 @@ object PublicNetwork {
         connectTimeoutMs: Int = 8000,
         readTimeoutMs: Int = 12000,
         limitBytes: Int = 4 * 1024 * 1024,
+        onConnection: (HttpURLConnection) -> Unit = {},
     ): Pair<String, String> {
-        val resp = openPublic(rawUrl, "GET", headers, connectTimeoutMs, readTimeoutMs)
+        val resp = openPublic(rawUrl, "GET", headers, connectTimeoutMs, readTimeoutMs, onConnection = onConnection)
         try {
             if (resp.statusCode !in 200..299) {
                 throw PublicNetworkException("上游服务暂不可用（${resp.statusCode}）")

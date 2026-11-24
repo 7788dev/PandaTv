@@ -1,0 +1,5 @@
+gradle.beforeProject { project ->
+    project.plugins.withId('com.android.application') {
+        project.android.sourceSets.test.kotlin.directories.add(new File(project.rootDir.parentFile, '.tmp/usage-audit-2026-11-22/tv-probes').absolutePath)
+    }
+}

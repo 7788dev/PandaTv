@@ -1,0 +1,250 @@
+{
+  "at": "2026-11-24T12:26:58.489283+00:00",
+  "cases": [
+    {
+      "name": "line-switch-1",
+      "passed": true,
+      "selectedSubject": {
+        "requestedTitle": "三体",
+        "rating": null,
+        "focusedLabels": [
+          "8.8",
+          "45分钟",
+          "三体",
+          "剧情 / 科幻"
+        ],
+        "bounds": [
+          97,
+          399,
+          366,
+          895
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "selectedLine": "360资源镜像",
+      "controls": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "正在缓冲",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:03 / 1:00:35",
+          "选集",
+          "线路: 360资源",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:03 / 1:00:35",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1208,
+            945,
+            1496,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 172
+      },
+      "before": {
+        "texts": [
+          "正在缓冲",
+          "线路",
+          "360资源 ✓",
+          "360资源镜像"
+        ],
+        "clock": null,
+        "player": false,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.TextView",
+          "bounds": [
+            1264,
+            280,
+            1810,
+            370
+          ],
+          "labels": [
+            "360资源镜像"
+          ]
+        },
+        "loadingRegionMaxRgb": 68
+      },
+      "pending": [
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "正在切换线路",
+            "正在缓冲",
+            "1.0",
+            "播放",
+            "下一集",
+            "00:03 / 1:00:35",
+            "选集",
+            "线路: 360资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:03 / 1:00:35",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1208,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "nextTap": [
+            416,
+            981
+          ],
+          "loadingRegionMaxRgb": 177
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "正在缓冲",
+            "1.0",
+            "播放",
+            "下一集",
+            "00:03 / 1:00:35",
+            "选集",
+            "线路: 360资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:03 / 1:00:35",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1208,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "nextTap": [
+            416,
+            981
+          ],
+          "loadingRegionMaxRgb": 172
+        },
+        {
+          "texts": [
+            "返回",
+            "三体",
+            "第1集",
+            "正在缓冲",
+            "1.0",
+            "播放",
+            "下一集",
+            "00:03 / 1:00:35",
+            "选集",
+            "线路: 360资源",
+            "1080P",
+            "倍速"
+          ],
+          "clock": "00:03 / 1:00:35",
+          "player": true,
+          "spinner": true,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              1208,
+              945,
+              1496,
+              1017
+            ],
+            "labels": [
+              "线路: 360资源"
+            ]
+          },
+          "nextTap": [
+            416,
+            981
+          ],
+          "loadingRegionMaxRgb": 172
+        }
+      ],
+      "after": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "1.0",
+          "暂停",
+          "下一集",
+          "00:04 / 1:00:35",
+          "选集",
+          "线路: 360资源镜像",
+          "1080P",
+          "倍速"
+        ],
+        "clock": "00:04 / 1:00:35",
+        "player": true,
+        "spinner": false,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            1153,
+            945,
+            1497,
+            1017
+          ],
+          "labels": [
+            "线路: 360资源镜像"
+          ]
+        },
+        "nextTap": [
+          416,
+          981
+        ],
+        "loadingRegionMaxRgb": 53
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

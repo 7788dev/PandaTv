@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-24T12:10:41.800Z",
+  "subject": {
+    "id": "db-26647087",
+    "title": "三体",
+    "year": 2023,
+    "region": "中国大陆"
+  },
+  "availability": {
+    "episodes": 30
+  },
+  "startupMs": 4947,
+  "firstSource": {
+    "list": [
+      {
+        "key": "360zy",
+        "name": "360资源"
+      }
+    ],
+    "current": "360zy"
+  }
+}

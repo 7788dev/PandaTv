@@ -1,0 +1,21 @@
+{
+  "at": "2026-11-20T10:59:54.511759+00:00",
+  "cases": [],
+  "unavailable": [
+    {
+      "name": "line-switch-1",
+      "status": "unavailable",
+      "reason": "The real catalogue pool returned only one line; no alternate line can be selected."
+    },
+    {
+      "name": "line-switch-2",
+      "status": "unavailable",
+      "reason": "The real catalogue pool returned only one line; no alternate line can be selected."
+    }
+  ],
+  "failures": [],
+  "version": "1.0.10",
+  "apkSha256": "3DB39556756BAD635A6E76F620E21736FBAD5F24DBAE1700872D1C779A5E6D48",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

@@ -1,0 +1,61 @@
+{
+  "at": "2026-11-22T19:27:16.845Z",
+  "unit": "ms after process creation",
+  "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+  "firstStarts": {
+    "count": 20,
+    "failed": 0,
+    "artworkComplete": 20,
+    "wholePageComplete": 20,
+    "statisticsMs": {
+      "skeleton": {
+        "median": 438.0,
+        "p95NearestRank": 513,
+        "max": 549
+      },
+      "topOfPage": {
+        "median": 713.0,
+        "p95NearestRank": 856,
+        "max": 858
+      },
+      "visibleArtwork": {
+        "median": 1174.5,
+        "p95NearestRank": 1424,
+        "max": 2445
+      },
+      "wholePage": {
+        "median": 1698.5,
+        "p95NearestRank": 1998,
+        "max": 2088
+      }
+    }
+  },
+  "repeatStarts": {
+    "count": 3,
+    "failed": 0,
+    "artworkComplete": 3,
+    "wholePageComplete": 3,
+    "statisticsMs": {
+      "skeleton": {
+        "median": 444,
+        "p95NearestRank": 505,
+        "max": 505
+      },
+      "topOfPage": {
+        "median": 600,
+        "p95NearestRank": 655,
+        "max": 655
+      },
+      "visibleArtwork": {
+        "median": 690,
+        "p95NearestRank": 792,
+        "max": 792
+      },
+      "wholePage": {
+        "median": 600,
+        "p95NearestRank": 655,
+        "max": 655
+      }
+    }
+  }
+}

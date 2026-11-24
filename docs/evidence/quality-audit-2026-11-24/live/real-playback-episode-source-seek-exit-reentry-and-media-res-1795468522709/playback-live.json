@@ -1,0 +1,55 @@
+{
+  "at": "2026-11-23T21:15:23.198Z",
+  "phases": [],
+  "subject": {
+    "id": "db-26647087",
+    "title": "三体",
+    "year": 2023
+  },
+  "startupMs": 8132,
+  "firstSource": {
+    "list": [
+      {
+        "key": "360zy",
+        "name": "360资源"
+      }
+    ],
+    "current": "360zy"
+  },
+  "sourceSwitchUnavailable": {
+    "reason": "Only one built-in catalogue carries a usable episode on the current network",
+    "available": {
+      "list": [
+        {
+          "key": "360zy",
+          "name": "360资源"
+        }
+      ],
+      "current": "360zy"
+    }
+  },
+  "seekMs": 2120,
+  "decoding": {
+    "currentTime": 63.298845,
+    "paused": true,
+    "frames": 117,
+    "dropped": 0
+  },
+  "history": {
+    "id": "db-26647087",
+    "episode": 2,
+    "position": 63,
+    "duration": 3831.8880000000017,
+    "at": 1795468544261
+  },
+  "resumedSource": {
+    "list": [
+      {
+        "key": "360zy",
+        "name": "360资源"
+      }
+    ],
+    "current": "360zy"
+  },
+  "resumedAt": 63.907287
+}

@@ -5,7 +5,7 @@
 // first error stays on the row (firstError) so upstream slowness is counted, not hidden.
 import { writeFileSync } from 'node:fs'
 import { DoubanDataSource } from '../src/main/data/douban'
-import type { ChannelQuery, MediaType } from '../design/contract/types'
+import type { ChannelQuery, MediaType } from '../src/contract/types'
 
 const MIN = 6
 const TYPES: MediaType[] = ['tv', 'movie', 'anime', 'variety', 'doc']

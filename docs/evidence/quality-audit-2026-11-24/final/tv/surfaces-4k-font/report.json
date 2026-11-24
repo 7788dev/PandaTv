@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-24T11:30:23.499103+00:00",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "device": "15",
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "case": "bezel",
+      "pass": true
+    },
+    {
+      "case": "confirmation",
+      "pass": true
+    },
+    {
+      "case": "keypad_back",
+      "pass": true
+    }
+  ],
+  "viewport": [
+    3840,
+    2160
+  ],
+  "userStateRestored": true
+}

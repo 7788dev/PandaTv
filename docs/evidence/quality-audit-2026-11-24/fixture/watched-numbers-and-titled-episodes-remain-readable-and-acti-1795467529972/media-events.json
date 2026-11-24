@@ -1,0 +1,37 @@
+[
+  {
+    "at": 1795467531984,
+    "name": "loadedmetadata",
+    "paused": true,
+    "time": 0,
+    "readyState": 1
+  },
+  {
+    "at": 1795467531986,
+    "name": "play",
+    "paused": false,
+    "time": 0,
+    "readyState": 1
+  },
+  {
+    "at": 1795467531986,
+    "name": "waiting",
+    "paused": false,
+    "time": 0,
+    "readyState": 1
+  },
+  {
+    "at": 1795467532357,
+    "name": "loadeddata",
+    "paused": false,
+    "time": 0.185348,
+    "readyState": 4
+  },
+  {
+    "at": 1795467532357,
+    "name": "playing",
+    "paused": false,
+    "time": 0.185437,
+    "readyState": 4
+  }
+]

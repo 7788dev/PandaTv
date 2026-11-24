@@ -1,14 +1,16 @@
-import type { MediaItem, MediaType, Playback, Quality } from '../../../design/contract/types'
+import type { MediaItem, MediaType, Playback, Quality } from '../../contract/types'
 import type { Availability, PlaySources } from '../../shared/api'
 import { getText, openPublic, readLimited, unreachableHere, WorkLimiter } from './network'
 import { MediaProxy } from './proxy'
 import { clearHead, pictureOf } from './picture'
+import { isMp4Head } from './media-head'
 import { loadSourceRules, type PlaySource, type SourceRules } from './sources'
 import { extra } from '../../copy.extra'
 import { adultShelf } from '../adult'
+import { REGIONS, REGION_GROUPS } from '../data/taxonomy'
 import { compareDelivery, compareSourceOrder, playbackMargin, PLAYBACK_HEADROOM, type DeliveryScore, type SourceOrderScore } from './delivery'
 
-interface RawVod { vod_id?: string | number; vod_name?: string; vod_year?: string | number; type_name?: string; vod_play_from?: string; vod_play_url?: string }
+interface RawVod { vod_id?: string | number; vod_name?: string; vod_year?: string | number; type_name?: string; vod_area?: string; vod_play_from?: string; vod_play_url?: string }
 export interface Episode { title: string; url: string; format: 'hls' | 'mp4'; number?: number }
 export interface Line { name: string; episodes: Episode[] }
 interface Candidate {
@@ -141,6 +143,11 @@ export function runOf(line: Line, range: EpisodeRange): Line | undefined {
 }
 
 const NOT_FEATURE = /预告|解说|花絮|幕后|速看|精彩片段/
+const COUNTRY_NAMES = new Set(REGIONS.tv.filter(value => !REGION_GROUPS.includes(value)))
+const COUNTRY_ALIASES: Record<string, string> = { 大陆: '中国大陆', 内地: '中国大陆', 中国: '中国大陆', 香港: '中国香港', 台湾: '中国台湾' }
+function countries(raw: string | undefined): string[] {
+  return (typeof raw === 'string' ? raw : '').normalize('NFKC').split(/[\s/,，、;；|]+/).map(value => COUNTRY_ALIASES[value] ?? value).filter(value => COUNTRY_NAMES.has(value))
+}
 /** Douban marks regional titles: "刺激1995(台)". */
 const REGION_NOTE = /\s*[（(][^（()）]{1,8}[)）]$/
 export interface RecordMatch {
@@ -160,6 +167,9 @@ export function matchRecord(item: MediaItem, raw: RawVod, hints: WorkHints = {})
   if (!raw.vod_name || NOT_FEATURE.test(raw.vod_name) || NOT_FEATURE.test(String(raw.type_name ?? '')) || adultShelf(String(raw.type_name ?? ''))) return undefined
   const year = Number.parseInt(String(raw.vod_year ?? ''), 10)
   const type = classifySourceType(String(raw.type_name ?? ''))
+  const wantedCountries = countries(item.region), sourceCountries = countries(raw.vod_area)
+  // Catalogue release years can be wrong: explicit production-country conflicts still identify a different adaptation.
+  if (wantedCountries.length && sourceCountries.length && !wantedCountries.some(value => sourceCountries.includes(value))) return undefined
   const plain = squash(raw.vod_name).replace(LANGUAGE, '')
   // Catalogues disambiguate remakes by appending the release year to the name.
   const keys = [raw.vod_name, ...(year > 1800 && plain.endsWith(String(year)) ? [plain.slice(0, -4)] : [])].map(titleKey).filter(key => key.base)
@@ -228,12 +238,27 @@ export function parseLines(from: string, value: string): Line[] {
       if (!['https:', 'http:'].includes(url.protocol)) continue
       const format = /\.m3u8$/i.test(url.pathname) ? 'hls' : /\.mp4$/i.test(url.pathname) ? 'mp4' : undefined
       if (!format) continue
-      if (title && /预告|花絮|特辑|解说/.test(title)) continue
+      if (title && /预告|花絮|特辑|解说|彩蛋|幕后|速看|精彩片段/.test(title)) continue
       // "第40集完结" and "第30集已完结" are episodes 40 and 30; "第240集上" is half of one and stays unnumbered.
       const numberMatch = /^(?:第)?0*(\d+)(?:集|期|话|回)?(?:已?完结|大结局|完)?$/.exec(title) ?? /^(?:EP|E)0*(\d+)$/i.exec(title)
       episodes.push({ title, url: url.href, format, ...(numberMatch ? { number: Number(numberMatch[1]) } : {}) })
     }
-    return episodes.length ? [{ name, episodes }] : []
+    if (!episodes.length) return []
+    const numbered = episodes.every(episode => episode.number != null && episode.number >= 1) &&
+      Math.max(...episodes.map(episode => episode.number!)) <= episodes.length * 3 + 10
+    if (!numbered) return [{ name, episodes }]
+    // A catalogue can merge mirror addresses into one list. Each mirror remains a fallback for the same numbered episode.
+    const mirrors: Array<Map<number, Episode>> = []
+    const seen = new Set<string>()
+    for (const episode of episodes) {
+      const key = episode.number + ':' + episode.url
+      if (seen.has(key)) continue
+      seen.add(key)
+      const mirror = mirrors.find(line => !line.has(episode.number!))
+      if (mirror) mirror.set(episode.number!, episode)
+      else mirrors.push(new Map([[episode.number!, episode]]))
+    }
+    return mirrors.map(mirror => ({ name, episodes: [...mirror.values()] }))
   })
 }
 
@@ -341,6 +366,10 @@ export class PlaybackService {
   private readonly selected = new Map<string, string>()
   /** Work → the source its viewer asked for; the next episodes start there too. */
   private readonly preferred = new Map<string, string>()
+  private readonly preferenceRevisions = new Map<string, number>()
+  private readonly manualIntents = new Map<string, number>()
+  private readonly selectionIntents = new Map<string, { intent: number; key: string }>()
+  private revisionClock = 0
   /** Work → the last source that won; used only to break a tie in the next episode's race. */
   private readonly winners = new Map<string, string>()
   /** Work + source → until when it is asked after the others: it failed or was slow for this work. */
@@ -348,6 +377,41 @@ export class PlaybackService {
   constructor(private readonly options: ServiceOptions) { this.rules = options.rules ?? loadSourceRules() }
 
   private primary(candidates: Candidate[]): Line | undefined { return referenceLine(candidates.flatMap(c => c.lines)) }
+
+  private workKey(item: MediaItem, hints: WorkHints): string {
+    return [item.id, item.title, item.year ?? '', item.type, item.region ?? '', hints.single ?? '', hints.totalEpisodes ?? '', ...(hints.aliases ?? [])].join('|')
+  }
+
+  private forgetPrepared(work: string) {
+    for (const key of this.resolved.keys()) if (key.startsWith(work + '|')) this.resolved.delete(key)
+  }
+
+  private revision(work: string): number {
+    const value = this.preferenceRevisions.get(work) ?? ++this.revisionClock
+    this.preferenceRevisions.delete(work)
+    this.preferenceRevisions.set(work, value)
+    this.trimRevisions()
+    return value
+  }
+
+  private trimRevisions() {
+    while (this.preferenceRevisions.size > 512) {
+      const old = this.preferenceRevisions.keys().next().value!
+      this.preferenceRevisions.delete(old); this.manualIntents.delete(old); this.forgetPrepared(old)
+    }
+  }
+
+  private prefer(work: string, source: string) {
+    if (!this.preferred.has(work) && this.preferred.size >= 256) {
+      const old = this.preferred.keys().next().value!
+      this.preferred.delete(old); this.preferenceRevisions.set(old, ++this.revisionClock); this.forgetPrepared(old)
+    }
+    this.preferred.set(work, source)
+    this.preferenceRevisions.set(work, ++this.revisionClock)
+    this.trimRevisions()
+    this.forgetPrepared(work)
+    for (const key of this.selected.keys()) if (key.startsWith(work + ':')) this.selected.delete(key)
+  }
 
   async availability(item: MediaItem, hints: WorkHints = {}): Promise<Availability> {
     const single = hints.single ?? item.type === 'movie'
@@ -370,13 +434,28 @@ export class PlaybackService {
    */
   async resolve(item: MediaItem, episode: number, quality?: Quality, retry = false, hints: WorkHints = {}, from?: string): Promise<Playback> {
     if (!Number.isInteger(episode) || episode < 1 || episode > 10000) throw new Error('集数无效')
-    const key = [item.id, episode, quality ?? ''].join('|')
+    const revision = this.revision(item.id)
+    const intent = from ? ++this.revisionClock : undefined
+    if (intent !== undefined) this.manualIntents.set(item.id, intent)
+    const key = [this.workKey(item, hints), episode, quality ?? '', revision].join('|')
+    const selectionKey = item.id + ':' + episode
     const known = this.resolved.get(key)
-    if (!retry && !from && known && known.expires > Date.now()) return known.value
-    const task = this.choose(item, episode, quality, retry, hints, from)
+    if (!retry && !from && known && known.expires > Date.now() && this.selectionIntents.get(selectionKey)?.key === key) return known.value
+    const selectionIntent = ++this.revisionClock
+    this.selectionIntents.delete(selectionKey)
+    this.selectionIntents.set(selectionKey, { intent: selectionIntent, key })
+    while (this.selectionIntents.size > 512) this.selectionIntents.delete(this.selectionIntents.keys().next().value!)
+    const task = this.choose(item, episode, quality, retry, hints, from, revision, selectionIntent, intent)
     this.resolved.delete(key)
     if (this.resolved.size >= 64) this.resolved.delete(this.resolved.keys().next().value!)
     this.resolved.set(key, { value: task, expires: Date.now() + RESOLVED_MS })
+    if (from) void task.then(() => {
+      if (this.selectionIntents.get(selectionKey)?.intent !== selectionIntent || this.manualIntents.get(item.id) !== intent || this.preferred.get(item.id) !== from) return
+      const current = [this.workKey(item, hints), episode, quality ?? '', this.revision(item.id)].join('|')
+      if (this.resolved.size >= 64) this.resolved.delete(this.resolved.keys().next().value!)
+      this.resolved.set(current, { value: task, expires: Date.now() + RESOLVED_MS })
+      this.selectionIntents.set(selectionKey, { intent: selectionIntent, key: current })
+    }, () => {})
     task.catch(() => { if (this.resolved.get(key)?.value === task) this.resolved.delete(key) })
     return task
   }
@@ -409,7 +488,7 @@ export class PlaybackService {
     return attempts
   }
 
-  private async choose(item: MediaItem, episode: number, quality: Quality | undefined, retry: boolean, hints: WorkHints, from?: string): Promise<Playback> {
+  private async choose(item: MediaItem, episode: number, quality: Quality | undefined, retry: boolean, hints: WorkHints, from: string | undefined, revision: number, selectionIntent: number, intent?: number): Promise<Playback> {
     const selectionKey = item.id + ':' + episode
     const previous = this.selected.get(selectionKey)
     // The player asks again when what it was given did not play.
@@ -469,13 +548,13 @@ export class PlaybackService {
       const win = (attempt: typeof list[number], playback: Playback) => {
         if (over) return
         stop(attempt)
-        if (this.selected.size > 512) this.selected.delete(this.selected.keys().next().value!)
-        this.selected.set(selectionKey, attempt.source.key)
-        if (this.winners.size > 256) this.winners.delete(this.winners.keys().next().value!)
-        this.winners.set(item.id, attempt.source.key)
-        if (from) {
-          if (this.preferred.size > 256) this.preferred.delete(this.preferred.keys().next().value!)
-          this.preferred.set(item.id, from)
+        const current = this.selectionIntents.get(selectionKey)?.intent === selectionIntent && (from ? this.manualIntents.get(item.id) === intent : this.preferenceRevisions.get(item.id) === revision)
+        if (current) {
+          if (from) this.prefer(item.id, from)
+          if (this.selected.size > 512) this.selected.delete(this.selected.keys().next().value!)
+          this.selected.set(selectionKey, attempt.source.key)
+          if (this.winners.size > 256) this.winners.delete(this.winners.keys().next().value!)
+          this.winners.set(item.id, attempt.source.key)
         }
         resolve(playback)
       }
@@ -592,9 +671,23 @@ export class PlaybackService {
     try {
       if (episode.format === 'mp4') {
         const { response } = await openPublic(episode.url, { headers: { Range: 'bytes=0-16383' }, signal: reach })
-        if (![200, 206].includes(response.statusCode ?? 0) || /text\/html/.test(String(response.headers['content-type']))) { response.destroy(); throw new Error('媒体不可用') }
-        response.destroy()
-        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4' }, whole: Promise.resolve(), margin: () => undefined, received: () => 0 }
+        let head = Buffer.alloc(0)
+        try {
+          if (![200, 206].includes(response.statusCode ?? 0) || /text\/html|application\/(?:json|xml)|\+(?:json|xml)(?:[;\s]|$)/i.test(String(response.headers['content-type']))) throw new Error('媒体不可用')
+          head = await within((async () => {
+            const parts: Buffer[] = []
+            let size = 0
+            for await (const chunk of response) {
+              const part = Buffer.from(chunk).subarray(0, 16384 - size)
+              parts.push(part); size += part.length
+              const prefix = Buffer.concat(parts)
+              if (isMp4Head(prefix) || size >= 16384) return prefix
+            }
+            return Buffer.concat(parts)
+          })())
+          if (!isMp4Head(head)) throw new Error('媒体不可用')
+        } finally { response.destroy() }
+        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4' }, whole: Promise.resolve(), margin: () => undefined, received: () => head.length }
       }
       let current = episode.url; let selected: Quality | undefined; let qualities: Quality[] | undefined; let preserveTimeline = false
       for (let depth = 0; depth < 4; depth++) {
@@ -682,7 +775,7 @@ export class PlaybackService {
   }
 
   private async candidates(item: MediaItem, hints: WorkHints): Promise<Candidate[]> {
-    const key = [item.id, item.title, item.year ?? '', item.type, hints.totalEpisodes ?? '', ...(hints.aliases ?? [])].join('|')
+    const key = this.workKey(item, hints)
     const cached = this.cache.get(key)
     if (cached && cached.expires > Date.now()) return cached.value
     const active = this.inflight.get(key); if (active) return active

@@ -1,0 +1,438 @@
+{
+  "config": {
+    "argv": [
+      "E:\\nvm4w\\nodejs\\node.exe",
+      "E:\\dev\\项目\\panda\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--project=desktop-fixture"
+    ],
+    "configFile": "E:\\dev\\项目\\panda\\playwright.config.ts",
+    "rootDir": "E:/dev/项目/panda/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "failures-only",
+    "projects": [
+      {
+        "outputDir": "E:/dev/项目/panda/.tmp/e2e-results/desktop-build-live",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-live",
+        "name": "desktop-live",
+        "testDir": "E:/dev/项目/panda/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.live.spec.ts"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "E:/dev/项目/panda/.tmp/e2e-results/desktop-fixture",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-fixture",
+        "name": "desktop-fixture",
+        "testDir": "E:/dev/项目/panda/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.fixture.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "E:\\dev\\项目\\panda\\.tmp\\e2e-results\\desktop-fixture",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop-fixture",
+        "testDir": "E:\\dev\\项目\\panda\\e2e",
+        "snapshotDir": "E:\\dev\\项目\\panda\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.fixture.spec.ts",
+        "timeout": 180000,
+        "use": {},
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop-fixture"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".tmp\\e2e-reports\\desktop-fixture.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": ".tmp\\playwright-report\\desktop-fixture",
+          "open": "never",
+          "title": "Panda E2E — desktop-fixture"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "quality.fixture.spec.ts",
+      "file": "quality.fixture.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "actual settings, channel layout and modal controls remain readable at supported window sizes and zoom",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3064,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:58:46.873Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-547acd167740769adc3c",
+          "file": "quality.fixture.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "watched numbers and titled episodes remain readable and actionable in the actual detail and drawer",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5050,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:58:49.966Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-8b3302fa890fdc3e0a07",
+          "file": "quality.fixture.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "focused seek arrows and page keys seek without consuming global volume shortcuts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:58:55.025Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-661c5bf4f25904debc44",
+          "file": "quality.fixture.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "a pause before the first video frame survives the startup deadline and resumes normally",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 21348,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:58:59.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-69e2d3d11721823ea0ea",
+          "file": "quality.fixture.spec.ts",
+          "line": 90,
+          "column": 1
+        },
+        {
+          "title": "loading icon controls have native disabled state and become usable after media arrives",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4078,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:59:20.834Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-bdff9dce94115df934e9",
+          "file": "quality.fixture.spec.ts",
+          "line": 111,
+          "column": 1
+        },
+        {
+          "title": "failed manual source falls back while preserving playback position and correct source selection",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7516,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:59:24.925Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-bd2e56e0a1a94f6900bd",
+          "file": "quality.fixture.spec.ts",
+          "line": 130,
+          "column": 1
+        },
+        {
+          "title": "real HLS decoding completes episode source seek exit and resume transitions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8702,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:59:32.450Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-d201244b6843f9dbdc4e",
+          "file": "quality.fixture.spec.ts",
+          "line": 144,
+          "column": 1
+        },
+        {
+          "title": "offline metadata becomes an actionable error and retry returns results with keyboard focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5318,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:59:41.161Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-7fe162a958f43c95e4f1",
+          "file": "quality.fixture.spec.ts",
+          "line": 171,
+          "column": 1
+        },
+        {
+          "title": "search suggestions modal cancellation and favorite state use real IPC and persist across reload",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5512,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-23T20:59:46.492Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-66330b04a63b72c5b738",
+          "file": "quality.fixture.spec.ts",
+          "line": 186,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-23T20:58:46.463Z",
+    "duration": 65573.77900000001,
+    "expected": 9,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

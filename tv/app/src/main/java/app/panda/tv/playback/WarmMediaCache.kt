@@ -3,6 +3,7 @@ package app.panda.tv.playback
 import app.panda.tv.net.PublicNetwork
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import java.io.InterruptedIOException
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -106,9 +107,15 @@ class SharedSegmentFlow(
             if (destLen == 0) return 0
             lock.withLock {
                 if (closed) return -1
-                while (chunkIndex >= chunks.size && state == 0) {
-                    cond.await()
+                while (!closed && chunkIndex >= chunks.size && state == 0) {
+                    try {
+                        cond.await()
+                    } catch (interrupted: InterruptedException) {
+                        Thread.currentThread().interrupt()
+                        throw InterruptedIOException("媒体分片读取中断").apply { initCause(interrupted) }
+                    }
                 }
+                if (closed) return -1
                 if (state == 2) {
                     throw IOException("媒体分片读取中断")
                 }
@@ -136,8 +143,8 @@ class SharedSegmentFlow(
                     if (activeReaders == 0 && (closedForMemory || state != 0)) {
                         if (state == 0) state = 2
                         chunks.clear()
-                        cond.signalAll()
                     }
+                    cond.signalAll()
                 }
             }
         }

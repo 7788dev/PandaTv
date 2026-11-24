@@ -1,0 +1,168 @@
+{
+  "config": {
+    "argv": [
+      "E:\\nvm4w\\nodejs\\node.exe",
+      "E:\\dev\\项目\\panda\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--project=desktop-fixture",
+      "--grep",
+      "repeated actual playback exits"
+    ],
+    "configFile": "E:\\dev\\项目\\panda\\playwright.config.ts",
+    "rootDir": "E:/dev/项目/panda/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "failures-only",
+    "projects": [
+      {
+        "outputDir": "E:/dev/项目/panda/.tmp/e2e-results/desktop-build-live",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-live",
+        "name": "desktop-live",
+        "testDir": "E:/dev/项目/panda/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.live.spec.ts"
+        ],
+        "timeout": 180000
+      },
+      {
+        "outputDir": "E:/dev/项目/panda/.tmp/e2e-results/desktop-fixture",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "desktop-fixture",
+        "name": "desktop-fixture",
+        "testDir": "E:/dev/项目/panda/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.fixture.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "E:\\dev\\项目\\panda\\.tmp\\e2e-results\\desktop-fixture",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "desktop-fixture",
+        "testDir": "E:\\dev\\项目\\panda\\e2e",
+        "snapshotDir": "E:\\dev\\项目\\panda\\e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.fixture.spec.ts",
+        "timeout": 180000,
+        "use": {},
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop-fixture"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".tmp\\e2e-reports\\desktop-fixture.json"
+        }
+      ],
+      [
+        "html",
+        {
+          "outputFolder": ".tmp\\playwright-report\\desktop-fixture",
+          "open": "never",
+          "title": "Panda E2E — desktop-fixture"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.65.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "quality.fixture.spec.ts",
+      "file": "quality.fixture.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "repeated actual playback exits release video nodes and keep document and window listeners stable",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "desktop-fixture",
+              "projectName": "desktop-fixture",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17644,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-24T09:42:08.393Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "019713c11df4cbc1e2e3-60f007526e5249e2aefe",
+          "file": "quality.fixture.spec.ts",
+          "line": 209,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-24T09:42:07.940Z",
+    "duration": 18148.894,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

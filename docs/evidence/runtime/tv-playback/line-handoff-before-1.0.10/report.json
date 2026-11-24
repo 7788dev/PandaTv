@@ -1,0 +1,19 @@
+{
+  "at": "2026-11-20T10:30:57.923049+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "line-switch-1",
+      "error": "Real subject not found: 三体 8.8"
+    },
+    {
+      "name": "line-switch-2",
+      "error": "Real subject not found: 三体 8.8"
+    }
+  ],
+  "version": "1.0.10",
+  "apkSha256": "3DB39556756BAD635A6E76F620E21736FBAD5F24DBAE1700872D1C779A5E6D48",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

@@ -1,0 +1,35 @@
+{
+  "at": "2026-11-22T19:04:06.845150+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "line-switch-1",
+      "passed": true,
+      "selectedLine": "360资源",
+      "beforeClock": "00:02 / 2:53:11",
+      "afterClock": "00:09 / 2:53:10",
+      "afterSource": "线路: 360资源"
+    },
+    {
+      "name": "line-switch-2",
+      "passed": true,
+      "selectedLine": "360资源",
+      "beforeClock": "00:09 / 2:53:11",
+      "afterClock": "00:16 / 2:53:10",
+      "afterSource": "线路: 360资源"
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "userStateRestored": true,
+    "firewallRulesRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/line-switch-movie/report.json",
+  "rawSha256": "7DB464CE148FE6C773E1C6DF6282C846C0FE480265C9647B6C43BE5991D06681"
+}

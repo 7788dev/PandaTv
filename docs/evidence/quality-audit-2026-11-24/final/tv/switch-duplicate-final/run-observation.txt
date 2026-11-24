@@ -1,0 +1,9 @@
+UNAVAILABLE line-switch-1: No alternate line became selectable in this playback sample.
+Traceback (most recent call last):
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 1062, in <module>
+    main()
+    ~~~~^^
+  File "E:\dev\项目\panda\scripts\verify-tv-playback-transitions.py", line 1058, in main
+    assert report["cases"], "No playback case actually ran to completion; check the unavailable section"
+           ~~~~~~^^^^^^^^^
+AssertionError: No playback case actually ran to completion; check the unavailable section

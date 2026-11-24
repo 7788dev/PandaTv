@@ -1,0 +1,57 @@
+[
+  {
+    "at": 1795522233215,
+    "process": "main",
+    "message": "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}"
+  },
+  {
+    "at": 1795522235993,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522235993,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522235993,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522238860,
+    "process": "main",
+    "message": "[search] {\"stage\":\"results\",\"returned\":218}"
+  },
+  {
+    "at": 1795522239031,
+    "process": "main",
+    "message": "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}"
+  },
+  {
+    "at": 1795522239062,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522239062,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522239063,
+    "process": "main",
+    "message": "[metadata] search:page UPSTREAM"
+  },
+  {
+    "at": 1795522239063,
+    "process": "main",
+    "message": "[search] {\"stage\":\"results\",\"returned\":218}"
+  },
+  {
+    "at": 1795522240325,
+    "process": "main",
+    "message": "[source] hongniu search: 网络请求失败或超时 / ECONNRESET 937ms"
+  }
+]

@@ -1,0 +1,480 @@
+{
+  "at": "2026-11-21T01:46:21.693469+00:00",
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "cases": [
+    {
+      "name": "home-1",
+      "passed": true,
+      "elapsedMs": 9614,
+      "frames": {
+        "totalFrames": 177,
+        "jankyFrames": 1,
+        "jankPct": 0.56,
+        "p90Ms": 17,
+        "p95Ms": 17
+      },
+      "heroReturnComplete": true,
+      "initialHeroCy": 559,
+      "returnedHeroCy": 550
+    },
+    {
+      "name": "channel-expanded-1",
+      "passed": true,
+      "elapsedMs": 7732,
+      "frames": {
+        "totalFrames": 213,
+        "jankyFrames": 0,
+        "jankPct": 0.0,
+        "p90Ms": 5,
+        "p95Ms": 5
+      },
+      "normalAndRapidInput": true
+    }
+  ],
+  "failures": [],
+  "focusTrace": [
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          85,
+          450,
+          506,
+          809
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "剩余25分钟"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          87,
+          409,
+          359,
+          910
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          518,
+          316,
+          610,
+          366
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "两京十五日",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "谷雨",
+          "剧情 · 2026",
+          "6.3"
+        ]
+      }
+    },
+    {
+      "phase": "down",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "试探",
+          "悬疑 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑色五叶草 第二季",
+          "动画 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑色五叶草 第二季",
+          "动画 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑色五叶草 第二季",
+          "动画 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_right",
+      "focus": {
+        "bounds": [
+          1304,
+          832,
+          1797,
+          950
+        ],
+        "labels": [
+          "5",
+          "黑色五叶草 第二季",
+          "动画 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          713,
+          832,
+          1206,
+          950
+        ],
+        "labels": [
+          "5",
+          "试探",
+          "悬疑 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "dpad_left",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          832,
+          615,
+          950
+        ],
+        "labels": [
+          "5",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "9.1"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          708,
+          615,
+          826
+        ],
+        "labels": [
+          "4",
+          "谷雨",
+          "剧情 · 2026",
+          "6.3"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          584,
+          615,
+          702
+        ],
+        "labels": [
+          "3",
+          "十万狂花入梦来",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          460,
+          615,
+          578
+        ],
+        "labels": [
+          "2",
+          "两京十五日",
+          "剧情 · 2026"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          123,
+          336,
+          615,
+          454
+        ],
+        "labels": [
+          "1",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "8.0"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          518,
+          263,
+          610,
+          313
+        ],
+        "labels": [
+          "更多"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          87,
+          300,
+          359,
+          801
+        ],
+        "labels": [
+          "8.0",
+          "今天是太阳雨",
+          "剧情 / 爱情"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          85,
+          411,
+          506,
+          770
+        ],
+        "labels": [
+          "谷雨街后巷",
+          "第1集 · 剩余25分钟"
+        ]
+      }
+    },
+    {
+      "phase": "up-check",
+      "focus": {
+        "bounds": [
+          152,
+          511,
+          337,
+          589
+        ],
+        "labels": [
+          "播放"
+        ]
+      }
+    }
+  ]
+}

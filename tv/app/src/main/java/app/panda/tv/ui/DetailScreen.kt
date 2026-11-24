@@ -29,6 +29,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Screen(ctx, nav) {
@@ -52,6 +53,9 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
     private var metaTv: TextView? = null
     private var episodeSection: LinearLayout? = null
     private var relatedGridHolder: LinearLayout? = null
+    private var peopleHolder: LinearLayout? = null
+    private var castTv: TextView? = null
+    private var backdropView: ImageView? = null
 
     override val view: View get() = container
 
@@ -77,11 +81,35 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         container.addView(Theme.loadingBox(ctx))
         loadJob = scope.launch {
             try {
-                val item = nav.app.douban.detail(id)
+                val item = nav.app.douban.subject(id)
                 if (destroyed) return@launch
                 detailItem = item
                 render(item)
                 loadAvailability(item)
+                launch {
+                    try {
+                        val full = nav.app.douban.detail(id)
+                        coroutineContext.ensureActive()
+                        if (destroyed) return@launch
+                        val current = detailItem ?: item
+                        val merged = full.copy(episodes = current.episodes, episodeTitles = current.episodeTitles)
+                        detailItem = merged
+                        refreshStateViews(merged)
+                        castTv?.apply {
+                            text = merged.cast?.takeIf { it.isNotEmpty() }?.let { "${Copy.Detail.STARRING}：${it.joinToString(" / ") { person -> person.name }}" }.orEmpty()
+                            visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+                        }
+                        backdropView?.let { nav.app.images.load(it, merged.backdrop ?: merged.poster, 1280, 720) }
+                        // Keep any currently focused cast control alive until focus leaves it.
+                        while (peopleHolder?.hasFocus() == true) delay(100L)
+                        if (!destroyed) peopleHolder?.apply {
+                            removeAllViews()
+                            val people = merged.people ?: merged.cast?.map { Credit(it.name, it.role) }.orEmpty()
+                            if (people.isNotEmpty()) addView(buildPeopleSection(people))
+                        }
+                    } catch (cancelled: CancellationException) { throw cancelled }
+                    catch (_: Throwable) { if (!destroyed) nav.toast(Copy.Extra.PARTIAL_METADATA) }
+                }
                 launch {
                     val rel = runCatching { nav.app.douban.related(item.id) }.getOrNull() ?: emptyList()
                     coroutineContext.ensureActive()
@@ -95,7 +123,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             } catch (t: Throwable) {
                 if (!destroyed) {
                     container.removeAllViews()
-                    val box = Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY) { load() }
+                    val box = Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY, focusRetry = true) { load() }
                     box.addView(Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK).apply {
                         layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                             gravity = Gravity.CENTER_HORIZONTAL
@@ -104,7 +132,6 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                         setOnClickListener { nav.back() }
                     })
                     container.addView(box)
-                    box.post { box.requestFocus() }
                 }
             }
         }
@@ -126,7 +153,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 coroutineContext.ensureActive()
                 if (destroyed || detailItem?.id != item.id) return@launch
                 availability = avail
-                val merged = item.copy(
+                val merged = (detailItem ?: item).copy(
                     episodes = avail.episodes ?: item.episodes,
                     episodeTitles = avail.episodeTitles ?: item.episodeTitles,
                 )
@@ -212,6 +239,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             scaleType = ImageView.ScaleType.CENTER_CROP
             imageAlpha = 95
         }
+        backdropView = bg
         nav.app.images.load(bg, item.backdrop ?: item.poster, 1280, 720)
         backdropFrame.addView(bg, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         val scrim = View(ctx).apply {
@@ -301,13 +329,14 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 }
             })
         }
-        item.cast?.takeIf { it.isNotEmpty() }?.let { c ->
-            infoCol.addView(Theme.label(ctx, "${Copy.Detail.STARRING}：${c.joinToString(" / ") { it.name }}", sp = 13.5f, color = Theme.PAPER_70, maxLines = 1).apply {
+        val c = item.cast.orEmpty()
+        infoCol.addView(Theme.label(ctx, if (c.isEmpty()) "" else "${Copy.Detail.STARRING}：${c.joinToString(" / ") { it.name }}", sp = 13.5f, color = Theme.PAPER_70, maxLines = 1).apply {
+                castTv = this
+                visibility = if (c.isEmpty()) View.GONE else View.VISIBLE
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     topMargin = Theme.dp(ctx, 4)
                 }
             })
-        }
         item.synopsis?.let { syn ->
             var expanded = false
             val synTv = Theme.label(ctx, syn, sp = 13.5f, color = Theme.PAPER_70, maxLines = 3).apply {
@@ -353,10 +382,11 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         playBtn = pBtn
         val fBtn = Theme.pillButton(ctx, Copy.Action.FAVORITE, icon = TvIcon.HEART, padH = 18, padV = 10, sp = 14.5f).apply {
             setOnClickListener {
-                val next = nav.app.userStore.dispatch(StateAction.ToggleFavorite(item.id))
-                val added = item.id in next.favorites
-                nav.toast(if (added) Copy.Toast.FAVORITED else Copy.Toast.UNFAVORITED)
-                refreshStateViews(detailItem ?: item)
+                nav.saveUser(StateAction.ToggleFavorite(item.id)) { next ->
+                    val added = item.id in next.favorites
+                    nav.toast(if (added) Copy.Toast.FAVORITED else Copy.Toast.UNFAVORITED)
+                    if (!destroyed) refreshStateViews(detailItem ?: item)
+                }
             }
         }
         favBtn = fBtn
@@ -385,9 +415,10 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         page.addView(epSec)
 
         val people: List<Credit> = item.people ?: item.cast?.map { Credit(it.name, it.role) } ?: emptyList()
-        if (people.isNotEmpty()) {
-            page.addView(buildPeopleSection(people))
-        }
+        val peopleBox = LinearLayout(ctx).apply { orientation = LinearLayout.VERTICAL; clipChildren = true; clipToPadding = false }
+        peopleHolder = peopleBox
+        if (people.isNotEmpty()) peopleBox.addView(buildPeopleSection(people))
+        page.addView(peopleBox)
 
         val relSec = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL

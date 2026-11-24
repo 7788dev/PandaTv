@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-23T03:47:58.6727273+08:00",
+  "testSha256": "B1FE389B56FF45BA04187F44017D89F1DE25D935870EFCCAD0052B32CBDB3DB6",
+  "baselineTestSha256": "B1FE389B56FF45BA04187F44017D89F1DE25D935870EFCCAD0052B32CBDB3DB6",
+  "baselineMetadataSha256": "C8A4E98C6F94977EC4E5C2A3B31978AD3CF792888FFF15541738B9E8001B6E50",
+  "finalMetadataSha256": "37B3AA4E745836162CC0F60D1D87B55EAD15AC75A305115E258E2602701274B8",
+  "compatibility": "The same JUnit file supplies a test-only subject extension that calls detail only when no subject member exists. Frozen MainActivity used detail; final MainActivity uses subject. The original metadata source is unchanged. Optional HTTP replies are held behind the same gate in both runs."
+}

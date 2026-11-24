@@ -1,0 +1,162 @@
+[
+  {
+    "name": "app.panda.tv.GoldenParityTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.44"
+  },
+  {
+    "name": "app.panda.tv.MetadataFlightTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.02"
+  },
+  {
+    "name": "app.panda.tv.MetadataStoreTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.276"
+  },
+  {
+    "name": "app.panda.tv.playback.MediaAdmissionTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.812"
+  },
+  {
+    "name": "app.panda.tv.playback.MediaDataSourceTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.004"
+  },
+  {
+    "name": "app.panda.tv.playback.MediaHeadTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.004"
+  },
+  {
+    "name": "app.panda.tv.playback.MediaRequestCancellationTest",
+    "tests": "2",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.001"
+  },
+  {
+    "name": "app.panda.tv.playback.SharedSegmentFlowTest",
+    "tests": "4",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.004"
+  },
+  {
+    "name": "app.panda.tv.PlaybackPreferencesTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "1.576"
+  },
+  {
+    "name": "app.panda.tv.PlaybackSearchTest",
+    "tests": "8",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.971"
+  },
+  {
+    "name": "app.panda.tv.PrimaryMetadataTest",
+    "tests": "1",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.211"
+  },
+  {
+    "name": "app.panda.tv.RuntimeCoreTest",
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.388"
+  },
+  {
+    "name": "app.panda.tv.SearchRequestTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.056"
+  },
+  {
+    "name": "app.panda.tv.TitleSearchTest",
+    "tests": "7",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "7.42"
+  },
+  {
+    "name": "app.panda.tv.ui.PersonPageLoadTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.048"
+  },
+  {
+    "name": "app.panda.tv.ui.PlaybackBufferPolicyTest",
+    "tests": "5",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.001"
+  },
+  {
+    "name": "app.panda.tv.ui.PlaybackProgressPolicyTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.001"
+  },
+  {
+    "name": "app.panda.tv.ui.PlaybackSpeedPolicyTest",
+    "tests": "9",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.002"
+  },
+  {
+    "name": "app.panda.tv.ui.PlayerLifecycleTest",
+    "tests": "3",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.002"
+  },
+  {
+    "name": "app.panda.tv.UsageStateTest",
+    "tests": "10",
+    "failures": "0",
+    "errors": "0",
+    "skipped": "0",
+    "time": "0.563"
+  }
+]

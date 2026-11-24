@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.MetadataStoreTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-11-22T18:16:38.729Z" hostname="DESKTOP-G3A3P0Q" time="0.225">
+  <properties/>
+  <testcase name="a supported 2501 title library is read in order" classname="app.panda.tv.MetadataStoreTest" time="0.141"/>
+  <testcase name="compact cards cannot erase a verified thematic type across a restart" classname="app.panda.tv.MetadataStoreTest" time="0.084"/>
+  <testcase name="new positive genre evidence can upgrade a plain format" classname="app.panda.tv.MetadataStoreTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

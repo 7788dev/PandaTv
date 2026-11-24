@@ -1,4 +1,4 @@
-import type { MediaType } from '../../../design/contract/types';
+import type { MediaType } from '../../contract/types';
 import type { DoubanKind } from './normalize';
 
 /**

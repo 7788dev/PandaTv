@@ -1,0 +1,62 @@
+{
+  "at": "2026-11-22T18:26:05.744800+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": [
+    1920,
+    1080
+  ],
+  "density": "Physical density: 280",
+  "cases": [
+    {
+      "name": "bezel",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "channel_memory",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "detail_return",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "channel_eviction",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "channel_eviction_aux_click",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "library_root_memory",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "confirmation",
+      "passed": true,
+      "pass": true
+    },
+    {
+      "name": "keypad_back",
+      "passed": true,
+      "pass": true
+    }
+  ],
+  "passed": 8,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "userStateRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/surfaces-native/report.json",
+  "rawSha256": "F9FD0AEDFACFCBC494DBB2BA5E127F49F4D7219E8C0C030069BD15C279C43FEE",
+  "auxiliaryCase": "channel_eviction_aux_click uses a top-bar tap followed by Confirm; it does not prove D-pad reachability"
+}

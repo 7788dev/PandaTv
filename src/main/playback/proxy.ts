@@ -110,6 +110,7 @@ export class MediaProxy {
     clearTimeout(this.pruneTimer)
     this.server?.closeAllConnections()
     if (this.server) await new Promise<void>(resolve => this.server!.close(() => resolve()))
+    await this.images?.close()
     this.server = undefined; this.origin = ''; this.capabilities.clear(); this.byTarget.clear(); this.warmed.clear(); this.warmedBytes = 0
     for (const flow of this.flows.values()) flow.listeners.forEach(tell => tell('fail'))
     this.flows.clear()

@@ -15,6 +15,8 @@ import android.widget.TextView
 import app.panda.tv.PandaTvApp
 import app.panda.tv.model.Copy
 import app.panda.tv.model.MediaType
+import app.panda.tv.model.StateAction
+import app.panda.tv.model.UserState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,7 +97,7 @@ class MainActivity : Activity(), Navigator {
         setContentView(rootLayout)
         if (rootLayout.isAttachedToWindow) bindFocusMemory()
 
-        openHome()
+        if (app.userStore.recovery().needed) openRecovery() else openHome()
     }
 
     override fun onPause() {
@@ -158,6 +160,11 @@ class MainActivity : Activity(), Navigator {
         }
         val top = stack.lastOrNull()
         if (top != null && top.onBackPressed()) return
+        if (top is RecoveryScreen) {
+            @Suppress("DEPRECATION")
+            super.onBackPressed()
+            return
+        }
         if (stack.size > 1) {
             back()
             return
@@ -264,6 +271,7 @@ class MainActivity : Activity(), Navigator {
     }
 
     private fun replaceRoot(key: String, create: () -> Screen) {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         cancelPlayerCheck()
         val hadPrior = stack.isNotEmpty()
         if (stack.size == 1 && stack[0].activeTab == key) return
@@ -331,24 +339,29 @@ class MainActivity : Activity(), Navigator {
     }
 
     override fun openSearch() {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         if (stack.lastOrNull() is SearchScreen) return
         pushScreen(SearchScreen(this, this))
     }
 
     override fun openSettings() {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         if (stack.lastOrNull() is SettingsScreen) return
         pushScreen(SettingsScreen(this, this))
     }
 
     override fun openDetail(id: String) {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         pushScreen(DetailScreen(this, this, id))
     }
 
     override fun openPerson(id: String, nameHint: String?, photoHint: String?) {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         pushScreen(PersonScreen(this, this, id, nameHint, photoHint))
     }
 
     override fun openPlayer(id: String, episode: Int) {
+        if (app.userStore.recovery().needed) { openRecovery(); return }
         if (playerCheckTarget == (id to episode)) return
         val origin = stack.lastOrNull() ?: return
         cancelPlayerCheck()
@@ -375,7 +388,7 @@ class MainActivity : Activity(), Navigator {
         playerCheckJob = scope.launch {
             try {
                 val item = withTimeout(22_000L) {
-                    val metadata = app.douban.detail(id)
+                    val metadata = app.douban.subject(id)
                     app.playback.prepareItem(metadata, episode, app.douban.workHints(id))
                 }
                 coroutineContext.ensureActive()
@@ -461,6 +474,34 @@ class MainActivity : Activity(), Navigator {
         val r = Runnable { toastView.visibility = View.GONE }
         toastHideRunnable = r
         handler.postDelayed(r, 2400L)
+    }
+
+    override fun saveUser(action: (UserState) -> StateAction, onSaved: (UserState) -> Unit) {
+        app.userWriter.dispatch(action) { result ->
+            if (isFinishing || isDestroyed) return@dispatch
+            result.fold(onSuccess = onSaved, onFailure = { toast(Copy.Extra.SAVE_ERROR) })
+        }
+    }
+
+    private fun openRecovery() {
+        if (stack.lastOrNull() is RecoveryScreen) return
+        cancelPlayerCheck()
+        stack.lastOrNull()?.onHidden()
+        stack.asReversed().forEach { it.onDestroy() }
+        stack.clear()
+        rootCache.values.forEach { it.onDestroy() }
+        rootCache.clear()
+        contentFrame.removeAllViews()
+        val screen = RecoveryScreen(this, this) {
+            stack.forEach { it.onDestroy() }
+            stack.clear()
+            contentFrame.removeAllViews()
+            openHome()
+        }
+        stack.add(screen)
+        contentFrame.addView(screen.view, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+        syncChrome(screen)
+        screen.onShown()
     }
 
     override fun confirm(title: String, confirmText: String, destructive: Boolean, onConfirm: () -> Unit) {

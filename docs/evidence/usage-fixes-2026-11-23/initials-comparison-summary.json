@@ -1,0 +1,8 @@
+{
+  "searchAlgorithmTextUnchanged": true,
+  "beforeSha256": "08A51645DB92AB0456406540EB1B1E099E2B3508A01B60D78EC0E98E5067436E",
+  "afterSha256": "08A51645DB92AB0456406540EB1B1E099E2B3508A01B60D78EC0E98E5067436E",
+  "baselineFailures": 2,
+  "finalFailures": 2,
+  "boundary": "Same original four-query test, sequential fresh profiles; the first failed query can vary. These failures remain failures."
+}

@@ -16,7 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
@@ -141,27 +140,29 @@ class PersonScreen(
         bodyBox.addView(posterPageLoading(ctx, grid))
         loadJob = scope.launch {
             try {
-                val infoTask = async { runCatching { nav.app.douban.person(personId) } }
-                val worksTask = async { nav.app.douban.personWorks(personId, null) }
-                val info = infoTask.await().getOrNull()
-                if (!destroyed && info != null) {
-                    nameTv.text = info.name
-                    updateAvatar(info.name, info.photo ?: photoHint)
-                }
-                val page = worksTask.await()
-                if (destroyed) return@launch
-                works.addAll(page.items)
-                nextCursor = page.next
-                bodyBox.removeAllViews()
-                if (works.isEmpty()) {
-                    bodyBox.addView(Theme.emptyOrErrorBox(ctx, Copy.Extra.PERSON_NOT_FOUND))
-                } else {
-                    grid.scrollToPosition(0)
-                    bodyBox.addView(grid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-                    adapter.notifyDataSetChanged()
-                    Theme.reveal(grid)
-                    grid.post { grid.requestFocus() }
-                }
+                loadPersonPage(nav.app.douban, personId, onInfo = { info ->
+                    if (!destroyed) {
+                        nameTv.text = info.name
+                        updateAvatar(info.name, info.photo ?: photoHint)
+                    }
+                }, onWorks = { page ->
+                    if (!destroyed) {
+                        works.addAll(page.items)
+                        nextCursor = page.next
+                        bodyBox.removeAllViews()
+                        if (works.isEmpty()) {
+                            bodyBox.addView(Theme.emptyOrErrorBox(ctx, Copy.Extra.PERSON_NOT_FOUND))
+                        } else {
+                            grid.scrollToPosition(0)
+                            bodyBox.addView(grid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+                            adapter.notifyDataSetChanged()
+                            Theme.reveal(grid)
+                            grid.post { if (!destroyed) grid.requestFocus() }
+                        }
+                    }
+                }, onInfoFailure = { error ->
+                    android.util.Log.w("PandaTV", "[person] optional info: ${error.message}")
+                })
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (t: Throwable) {

@@ -184,7 +184,12 @@ export class WorkLimiter {
   constructor(private readonly capacity: number) {}
   async run<T>(task: () => Promise<T>): Promise<T> {
     if (this.active >= this.capacity) await new Promise<void>(resolve => this.waiting.push(resolve))
-    this.active++
-    try { return await task() } finally { this.active--; this.waiting.shift()?.() }
+    else this.active++
+    try { return await task() } finally {
+      // Transfer the occupied slot directly. Decrementing before the waiting
+      // continuation resumes lets a new request claim that same slot as well.
+      const next = this.waiting.shift()
+      if (next) next(); else this.active--
+    }
   }
 }

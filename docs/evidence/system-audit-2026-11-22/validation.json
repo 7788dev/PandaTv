@@ -1,0 +1,1902 @@
+{
+  "at": "2026-11-22T19:19:34.821376+08:00",
+  "baseCommit": "4220d6dff973a55f42508a49a9c0c3d43d3b296a",
+  "scope": "Local repair candidates, desktop 1.1.4 / TV 1.0.14; versions retained and candidates identified by hashes.",
+  "verifiedProductFixes": 4,
+  "reproductions": {
+    "desktopUnitsBefore": {
+      "startedAt": "2026-11-22T17:56:14.532308+08:00",
+      "finishedAt": "2026-11-22T17:56:16.084279+08:00",
+      "log": ".tmp/system-audit/before-unit-reproductions.log",
+      "passed": 6,
+      "failed": 5,
+      "total": 11
+    },
+    "desktopUnitsAfter": {
+      "startedAt": "2026-11-22T18:01:01.281436+08:00",
+      "finishedAt": "2026-11-22T18:01:03.808980+08:00",
+      "log": ".tmp/system-audit/after-unit-reproductions.log",
+      "passed": 11,
+      "failed": 0,
+      "total": 11
+    },
+    "tvUnitsBefore": {
+      "startedAt": "2026-11-22T17:57:20.106785+08:00",
+      "finishedAt": "2026-11-22T17:58:08.658182+08:00",
+      "log": ".tmp/system-audit/tv-before-unit.log",
+      "passed": 54,
+      "failed": 2,
+      "total": 56
+    },
+    "rendererStallBefore": {
+      "startedAt": "2026-11-22T18:04:34.576148+08:00",
+      "finishedAt": "2026-11-22T18:05:13.391741+08:00",
+      "log": ".tmp/system-audit/before-stall-repeat.log",
+      "passed": 0,
+      "failed": 3,
+      "runtime": "Hidden fixture loading original released ASAR renderer; native playhead freeze and accelerated clock."
+    },
+    "rendererStallAfter": {
+      "startedAt": "2026-11-22T18:05:13.548725+08:00",
+      "finishedAt": "2026-11-22T18:05:37.113666+08:00",
+      "log": ".tmp/system-audit/after-stall-repeat.log",
+      "passed": 3,
+      "failed": 0,
+      "runtime": "Hidden fixture loading final compiled renderer; same fault injection."
+    }
+  },
+  "offline": {
+    "desktopUnit": {
+      "startedAt": "2026-11-22T18:02:30.945590+08:00",
+      "finishedAt": "2026-11-22T18:02:55.265646+08:00",
+      "log": ".tmp/system-audit/final-unit.log",
+      "files": 23,
+      "passed": 302,
+      "failed": 0,
+      "command": "npm test"
+    },
+    "releaseTests": {
+      "startedAt": "2026-11-22T18:02:55.337415+08:00",
+      "finishedAt": "2026-11-22T18:02:56.235863+08:00",
+      "log": ".tmp/system-audit/final-release-tests.log",
+      "passed": 6,
+      "failed": 0,
+      "command": "npm run test:release"
+    },
+    "fixture": {
+      "startedAt": "2026-11-22T18:09:27.962787+08:00",
+      "finishedAt": "2026-11-22T18:15:26.498749+08:00",
+      "log": ".tmp/system-audit/final-fixture.log",
+      "passed": 26,
+      "failed": 0,
+      "runtime": "desktop-fixture",
+      "command": "npm run test:e2e:fixture"
+    },
+    "typecheck": {
+      "startedAt": "2026-11-22T18:12:19.620001+08:00",
+      "finishedAt": "2026-11-22T18:12:19.622581+08:00",
+      "log": ".tmp/system-audit/final-typecheck.log",
+      "passed": true
+    },
+    "build": {
+      "startedAt": "2026-11-22T18:01:03.891065+08:00",
+      "finishedAt": "2026-11-22T18:01:12.159144+08:00",
+      "log": ".tmp/system-audit/after-build.log",
+      "passed": true
+    },
+    "design": {
+      "startedAt": "2026-11-22T18:16:18.572004+08:00",
+      "finishedAt": "2026-11-22T18:16:19.369950+08:00",
+      "log": ".tmp/system-audit/final-design.log",
+      "unchangedFiles": 206
+    },
+    "designContract": {
+      "startedAt": "2026-11-22T18:16:19.499419+08:00",
+      "finishedAt": "2026-11-22T18:16:19.532433+08:00",
+      "log": ".tmp/system-audit/final-contract.log",
+      "passedChecks": 405
+    },
+    "tv": {
+      "startedAt": "2026-11-22T18:02:31.819866+08:00",
+      "finishedAt": "2026-11-22T18:03:52.216593+08:00",
+      "log": ".tmp/system-audit/tv-final-checks.log",
+      "tests": 56,
+      "failed": 0,
+      "lintRelease": true,
+      "assembleRelease": true,
+      "minSdk": 22,
+      "command": "tv/gradlew.bat testDebugUnitTest lintRelease assembleRelease --offline --console=plain"
+    }
+  },
+  "windowsCandidate": {
+    "at": "2026-11-22T18:16:19.5338903+08:00",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\system-audit\\windows-final\\win-unpacked\\Panda.exe",
+    "rendererHtml": "<!doctype html>\n<html lang=\"zh-CN\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: http://127.0.0.1:*; media-src 'self' blob: http://127.0.0.1:*; connect-src 'self' http://127.0.0.1:* ws://localhost:*; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'\" />\n    <title>Panda</title>\n    <script type=\"module\" crossorigin src=\"./assets/index-C3R2Zlba.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"./assets/index-C9a67xhW.css\">\n  </head>\n  <body><div id=\"root\"></div></body>\n</html>\n",
+    "files": [
+      {
+        "path": "E:\\dev\\项目\\panda\\.tmp\\system-audit\\windows-final\\win-unpacked\\Panda.exe",
+        "bytes": 250077696,
+        "sha256": "0B64A1022B629CBCA5DB9FA53E2B94A10E7BA5A4E0EA988C26251EB7D4069241"
+      },
+      {
+        "path": "E:\\dev\\项目\\panda\\.tmp\\system-audit\\windows-final\\win-unpacked\\resources\\app.asar",
+        "bytes": 13791380,
+        "sha256": "1841E6C18E200F2437EC4AC33A081E61CA5598B9D996E93CD4BBEB2DE96A7403"
+      }
+    ]
+  },
+  "tvCandidate": {
+    "at": "2026-11-22T10:10:59.068218+00:00",
+    "serial": "127.0.0.1:16416",
+    "installedApkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+    "candidateApkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+    "android": "15",
+    "api": "35",
+    "bytes": 1821937,
+    "versionCode": 15,
+    "versionName": "1.0.14",
+    "minSdk": 22,
+    "signatureEvidence": ".tmp/system-audit/tv-final-signature.log"
+  },
+  "productionSourcesUnchangedAfterBuild": true,
+  "sourceIdentity": {
+    "at": "2026-11-22T18:19:26.1288745+08:00",
+    "files": [
+      {
+        "path": "src/main/playback/network.ts",
+        "sha256": "FF9D230A963D76B9E7ED362987EA3CE47E2CA22868D1CFCD27428DB6CBD36724"
+      },
+      {
+        "path": "src/main/data/store.ts",
+        "sha256": "6DAF22AF18F83446B47C9E95287C314D669F73B1FBCB9C449A60F0B74F23550E"
+      },
+      {
+        "path": "src/main/data/douban.ts",
+        "sha256": "DFF2E4EF60900884330C17BB7C8110478398F5C82A9F6532E4DBB8F6FD19C937"
+      },
+      {
+        "path": "src/renderer/Player.tsx",
+        "sha256": "EC2AABAB3F1C80F621559789F170A4DD2952AB5A28F96BD75776AD640D1786A3"
+      },
+      {
+        "path": "tv/app/src/main/java/app/panda/tv/data/MetadataStore.kt",
+        "sha256": "79E473819851F0EA958560FCC4EF8BFE3336AFE5082AF2158AD79713F6E42C21"
+      },
+      {
+        "path": "tv/app/src/main/java/app/panda/tv/data/DoubanDataSource.kt",
+        "sha256": "C8A4E98C6F94977EC4E5C2A3B31978AD3CF792888FFF15541738B9E8001B6E50"
+      }
+    ]
+  },
+  "desktopLive": {
+    "startedAt": "2026-11-22T18:18:06.955884+08:00",
+    "finishedAt": "2026-11-22T18:25:49.248889+08:00",
+    "log": ".tmp/system-audit/final-packaged-live.log",
+    "command": "npm run test:e2e (PANDA_E2E_EXECUTABLE selects .tmp/system-audit/windows-final/win-unpacked/Panda.exe)",
+    "passed": 11,
+    "failed": 3,
+    "skipped": 1,
+    "runtime": "desktop-packaged-live, unpacked candidate",
+    "failedSources": [
+      "bfzy",
+      "dyttzy",
+      "lzi"
+    ],
+    "failureStage": "e2e/ads.spec.ts:41, initial wait for decoded playback; ad-cut assertions not reached",
+    "buildReload": {
+      "startedAt": "2026-11-22T18:27:12.980401+08:00",
+      "finishedAt": "2026-11-22T18:27:15.317801+08:00",
+      "log": ".tmp/system-audit/build-live-startup.log",
+      "passed": 1,
+      "failed": 0,
+      "runtime": "desktop-build-live",
+      "command": "npm run test:e2e -- e2e/startup.spec.ts --grep reload"
+    },
+    "movie": {
+      "at": "2026-11-22T10:22:17.975Z",
+      "start": {
+        "position": 1.005814,
+        "duration": 10390.645999999999,
+        "width": 1280,
+        "height": 538,
+        "readyState": 4,
+        "paused": false,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 25,
+        "droppedFrames": 0
+      },
+      "pause": {
+        "position": 1.029127,
+        "duration": 10390.645999999999,
+        "width": 1280,
+        "height": 538,
+        "readyState": 4,
+        "paused": true,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 26,
+        "droppedFrames": 0
+      },
+      "seekRecoveryMs": 1868,
+      "seek": {
+        "position": 501.698655,
+        "duration": 10390.645999999999,
+        "width": 1280,
+        "height": 538,
+        "readyState": 4,
+        "paused": false,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 91,
+        "droppedFrames": 0
+      },
+      "speedPlayback": {
+        "requestedRate": 2,
+        "appliedRate": 2,
+        "observedRate": 1.989191384769206,
+        "wallSeconds": 12.002,
+        "mediaSeconds": 23.87427500000001,
+        "decodedFrames": 574,
+        "droppedFrames": 1,
+        "droppedFrameRatio": 0.0017421602787456446
+      },
+      "fullscreen": {
+        "maximized": false,
+        "fullscreen": true
+      },
+      "pictureInPicture": true
+    },
+    "serial": {
+      "at": "2026-11-22T10:22:41.651Z",
+      "first": {
+        "position": 1.004388,
+        "duration": 3635.134000000003,
+        "width": 1920,
+        "height": 1080,
+        "readyState": 4,
+        "paused": false,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 34,
+        "droppedFrames": 0
+      },
+      "second": {
+        "position": 1.002837,
+        "duration": 3831.8880000000017,
+        "width": 1920,
+        "height": 1080,
+        "readyState": 4,
+        "paused": false,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 34,
+        "droppedFrames": 0
+      },
+      "third": {
+        "position": 1.00165,
+        "duration": 3209.875000000001,
+        "width": 1920,
+        "height": 1080,
+        "readyState": 4,
+        "paused": false,
+        "rate": 1,
+        "volume": 0.8,
+        "muted": true,
+        "decodedFrames": 26,
+        "droppedFrames": 0
+      }
+    },
+    "animation": {
+      "id": "db-37457082",
+      "title": "凡人修仙传 年番4",
+      "position": 1.003934,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 27
+    },
+    "resourceRelease": {
+      "at": "2026-11-22T10:25:18.225Z",
+      "cycles": 6,
+      "retainedPlayers": [
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        }
+      ],
+      "activeTimers": [],
+      "applicationRootListenersMatchBaseline": true,
+      "frameSamples": [
+        {
+          "name": "search-open-close",
+          "frames": 365,
+          "p95Ms": 8.299999999999955,
+          "maxMs": 58.69999999999993,
+          "longTasksMs": [
+            67
+          ]
+        },
+        {
+          "name": "poster-hover-scroll",
+          "frames": 377,
+          "p95Ms": 4.300000000000182,
+          "maxMs": 100.09999999999991,
+          "longTasksMs": []
+        },
+        {
+          "name": "detail-enter",
+          "frames": 330,
+          "p95Ms": 4.300000000000182,
+          "maxMs": 54,
+          "longTasksMs": []
+        },
+        {
+          "name": "episode-open-close",
+          "frames": 359,
+          "p95Ms": 4.299999999999272,
+          "maxMs": 8.200000000000728,
+          "longTasksMs": []
+        }
+      ]
+    }
+  },
+  "startup": {
+    "at": "2026-11-22T10:27:16.046Z",
+    "executable": "E:\\dev\\项目\\panda\\.tmp\\system-audit\\windows-final\\win-unpacked\\Panda.exe",
+    "unit": "ms after process creation",
+    "percentileMethod": "nearest rank",
+    "firstStarts": {
+      "count": 20,
+      "failed": 0,
+      "fields": {
+        "skeleton": {
+          "observed": 20,
+          "median": 465.5,
+          "p95": 512,
+          "max": 515
+        },
+        "topOfPage": {
+          "observed": 20,
+          "median": 782.5,
+          "p95": 1019,
+          "max": 1110
+        },
+        "visibleArtwork": {
+          "observed": 20,
+          "median": 1107.0,
+          "p95": 1405,
+          "max": 1551
+        },
+        "wholePage": {
+          "observed": 20,
+          "median": 1867.5,
+          "p95": 2025,
+          "max": 2279
+        }
+      }
+    },
+    "repeatStarts": {
+      "count": 3,
+      "failed": 0,
+      "fields": {
+        "skeleton": {
+          "observed": 3,
+          "median": 451,
+          "p95": 486,
+          "max": 486
+        },
+        "topOfPage": {
+          "observed": 3,
+          "median": 596,
+          "p95": 631,
+          "max": 631
+        },
+        "visibleArtwork": {
+          "observed": 3,
+          "median": 802,
+          "p95": 818,
+          "max": 818
+        },
+        "wholePage": {
+          "observed": 3,
+          "median": 596,
+          "p95": 631,
+          "max": 631
+        }
+      }
+    }
+  },
+  "forcedSourceDiagnostics": {
+    "original": {
+      "startedAt": "2026-11-22T18:29:41.678000+08:00",
+      "asarSha256": "9FBE21EA11AF38239AD63D7BFADBFB136BC06BBF98CE5FB55C8B5DA771133D26",
+      "report": ".tmp/system-audit/single-source-original/report.json",
+      "cases": [
+        {
+          "source": "bfzy",
+          "title": "漫长的季节",
+          "item": {
+            "id": "db-35588177",
+            "title": "漫长的季节",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 1353
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19183,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] bfzy search: 请求已取消 / ABORT_ERR 9001ms",
+            "[source] bfzy search: 请求已取消 / ABORT_ERR 9001ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        },
+        {
+          "source": "dyttzy",
+          "title": "三体",
+          "item": {
+            "id": "db-26647087",
+            "title": "三体",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 1389
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19433,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] dyttzy search: 请求已取消 / ABORT_ERR 9001ms",
+            "[source] dyttzy search: 请求已取消 / ABORT_ERR 9001ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        },
+        {
+          "source": "lzi",
+          "title": "庆余年 第二季",
+          "item": {
+            "id": "db-34937650",
+            "title": "庆余年 第二季",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 1204
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19452,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] lzi search: 请求已取消 / ABORT_ERR 9001ms",
+            "[source] lzi search: 请求已取消 / ABORT_ERR 9001ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        }
+      ]
+    },
+    "candidate": {
+      "startedAt": "2026-11-22T18:28:33.855000+08:00",
+      "asarSha256": "1841E6C18E200F2437EC4AC33A081E61CA5598B9D996E93CD4BBEB2DE96A7403",
+      "report": ".tmp/system-audit/single-source-final/report.json",
+      "cases": [
+        {
+          "source": "bfzy",
+          "title": "漫长的季节",
+          "item": {
+            "id": "db-35588177",
+            "title": "漫长的季节",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 1490
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19355,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] bfzy search: 请求已取消 / ABORT_ERR 9002ms",
+            "[source] bfzy search: 请求已取消 / ABORT_ERR 9002ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        },
+        {
+          "source": "dyttzy",
+          "title": "三体",
+          "item": {
+            "id": "db-26647087",
+            "title": "三体",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 2141
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19275,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] dyttzy search: 请求已取消 / ABORT_ERR 9001ms",
+            "[source] dyttzy search: 请求已取消 / ABORT_ERR 9000ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        },
+        {
+          "source": "lzi",
+          "title": "庆余年 第二季",
+          "item": {
+            "id": "db-34937650",
+            "title": "庆余年 第二季",
+            "type": "tv"
+          },
+          "stages": [
+            {
+              "name": "metadata",
+              "ms": 1737
+            },
+            {
+              "name": "source-resolution",
+              "ok": false,
+              "ms": 19439,
+              "error": "page.evaluate: Error: 暂时无法连接，请重试"
+            }
+          ],
+          "sourceLogs": [
+            "[source] lzi search: 请求已取消 / ABORT_ERR 9002ms",
+            "[source] lzi search: 请求已取消 / ABORT_ERR 9001ms",
+            "[failure] UNAVAILABLE 暂时无法连接，请重试"
+          ]
+        }
+      ]
+    }
+  },
+  "tvRuntime": {
+    "surfaces": {
+      "startedAt": "2026-11-22T18:11:14.809736+08:00",
+      "command": "python -X utf8 scripts/verify-tv-surfaces.py --serial 127.0.0.1:16416 --apk .tmp/system-audit/Panda-TV-final.apk --output .tmp/system-audit/tv-surfaces",
+      "report": ".tmp/system-audit/tv-surfaces/report.json",
+      "reportSha256": "3FD69EA0551594807E93AB03B88ED9983154289D544D4ABC27883F1707316D0F",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 8,
+      "cases": [
+        {
+          "case": "bezel",
+          "pass": true
+        },
+        {
+          "case": "channel_memory",
+          "pass": true
+        },
+        {
+          "case": "detail_return",
+          "pass": true
+        },
+        {
+          "case": "channel_eviction",
+          "pass": true
+        },
+        {
+          "case": "channel_eviction_aux_click",
+          "pass": true
+        },
+        {
+          "case": "library_root_memory",
+          "pass": true
+        },
+        {
+          "case": "confirmation",
+          "pass": true
+        },
+        {
+          "case": "keypad_back",
+          "pass": true
+        }
+      ],
+      "failures": [],
+      "unavailable": [],
+      "restoration": {
+        "userStateRestored": true
+      }
+    },
+    "navigation": {
+      "startedAt": "2026-11-22T18:13:39.530766+08:00",
+      "command": "python -X utf8 scripts/verify-tv-navigation.py --serial 127.0.0.1:16416 --extended --library --output .tmp/system-audit/tv-navigation",
+      "report": ".tmp/system-audit/tv-navigation/report.json",
+      "reportSha256": "F27C4AE89FD134E1A27DF7DAE75CB6067CE7CD2A8758F87D9E63E99C6150B316",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 23,
+      "cases": [
+        {
+          "name": "动漫-1-normal",
+          "passed": true
+        },
+        {
+          "name": "动漫-1-fast-right",
+          "passed": true
+        },
+        {
+          "name": "动漫筛选展开回顶",
+          "passed": true
+        },
+        {
+          "name": "电影-1-normal",
+          "passed": true
+        },
+        {
+          "name": "电影-1-fast-right",
+          "passed": true
+        },
+        {
+          "name": "电影筛选展开回顶",
+          "passed": true
+        },
+        {
+          "name": "剧集-1-normal",
+          "passed": true
+        },
+        {
+          "name": "剧集-1-fast-right",
+          "passed": true
+        },
+        {
+          "name": "剧集筛选展开回顶",
+          "passed": true
+        },
+        {
+          "name": "综艺-1-normal",
+          "passed": true
+        },
+        {
+          "name": "综艺-1-fast-right",
+          "passed": true
+        },
+        {
+          "name": "综艺筛选展开回顶",
+          "passed": true
+        },
+        {
+          "name": "纪录片-1-normal",
+          "passed": true
+        },
+        {
+          "name": "纪录片-1-fast-right",
+          "passed": true
+        },
+        {
+          "name": "纪录片筛选展开回顶",
+          "passed": true
+        },
+        {
+          "name": "搜索结果回顶",
+          "passed": true
+        },
+        {
+          "name": "搜索末行保持列",
+          "passed": true
+        },
+        {
+          "name": "影人作品回顶",
+          "passed": true
+        },
+        {
+          "name": "搜索与影人页面流程",
+          "passed": true
+        },
+        {
+          "name": "收藏列表回顶",
+          "passed": true
+        },
+        {
+          "name": "收藏详情返回位置",
+          "passed": true
+        },
+        {
+          "name": "历史列表回顶",
+          "passed": true
+        },
+        {
+          "name": "收藏历史流程",
+          "passed": true
+        }
+      ],
+      "failures": [],
+      "unavailable": [],
+      "restoration": {
+        "userStateRestored": true,
+        "libraryUserStateRestored": true
+      }
+    },
+    "search": {
+      "startedAt": "2026-11-22T18:18:38.666092+08:00",
+      "command": "python -X utf8 scripts/verify-tv-search-state.py --serial 127.0.0.1:16416 --output .tmp/system-audit/tv-search",
+      "report": ".tmp/system-audit/tv-search/report.json",
+      "reportSha256": "9759BE08A111519D27AF50F9FA9AF33C47C82A60DC7B2B68EF5616E90EFF62C0",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 3,
+      "cases": [
+        {
+          "query": "刘德华",
+          "passed": true
+        },
+        {
+          "query": "西游记",
+          "passed": true
+        },
+        {
+          "query": "蜡笔小新",
+          "passed": true
+        }
+      ],
+      "failures": [],
+      "unavailable": [],
+      "restoration": {
+        "userStateRestored": true
+      }
+    },
+    "motion": {
+      "startedAt": "2026-11-22T18:31:44.045945+08:00",
+      "command": "python -X utf8 scripts/verify-tv-motion.py --serial 127.0.0.1:16416 --repeat 2 --hold --output .tmp/system-audit/tv-motion",
+      "report": ".tmp/system-audit/tv-motion/report.json",
+      "reportSha256": "4B2E74BA872035DD1232987A9A0ADA0A3D6C96605C9978C6027ABC923B8EF07E",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 4,
+      "cases": [
+        {
+          "name": "home-1",
+          "passed": true,
+          "frames": {
+            "totalFrames": 179,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          }
+        },
+        {
+          "name": "channel-expanded-1",
+          "passed": true,
+          "frames": {
+            "totalFrames": 268,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          }
+        },
+        {
+          "name": "home-2",
+          "passed": true,
+          "frames": {
+            "totalFrames": 170,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          }
+        },
+        {
+          "name": "channel-expanded-2",
+          "passed": true,
+          "frames": {
+            "totalFrames": 268,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          }
+        }
+      ],
+      "failures": [],
+      "unavailable": [],
+      "restoration": {}
+    },
+    "initialInterruptedRunner": {
+      "log": ".tmp/system-audit/tv-playback.log",
+      "preconditionFailures": 4,
+      "playActionsNotReached": true,
+      "restorationLog": ".tmp/system-audit/tv-after-helper-interrupt-restoration.log"
+    },
+    "queryFixBatch": {
+      "startedAt": "2026-11-22T18:37:22.968915+08:00",
+      "command": "Full playback replay after correcting title-visibility precondition; retained original batch.",
+      "report": ".tmp/system-audit/tv-playback-final/report.json",
+      "reportSha256": "1644A2C7712B2C182178447E93D7D7C36C2D4372B19B5A9FD2785B053C621002",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 12,
+      "cases": [
+        {
+          "name": "player-focus",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              336,
+              701,
+              419
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        },
+        {
+          "name": "episode-panel-focus",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              336,
+              701,
+              419
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        },
+        {
+          "name": "player-lifecycle",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "seek-control",
+          "passed": true,
+          "seekRecoveryMs": 6375,
+          "sourceRetries": 0,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "speed-control",
+          "passed": true,
+          "sourceRetries": 0,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "episode-switch",
+          "passed": true,
+          "seekRecoveryMs": 6330,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "admission-cancel",
+          "passed": true
+        },
+        {
+          "name": "loaded-detail-return-1",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第3集"
+            ]
+          }
+        },
+        {
+          "name": "loaded-detail-return-2",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第3集"
+            ]
+          }
+        },
+        {
+          "name": "playback-error-recovery-1",
+          "passed": true,
+          "retryRecoveryMs": 6526,
+          "errorObservedMs": 40173,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第3集"
+            ]
+          }
+        },
+        {
+          "name": "playback-error-recovery-2",
+          "passed": true,
+          "retryRecoveryMs": 11602,
+          "errorObservedMs": 40195,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第4集"
+            ]
+          }
+        },
+        {
+          "name": "missing-source",
+          "passed": true,
+          "verdict": "retryable",
+          "selectedSubject": {
+            "requestedTitle": "骑有此理 第四季",
+            "rating": null,
+            "focusedLabels": [
+              "40分钟",
+              "骑有此理 第四季",
+              "真人秀"
+            ],
+            "bounds": [
+              97,
+              307,
+              366,
+              803
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              272,
+              701,
+              355
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        }
+      ],
+      "failures": [
+        {
+          "name": "media-controls",
+          "stage": "media-controls:entry",
+          "error": "MEDIA_PAUSE did not hold the timeline: {'texts': ['返回', '三体', '第1集', '1.0', '播放', '下一集', '00:03 / 1:00:35', '选集', '1080P', '倍速'], 'clock': '00:03 / 1:00:35', 'player': True, 'spinner': False, 'focus': {'class': 'android.widget.LinearLayout', 'bounds': (102, 945, 277, 1017), 'labels': ['播放']}, 'nextTap': [416, 981], 'loadingRegionMaxRgb': 246} -> {'texts': ['返回', '三体', '第1集', '1.0', '播放', '下一集', '00:04 / 1:00:35', '选集', '1080P', '倍速'], 'clock': '00:04 / 1:00:35', 'player': True, 'spinner': False, 'focus': {'class': 'android.widget.LinearLayout', 'bounds': (102, 945, 277, 1017), 'labels': ['播放']}, 'nextTap': [416, 981]}"
+        },
+        {
+          "name": "line-switch-1",
+          "stage": "line-switch:initial-playback",
+          "error": "Playback controls disappeared while waiting for the line trigger: {'texts': [], 'clock': None, 'player': False, 'spinner': False, 'focus': None, 'loadingRegionMaxRgb': 221}"
+        },
+        {
+          "name": "line-switch-2",
+          "stage": "line-switch:initial-playback",
+          "error": "Playback controls disappeared while waiting for the line trigger: {'texts': [], 'clock': None, 'player': False, 'spinner': False, 'focus': None, 'loadingRegionMaxRgb': 219}"
+        }
+      ],
+      "unavailable": [],
+      "restoration": {
+        "userStateRestored": true,
+        "firewallRulesRestored": true
+      }
+    },
+    "mediaRecheck": {
+      "startedAt": "2026-11-22T18:46:54.338085+08:00",
+      "command": "Independent --case media replay after synchronizing the pause baseline with saved actual position.",
+      "report": ".tmp/system-audit/tv-media-final/report.json",
+      "reportSha256": "A3C7F02A6ACB012450ED9B3D54F626839C95904C56EB27881ABF6FFEF527B175",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 1,
+      "cases": [
+        {
+          "name": "media-controls",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              336,
+              701,
+              419
+            ],
+            "labels": [
+              "播放"
+            ]
+          },
+          "pauseBaseline": {
+            "initialClock": "00:02 / 1:00:35",
+            "settledClock": "00:02 / 1:00:35",
+            "savedEntry": {
+              "id": "db-26647087",
+              "episode": 1,
+              "position": 2,
+              "duration": 3635.134,
+              "at": 1795344431257
+            },
+            "pauseStableMs": 1200
+          }
+        }
+      ],
+      "failures": [],
+      "unavailable": [],
+      "restoration": {
+        "userStateRestored": true,
+        "firewallRulesRestored": true
+      }
+    },
+    "lineRecheck": {
+      "startedAt": "2026-11-22T18:47:22.994568+08:00",
+      "command": "Independent --case switch --switch-repeats 2 replay with ordinary D-pad overlay reveal.",
+      "report": ".tmp/system-audit/tv-lines-final/report.json",
+      "reportSha256": "413BDF35417E56165531F0361C1FBD57709456228FD90A29D4023D1F44A3A942",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 0,
+      "cases": [],
+      "failures": [],
+      "unavailable": [
+        {
+          "name": "line-switch-1",
+          "reason": "No alternate line became selectable in this playback sample."
+        },
+        {
+          "name": "line-switch-2",
+          "reason": "No alternate line became selectable in this playback sample."
+        }
+      ],
+      "restoration": {
+        "userStateRestored": true,
+        "firewallRulesRestored": true
+      }
+    },
+    "lastCompletePlayback": {
+      "startedAt": "2026-11-22T18:49:51.688293+08:00",
+      "command": "python -X utf8 scripts/verify-tv-playback-transitions.py --serial 127.0.0.1:16416 --case all --line-title 流浪地球2 --switch-repeats 2 --output .tmp/system-audit/tv-playback-verified",
+      "report": ".tmp/system-audit/tv-playback-verified/report.json",
+      "reportSha256": "B36378A002B7183A5AA59AA6A575F4ABAD19B773C235E0361816E1C573B1CD2F",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 10,
+      "cases": [
+        {
+          "name": "player-focus",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              336,
+              701,
+              419
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        },
+        {
+          "name": "episode-panel-focus",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              336,
+              701,
+              419
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        },
+        {
+          "name": "media-controls",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          },
+          "pauseBaseline": {
+            "initialClock": "00:02 / 1:00:35",
+            "settledClock": "00:02 / 1:00:35",
+            "savedEntry": {
+              "id": "db-26647087",
+              "episode": 1,
+              "position": 2,
+              "duration": 3635.134,
+              "at": 1795344630393
+            },
+            "pauseStableMs": 1200
+          }
+        },
+        {
+          "name": "player-lifecycle",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "seek-control",
+          "passed": true,
+          "seekRecoveryMs": 7247,
+          "sourceRetries": 0,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "speed-control",
+          "passed": true,
+          "sourceRetries": 0,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "episode-switch",
+          "passed": true,
+          "seekRecoveryMs": 7376,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "name": "admission-cancel",
+          "passed": true
+        },
+        {
+          "name": "loaded-detail-return-1",
+          "passed": true,
+          "selectedSubject": {
+            "requestedTitle": "三体",
+            "rating": "8.8",
+            "focusedLabels": [
+              "8.8",
+              "45分钟",
+              "三体",
+              "剧情 / 科幻"
+            ],
+            "bounds": [
+              97,
+              399,
+              366,
+              895
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              692,
+              844,
+              775
+            ],
+            "labels": [
+              "继续播放 第3集"
+            ]
+          }
+        },
+        {
+          "name": "missing-source",
+          "passed": true,
+          "verdict": "retryable",
+          "selectedSubject": {
+            "requestedTitle": "骑有此理 第四季",
+            "rating": null,
+            "focusedLabels": [
+              "40分钟",
+              "骑有此理 第四季",
+              "真人秀"
+            ],
+            "bounds": [
+              97,
+              307,
+              366,
+              803
+            ]
+          },
+          "detailPlayFocus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              272,
+              701,
+              355
+            ],
+            "labels": [
+              "播放"
+            ]
+          }
+        }
+      ],
+      "failures": [
+        {
+          "name": "playback-error-recovery-1",
+          "stage": "playback-error:initial-playback",
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+        },
+        {
+          "name": "playback-error-recovery-2",
+          "stage": "playback-error:initial-playback",
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+        }
+      ],
+      "unavailable": [
+        {
+          "name": "line-switch-1",
+          "reason": "No alternate line became selectable in this playback sample."
+        },
+        {
+          "name": "line-switch-2",
+          "reason": "No alternate line became selectable in this playback sample."
+        },
+        {
+          "name": "loaded-detail-return-2",
+          "stage": "loaded-detail-return:playback",
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']",
+          "reason": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']",
+          "detail": "Catalogues returned retryable network errors before this real playback sample could run."
+        }
+      ],
+      "restoration": {
+        "userStateRestored": true,
+        "firewallRulesRestored": true
+      }
+    },
+    "errorRecoveryRecheck": {
+      "startedAt": "2026-11-22T19:03:40.940944+08:00",
+      "command": "Independent --case error --error-repeats 2 replay; recovery deadlines start after fault injection.",
+      "report": ".tmp/system-audit/tv-errors-final/report.json",
+      "reportSha256": "268CBBCB65EAF9886DBD43062090A37BD57449D9AABA1EF7829F106E0CC86089",
+      "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+      "completed": 0,
+      "cases": [],
+      "failures": [
+        {
+          "name": "playback-error-recovery-2",
+          "stage": "playback-error:initial-playback",
+          "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '正在准备播放', '0.0', '播放', '下一集', '00:01 / 1:00:35', '选集', '1080P', '倍速']"
+        }
+      ],
+      "unavailable": [
+        {
+          "name": "playback-error-recovery-1",
+          "stage": "playback-error:initial-playback",
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']",
+          "reason": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']",
+          "detail": "Catalogues returned retryable network errors before this real playback sample could run."
+        }
+      ],
+      "restoration": {
+        "userStateRestored": true,
+        "firewallRulesRestored": true
+      }
+    },
+    "helperIdentities": {
+      "lastCompletePlayback": {
+        "at": "2026-11-22T18:49:50.0056840+08:00",
+        "helper": "scripts/verify-tv-playback-transitions.py",
+        "sha256": "BEEE27AC9BCFFD5F6166C6680884FB640D53AB010C4607358821BFA4F76DB7D6",
+        "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+        "evidence": ".tmp/system-audit/tv-playback-verified"
+      },
+      "errorRecoveryRecheck": {
+        "at": "2026-11-22T19:03:39.2564144+08:00",
+        "helper": "scripts/verify-tv-playback-transitions.py",
+        "sha256": "BC3217C14B34E0333F29EBE8F121FE3CBB0752DAE94FA331B141B2D03D47FAA1",
+        "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+        "evidence": ".tmp/system-audit/tv-errors-final"
+      },
+      "lastCompletePlaybackRetainedSnapshot": ".tmp/system-audit/tv-playback-before-classification-fix.py",
+      "errorRecoveryRecheckProvenance": "Helper hash recorded at the run; this intermediate helper snapshot was not retained.",
+      "finalClassificationReview": {
+        "at": "2026-11-22T11:15:51.148838+00:00",
+        "helper": "scripts/verify-tv-playback-transitions.py",
+        "sha256": "DAEA09BDD59D87203A79A633E122FFD88BB6BD365CC6D2D52A8EBD225C246419",
+        "method": "Read-only replay of captured real observations, not another device playback run",
+        "evidence": ".tmp/system-audit/tv-classification-review.json"
+      }
+    },
+    "classificationReview": {
+      "at": "2026-11-22T11:15:51.148838+00:00",
+      "method": "Read-only replay of captured real observations, not another device playback run",
+      "helperSha256": "DAEA09BDD59D87203A79A633E122FFD88BB6BD365CC6D2D52A8EBD225C246419",
+      "cases": [
+        {
+          "origin": "tv-playback-verified/report.json",
+          "name": "playback-error-recovery-1",
+          "stage": "playback-error:initial-playback",
+          "clock": null,
+          "isRecoverySampleUnavailable": true,
+          "faultNotInjected": true,
+          "initialPlaybackFailureRetained": true,
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+        },
+        {
+          "origin": "tv-playback-verified/report.json",
+          "name": "playback-error-recovery-2",
+          "stage": "playback-error:initial-playback",
+          "clock": null,
+          "isRecoverySampleUnavailable": true,
+          "faultNotInjected": true,
+          "initialPlaybackFailureRetained": true,
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+        },
+        {
+          "origin": "tv-errors-final/report.json",
+          "name": "playback-error-recovery-2",
+          "stage": "playback-error:initial-playback",
+          "clock": "00:01 / 1:00:35",
+          "isRecoverySampleUnavailable": true,
+          "faultNotInjected": true,
+          "initialPlaybackFailureRetained": true,
+          "error": "Playback did not advance; visible texts=['返回', '三体', '第1集', '正在准备播放', '0.0', '播放', '下一集', '00:01 / 1:00:35', '选集', '1080P', '倍速']"
+        },
+        {
+          "origin": "tv-errors-final/report.json",
+          "name": "playback-error-recovery-1",
+          "stage": "playback-error:initial-playback",
+          "clock": null,
+          "isRecoverySampleUnavailable": true,
+          "faultNotInjected": true,
+          "initialPlaybackFailureRetained": true,
+          "error": "Player reached the retry screen before the timeline advanced: ['连接超时，请重试', '重试', '返回']"
+        }
+      ],
+      "postInjectionDeadlinesRemainStrict": true
+    },
+    "observedNetworkRecoverySamples": [
+      {
+        "name": "playback-error-recovery-1",
+        "passed": true,
+        "retryRecoveryMs": 6526,
+        "errorObservedMs": 40173,
+        "selectedSubject": {
+          "requestedTitle": "三体",
+          "rating": "8.8",
+          "focusedLabels": [
+            "8.8",
+            "45分钟",
+            "三体",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ]
+        },
+        "detailPlayFocus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            506,
+            692,
+            844,
+            775
+          ],
+          "labels": [
+            "继续播放 第3集"
+          ]
+        }
+      },
+      {
+        "name": "playback-error-recovery-2",
+        "passed": true,
+        "retryRecoveryMs": 11602,
+        "errorObservedMs": 40195,
+        "selectedSubject": {
+          "requestedTitle": "三体",
+          "rating": "8.8",
+          "focusedLabels": [
+            "8.8",
+            "45分钟",
+            "三体",
+            "剧情 / 科幻"
+          ],
+          "bounds": [
+            97,
+            399,
+            366,
+            895
+          ]
+        },
+        "detailPlayFocus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            506,
+            692,
+            844,
+            775
+          ],
+          "labels": [
+            "继续播放 第4集"
+          ]
+        }
+      }
+    ],
+    "initialSourceFailureClassification": "Four recovery samples in the latest complete and independent error runs did not obtain advancing initial playback before fault injection. Original raw counts, errors and logs are retained. Read-only classification makes those recovery samples unavailable, not passed. True post-injection deadlines remain strict failures.",
+    "sessionRestoration": {
+      "at": "2026-11-22T11:16:11.615930+00:00",
+      "files": {
+        "user-state.json": true,
+        "play-sources.json": true
+      },
+      "displayRestored": true,
+      "firewallRulesRestored": true,
+      "finalApkStillInstalled": true
+    },
+    "emulatorSessionEnd": {
+      "at": "2026-11-22T11:16:54.900819+00:00",
+      "instance": "1",
+      "command": "mumu-cli.exe control --vmindex 1 shutdown",
+      "shutdownResult": "{\n  \"errcode\": 0,\n  \"errmsg\": \"\"\n}",
+      "initiallyStopped": true,
+      "finallyStopped": true
+    }
+  },
+  "protectedArtifacts": [
+    {
+      "path": "release/win-unpacked/resources/app.asar",
+      "sha256": "9FBE21EA11AF38239AD63D7BFADBFB136BC06BBF98CE5FB55C8B5DA771133D26",
+      "bytes": 13791289
+    },
+    {
+      "path": "release/Panda-TV-1.0.14.apk",
+      "sha256": "25E9963471F04405A8DA8CE76FF80345ECD069CD4360D3BEB1D663B0D3001DD6",
+      "bytes": 1821909
+    }
+  ],
+  "windowsUserInstallation": {
+    "path": "D:/Programs/Panda/resources/app.asar",
+    "bytes": 13785502,
+    "sha256": "823108D66FCFD4C8E690BB24977401576A992CE91E3794433081B819DFE31302",
+    "inspection": "read only; executable not launched or upgraded"
+  },
+  "limits": [
+    "Large supported libraries still load uncached metadata without library pagination.",
+    "Three forced catalogues timed out on this network in both original and repair candidate.",
+    "A second selectable TV source line was not observed; switching cannot be claimed passed.",
+    "Latest TV recovery samples hit initial source playback timeouts before fault injection; earlier two recoveries on the same APK do not erase those initial failures.",
+    "The missing-title admission replay may yield a retryable result, not confirmed global absence.",
+    "Android 15/API 35 MuMu evidence does not cover TCL/API 22 hardware or long playback sessions.",
+    "Windows candidate is unpacked; NSIS installation was not performed."
+  ]
+}

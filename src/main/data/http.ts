@@ -7,9 +7,10 @@ export class DataError extends Error {
   }
 }
 
-export interface DataWarning { code: DataErrorCode | 'CACHED'; operation: string; message: string; at: number }
+export interface DataWarning { code: DataErrorCode | 'CACHED' | 'PARTIAL'; operation: string; message: string; at: number }
 
 interface Cached { value: unknown; expires: number; bytes: number }
+interface Flight { value: Promise<unknown>; controller: AbortController; readers: number; done: boolean }
 interface HttpOptions {
   fetch?: typeof globalThis.fetch;
   timeoutMs?: number;
@@ -22,14 +23,19 @@ interface HttpOptions {
   maxEntries?: number;
   maxBytes?: number;
 }
-const wait = (ms: number) => new Promise<void>(resolve => setTimeout(resolve, ms));
+const wait = (ms: number, signal?: AbortSignal) => new Promise<void>((resolve, reject) => {
+  const abort = () => { clearTimeout(timer); signal?.removeEventListener('abort', abort); reject(signal?.reason) };
+  const timer = setTimeout(() => { signal?.removeEventListener('abort', abort); resolve(); }, ms);
+  signal?.addEventListener('abort', abort, { once: true });
+  if (signal?.aborted) abort();
+});
 const MAX_BODY = 8 * 1024 * 1024;
 const ALLOWED_HOSTS = new Set(['m.douban.com', 'movie.douban.com', 'www.douban.com', 'top.baidu.com']);
 
 /** All requests are main-process only. A success is cached only after endpoint validation. */
 export class DoubanHttp {
   private cache = new Map<string, Cached>();
-  private flights = new Map<string, Promise<unknown>>();
+  private flights = new Map<string, Flight>();
   private bytes = 0;
   private active = 0;
   private queue: Array<() => void> = [];
@@ -60,7 +66,8 @@ export class DoubanHttp {
    * `patient` is for listings Douban computes on demand: one long wait instead of two short
    * ones, because a request that is abandoned and repeated starts the computation again.
    */
-  async json<T>(url: string, ttlMs: number, validate: (value: unknown) => T, patient = false, emptyTtlMs = ttlMs): Promise<T> {
+  async json<T>(url: string, ttlMs: number, validate: (value: unknown) => T, patient = false, emptyTtlMs = ttlMs, signal?: AbortSignal): Promise<T> {
+    signal?.throwIfAborted();
     const parsed = new URL(url);
     if (parsed.protocol !== 'https:' || !ALLOWED_HOSTS.has(parsed.hostname) || parsed.username || parsed.password) {
       throw new DataError('INVALID_INPUT', 'Unapproved metadata origin');
@@ -72,9 +79,11 @@ export class DoubanHttp {
       return validate(structuredClone(cached.value));
     }
     if (cached) this.remove(url);
-    const existing = this.flights.get(url);
-    if (existing) return validate(structuredClone(await existing));
-    const work = this.request(parsed, patient).then(value => {
+    let flight = this.flights.get(url);
+    if (!flight || flight.controller.signal.aborted) {
+    const created: Flight = { value: Promise.resolve(undefined), controller: new AbortController(), readers: 0, done: false };
+    const work = this.request(parsed, patient, created.controller.signal).then(value => {
+      created.controller.signal.throwIfAborted();
       const validated = validate(value);
       const bytes = Buffer.byteLength(JSON.stringify(value));
       const effectiveTtl = Array.isArray(validated) && !validated.length ? emptyTtlMs : ttlMs;
@@ -84,9 +93,24 @@ export class DoubanHttp {
         while (this.cache.size > this.maxEntries || this.bytes > this.maxBytes) this.remove(this.cache.keys().next().value!);
       }
       return value;
-    }).finally(() => this.flights.delete(url));
-    this.flights.set(url, work);
-    return validate(structuredClone(await work));
+    }).finally(() => { created.done = true; if (this.flights.get(url) === created) this.flights.delete(url); });
+    created.value = work;
+    this.flights.set(url, created);
+    flight = created;
+    }
+    flight.readers++;
+    try { return validate(structuredClone(await this.consume(flight.value, signal))); }
+    finally { if (--flight.readers === 0 && !flight.done) flight.controller.abort(); }
+  }
+
+  private consume(value: Promise<unknown>, signal?: AbortSignal): Promise<unknown> {
+    if (!signal) return value;
+    return new Promise((resolve, reject) => {
+      const abort = () => { signal.removeEventListener('abort', abort); reject(signal.reason); };
+      signal.addEventListener('abort', abort, { once: true });
+      value.then(next => { signal.removeEventListener('abort', abort); resolve(next); }, error => { signal.removeEventListener('abort', abort); reject(error); });
+      if (signal.aborted) abort();
+    });
   }
 
   clear() { this.cache.clear(); this.bytes = 0; }
@@ -97,11 +121,20 @@ export class DoubanHttp {
     this.cache.delete(key);
   }
 
-  private async acquire() {
+  private async acquire(signal: AbortSignal) {
+    let owned = false;
+    try {
+    signal.throwIfAborted();
     if (this.active >= this.maxConcurrent) {
       if (this.queue.length >= 64) throw new DataError('RATE_LIMITED', 'Metadata request queue is full', true);
-      await new Promise<void>(resolve => this.queue.push(resolve));
-    } else this.active++;
+      await new Promise<void>((resolve, reject) => {
+        const ready = () => { signal.removeEventListener('abort', abort); owned = true; resolve(); };
+        const abort = () => { signal.removeEventListener('abort', abort); const index = this.queue.indexOf(ready); if (index >= 0) this.queue.splice(index, 1); reject(signal.reason); };
+        this.queue.push(ready); signal.addEventListener('abort', abort, { once: true });
+        if (signal.aborted) abort();
+      });
+    } else { this.active++; owned = true; }
+    signal.throwIfAborted();
     // Starts are paced at one per interval on average. After a quiet spell up to `burst` of
     // them leave together: a page made of several requests (home: ten) otherwise spends most
     // of its loading time waiting for its turn, not for Douban.
@@ -109,7 +142,8 @@ export class DoubanHttp {
     const now = Date.now();
     const start = Math.max(now, this.nextStart - (this.burst - 1) * this.intervalMs);
     this.nextStart = Math.max(now, this.nextStart) + this.intervalMs;
-    if (start > now) await wait(start - now);
+    if (start > now) await wait(start - now, signal);
+    } catch (error) { if (owned) this.release(); throw error; }
   }
 
   private release() {
@@ -117,14 +151,14 @@ export class DoubanHttp {
     if (next) next(); else this.active--;
   }
 
-  private async request(initial: URL, patient: boolean): Promise<unknown> {
+  private async request(initial: URL, patient: boolean, cancellation: AbortSignal): Promise<unknown> {
     let last: DataError = new DataError('NETWORK', 'Metadata request failed', true);
     for (let attempt = 0; attempt <= this.retries; attempt++) {
-      await this.acquire();
+      await this.acquire(cancellation);
       let retryDelay = 250 + Math.floor(Math.random() * 200);
       try {
         let url = initial;
-        const signal = AbortSignal.timeout(patient ? this.patientTimeoutMs : this.timeoutMs);
+        const signal = AbortSignal.any([cancellation, AbortSignal.timeout(patient ? this.patientTimeoutMs : this.timeoutMs)]);
         let response: Response | undefined;
         for (let redirect = 0; redirect <= 3; redirect++) {
           response = await this.fetcher(url, {
@@ -171,13 +205,14 @@ export class DoubanHttp {
           return value;
         } catch { throw new DataError('INVALID_RESPONSE', 'Metadata returned invalid JSON'); }
       } catch (error) {
+        if (cancellation.aborted) throw cancellation.reason;
         last = error instanceof DataError ? error : new DataError(
           error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError') ? 'TIMEOUT' : 'NETWORK',
           error instanceof Error && (error.name === 'TimeoutError' || error.name === 'AbortError') ? 'Metadata request timed out' : 'Metadata network unavailable', true,
         );
       } finally { this.release(); }
       if (!last.retryable || attempt === this.retries || (patient && last.code === 'TIMEOUT')) throw last;
-      await wait(retryDelay);
+      await wait(retryDelay, cancellation);
     }
     throw last;
   }

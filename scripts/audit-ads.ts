@@ -4,17 +4,17 @@
 // which discontinuity-bounded blocks they left in place, so expired rules (rotated CDN hosts,
 // changed ad lengths) and missing rules are visible instead of silently doing nothing.
 import { writeFileSync } from 'node:fs'
-import type { MediaItem } from '../design/contract/types'
+import type { MediaItem } from '../src/contract/types'
 import { filterPlaylist } from '../src/main/playback/filter'
 import { getText } from '../src/main/playback/network'
 import { manifestVariants, matchesItem, parseLines, searchTerms } from '../src/main/playback/service'
 import { loadSourceRules, type PlaySource } from '../src/main/playback/sources'
 import { describeEgress } from '../src/main/egress'
 
-const SAMPLES: Array<Pick<MediaItem, 'title' | 'year' | 'type'>> = [
+const SAMPLES: Array<Pick<MediaItem, 'title' | 'year' | 'type' | 'region'>> = [
   { title: '流浪地球2', year: 2023, type: 'movie' },
   { title: '肖申克的救赎', year: 1994, type: 'movie' },
-  { title: '三体', year: 2023, type: 'tv' },
+  { title: '三体', year: 2023, type: 'tv', region: '中国大陆' },
   { title: '漫长的季节', year: 2023, type: 'tv' },
   { title: '庆余年 第二季', year: 2024, type: 'tv' },
   { title: '凡人修仙传', year: 2020, type: 'anime' },
@@ -72,6 +72,7 @@ async function find(source: PlaySource, item: MediaItem) {
         const detail = new URL(source.api); detail.searchParams.set('ac', 'videolist'); detail.searchParams.set('ids', String(row.vod_id))
         full = ((JSON.parse((await getText(detail, { timeoutMs: 15000 })).text) as { list?: Array<Record<string, unknown>> }).list ?? []).find(r => String(r.vod_id) === String(row.vod_id)) ?? row
       }
+      if (!matchesItem(item, full)) continue
       const line = parseLines(String(full.vod_play_from ?? ''), String(full.vod_play_url ?? '')).find(l => l.episodes.some(e => e.format === 'hls'))
       if (line) return line.episodes.filter(e => e.format === 'hls')
     }

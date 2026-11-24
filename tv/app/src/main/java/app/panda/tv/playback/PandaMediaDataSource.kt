@@ -9,6 +9,7 @@ import androidx.media3.datasource.DataSpec
 import app.panda.tv.net.PublicNetwork
 import app.panda.tv.net.PublicResponse
 import java.io.ByteArrayInputStream
+import java.io.EOFException
 import java.io.IOException
 import java.io.InputStream
 import java.net.URI
@@ -147,7 +148,10 @@ class PandaMediaDataSource(
         if (streamBytesLeft == 0L) return C.RESULT_END_OF_INPUT
         val want = if (streamBytesLeft != C.LENGTH_UNSET.toLong()) minOf(length.toLong(), streamBytesLeft).toInt() else length
         val n = resp.stream.read(buffer, offset, want)
-        if (n < 0) return C.RESULT_END_OF_INPUT
+        if (n < 0) {
+            if (streamBytesLeft > 0L) throw EOFException("媒体分片不完整")
+            return C.RESULT_END_OF_INPUT
+        }
         totalRead += n
         if (totalRead > maxSegmentCap) throw IOException("资源超过大小限制")
         if (streamBytesLeft != C.LENGTH_UNSET.toLong()) streamBytesLeft -= n
@@ -164,6 +168,8 @@ class PandaMediaDataSource(
         sharedReader = null
         response?.close()
         response = null
+        streamBytesLeft = C.LENGTH_UNSET.toLong()
+        maxSegmentCap = Long.MAX_VALUE
         totalRead = 0L
         if (opened) {
             opened = false

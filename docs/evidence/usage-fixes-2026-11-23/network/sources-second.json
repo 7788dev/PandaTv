@@ -1,0 +1,954 @@
+{
+ "at": "2026-11-22T18:31:15.971Z",
+ "route": "system route",
+ "method": "DoubanDataSource.subject → PlaybackService.availability + resolve(episode 1); ok = first media bytes read",
+ "perChannel": 4,
+ "summary": {
+  "hot:tv": "4/4",
+  "hot:movie": "2/4",
+  "hot:anime": "4/4",
+  "hot:variety": "3/4",
+  "hot:doc": "1/4",
+  "serials": "42/48",
+  "serials with an episode range": "29/31"
+ },
+ "rows": [
+  {
+   "group": "hot:tv",
+   "id": "db-36689621",
+   "title": "今天是太阳雨",
+   "year": 2026,
+   "type": "tv",
+   "ok": true,
+   "ms": 4514,
+   "doubanEpisodes": 24,
+   "sourceEpisodes": 24,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:tv",
+   "id": "db-35235320",
+   "title": "两京十五日",
+   "year": 2026,
+   "type": "tv",
+   "ok": true,
+   "ms": 3150,
+   "doubanEpisodes": 26,
+   "sourceEpisodes": 8,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:tv",
+   "id": "db-37806882",
+   "title": "我的有罪之人",
+   "year": 2026,
+   "type": "tv",
+   "ok": true,
+   "ms": 4786,
+   "doubanEpisodes": 12,
+   "sourceEpisodes": 10,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:tv",
+   "id": "db-36675942",
+   "title": "小城良方",
+   "year": 2026,
+   "type": "tv",
+   "ok": true,
+   "ms": 2213,
+   "doubanEpisodes": 29,
+   "sourceEpisodes": 29,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:movie",
+   "id": "db-36847425",
+   "title": "可能的爱",
+   "year": 2026,
+   "type": "movie",
+   "ok": false,
+   "ms": 3458,
+   "error": "片源暂时无法连接，请重试"
+  },
+  {
+   "group": "hot:movie",
+   "id": "db-36882191",
+   "title": "八仙！",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1470,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:movie",
+   "id": "db-36915988",
+   "title": "饥饿游戏：收获日出",
+   "year": 2026,
+   "type": "movie",
+   "ok": false,
+   "ms": 1402,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "hot:movie",
+   "id": "db-37508847",
+   "title": "空枪",
+   "year": 2026,
+   "type": "movie",
+   "ok": true,
+   "ms": 1750,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:anime",
+   "id": "db-37000930",
+   "title": "谷雨街后巷",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1005,
+   "doubanEpisodes": 5,
+   "sourceEpisodes": 5,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:anime",
+   "id": "db-36882191",
+   "title": "八仙！",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 0,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:anime",
+   "id": "db-37421775",
+   "title": "赛博朋克：边缘行者 第二季",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1115,
+   "doubanEpisodes": 10,
+   "sourceEpisodes": 10,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:anime",
+   "id": "db-25662329",
+   "title": "疯狂动物城",
+   "year": 2016,
+   "type": "anime",
+   "ok": true,
+   "ms": 2166,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:variety",
+   "id": "db-37100984",
+   "title": "后会友期",
+   "year": 2026,
+   "type": "variety",
+   "ok": true,
+   "ms": 1741,
+   "doubanEpisodes": 12,
+   "sourceEpisodes": 23,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:variety",
+   "id": "db-39054885",
+   "title": "不栩此行",
+   "year": 2026,
+   "type": "variety",
+   "ok": false,
+   "ms": 598,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "hot:variety",
+   "id": "db-37816990",
+   "title": "现在就出发 第四季",
+   "year": 2026,
+   "type": "variety",
+   "ok": true,
+   "ms": 910,
+   "doubanEpisodes": 10,
+   "sourceEpisodes": 64,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:variety",
+   "id": "db-36642543",
+   "title": "女子推理社 第二季",
+   "year": 2024,
+   "type": "variety",
+   "ok": true,
+   "ms": 1670,
+   "doubanEpisodes": 12,
+   "sourceEpisodes": 51,
+   "format": "hls",
+   "quality": "480P"
+  },
+  {
+   "group": "hot:doc",
+   "id": "db-38646835",
+   "title": "生命奇观2",
+   "year": 2026,
+   "type": "doc",
+   "ok": false,
+   "ms": 1186,
+   "doubanEpisodes": 3,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "hot:doc",
+   "id": "db-37822528",
+   "title": "珠穆朗玛：云中彼岸",
+   "year": 2026,
+   "type": "doc",
+   "ok": false,
+   "ms": 1484,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "hot:doc",
+   "id": "db-36553932",
+   "title": "生命奇观",
+   "year": 2023,
+   "type": "doc",
+   "ok": true,
+   "ms": 1007,
+   "doubanEpisodes": 3,
+   "sourceEpisodes": 3,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "hot:doc",
+   "id": "db-38643086",
+   "title": "一切如你所见",
+   "year": 2026,
+   "type": "doc",
+   "ok": false,
+   "ms": 1098,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-35861087",
+   "title": "凡人修仙传",
+   "year": 2025,
+   "type": "tv",
+   "ok": true,
+   "ms": 1761,
+   "doubanEpisodes": 30,
+   "sourceEpisodes": 30,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-37457082",
+   "title": "凡人修仙传 年番4",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1824,
+   "doubanEpisodes": 52,
+   "runs": [
+    "凡人修仙传 第177-228集"
+   ],
+   "sourceEpisodes": 25,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-37156504",
+   "title": "凡人修仙传：重返天南",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 4198,
+   "doubanEpisodes": 24,
+   "runs": [
+    "凡人修仙传 第153-176集"
+   ],
+   "sourceEpisodes": 24,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-34925294",
+   "title": "凡人修仙传：风起天南",
+   "year": 2020,
+   "type": "anime",
+   "ok": true,
+   "ms": 1901,
+   "doubanEpisodes": 17,
+   "runs": [
+    "凡人修仙传 第1-17集"
+   ],
+   "sourceEpisodes": 17,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-36139980",
+   "title": "凡人修仙传：星海飞驰",
+   "year": 2023,
+   "type": "anime",
+   "ok": true,
+   "ms": 1897,
+   "doubanEpisodes": 52,
+   "runs": [
+    "凡人修仙传 第73-124集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-37323503",
+   "title": "凡人修仙传之瀚海迷踪",
+   "year": 2026,
+   "type": "anime",
+   "ok": false,
+   "ms": 1149,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-36923479",
+   "title": "凡人修仙传：外海风云‎",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 1382,
+   "doubanEpisodes": 28,
+   "runs": [
+    "凡人修仙传 第125-152集"
+   ],
+   "sourceEpisodes": 28,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:凡人修仙传",
+   "id": "db-35640039",
+   "title": "凡人修仙传：魔道争锋",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 2070,
+   "doubanEpisodes": 25,
+   "runs": [
+    "凡人修仙传 第22-46集"
+   ],
+   "sourceEpisodes": 25,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-26882446",
+   "title": "斗破苍穹",
+   "year": 2018,
+   "type": "tv",
+   "ok": true,
+   "ms": 1997,
+   "doubanEpisodes": 45,
+   "sourceEpisodes": 42,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-37415041",
+   "title": "斗破苍穹 年番4",
+   "year": 2025,
+   "type": "anime",
+   "ok": false,
+   "ms": 3200,
+   "doubanEpisodes": 62,
+   "runs": [
+    "斗破苍穹 年番 第158-219集",
+    "斗破苍穹 第218-279集"
+   ],
+   "error": "片源暂时无法连接，请重试"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-25857975",
+   "title": "斗破苍穹",
+   "year": 2030,
+   "type": "movie",
+   "ok": false,
+   "ms": 11847,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-35560094",
+   "title": "斗破苍穹 年番1",
+   "year": 2022,
+   "type": "anime",
+   "ok": true,
+   "ms": 4219,
+   "doubanEpisodes": 52,
+   "runs": [
+    "斗破苍穹年番 第1-52集",
+    "斗破苍穹 第61-112集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-37471473",
+   "title": "斗破苍穹剧场版 双帝之战​",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 844,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-26884429",
+   "title": "斗破苍穹 第一季",
+   "year": 2017,
+   "type": "anime",
+   "ok": true,
+   "ms": 1262,
+   "doubanEpisodes": 12,
+   "sourceEpisodes": 12,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-35558676",
+   "title": "斗破苍穹 特别篇3",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 3562,
+   "doubanEpisodes": 13,
+   "sourceEpisodes": 13,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗破苍穹",
+   "id": "db-34851198",
+   "title": "斗破苍穹 第四季",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 1284,
+   "doubanEpisodes": 24,
+   "runs": [
+    "斗破苍穹 第37-60集"
+   ],
+   "sourceEpisodes": 24,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-30313969",
+   "title": "斗罗大陆",
+   "year": 2021,
+   "type": "tv",
+   "ok": true,
+   "ms": 1452,
+   "doubanEpisodes": 40,
+   "sourceEpisodes": 40,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-27040807",
+   "title": "斗罗大陆1 第一季",
+   "year": 2018,
+   "type": "anime",
+   "ok": true,
+   "ms": 1006,
+   "doubanEpisodes": 26,
+   "runs": [
+    "斗罗大陆1 第1-26集"
+   ],
+   "sourceEpisodes": 26,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-35567787",
+   "title": "斗罗大陆Ⅱ绝世唐门 年番1",
+   "year": 2023,
+   "type": "anime",
+   "ok": true,
+   "ms": 3691,
+   "doubanEpisodes": 52,
+   "sourceEpisodes": 180,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-35663254",
+   "title": "斗罗大陆1 第五季",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 3215,
+   "doubanEpisodes": 52,
+   "runs": [
+    "斗罗大陆1 第183-234集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "720P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-35236763",
+   "title": "斗罗大陆之燃魂战",
+   "year": 2024,
+   "type": "tv",
+   "ok": true,
+   "ms": 1111,
+   "doubanEpisodes": 38,
+   "sourceEpisodes": 38,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-35256194",
+   "title": "斗罗大陆1 第四季",
+   "year": 2020,
+   "type": "anime",
+   "ok": true,
+   "ms": 2444,
+   "doubanEpisodes": 52,
+   "runs": [
+    "斗罗大陆1 第131-182集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "720P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-36742514",
+   "title": "斗罗大陆1 第六季",
+   "year": 2022,
+   "type": "anime",
+   "ok": true,
+   "ms": 1358,
+   "doubanEpisodes": 29,
+   "runs": [
+    "斗罗大陆1 第235-263集"
+   ],
+   "sourceEpisodes": 29,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:斗罗大陆",
+   "id": "db-36145513",
+   "title": "斗罗大陆：双神大战",
+   "year": 2023,
+   "type": "anime",
+   "ok": false,
+   "ms": 9238,
+   "error": "暂时无法连接，请重试"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-35312003",
+   "title": "完美世界 第一季",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 1423,
+   "doubanEpisodes": 26,
+   "runs": [
+    "完美世界 第1-26集"
+   ],
+   "sourceEpisodes": 26,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-38454423",
+   "title": "完美世界 第七季",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1172,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第287-338集"
+   ],
+   "sourceEpisodes": 2,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-36318455",
+   "title": "完美世界 第三季",
+   "year": 2022,
+   "type": "anime",
+   "ok": true,
+   "ms": 1768,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第79-130集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-37516275",
+   "title": "完美世界 第六季",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 1901,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第235-286集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-36097599",
+   "title": "完美世界 第二季",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 2055,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第27-78集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-36589504",
+   "title": "完美世界 第四季",
+   "year": 2023,
+   "type": "anime",
+   "ok": true,
+   "ms": 1741,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第131-182集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-37046586",
+   "title": "完美世界 第五季",
+   "year": 2024,
+   "type": "anime",
+   "ok": true,
+   "ms": 1143,
+   "doubanEpisodes": 52,
+   "runs": [
+    "完美世界 第183-234集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:完美世界",
+   "id": "db-37263769",
+   "title": "完美世界剧场版 九劫焚天",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1145,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-35170001",
+   "title": "吞噬星空 第1季",
+   "year": 2020,
+   "type": "anime",
+   "ok": true,
+   "ms": 1124,
+   "doubanEpisodes": 26,
+   "sourceEpisodes": 250,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-38187745",
+   "title": "吞噬星空 第7季",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1546,
+   "doubanEpisodes": 52,
+   "runs": [
+    "吞噬星空 第209-260集"
+   ],
+   "sourceEpisodes": 42,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-37210701",
+   "title": "吞噬星空 第6季",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 987,
+   "doubanEpisodes": 52,
+   "runs": [
+    "吞噬星空 第157-208集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-35674156",
+   "title": "吞噬星空 第2季",
+   "year": 2021,
+   "type": "anime",
+   "ok": true,
+   "ms": 1101,
+   "doubanEpisodes": 26,
+   "runs": [
+    "吞噬星空 第27-52集"
+   ],
+   "sourceEpisodes": 26,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-36985220",
+   "title": "吞噬星空 第5季",
+   "year": 2024,
+   "type": "anime",
+   "ok": true,
+   "ms": 1108,
+   "doubanEpisodes": 26,
+   "runs": [
+    "吞噬星空131-156集"
+   ],
+   "sourceEpisodes": 26,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-36309129",
+   "title": "吞噬星空 第4季",
+   "year": 2023,
+   "type": "anime",
+   "ok": true,
+   "ms": 951,
+   "doubanEpisodes": 45,
+   "runs": [
+    "吞噬星空 第86-130集"
+   ],
+   "sourceEpisodes": 45,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-36205705",
+   "title": "吞噬星空 第3季",
+   "year": 2022,
+   "type": "anime",
+   "ok": true,
+   "ms": 1007,
+   "doubanEpisodes": 33,
+   "runs": [
+    "吞噬星空 第53-85集"
+   ],
+   "sourceEpisodes": 33,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:吞噬星空",
+   "id": "db-37472453",
+   "title": "吞噬星空剧场版 决战原始星",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 1013,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-35679839",
+   "title": "仙逆 第一季",
+   "year": 2023,
+   "type": "anime",
+   "ok": true,
+   "ms": 956,
+   "doubanEpisodes": 24,
+   "runs": [
+    "仙逆 第1-24集"
+   ],
+   "sourceEpisodes": 24,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-37480076",
+   "title": "仙逆 年番3",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 893,
+   "doubanEpisodes": 52,
+   "runs": [
+    "仙逆 第129-180集"
+   ],
+   "sourceEpisodes": 40,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-36779574",
+   "title": "仙逆 年番1",
+   "year": 2024,
+   "type": "anime",
+   "ok": true,
+   "ms": 1047,
+   "doubanEpisodes": 52,
+   "runs": [
+    "仙逆 第25-76集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-37220616",
+   "title": "仙逆 年番2",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 905,
+   "doubanEpisodes": 52,
+   "runs": [
+    "仙逆 第077-128集"
+   ],
+   "sourceEpisodes": 52,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-37472452",
+   "title": "仙逆剧场版 弑仙之战",
+   "year": 2026,
+   "type": "anime",
+   "ok": true,
+   "ms": 827,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-36999840",
+   "title": "仙逆剧场版 神临之战",
+   "year": 2025,
+   "type": "anime",
+   "ok": true,
+   "ms": 888,
+   "sourceEpisodes": 1,
+   "format": "hls",
+   "quality": "1080P"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-37472458",
+   "title": "仙逆之七式斩天",
+   "year": 2027,
+   "type": "anime",
+   "ok": false,
+   "ms": 1370,
+   "error": "未找到可用片源"
+  },
+  {
+   "group": "serial:仙逆",
+   "id": "db-37480077",
+   "title": "仙逆 年番4",
+   "year": 2027,
+   "type": "anime",
+   "ok": false,
+   "ms": 1543,
+   "doubanEpisodes": 52,
+   "runs": [
+    "仙逆 第181-232集"
+   ],
+   "error": "未找到可用片源"
+  }
+ ]
+}

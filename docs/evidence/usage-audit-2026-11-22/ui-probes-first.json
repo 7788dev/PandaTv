@@ -1,0 +1,60 @@
+{
+  "at": "2026-11-22T14:46:23.255Z",
+  "round": "first",
+  "observations": [
+    {
+      "scenario": "channel-return-loses-loaded-pages-and-scroll",
+      "renderer": "current compiled production renderer, hidden window",
+      "data": "extended isolated fixture catalogue",
+      "before": {
+        "count": 90,
+        "top": 4424,
+        "href": "#/detail/db-1000071",
+        "title": "Audit title 1000071"
+      },
+      "after": {
+        "count": 30,
+        "top": 530,
+        "chosenCardPresent": 0
+      },
+      "screenshots": [
+        "channel-first-before.png",
+        "channel-first-after.png"
+      ]
+    },
+    {
+      "scenario": "person-return-loses-loaded-pages-and-scroll",
+      "renderer": "current compiled production renderer, hidden window",
+      "data": "extended isolated fixture catalogue",
+      "before": {
+        "count": 90,
+        "top": 4292,
+        "href": "#/detail/db-1000071",
+        "title": "Audit title 1000071"
+      },
+      "after": {
+        "count": 30,
+        "top": 538,
+        "chosenCardPresent": 0
+      },
+      "screenshots": [
+        "person-first-before.png",
+        "person-first-after.png"
+      ]
+    },
+    {
+      "scenario": "new-settings-defaults-overridden-by-previous-player-session",
+      "savedDefaults": {
+        "speed": 1.5,
+        "quality": "720P"
+      },
+      "nextMovie": {
+        "id": "beiwei-sanshidu",
+        "rate": 1,
+        "width": 640,
+        "requestedQuality": "480P"
+      },
+      "evidence": "actual menu actions and native video state, compiled renderer with local MP4"
+    }
+  ]
+}

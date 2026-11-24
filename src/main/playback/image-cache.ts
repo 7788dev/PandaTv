@@ -24,6 +24,11 @@ export function imageType(body: Buffer): string | undefined {
  * cache is optional throughout: a file that cannot be read or written means a download.
  */
 export class ImageCache {
+  private pendingBytes = 0
+  private pruneTimer?: ReturnType<typeof setTimeout>
+  private pruning?: Promise<void>
+  private closed = false
+  private readonly writes = new Set<Promise<void>>()
   constructor(private readonly directory: string, private readonly maxBytes = 200 * 1024 * 1024, private readonly maxImageBytes = 2 * 1024 * 1024) {}
 
   /** Whether an image of this size is kept. */
@@ -43,19 +48,52 @@ export class ImageCache {
     } catch { return undefined }
   }
 
-  async put(url: string, body: Buffer): Promise<void> {
-    if (!this.accepts(body.length) || !imageType(body)) return
+  put(url: string, body: Buffer): Promise<void> {
+    if (this.closed || !this.accepts(body.length) || !imageType(body)) return Promise.resolve()
+    const work = this.write(url, body).finally(() => { this.writes.delete(work) })
+    this.writes.add(work)
+    return work
+  }
+
+  private schedulePrune() {
+    if (this.pendingBytes < Math.min(this.maxBytes * 0.2, 8 * 1024 * 1024) || this.pruneTimer || this.closed) return
+    this.pruneTimer = setTimeout(() => { this.pruneTimer = undefined; void this.prune() }, 1000)
+    this.pruneTimer.unref?.()
+  }
+
+  private async write(url: string, body: Buffer): Promise<void> {
     const path = this.path(url)
     const temporary = `${path}.${randomBytes(6).toString('hex')}.tmp`
     try {
       await mkdir(this.directory, { recursive: true })
       await writeFile(temporary, body)
       await rename(temporary, path)
+      this.pendingBytes += body.length
+      this.schedulePrune()
     } catch { await unlink(temporary).catch(() => {}) }
   }
 
   /** Removes the images shown longest ago once the directory outgrows its limit, and unfinished writes. */
   async prune(): Promise<void> {
+    clearTimeout(this.pruneTimer)
+    this.pruneTimer = undefined
+    if (this.pruning) return this.pruning
+    this.pendingBytes = 0
+    const work = this.pruneFiles().finally(() => { if (this.pruning === work) this.pruning = undefined; this.schedulePrune() })
+    this.pruning = work
+    return work
+  }
+
+  async close(): Promise<void> {
+    this.closed = true
+    clearTimeout(this.pruneTimer)
+    this.pruneTimer = undefined
+    await Promise.allSettled([...this.writes])
+    await this.pruning
+    await this.prune()
+  }
+
+  private async pruneFiles(): Promise<void> {
     let names: string[]
     try { names = await readdir(this.directory) } catch { return }
     const files: Array<{ path: string; bytes: number; usedAt: number }> = []

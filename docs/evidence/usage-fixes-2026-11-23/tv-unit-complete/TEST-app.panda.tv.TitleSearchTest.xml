@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.TitleSearchTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-11-22T19:48:52.860Z" hostname="DESKTOP-G3A3P0Q" time="7.233">
+  <properties/>
+  <testcase name="blocked search falls back to identity hints and reads canonical TV metadata" classname="app.panda.tv.TitleSearchTest" time="3.064"/>
+  <testcase name="empty suggestion fallbacks do not turn blocked searches into empty results" classname="app.panda.tv.TitleSearchTest" time="3.005"/>
+  <testcase name="initial matching and query vocabulary match desktop golden cases" classname="app.panda.tv.TitleSearchTest" time="0.086"/>
+  <testcase name="a search with no verified fallback retries the primary query immediately" classname="app.panda.tv.TitleSearchTest" time="1.004"/>
+  <testcase name="LBXX searches real Chinese titles without a prepopulated metadata cache" classname="app.panda.tv.TitleSearchTest" time="0.029"/>
+  <testcase name="an empty raw initials response cannot hide a failed Chinese query" classname="app.panda.tv.TitleSearchTest" time="0.02"/>
+  <testcase name="initial queries reject unrelated raw matches and keep English search" classname="app.panda.tv.TitleSearchTest" time="0.025"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

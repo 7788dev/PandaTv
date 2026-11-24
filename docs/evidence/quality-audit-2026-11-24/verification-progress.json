@@ -1,0 +1,64 @@
+{
+  "at": "2026-11-24T23:45:00+00:00",
+  "desktop": {
+    "typecheck": true,
+    "vitest": 36,
+    "releaseTests": 6,
+    "fixturePassed": 10,
+    "livePassed": 2,
+    "packagedLivePassed": 2,
+    "conditions": "PANDA_E2E_SILENT_OUTPUT=2 (no audio output), PANDA_E2E_SHOW_INACTIVE=1 (test window never takes focus)",
+    "fixtureEvidence": "final/fixture-10-green-muted-inactive.txt",
+    "liveEvidence": "final/live-2-green-muted-inactive.txt",
+    "packagedEvidence": "final/packaged-live-2-green-muted-inactive.txt",
+    "packageAsarSha256": "8FFF87B5685CDAADDE4803232E9A320C0ABE92D4BF9E89581EEF56767E40E3EB",
+    "packageExeSha256": "89CA17B17DD41BC6A7CC31A0C54C442005F3A8EA67C8CEC85238E292A4FD6B26",
+    "audioOutput": "Disabled for replay; the assertions cover decoder frames/timeline/pause/resume, not speaker audibility."
+  },
+  "tv": {
+    "apkSha256": "7688BF38BFE8DBD751B485A6898B32EDF18ADC9917FC43B756E33820D798AB3B",
+    "unitTests": 98,
+    "suites": 21,
+    "lintRelease": true,
+    "assembleRelease": true,
+    "realPlaybackCycle": "passed: startup 6.832s, episode 2, seek 3.451s, pause 22s, exit position 66s, reentry 01:06",
+    "surfaces": "FHD 8/8, 720p 3/3, 4K+font_scale 1.15 3/3",
+    "navigation": "8/8 extended navigation/library",
+    "searchCancellation": "3/3",
+    "motion": "4/4, channel p95 6ms/0 jank; home p95 17ms/1 jank (0.55%)",
+    "errorRecovery": "passed: 40.259s retryable error, 4.510s recovery",
+    "admissionCancel": "passed",
+    "mediaControls": "passed; auto-hide 2.873s, held confirm 1.25s",
+    "lifecycle": "6 cycles, one ViewRootImpl and one Activity, same PID",
+    "extendedPlayback": "301.85s, 7624 rendered frames, 0 dropped",
+    "sourceSwitch": {
+      "independent": "passed: final APK switched from 非凡资源 to 360资源 on 八仙！ after ffzy API update; 00:02 / 2:23:16 -> 00:07 / 2:23:16",
+      "controlled": "previous controlled mirror-entrance full cycle remains",
+      "unreachable": "电影天堂/虎牙/金鹰/红牛/速播/暴风/量子: upstream 403/timeout/reset; no source deleted",
+      "evidence": [
+        "docs/evidence/source-playback-audit-2026-11-24/tv-switch-ffzy/report.json",
+        "final/tv/cycle-mirror-final/report.json"
+      ]
+    },
+    "deviceRestored": "original APK 59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401, original user state a615482849cc550e38810680ef3e41f83f2409897cb709eaf1896492aa752d67, display 1080x1920/280/font_scale 1.0, rules override removed, app force-stopped",
+    "completeCycleWithControlledSwitch": {
+      "startupMs": 5959,
+      "episodeSwitch": true,
+      "selectedLine": "360资源镜像",
+      "switchClock": "00:08 / 43:14",
+      "seekMs": 2756,
+      "seekClock": "01:09 / 43:14",
+      "pausedSeconds": 22,
+      "exitSavedPosition": 72,
+      "reenteredClock": "01:13 / 43:14",
+      "evidence": "final/tv/cycle-mirror-final/report.json",
+      "note": "One final-APK run; controlled second entrance to the same real 360zy upstream, user state and firewall restored."
+    }
+  },
+  "residual": [
+    "独立 TV 切源已通过（360zy ↔ ffzy）；电影天堂等源仍因上游 403/超时不可达，电影天堂当前公开 API 未变（非旧地址）。",
+    "Physical audio output and a physical Android 5.1/API 22 television were not tested; TV runs on MuMu Android 15.",
+    "Desktop E2E ran muted and with an inactive window; it asserts decoder/timeline state, not speaker audibility."
+  ],
+  "complete": true
+}

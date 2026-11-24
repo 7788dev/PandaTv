@@ -1,0 +1,47 @@
+{
+  "at": "2026-11-23T17:46:10.453Z",
+  "implementation": "src/main/playback/service.ts; network response boundary controlled",
+  "observations": [
+    {
+      "name": "mp4-empty",
+      "accepted": true,
+      "playback": {
+        "url": "https://a.media.example.org/feature.mp4",
+        "format": "mp4"
+      }
+    },
+    {
+      "name": "mp4-json",
+      "accepted": true,
+      "playback": {
+        "url": "https://a.media.example.org/feature.mp4",
+        "format": "mp4"
+      }
+    },
+    {
+      "name": "late-automatic-resolution",
+      "newer": "https://b.media.example.org/feature.mp4",
+      "older": "https://a.media.example.org/feature.mp4",
+      "currentBeforeLate": "b",
+      "currentAfterLate": "a",
+      "calls": [
+        {
+          "key": "a",
+          "call": 1
+        },
+        {
+          "key": "b",
+          "call": 1
+        },
+        {
+          "key": "a",
+          "call": 2
+        },
+        {
+          "key": "b",
+          "call": 2
+        }
+      ]
+    }
+  ]
+}

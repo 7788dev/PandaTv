@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-22T19:18:42.846798+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "completeUserStateRestored": true,
+  "directoryPermissionsRestored": true,
+  "firewallRulesRestored": true,
+  "displaySettingsRestored": true,
+  "emulatorInitiallyOff": true,
+  "emulatorFinallyOff": true,
+  "mumuSettingsEqual": true
+}

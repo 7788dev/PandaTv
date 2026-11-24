@@ -1,0 +1,27 @@
+{
+  "detail": {
+    "ratio": 4.756099156634886,
+    "color": "rgba(239, 234, 226, 0.52)",
+    "fontSize": "14px"
+  },
+  "hover": {
+    "ratio": 5.1291106336466505,
+    "color": "rgba(239, 234, 226, 0.55)",
+    "fontSize": "14px"
+  },
+  "focused": {
+    "ratio": 4.981435499932395,
+    "color": "rgba(239, 234, 226, 0.537)",
+    "fontSize": "14px"
+  },
+  "namedNumber": {
+    "ratio": 4.93357940994014,
+    "color": "rgba(239, 234, 226, 0.52)",
+    "fontSize": "14px"
+  },
+  "namedTitle": {
+    "ratio": 4.93357940994014,
+    "color": "rgba(239, 234, 226, 0.52)",
+    "fontSize": "14px"
+  }
+}

@@ -1,16 +1,18 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Switch } from '@base-ui/react/switch'
-import type { ChannelFilters, ChannelQuery, ChannelSort, HistoryEntry, HomeFeed, MediaItem, MediaType, Page, Settings } from '../../design/contract/types'
-import { QUALITIES, SPEEDS } from '../../design/contract/constants'
-import { avatarText, continuing, episodeRanges, groupHistory, playLabel, rangeOf, rankSub, speedLabel } from '../../design/contract/rules'
-import { fmt, t } from '../../design/contract/copy'
-import logo from '../../design/brand/logo-mark.svg?url'
+import type { ChannelFilters, ChannelQuery, ChannelSort, HistoryEntry, HomeFeed, MediaItem, MediaType, Page, Settings } from '../contract/types'
+import { QUALITIES, SPEEDS } from '../contract/constants'
+import { avatarText, continuing, episodeRanges, groupHistory, playLabel, rangeOf, rankSub, speedLabel } from '../contract/rules'
+import { fmt, t } from '../contract/copy'
+import logo from './brand/logo-mark.svg?url'
 import type { Detail } from '../shared/api'
 import { extra } from '../copy.extra'
 import { Cast, ContinueCard, dataAttr, EmptyState, EpisodeCells, ErrorState, FavoriteButton, Icon, MediaCard, MediaImage, MetaRow, PosterBox, SelectMenu, Shelf, SkeletonCard, SkeletonGrid, Spinner, Tabs } from './components'
 import { errorText, useConfirm, useNotify, useRemote, useUser } from './state'
-import { go } from './router'
+import { go, useRoute } from './router'
 import { wantedQuality } from './Player'
+import { pageMemory, pageMemoryKey } from './page-memory'
+import { usePagedLibrary } from './library'
 
 /** How long a detail page is looked at before its episode is prepared. */
 const DWELL_MS = 1200
@@ -33,22 +35,23 @@ function Hero({ items }: { items: MediaItem[] }) {
       {(item.tagline || item.synopsis) && <p className="hero__tagline">{item.tagline || item.synopsis}</p>}
       <div className="hero__actions"><a className="btn btn--primary btn--lg" href={`#/play/${item.id}`}><Icon name="play" />{t.action.play}</a><a className="btn btn--glass btn--lg" href={`#/detail/${item.id}`}>{t.action.detail}</a></div>
     </div>
-    {items.length > 1 && <div className="hero__pager">{items.map((entry, i) => <button className="hero__thumb" key={entry.id} aria-label={entry.title} data-active={dataAttr(index === i)} onClick={() => setIndex(i)}>
+    {items.length > 1 && <div className="hero__pager"><button type="button" className="icon-btn hero__autoplay" aria-label={paused ? extra.carouselPlay : extra.carouselPause} aria-pressed={paused} onClick={() => setPaused(value => !value)}><Icon name={paused ? 'play' : 'pause'} /></button>{items.map((entry, i) => <button className="hero__thumb" key={entry.id} aria-label={entry.title} data-active={dataAttr(index === i)} onClick={() => setIndex(i)}>
       <MediaImage src={entry.backdrop ?? entry.poster} eager /><i className="hero__timer" onAnimationEnd={event => { if (event.animationName === 'hero-timer') setIndex(value => (value + 1) % items.length) }} />
     </button>)}</div>}
   </section>
 }
 
 function ContinueShelf({ history }: { history: HistoryEntry[] }) {
-  const ids = history.map(entry => entry.id).join(',')
-  const result = useRemote(() => window.panda.data.byIds(history.map(entry => entry.id)), [ids])
+  const entries = continuing(history).slice(0, 14)
+  const ids = entries.map(entry => entry.id).join(',')
+  const result = useRemote(() => entries.length ? window.panda.data.byIds(entries.map(entry => entry.id)) : Promise.resolve([] as MediaItem[]), [ids])
   if (!history.length) return null
   if (result.error) return <section className="section"><ErrorState error={result.error} retry={result.reload} /></section>
   if (result.loading) return <Shelf title={t.home.continue} wide more="/me/history">{Array.from({ length: 5 }, (_, i) => <SkeletonCard key={i} wide />)}</Shelf>
   const byId = new Map(result.data?.map(item => [item.id, item]))
-  const entries = history.filter(entry => byId.has(entry.id))
-  if (!entries.length) return null
-  return <Shelf title={t.home.continue} wide more="/me/history">{entries.map(entry => <ContinueCard item={byId.get(entry.id)!} history={entry} key={entry.id} />)}</Shelf>
+  const visible = entries.filter(entry => byId.has(entry.id))
+  if (!visible.length) return null
+  return <Shelf title={t.home.continue} wide more="/me/history">{visible.map(entry => <ContinueCard item={byId.get(entry.id)!} history={entry} key={entry.id} />)}</Shelf>
 }
 
 export function HomePage() {
@@ -60,8 +63,7 @@ export function HomePage() {
   const { state } = useUser()
   // The featured titles keep their place (and the slide being shown) while shelves arrive below.
   const feed = newer ?? result.data
-  const heroKey = feed?.hero.map(item => `${item.id}|${item.backdrop ?? item.poster}`).join(',')
-  const hero = useMemo(() => feed?.hero ?? [], [heroKey])
+  const hero = feed?.hero ?? []
   if (result.error) return <main className="page"><ErrorState error={result.error} retry={result.reload} /></main>
   if (!result.data) return <main className="page page--bleed" aria-busy="true"><div className="hero skel" /><section className="section"><SkeletonGrid count={7} /></section></main>
   const data = newer ?? result.data
@@ -96,48 +98,63 @@ function FilterRows({ filters, query, onChange }: { filters: ChannelFilters; que
 }
 
 /** A poster grid that asks for its next page as the end of the list comes into view. */
-function PagedGrid({ load, empty }: { load: (cursor?: string) => Promise<Page<MediaItem>>; empty?: ReactNode }) {
-  const result = useRemote(() => load(), [load])
-  const [extraPages, setExtraPages] = useState<Page<MediaItem>[]>([])
+function PagedGrid({ load, cacheKey, empty }: { load: (cursor?: string) => Promise<Page<MediaItem>>; cacheKey: string; empty?: ReactNode }) {
+  const [pages, setPages] = useState<Page<MediaItem>[]>(() => pageMemory.get(cacheKey)?.pages ?? [])
+  const [loading, setLoading] = useState(() => !pageMemory.get(cacheKey)?.pages)
+  const [error, setError] = useState<unknown>(null)
+  const [revision, setRevision] = useState(0)
   const [moreLoading, setMoreLoading] = useState(false)
   const [moreError, setMoreError] = useState<unknown>(null)
   const sentinel = useRef<HTMLDivElement>(null)
   const epoch = useRef(0)
   const busy = useRef(false)
   useEffect(() => {
-    epoch.current += 1; busy.current = false; setExtraPages([]); setMoreError(null); setMoreLoading(false)
-  }, [load, result.data])
-  const next = extraPages.length ? extraPages[extraPages.length - 1].next : result.data?.next
+    const at = ++epoch.current
+    busy.current = false
+    if (revision === 0 && pageMemory.get(cacheKey)?.pages) return () => { epoch.current++ }
+    setLoading(true); setError(null)
+    void load().then(first => {
+      if (at !== epoch.current) return
+      const nextPages = [first]
+      pageMemory.savePages(cacheKey, nextPages); setPages(nextPages)
+    }, problem => { if (at === epoch.current) setError(problem) }).finally(() => { if (at === epoch.current) setLoading(false) })
+    return () => { epoch.current++ }
+  }, [load, cacheKey, revision])
+  const next = pages.at(-1)?.next
   const loadMore = useCallback(async () => {
-    if (!next || busy.current || result.loading) return
+    if (!next || busy.current || loading) return
     const at = epoch.current
     busy.current = true; setMoreLoading(true); setMoreError(null)
     try {
       const page = await load(next)
-      if (at === epoch.current) setExtraPages(pages => [...pages, page])
+      if (at === epoch.current) setPages(previous => {
+        const nextPages = [...previous, page]
+        pageMemory.savePages(cacheKey, nextPages)
+        return nextPages
+      })
     } catch (error) { if (at === epoch.current) setMoreError(error) }
     finally { if (at === epoch.current) { busy.current = false; setMoreLoading(false) } }
-  }, [next, load, result.loading])
+  }, [next, load, loading, cacheKey])
   useEffect(() => {
     if (!next || moreError || moreLoading || !sentinel.current) return
     const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) void loadMore() }, { rootMargin: '300px' })
     observer.observe(sentinel.current)
     return () => observer.disconnect()
   }, [next, moreError, moreLoading, loadMore])
-  if (result.loading) return <SkeletonGrid />
-  if (result.error) return <ErrorState error={result.error} retry={result.reload} />
+  if (loading) return <SkeletonGrid />
+  if (error) return <ErrorState error={error} retry={() => { pageMemory.reset(cacheKey); setRevision(value => value + 1) }} />
   const seen = new Set<string>()
-  const items = [...(result.data?.items ?? []), ...extraPages.flatMap(page => page.items)].filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
+  const items = pages.flatMap(page => page.items).filter(item => { if (seen.has(item.id)) return false; seen.add(item.id); return true })
   if (!items.length && !next) return <EmptyState text={t.channel.empty}>{empty}</EmptyState>
   return <div className="fade-in"><div className="grid grid--poster">{items.map(item => <MediaCard item={item} key={item.id} />)}</div>
     {moreError ? <ErrorState error={moreError} retry={() => void loadMore()} /> : next ? <div ref={sentinel}><Spinner /></div> : <p className="list-end">{t.channel.end}</p>}
   </div>
 }
 
-function ChannelResults({ type, query }: { type: MediaType; query: ChannelQuery }) {
+function ChannelResults({ type, query, cacheKey }: { type: MediaType; query: ChannelQuery; cacheKey: string }) {
   const queryKey = JSON.stringify(query)
   const load = useCallback((cursor?: string) => window.panda.data.channel(type, query, cursor), [type, queryKey])
-  return <PagedGrid load={load} empty={<button className="btn" onClick={() => go(`/channel/${type}`, { replace: true })}>{t.action.clearFilters}</button>} />
+  return <PagedGrid key={cacheKey} cacheKey={cacheKey} load={load} empty={<button className="btn" onClick={() => go(`/channel/${type}`, { replace: true })}>{t.action.clearFilters}</button>} />
 }
 
 export function ChannelPage({ type, params }: { type: MediaType; params: URLSearchParams }) {
@@ -149,7 +166,7 @@ export function ChannelPage({ type, params }: { type: MediaType; params: URLSear
     go(`/channel/${type}${qs.size ? `?${qs}` : ''}`, { replace: true })
   }
   return <main className="page"><header className="page__head"><h1 className="page__title">{t.nav[type]}</h1><div className="page__tools"><Tabs variant="plain" value={query.sort} items={[{ value: 'hot', label: t.channel.sortHot }, { value: 'new', label: t.channel.sortNew }, { value: 'score', label: t.channel.sortScore }]} onChange={value => change({ sort: value as ChannelSort })} /></div></header>
-    {result.error ? <ErrorState error={result.error} retry={result.reload} /> : result.data ? <><FilterRows filters={result.data} query={query} onChange={change} /><ChannelResults type={type} query={query} /></> : <SkeletonGrid />}
+    {result.error ? <ErrorState error={result.error} retry={result.reload} /> : result.data ? <><FilterRows filters={result.data} query={query} onChange={change} /><ChannelResults type={type} query={query} cacheKey={pageMemoryKey(`/channel/${type}`, params)} /></> : <SkeletonGrid />}
   </main>
 }
 
@@ -180,21 +197,23 @@ function EpisodeSection({ item, current }: { item: MediaItem; current?: number }
 }
 
 export function DetailPage({ id }: { id: string }) {
-  const result = useRemote(() => window.panda.data.detail(id), [id])
+  const result = useRemote(() => window.panda.data.subject(id), [id])
+  const enriched = useRemote(() => window.panda.data.detail(id), [id])
   const related = useRemote(() => window.panda.data.related(id), [id])
   const availability = useRemote(() => window.panda.data.availability(id), [id])
   const { state } = useUser()
+  const historyEpisode = state.history.find(entry => entry.id === id)?.episode ?? 1
+  const historyQuality = state.settings.quality
   // Someone who stays on the page is likely to press play: the source for the episode they
   // would get is chosen meanwhile, so the picture comes at once. A failure here is not theirs to see.
   useEffect(() => {
     if (!availability.data) return
-    const episode = state.history.find(entry => entry.id === id)?.episode ?? 1
-    const timer = setTimeout(() => void window.panda.data.playback(id, episode, wantedQuality(state.settings)).catch(() => {}), DWELL_MS)
+    const timer = setTimeout(() => void window.panda.data.playback(id, historyEpisode, wantedQuality({ quality: historyQuality })).catch(() => {}), DWELL_MS)
     return () => clearTimeout(timer)
-  }, [id, availability.data])
+  }, [id, availability.data, historyEpisode, historyQuality])
   if (result.error) return <main className="page"><ErrorState error={result.error} retry={result.reload} /></main>
   if (!result.data) return <main className="page"><SkeletonGrid count={7} /></main>
-  const item: Detail = { ...result.data, episodes: availability.data?.episodes, episodeTitles: availability.data?.episodeTitles }
+  const item: Detail = { ...(enriched.data ?? result.data), episodes: availability.data?.episodes, episodeTitles: availability.data?.episodeTitles }
   const history = state.history.find(entry => entry.id === id)
   return <main className="page page--bleed">
     <div className="detail__backdrop"><MediaImage src={item.backdrop ?? item.poster} className="detail__bg" eager ambient={!item.backdrop} /><div className="detail__shade" /></div>
@@ -205,9 +224,39 @@ export function DetailPage({ id }: { id: string }) {
       {(item.directors?.length || item.cast?.length) ? <dl className="credits">{item.directors?.length ? <div><dt>{t.detail.director}</dt><dd>{item.directors.join(' / ')}</dd></div> : null}{item.cast?.length ? <div><dt>{t.detail.starring}</dt><dd>{item.cast.map(person => person.name).join(' / ')}</dd></div> : null}</dl> : null}
     </div></div>
     {availability.loading && item.type !== 'movie' ? <section className="section"><Spinner /></section> : availability.error && item.type !== 'movie' ? <section className="section"><ErrorState error={availability.error} retry={availability.reload} /></section> : <EpisodeSection item={item} current={history?.episode} />}
-    <Cast people={item.people ?? item.cast} />
+    <Cast people={item.people?.length ? item.people : item.cast} />
+    {Boolean(enriched.error) && <section className="section"><ErrorState error={enriched.error} retry={enriched.reload} /></section>}
     {related.error ? <section className="section"><ErrorState error={related.error} retry={related.reload} /></section> : related.data?.length ? <Shelf title={t.detail.related}>{related.data.map(entry => <MediaCard key={entry.id} item={entry} />)}</Shelf> : null}
   </main>
+}
+
+export function RecoveryPage({ error }: { error: unknown }) {
+  const user = useUser()
+  const recovery = useRemote(() => window.panda.user.recovery(), [])
+  const confirm = useConfirm()
+  const notify = useNotify()
+  const [busy, setBusy] = useState(false)
+  const restore = async (backup: boolean) => {
+    if (!await confirm({ title: backup ? extra.restoreConfirm : extra.resetConfirm, confirm: backup ? extra.restoreBackup : extra.resetData, danger: !backup })) return
+    setBusy(true)
+    try { await window.panda.user.recover(backup); user.reload() }
+    catch (problem) { notify(errorText(problem)); recovery.reload() }
+    finally { setBusy(false) }
+  }
+  const exportFile = async () => {
+    setBusy(true)
+    try { if ((await window.panda.user.exportRecovery()).status === 'saved') notify(extra.recoveryExported) }
+    catch (problem) { notify(errorText(problem)) }
+    finally { setBusy(false) }
+  }
+  if (!recovery.data?.needed) return <main className="page"><ErrorState error={recovery.error ?? error} retry={user.reload} /></main>
+  return <main className="page"><header className="page__head"><h1 className="page__title">{extra.stateCorrupt}</h1></header><div className="settings__body">
+    <p>{extra.recoveryDescription}</p><div className="detail__actions">
+      <button className="btn" disabled={busy} onClick={() => void exportFile()}>{extra.exportRecovery}</button>
+      {recovery.data.canRestore && <button className="btn btn--primary" disabled={busy} onClick={() => void restore(true)}>{extra.restoreBackup}</button>}
+      <button className="btn btn--danger" disabled={busy} onClick={() => void restore(false)}>{extra.resetData}</button>
+      <button className="btn btn--ghost" disabled={busy} onClick={user.reload}>{t.action.retry}</button>
+    </div></div></main>
 }
 
 /** Everything one person worked on. Their name and the list are asked for together; the name arrives first. */
@@ -217,8 +266,8 @@ export function PersonPage({ id }: { id: string }) {
   if (person.error) return <main className="page"><ErrorState error={person.error} retry={person.reload} /></main>
   return <main className="page"><header className="page__head page__head--person">
     <span className="cast__avatar">{person.data && <MediaImage src={person.data.photo} eager fallback={avatarText(person.data.name)} />}</span>
-    <div className="page__heading"><div className="page__kicker">{extra.personWorks}</div><h1 className="page__title">{person.data?.name ?? ' '}</h1></div>
-  </header><PagedGrid load={load} /></main>
+    <div className="page__heading"><div className="page__kicker">{extra.personWorks}</div><h1 className="page__title">{person.data?.name ?? extra.loading}</h1></div>
+  </header><PagedGrid load={load} cacheKey={`/person/${id}`} /></main>
 }
 
 export function SearchPage({ query }: { query: string }) {
@@ -232,7 +281,7 @@ export function SearchPage({ query }: { query: string }) {
   const best = rows[0]
   const exact = best && best.title.toLowerCase().includes(query.trim().toLowerCase())
   const cards = exact ? rows.slice(1) : rows
-  return <main className="page"><header className="page__head"><div className="page__heading"><div className="page__kicker">{t.search.results}</div><h1 className="page__title">{query}</h1></div>{present.length > 1 && <div className="page__tools"><Tabs variant="plain" value={type} items={[{ value: '', label: t.search.all }, ...present.map(value => ({ value, label: t.nav[value] }))]} onChange={setType} /></div>}</header>
+  return <main className="page"><header className="page__head"><div className="page__heading"><div className="page__kicker">{t.search.results}</div><h1 className="page__title">{query || t.search.label}</h1></div>{present.length > 1 && <div className="page__tools"><Tabs variant="plain" value={type} items={[{ value: '', label: t.search.all }, ...present.map(value => ({ value, label: t.nav[value] }))]} onChange={setType} /></div>}</header>
     {result.loading ? <SkeletonGrid /> : result.error ? <ErrorState error={result.error} retry={result.reload} /> : !rows.length ? <EmptyState icon="search-x" text={t.search.empty} /> : <div className="fade-in" key={`${query}:${type}`}>
       {exact && <div className="feature"><a className="poster feature__poster" href={`#/detail/${best.id}`} tabIndex={-1}><MediaImage src={best.poster} fallback={<span className="card__fallback">{best.title}</span>} /></a><div><h2 className="feature__title"><a href={`#/detail/${best.id}`} title={best.title}>{best.title}</a></h2><MetaRow item={best} className="feature__meta" region />{(best.synopsis || best.tagline) && <p className="feature__tagline">{best.synopsis || best.tagline}</p>}<div className="feature__actions"><a className="btn btn--primary" href={`#/play/${best.id}`}><Icon name="play" />{t.action.play}</a><a className="btn" href={`#/detail/${best.id}`}>{t.action.detail}</a></div></div></div>}
       {cards.length > 0 && <div className="grid grid--poster">{cards.map(item => <MediaCard key={item.id} item={item} />)}</div>}
@@ -241,19 +290,46 @@ export function SearchPage({ query }: { query: string }) {
 }
 
 export function LibraryPage({ historyTab }: { historyTab: boolean }) {
+  const route = useRoute()
   const { state, dispatch } = useUser()
   const confirm = useConfirm()
   const notify = useNotify()
   const ids = historyTab ? state.history.map(entry => entry.id) : state.favorites
-  const result = useRemote(() => ids.length ? window.panda.data.byIds(ids) : Promise.resolve([]), [ids.join(','), historyTab])
-  const byId = new Map(result.data?.map(item => [item.id, item]))
   const clear = async () => {
     if (!await confirm({ title: t.me.clearHistoryTitle, confirm: t.action.clear, danger: true })) return
     try { await dispatch({ type: 'history:clear' }); notify(t.toast.cleared) } catch (error) { notify(errorText(error)) }
   }
-  return <main className="page"><header className="page__head"><Tabs variant="title" value={historyTab ? 'history' : 'favorites'} items={[{ value: 'favorites', label: t.me.favorites }, { value: 'history', label: t.me.history }]} onChange={value => go(value === 'history' ? '/me/history' : '/me', { replace: true })} /><div className="page__tools">{historyTab && state.history.length > 0 && <button className="text-btn" onClick={() => void clear()}>{t.action.clear}</button>}</div></header>
-    {result.loading && ids.length > 0 ? <SkeletonGrid wide={historyTab} /> : result.error ? <ErrorState error={result.error} retry={result.reload} /> : !result.data?.length ? <EmptyState icon={historyTab ? 'history' : 'bookmark'} text={historyTab ? t.me.emptyHistory : t.me.emptyFavorites} /> : historyTab ? groupHistory(state.history.filter(entry => byId.has(entry.id))).map(group => <section className="group" key={group.label}><h2 className="group__label">{group.label}</h2><div className="grid grid--wide">{group.items.map(entry => <ContinueCard history={entry} item={byId.get(entry.id)!} key={entry.id} />)}</div></section>) : <div className="grid grid--poster">{result.data.map(item => <MediaCard item={item} key={item.id} />)}</div>}
+  return <main className="page"><h1 className="sr-only">{historyTab ? t.me.history : t.me.favorites}</h1><header className="page__head"><Tabs variant="title" value={historyTab ? 'history' : 'favorites'} items={[{ value: 'favorites', label: t.me.favorites }, { value: 'history', label: t.me.history }]} onChange={value => go(value === 'history' ? '/me/history' : '/me', { replace: true })} /><div className="page__tools">{historyTab && state.history.length > 0 && <button className="text-btn" onClick={() => void clear()}>{t.action.clear}</button>}</div></header>
+    <LibraryResults key={`${route.path}:${ids.join(',')}`} cacheKey={pageMemoryKey(route.path, route.query)} ids={ids} historyTab={historyTab} history={state.history} />
   </main>
+}
+
+function LibraryResults({ ids, historyTab, history, cacheKey }: { ids: string[]; historyTab: boolean; history: HistoryEntry[]; cacheKey: string }) {
+  const result = usePagedLibrary(ids, cacheKey)
+  const retryTarget = useRef<string | undefined>(undefined)
+  const sentinel = useRef<HTMLDivElement>(null)
+  const more = useRef(result.more)
+  more.current = result.more
+  useEffect(() => {
+    const id = retryTarget.current
+    if (!id || !result.items.some(item => item.id === id)) return
+    const target = document.querySelector<HTMLElement>(`.card[data-id="${CSS.escape(id)}"] .card__link`)
+    if (target) { target.focus({ preventScroll: true }); retryTarget.current = undefined }
+  }, [result.items])
+  useEffect(() => {
+    if (!result.hasMore || result.loading || result.error || !sentinel.current) return
+    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) more.current() }, { rootMargin: '300px' })
+    observer.observe(sentinel.current)
+    return () => observer.disconnect()
+  }, [result.hasMore, result.loading, result.error])
+  const byId = new Map(result.items.map(item => [item.id, item]))
+  const failureText = (code: string) => code === 'NOT_FOUND' ? extra.notFound : code === 'TIMEOUT' ? extra.timeout : code === 'NETWORK' ? t.state.offline : code === 'RATE_LIMITED' ? extra.rateLimited : extra.unavailable
+  return <>
+    {!result.loaded && result.loading ? <SkeletonGrid wide={historyTab} /> : result.items.length ? historyTab ? groupHistory(history.filter(entry => byId.has(entry.id))).map(group => <section className="group" key={group.label}><h2 className="group__label">{group.label}</h2><div className="grid grid--wide">{group.items.map(entry => <ContinueCard history={entry} item={byId.get(entry.id)!} key={entry.id} />)}</div></section>) : <div className="grid grid--poster">{result.items.map(item => <MediaCard item={item} key={item.id} />)}</div> : !ids.length ? <EmptyState icon={historyTab ? 'history' : 'bookmark'} text={historyTab ? t.me.emptyHistory : t.me.emptyFavorites} /> : null}
+    {result.failures.length > 0 && <section className="setgroup"><h2 className="setgroup__label">{extra.partialMetadata}</h2>{result.failures.map(failure => <div className="setrow" key={failure.id}><span className="setrow__label">{fmt(extra.libraryItem, { index: ids.indexOf(failure.id) + 1 })} · {failureText(failure.code)}</span><button className="btn btn--sm" disabled={result.loading} aria-label={fmt(extra.retryLibraryItem, { index: ids.indexOf(failure.id) + 1 })} onClick={() => { retryTarget.current = failure.id; result.retry(failure.id) }}>{t.action.retry}</button></div>)}</section>}
+    {Boolean(result.error) && <ErrorState error={result.error} retry={result.more} />}
+    {result.loaded && result.loading ? <Spinner /> : result.hasMore ? <div ref={sentinel}><button className="btn" onClick={result.more}>{extra.loadMore}</button></div> : ids.length > 0 && result.loaded && !result.error && result.failures.length === 0 ? <p className="list-end">{t.channel.end}</p> : null}
+  </>
 }
 
 export function SettingsPage() {

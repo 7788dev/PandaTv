@@ -574,6 +574,7 @@ object Theme {
         ctx: Context,
         message: String,
         retryLabel: String? = null,
+        focusRetry: Boolean = false,
         onRetry: (() -> Unit)? = null,
     ): LinearLayout {
         return LinearLayout(ctx).apply {
@@ -598,12 +599,17 @@ object Theme {
                 }
             })
             if (retryLabel != null && onRetry != null) {
-                addView(pillButton(ctx, retryLabel).apply {
+                val retry = pillButton(ctx, retryLabel).apply {
                     layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         gravity = Gravity.CENTER_HORIZONTAL
                     }
                     setOnClickListener { onRetry() }
-                })
+                }
+                addView(retry)
+                // A full-page error replaces the content with no focused control. Give the
+                // remote user a visible target immediately; screens with a persistent input
+                // or header keep their focus and leave this opt-in off.
+                if (focusRetry) retry.post { if (isAttachedToWindow && retry.isShown) retry.requestFocus() }
             }
         }
     }

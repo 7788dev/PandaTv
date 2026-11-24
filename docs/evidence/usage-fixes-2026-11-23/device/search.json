@@ -1,0 +1,30 @@
+{
+  "at": "2026-11-22T18:43:03.097159+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": null,
+      "passed": true
+    },
+    {
+      "name": null,
+      "passed": true
+    },
+    {
+      "name": null,
+      "passed": true
+    }
+  ],
+  "passed": 3,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "userStateRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/search/report.json",
+  "rawSha256": "0670A41BCE65DE3901C3B5188078E8DFBE600076783D94E8DAB3C9C775279C6C"
+}

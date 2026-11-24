@@ -1,0 +1,71 @@
+{
+  "before": {
+    "at": "2026-11-22T14:49:46.459061+00:00",
+    "serial": "127.0.0.1:16416",
+    "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+    "userStateSha256": "A615482849CC550E38810680EF3E41F83F2409897CB709EAF1896492AA752D67",
+    "filesPermissions": [
+      "771",
+      "10054",
+      "10054"
+    ],
+    "statePermissions": [
+      "600",
+      "10054",
+      "10054"
+    ],
+    "sourceOverrideSha256": "absent",
+    "ipv4RulesSha256": "FC8BEA5289EEAF6911D3B2E2BF74C15D4B15151839A51C7A238BC7D1569E22D8",
+    "ipv6RulesSha256": "D92A73C4CFDEA697C14C1C7767DE75CD12940C505F82317923BF344822FFB94A",
+    "displaySize": "Physical size: 1080x1920",
+    "displayDensity": "Physical density: 280"
+  },
+  "cases": [
+    {
+      "startedAt": "2026-11-22T14:49:53.148522+00:00",
+      "controlFocus": [
+        "自动播放下一集"
+      ],
+      "input": "D-pad Confirm on real auto-next setting",
+      "fault": "app files directory temporarily chmod 555",
+      "processExited": true,
+      "fatalMainThread": true,
+      "permissionWriteFailure": true,
+      "savedStateUnchangedBeforeRestoration": true
+    },
+    {
+      "startedAt": "2026-11-22T14:49:59.530960+00:00",
+      "controlFocus": [
+        "自动播放下一集"
+      ],
+      "input": "D-pad Confirm on real auto-next setting",
+      "fault": "app files directory temporarily chmod 555",
+      "processExited": true,
+      "fatalMainThread": true,
+      "permissionWriteFailure": true,
+      "savedStateUnchangedBeforeRestoration": true
+    }
+  ],
+  "failure": null,
+  "after": {
+    "at": "2026-11-22T14:50:14.949753+00:00",
+    "apkSha256": "340D954727612FD89DE97848D44522DB06C5457C907AB267385FFDBE8B1C296D",
+    "userStateSha256": "A615482849CC550E38810680EF3E41F83F2409897CB709EAF1896492AA752D67",
+    "filesPermissions": [
+      "771",
+      "10054",
+      "10054"
+    ],
+    "statePermissions": [
+      "600",
+      "10054",
+      "10054"
+    ],
+    "sourceOverrideSha256": "absent",
+    "ipv4RulesSha256": "FC8BEA5289EEAF6911D3B2E2BF74C15D4B15151839A51C7A238BC7D1569E22D8",
+    "ipv6RulesSha256": "D92A73C4CFDEA697C14C1C7767DE75CD12940C505F82317923BF344822FFB94A",
+    "displaySize": "Physical size: 1080x1920",
+    "displayDensity": "Physical density: 280"
+  },
+  "restored": true
+}

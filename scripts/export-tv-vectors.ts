@@ -1,12 +1,12 @@
 import { createCipheriv } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import type { HistoryEntry, MediaItem, Playback, Settings } from '../design/contract/types';
+import type { HistoryEntry, MediaItem, Playback, Settings } from '../src/contract/types';
 import {
   clock, episodeHeading, episodeLabel, episodeRanges, historyRecord,
   isFinished, metaParts, playLabel, progressPercent, progressText,
   resumePosition, scoreText, statusText, upNextSeconds,
-} from '../design/contract/rules';
+} from '../src/contract/rules';
 import {
   imageUrl, landscapePhoto, mediaType, normalize, portraitUrl,
   principalCredits, subtitleParts,
@@ -20,6 +20,7 @@ import {
 } from '../src/main/playback/service';
 import { filterPlaylist, hasSynchronizedTracks } from '../src/main/playback/filter';
 import { clearHead, pictureOf } from '../src/main/playback/picture';
+import { isMp4Head } from '../src/main/playback/media-head';
 import { adultShelf } from '../src/main/adult';
 import { loadSourceRules } from '../src/main/playback/sources';
 import { compareDelivery, compareSourceOrder, playbackMargin } from '../src/main/playback/delivery';
@@ -35,7 +36,7 @@ for (const name of ['search-initials.json', 'search-titles.tsv', 'LICENSE-pinyin
 const rulesConfig = loadSourceRules(resolve(root, 'resources/play-sources.json'));
 const sourceOf = (key: string) => rulesConfig.sources.find(s => s.key === key)!;
 const fixtureManifest = (name: string) => readFileSync(resolve(root, `docs/evidence/manifest-${name}.m3u8`), 'utf8');
-const segmentHeads = JSON.parse(readFileSync(resolve(root, 'tests/fixtures/segment-heads.json'), 'utf8')) as {
+const segmentHeads = JSON.parse(readFileSync(resolve(root, 'tv/app/src/test/resources/media-heads.json'), 'utf8')) as {
   heads: Array<{ source: string; title: string; encrypted: boolean; picture: string; head: string }>;
 };
 
@@ -114,6 +115,14 @@ const cipher = createCipheriv('aes-128-cbc', aesKey, aesIv);
 const sealedSample = Buffer.concat([cipher.update(Buffer.concat([clearSample, Buffer.alloc(5000, 1)])), cipher.final()]);
 
 const vectors = {
+  mp4Heads: [
+    '', '7b7d', '3c68746d6c3e6f66666c696e653c2f68746d6c3e', '00000000000000000000000000000000',
+    '0000001866747970', '000000186674797069736f6d', '000000046674797069736f6d00000000',
+    '000000186674797069736f6d0000000069736f6d6d703432',
+    '0000000866726565000000186674797069736f6d0000000069736f6d6d703432',
+    '000000106d6461740001020304050607', '000000006d64617400010203',
+    '0000000166747970000000000000002069736f6d00000000', '0000000177696465ffffffffffffffff',
+  ].map(hex => ({ hex, valid: isMp4Head(Buffer.from(hex, 'hex')) })),
   titleSearch: {
     suggestions: [
       [
@@ -223,6 +232,10 @@ const vectors = {
       extras263: runOf(serialWithExtras, { name: '斗罗大陆1', first: 235, last: 263 })!.episodes.map(e => ({ title: e.title, number: e.number })),
     },
     matchRecord: [
+      ...['美国', '内地', '香港', '中国香港 / 中国大陆', '', '欧美'].map(area => {
+        const raw = { vod_name: '三体第一季', vod_year: '2023–', type_name: '欧美剧', vod_area: area };
+        return { item: baseItem, raw, hints: {}, output: matchRecord(baseItem, raw) ?? null };
+      }),
       { item: run4, raw: { vod_name: '凡人修仙传', vod_year: '2020', type_name: '国产动漫' }, hints: run4Hints, output: matchRecord(run4, { vod_name: '凡人修仙传', vod_year: '2020', type_name: '国产动漫' }, run4Hints) ?? null },
       { item: run4, raw: { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, hints: run4Hints, output: matchRecord(run4, { vod_name: '凡人修仙传 慕兰之战', vod_year: '2026', type_name: '国产动漫' }, run4Hints) ?? null },
       { item: { ...filmItem, year: 2025, title: '生日快乐' }, raw: { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }, hints: {}, output: matchRecord({ ...filmItem, year: 2025, title: '生日快乐' }, { vod_name: '生日快乐', vod_year: '2007', type_name: '爱情片' }) ?? null },
@@ -233,6 +246,10 @@ const vectors = {
     searchTerms: ['现在就出发 第二季', 'Doctor X：白色黑手党时代', '1917'].map(input => ({ input, output: searchTerms(input) })),
     workTerms: workTerms('凡人修仙传 年番4', run4Hints.aliases),
     parseLines: parseLines('dyttm3u8$$$yun123$$$dytt', '第01集$https://a.com/1.m3u8#第30集已完结$https://a.com/30.m3u8#第240集上$https://a.com/240a.m3u8#预告$https://a.com/t.m3u8$$$x$https://y.com/1.m3u8$$$HD$//b.com/v.mp4'),
+    mirrorLines: (() => {
+      const input = '彩蛋$https://e/bonus.mp4#第01集$https://e/a1.mp4#第01集$https://e/a1.mp4#第01集$https://e/b1.mp4#第02集$https://e/a2.mp4';
+      return { input, output: parseLines('mp4', input) };
+    })(),
     numbering: [
       numbering(parseLines('m', '第01集$https://e/1.m3u8#第04集$https://e/4.m3u8')[0]!),
       numbering(parseLines('m', '20241019$https://e/1.m3u8#20241024$https://e/2.m3u8')[0]!),
@@ -307,8 +324,8 @@ const vectors = {
     encrypted: {
       keyHex: aesKey.toString('hex'),
       ivHex: aesIv.toString('hex'),
-      sealedBase64: sealedSample.subarray(0, 1001).toString('base64'),
-      expectedPicture: pictureOf(clearHead(sealedSample.subarray(0, 1001), aesKey, aesIv)) ?? null,
+      sealedBase64: sealedSample.subarray(0, 8193).toString('base64'),
+      expectedPicture: pictureOf(clearHead(sealedSample.subarray(0, 8193), aesKey, aesIv)) ?? null,
       shortLength: clearHead(sealedSample.subarray(0, 10), aesKey, aesIv).length,
     },
   },

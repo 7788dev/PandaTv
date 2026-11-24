@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-20T16:21:24.664119+00:00",
+  "cases": [],
+  "unavailable": [],
+  "failures": [
+    {
+      "name": "speed-control",
+      "error": "Only 5.87s of the measurement window was active video playback: [{'wallSeconds': 0.0, 'clock': '00:02', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 0.54, 'clock': '00:02', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 1.08, 'clock': '00:03', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 1.63, 'clock': '00:03', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 2.17, 'clock': '00:05', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 2.69, 'clock': '00:05', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 3.23, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 3.75, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 4.29, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 4.83, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 5.37, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 5.9, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 6.45, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 6.97, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 7.5, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 8.02, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 8.56, 'clock': '00:07', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 9.1, 'clock': '00:07', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 9.61, 'clock': '00:07', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 10.15, 'clock': '00:09', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 10.71, 'clock': '00:09', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 11.23, 'clock': '00:11', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 11.76, 'clock': '00:11', 'spinner': False, 'playing': True, 'speed': '2.0×', 'line': None}, {'wallSeconds': 12.28, 'clock': '00:13', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}, {'wallSeconds': 12.82, 'clock': '00:13', 'spinner': True, 'playing': False, 'speed': '2.0×', 'line': None}]"
+    }
+  ],
+  "version": "1.0.12",
+  "apkSha256": "765044DC805725FB22CB76B6967A2960C25B443FCB9A9F381685D1E76DE432D3",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

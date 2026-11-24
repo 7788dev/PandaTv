@@ -38,7 +38,7 @@ async function main() {
       const row: Record<string, number | string> = { type, sort, title: card.title }
       try {
         let t = Date.now()
-        const item = await data.detail(card.id); row.detail = Date.now() - t
+        const item = await data.subject(card.id); row.subject = Date.now() - t
         const record = data.getMetadata(item.id)
         const hints = { single: record?.kind === 'movie', aliases: record?.aliases, totalEpisodes: record?.totalEpisodes }
         t = Date.now(); await playback.availability(item, hints); row.search = Date.now() - t

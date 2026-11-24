@@ -1,0 +1,168 @@
+{
+  "at": "2026-11-24T11:40:28.948415+00:00",
+  "cases": [
+    {
+      "name": "player-lifecycle",
+      "passed": true,
+      "selectedSubject": {
+        "requestedTitle": "三体",
+        "rating": "8.8",
+        "focusedLabels": [
+          "8.8",
+          "45分钟",
+          "三体",
+          "剧情 / 科幻"
+        ],
+        "bounds": [
+          97,
+          399,
+          366,
+          895
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "pid": "22764",
+      "cycles": 6,
+      "samples": [
+        {
+          "cycle": 1,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 14056,
+          "nativeHeapPssKb": 35332,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "cycle": 2,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 11036,
+          "nativeHeapPssKb": 34152,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "cycle": 3,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 10488,
+          "nativeHeapPssKb": 38732,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "cycle": 4,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 5932,
+          "nativeHeapPssKb": 33592,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "cycle": 5,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 10720,
+          "nativeHeapPssKb": 34884,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        },
+        {
+          "cycle": 6,
+          "views": 388,
+          "viewRoots": 1,
+          "activities": 1,
+          "javaHeapPssKb": 10664,
+          "nativeHeapPssKb": 34728,
+          "focus": {
+            "class": "android.widget.LinearLayout",
+            "bounds": [
+              506,
+              338,
+              844,
+              421
+            ],
+            "labels": [
+              "继续播放 第1集"
+            ]
+          }
+        }
+      ],
+      "scope": "Finite same-process playback/Back replay and native object counters. The release APK is not debuggable; these counters do not prove long-duration or coroutine-queue leak freedom."
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

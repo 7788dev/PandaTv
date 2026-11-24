@@ -185,6 +185,12 @@ object Copy {
         const val LINE_SWITCH_FAILED = "切换未成功，保留当前线路"
         const val PERSON_WORKS = "全部作品"
         const val PERSON_NOT_FOUND = "未找到这位影人"
+        const val RECOVERY_DESCRIPTION = "可恢复上次备份，或重置本机数据。恢复和重置都会保留原文件。"
+        const val RESTORE_BACKUP = "恢复备份"
+        const val RESET_DATA = "重置本机数据"
+        const val RESTORE_CONFIRM = "恢复备份将替换收藏、历史、搜索记录和设置，原文件会保留。"
+        const val RESET_CONFIRM = "重置将清空收藏、历史和搜索记录，并恢复默认设置。原文件会保留。"
+        const val LIBRARY_ITEM = "第 {index} 个条目"
 
         val ALL_SAFE = setOf(
             LOADING, LOAD_MORE, SAVE_ERROR, UNAVAILABLE, SOURCE_UNAVAILABLE,
@@ -194,6 +200,8 @@ object Copy {
             HOT_SEARCH_SOURCE, STATE_CORRUPT, UNSUPPORTED_PLAYBACK, PLAYER_RETRY,
             RESTORING_SOURCE, NO_EPISODE, LINE, SWITCHING_LINE, PERSON_WORKS,
             PERSON_NOT_FOUND, State.OFFLINE, State.ERROR,
+            RECOVERY_DESCRIPTION, RESTORE_BACKUP, RESET_DATA, RESTORE_CONFIRM, RESET_CONFIRM,
+            LIBRARY_ITEM,
         )
     }
 
@@ -220,6 +228,7 @@ object Copy {
             }
         }
         val msg = error?.message.orEmpty()
+        if (msg == "STATE_CORRUPT") return Extra.STATE_CORRUPT
         if (msg in Extra.ALL_SAFE) return msg
         return State.ERROR
     }

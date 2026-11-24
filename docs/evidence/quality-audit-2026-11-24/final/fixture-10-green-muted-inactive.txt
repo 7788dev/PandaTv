@@ -1,0 +1,15 @@
+
+Running 10 tests using 1 worker
+
+  ok  1 [desktop-fixture] › e2e\quality.fixture.spec.ts:15:1 › actual settings, channel layout and modal controls remain readable at supported window sizes and zoom (3.5s)
+  ok  2 [desktop-fixture] › e2e\quality.fixture.spec.ts:48:1 › watched numbers and titled episodes remain readable and actionable in the actual detail and drawer (6.5s)
+  ok  3 [desktop-fixture] › e2e\quality.fixture.spec.ts:89:1 › focused seek arrows and page keys seek without consuming global volume shortcuts (4.8s)
+  ok  4 [desktop-fixture] › e2e\quality.fixture.spec.ts:109:1 › a pause before the first video frame survives the startup deadline and resumes normally (21.5s)
+  ok  5 [desktop-fixture] › e2e\quality.fixture.spec.ts:130:1 › loading icon controls have native disabled state and become usable after media arrives (4.3s)
+  ok  6 [desktop-fixture] › e2e\quality.fixture.spec.ts:149:1 › failed manual source falls back while preserving playback position and correct source selection (7.7s)
+  ok  7 [desktop-fixture] › e2e\quality.fixture.spec.ts:163:1 › real HLS decoding completes episode source seek exit and resume transitions (8.4s)
+  ok  8 [desktop-fixture] › e2e\quality.fixture.spec.ts:192:1 › offline metadata becomes an actionable error and retry returns results with keyboard focus (5.9s)
+  ok  9 [desktop-fixture] › e2e\quality.fixture.spec.ts:207:1 › search suggestions modal cancellation and favorite state use real IPC and persist across reload (5.1s)
+  ok 10 [desktop-fixture] › e2e\quality.fixture.spec.ts:228:1 › repeated actual playback exits release video nodes and keep document and window listeners stable (17.3s)
+
+  10 passed (1.4m)

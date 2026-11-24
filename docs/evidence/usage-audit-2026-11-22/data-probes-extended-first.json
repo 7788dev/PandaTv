@@ -1,0 +1,103 @@
+{
+  "at": "2026-11-22T15:02:27.522Z",
+  "run": "extended-first",
+  "workspaceSource": true,
+  "scenarios": [
+    {
+      "scenario": "optional-metadata-blocks-content-and-playback",
+      "held": {
+        "baseReturned": true,
+        "optionalStarted": 2,
+        "detailSettled": false,
+        "resolverCalls": 0,
+        "elapsedMs": 609
+      },
+      "afterRelease": {
+        "detailSettled": true,
+        "resolverCalls": 1,
+        "title": "Audit title 1",
+        "elapsedMs": 610
+      },
+      "evidence": "real DoubanDataSource and invokeData, gated upstream response"
+    },
+    {
+      "scenario": "one-uncached-failure-rejects-cached-library",
+      "savedMetadata": 2,
+      "requestedIds": [
+        "db-1",
+        "db-3",
+        "db-2"
+      ],
+      "returnedItems": 0,
+      "errorCode": "UPSTREAM",
+      "unaffectedCacheStillReadable": 2,
+      "upstreamPaths": [
+        "/rexxar/api/v2/search/movie",
+        "/rexxar/api/v2/movie/3",
+        "/rexxar/api/v2/movie/3"
+      ]
+    },
+    {
+      "scenario": "library-is-sequential-with-no-progressive-first-screen",
+      "controlledDetailDelayMs": 4,
+      "rows": 80,
+      "maximumConcurrentDetails": 1,
+      "after100Ms": {
+        "settled": false,
+        "requested": 8
+      },
+      "allItemsReturnedAfterMs": 1236
+    },
+    {
+      "scenario": "desktop-corrupt-state-retry-is-not-recovery",
+      "repeatedReads": [
+        {
+          "ok": false,
+          "error": {
+            "code": "INTERNAL",
+            "message": "操作失败，请重试"
+          }
+        },
+        {
+          "ok": false,
+          "error": {
+            "code": "INTERNAL",
+            "message": "操作失败，请重试"
+          }
+        },
+        {
+          "ok": false,
+          "error": {
+            "code": "INTERNAL",
+            "message": "操作失败，请重试"
+          }
+        }
+      ],
+      "savedFilePreserved": true,
+      "invalidShapeReply": {
+        "ok": false,
+        "error": {
+          "code": "STORAGE",
+          "message": "本机数据读取失败"
+        }
+      },
+      "evidence": "real UserStore and RPC with temporary malformed files; app-level gate independently reviewed"
+    },
+    {
+      "scenario": "desktop-image-cache-outgrows-budget-after-initial-prune",
+      "scaledBudgetBytes": 40960,
+      "bytesAfter20Writes": 327680,
+      "bytesAfterExplicitPrune": 32768,
+      "evidence": "real ImageCache; byte budget scaled, startup-only scheduling independently reviewed"
+    },
+    {
+      "scenario": "manual-line-choice-does-not-invalidate-prepared-next-episode",
+      "preparedNextEpisodeUrl": "https://old-line.example.com/2.mp4",
+      "manuallyPickedEpisodeUrl": "https://picked-line.example.com/1.mp4",
+      "actualNextEpisodeUrl": "https://old-line.example.com/2.mp4",
+      "freshEpisodeUrl": "https://picked-line.example.com/3.mp4",
+      "cachedPathMadeNewProbes": false,
+      "evidence": "real PlaybackService resolve/choose/attempts/cache with deterministic catalogue and media seams; no live handoff claim"
+    }
+  ]
+}

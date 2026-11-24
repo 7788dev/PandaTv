@@ -1,36 +1,38 @@
 # Repository Guidelines
 
-## Project Structure
+## Project Structure & Module Organization
 
-`design/` is the immutable visual and data contract reference. Read the [delivery report](docs/delivery-report.md) for the current state, then the [implementation plan](docs/implementation-plan.md) and the three linked audits before changing production behavior. Desktop production sources belong in `src/main/`, `src/preload/`, `src/shared/`, and `src/renderer/`; the native Android TV client (`minSdk = 22`) lives in `tv/`; verification belongs in `tests/`, `e2e/`, and `tv/app/src/test/`; replayable live probes and device/install checks in `scripts/`. Evidence and delivery notes belong in `docs/`; scratch output goes to `.tmp/` (ignored).
+- `src/main/`: Electron lifecycle, data retrieval, playback, and IPC; `src/preload/`: typed bridge; `src/shared/`: APIs; `src/renderer/`: React UI.
+- `tv/app/src/main/`: Kotlin Android TV client, with assets in `assets/` and `res/`; `resources/`: desktop manifests, search indexes, and licenses.
+- `scripts/`: probes, device checks, and release tooling; `docs/`: plans, reports, and evidence. Use `.tmp/` for scratch output.
 
-## Development Rules
+**UI verification:** Use the actual `src/renderer/` and `tv/app/` implementations and their compiled output. The prototype was intentionally removed; do not restore it or use its pages, data, or screenshots for acceptance. Test fixtures belong at network or IPC boundaries. Build new behavioral regressions against the production code instead of restoring the deleted test suites.
 
-Use Node 24 and TypeScript. Keep upstream data normalization, requests, credentials, playback resolution and filtering in the main process. The renderer consumes the typed Panda bridge and design contract. Never import `design/mock`, `design/art`, or `design/preview` into production. Keep original design files unchanged and check their SHA256 baseline before delivery.
+## Build, Test, and Development Commands
 
-Use existing design CSS, copy, icons and fonts. Put extra operational copy in `src/copy.extra.ts`: the IPC layer (`safeError`) only lets text from that file or the design copy reach the interface, any other error message is replaced by a generic one. Do not fabricate metadata, movie duration, episode availability, quality, intro markers, trending terms, or update success. Missing optional fields are omitted.
+Use Node.js 24 and npm; TV builds use JDK 21 and Android SDK/build-tools 37.
 
-Use Context7 to resolve and query current library documentation before relying on library-specific APIs. Read `C:/Users/1/.codex/RTK.md` for this host's command-output conventions. Review source rules before adopting them from other projects; record evidence and alternatives.
+- `npm ci`: install locked dependencies.
+- `npm run dev`: launch Electron development mode.
+- `npm run typecheck`: check strict TypeScript.
+- `npm test`: run Vitest once; `npm run test:release`: test release tooling.
+- `npm run build`: compile desktop bundles into `out/`.
+- `npm run dist -- --publish never`: create a Windows x64 NSIS installer in `release/`.
+- `npm run test:e2e:fixture` / `npm run test:e2e`: offline fixture / live network UI tests; build first.
+- From `tv/`, run `.\gradlew.bat testDebugUnitTest lintRelease assembleRelease` for unit tests, compatibility lint, and a release APK.
 
-- Filter vocabulary must match its evidence: after editing `src/main/data/taxonomy.ts` run `npm run probe:filters` ([why](.agents/notes/implemented/architecture/2026-11-16-filter-vocabulary.md)).
-- After touching source matching, line numbering or the choice of a source in `src/main/playback/service.ts`, run `npm run probe:sources` and `npm run probe:start`; one run is not a verdict, sources fail intermittently, and which are fast depends on the network: judge domestic use by a run inside China ([verdict](.agents/notes/implemented/architecture/2026-11-16-source-verdict.md), [choice](.agents/notes/implemented/architecture/2026-11-17-source-contest.md), [measurements](docs/evidence/cn-sources.md)).
-- Ad rules delete only on evidence inside the manifest; never add host lists or expiry dates; replay with `npm run audit:ads` ([why](.agents/notes/implemented/architecture/2026-11-16-ad-evidence.md)).
-- After touching the home feed, the artwork proxy, connection handling or main-process startup, run `npm run probe:startup` with at least 20 first starts: stalls are intermittent, so a few clean starts prove nothing ([why](.agents/notes/implemented/architecture/2026-11-17-startup.md)).
-- Keep `tv/` data, matching, ad-filtering and contract rules aligned with desktop, keep `minSdk = 22` (`NewApi` fatal, Media3 <= 1.8.x), and after changing shared rules or `resources/play-sources.json` re-export golden vectors (`node scripts/export-tv-vectors.mjs`) and run `tv\gradlew.bat testDebugUnitTest lintRelease assembleRelease` ([why](.agents/notes/implemented/architecture/2026-11-18-android-tv.md)).
-- For TV focus, loading or player changes, replay navigation and playback on the installed final APK. Verify the actual control focus before activation and restore seeded user state, source overrides and firewall rules after device tests ([why](.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md), [workflow](.agents/skills/tv-runtime-regression/SKILL.md)).
-- In TV replay helpers, choose the D-pad axis from both target and focused-node positions; a left/right move can close the player side panel ([why](.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)).
-- On this host write multi-line helper scripts to a file before running them: shell heredocs drop backslashes and mangle non-ASCII literals.
+## Coding Style & Naming Conventions
 
-## Verification
+Use two-space indentation in TypeScript/TSX and four spaces in Kotlin. Follow each file’s existing quote and semicolon style. Use PascalCase for components/classes, camelCase for functions/variables, and kebab-case for utility modules (`player-model.ts`). No ESLint or Prettier configuration exists; use typechecking and Android lint.
 
-`npm run typecheck`, `npm test` (offline), `npm run build`, `npm run test:e2e:fixture` (hidden renderer with test data), and `npm run test:e2e` (production bridge and real network). Run live Electron tests serially. Never launch `design/preview` in app tests or use its screenshots as current UI evidence. For packaged/installed acceptance set `PANDA_E2E_EXECUTABLE` to that exact `Panda.exe` and record `app.asar` identity. Keep fixture, build-live and packaged/live evidence separate in `.tmp/` unless promoting reviewed evidence ([why](.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md)).
+## Testing Guidelines
 
-`npm run verify:design` checks the design baseline; `node design/tools/test-contract.mjs` checks the original contract (405 assertions). For the installer: `npm run dist`, `node scripts/asar-check.cjs <app.asar>`, then live E2E on the chosen executable. `scripts/install-check.ps1` upgrades any existing install in place; do not run it over a user's installation just for UI validation. Use `scripts/uninstall-check.ps1` only for an install created by the test script.
+Vitest discovers `tests/**/*.test.ts` and `src/**/*.test.ts`; Playwright uses `e2e/**/*.spec.ts`; JUnit 4 uses `*Test.kt` under `tv/app/src/test/`. No coverage threshold is configured. Add behavioral regressions and run live Electron tests serially. Shared-rule changes require `node scripts/export-tv-vectors.mjs` and TV checks.
 
-Keep tests and captured fixtures outside the shipped application. Reproduce fixes before and after, run the offline suite, and independently recheck audit findings before finalizing conclusions. Never report build-only success as playback or installation success. Numbers in documents come from a run on the final code, with the time of the run.
+## Commit & Pull Request Guidelines
 
-Capture return-focus and scroll baselines at the actual departure point, after navigation helpers have moved there. Label auxiliary taps separately from D-pad reachability evidence; a helper's own scrolling is not an application return failure ([why](.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md)).
+Follow the prevalent `type(scope): summary` convention, such as `fix(tv): preserve focus`; unscoped `docs:` and `test:` also occur. PRs should describe changed behavior, link related issues, and list validation results or missing inputs. Include screenshots or TV focus/playback evidence for UI changes.
 
-## Contributions and Memory
+## Architecture & Configuration
 
-The repository initially had no commits, so no commit convention can be inferred. Do not change unrelated user files, commit, or rewrite Git history implicitly. Record architecture tradeoffs using [agent notes](.agents/notes/README.md). After a commit or substantial delivery, review the note triggers there; update existing facts instead of duplicating them.
+Keep requests, credentials, normalization, and playback resolution in the main process; the renderer uses `window.panda`. Preserve desktop/TV rule parity and Android API 22 compatibility. Exclude signing keys, cookies, `.env` files, and machine-specific `tv/local.properties` from Git. Consult Context7 before using library-specific APIs.

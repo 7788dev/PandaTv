@@ -1,5 +1,5 @@
-import { SPEEDS } from '../../design/contract/constants'
-import type { Speed } from '../../design/contract/types'
+import { SPEEDS } from '../contract/constants'
+import type { Speed } from '../contract/types'
 
 export const FRAME_SAMPLE_MS = 10_000
 const MIN_WINDOW_FRAMES = 120

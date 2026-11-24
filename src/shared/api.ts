@@ -1,4 +1,4 @@
-import type { DataSource, HistoryEntry, HomeFeed, MediaItem, Page, Person, Playback, Quality, Settings, UserState } from '../../design/contract/types'
+import type { DataSource, HistoryEntry, HomeFeed, MediaItem, Page, Person, Playback, Quality, Settings, UserState } from '../contract/types'
 
 export type Availability = { episodes?: number; episodeTitles?: string[] }
 /** One of the people on a title's page. With an `id` their works can be listed; `photo` is absent when there is none. */
@@ -23,9 +23,16 @@ export type StateAction =
   | { type: 'settings'; patch: Partial<Settings> }
 export type UpdateResult = { status: 'current' | 'available'; version: string }
 export type AppNotice = { code: string; message: string }
+export type LibraryFailure = { id: string; code: string }
+export type LibraryPage = Page<MediaItem> & { failures: LibraryFailure[]; pending: string[] }
+export type StateRecovery = { needed: boolean; canRestore: boolean }
 export interface PandaBridge {
   data: Omit<DataSource, 'detail'> & {
     detail(id: string): Promise<Detail>
+    /** Primary verified metadata, without waiting for optional credits and photos. */
+    subject(id: string): Promise<MediaItem>
+    libraryPage(ids: string[], cursor?: string, request?: string, cachedOnly?: boolean): Promise<LibraryPage>
+    cancelLibrary(request: string): Promise<void>
     /** Catalogue-derived search terms for local initials completion; no film metadata. */
     titleHints(query: string): Promise<string[]>
     person(id: string): Promise<PersonInfo>
@@ -44,6 +51,9 @@ export interface PandaBridge {
     get(): Promise<UserState>
     dispatch(action: StateAction): Promise<UserState>
     subscribe(listener: (state: UserState) => void): () => void
+    recovery(): Promise<StateRecovery>
+    recover(restoreBackup: boolean): Promise<UserState>
+    exportRecovery(): Promise<{ status: 'saved' | 'cancelled' }>
   }
   window: {
     minimize(): Promise<void>

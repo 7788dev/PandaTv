@@ -6,6 +6,8 @@ import android.view.View
 import androidx.leanback.widget.BaseGridView
 import app.panda.tv.PandaTvApp
 import app.panda.tv.model.MediaType
+import app.panda.tv.model.StateAction
+import app.panda.tv.model.UserState
 
 interface Navigator {
     val app: PandaTvApp
@@ -21,6 +23,8 @@ interface Navigator {
     fun toast(text: String)
     fun confirm(title: String, confirmText: String, destructive: Boolean = false, onConfirm: () -> Unit)
     fun focusTopBar()
+    fun saveUser(action: (UserState) -> StateAction, onSaved: (UserState) -> Unit = {})
+    fun saveUser(action: StateAction, onSaved: (UserState) -> Unit = {}) = saveUser({ action }, onSaved)
 }
 
 abstract class Screen(val ctx: Context, val nav: Navigator) {

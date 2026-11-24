@@ -11,6 +11,9 @@ import app.panda.tv.playback.SourceRules
 import app.panda.tv.playback.SourceRulesLoader
 import app.panda.tv.playback.WarmMediaCache
 import app.panda.tv.state.UserStore
+import app.panda.tv.state.UserStateWriter
+import app.panda.tv.model.StateAction
+import app.panda.tv.ui.PlaybackPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -19,6 +22,8 @@ import java.io.File
 
 class PandaTvApp : Application() {
     lateinit var userStore: UserStore
+        private set
+    lateinit var userWriter: UserStateWriter
         private set
     lateinit var douban: DoubanDataSource
         private set
@@ -39,6 +44,9 @@ class PandaTvApp : Application() {
 
         val metaDir = File(filesDir, "cache").apply { mkdirs() }
         userStore = UserStore(File(filesDir, "user-state.json"))
+        userWriter = UserStateWriter(userStore, appScope, onCommitted = { action, _ ->
+            if (action is StateAction.UpdateSettings) PlaybackPreferences.defaultsSaved(action)
+        })
         douban = DoubanDataSource(cacheDir = metaDir, titleIndex = {
             val dictionary = assets.open("search-initials.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
             val titles = assets.open("search-titles.tsv").bufferedReader(Charsets.UTF_8).use { it.readText() }

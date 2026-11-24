@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.PlaybackSearchTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-11-22T19:48:51.379Z" hostname="DESKTOP-G3A3P0Q" time="1.031">
+  <properties/>
+  <testcase name="recent failed catalogue is retryable and never cached as absence" classname="app.panda.tv.PlaybackSearchTest" time="0.033"/>
+  <testcase name="a catalogue with only episode one rejects episode two before player entry" classname="app.panda.tv.PlaybackSearchTest" time="0.003"/>
+  <testcase name="last bundled fallback starts while first eight catalogues are waiting" classname="app.panda.tv.PlaybackSearchTest" time="0.007"/>
+  <testcase name="cancelling a preload does not cancel an active resolver awaiting it" classname="app.panda.tv.PlaybackSearchTest" time="0.034"/>
+  <testcase name="first playable answer returns without waiting for slow catalogue" classname="app.panda.tv.PlaybackSearchTest" time="0.079"/>
+  <testcase name="cancelling one screen does not cancel a shared playback admission" classname="app.panda.tv.PlaybackSearchTest" time="0.032"/>
+  <testcase name="late catalogue source is kept after the early answer is cached" classname="app.panda.tv.PlaybackSearchTest" time="0.841"/>
+  <testcase name="confirmed empty catalogues reject admission without fabricating episodes" classname="app.panda.tv.PlaybackSearchTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

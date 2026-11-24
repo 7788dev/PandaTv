@@ -1,0 +1,33 @@
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop-live] › e2e\quality.live.spec.ts:39:1 › real metadata initials filters paging and detail navigation (19.3s)
+  x  2 [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release (45.5s)
+
+
+  1) [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release 
+
+    TimeoutError: page.screenshot: Timeout 30000ms exceeded.
+    Call log:
+      - taking page screenshot
+      - waiting for fonts to load...
+      - fonts loaded
+
+
+       at quality-desktop.ts:92
+
+      90 |   await page.evaluate(() => document.fonts.ready)
+      91 |   await page.waitForTimeout(250)
+    > 92 |   await page.screenshot({ path })
+         |              ^
+      93 | }
+      94 | export async function contrast(element: ReturnType<Page['locator']>) {
+      95 |   return element.evaluate(e => {
+        at screenshot (E:\dev\项目\panda\e2e\quality-desktop.ts:92:14)
+        at E:\dev\项目\panda\e2e\quality.live.spec.ts:88:3
+
+    Error Context: .tmp\e2e-results\desktop-packaged-live\quality.live-real-playback-26cea--and-media-resource-release-desktop-live\error-context.md
+
+  1 failed
+    [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release 
+  1 passed (1.1m)

@@ -1,0 +1,1442 @@
+{
+ "at": "2026-11-24T15:28:04.466Z",
+ "route": "system route",
+ "perType": 2,
+ "method": "Douban hot subject → one source forced at a time → sources() + resolve() → playlist and real segment bytes",
+ "sources": [
+  {
+   "key": "subo",
+   "name": "速播资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9002ms",
+    "search: 请求已取消 / ABORT_ERR 9000ms",
+    "search: 请求已取消 / ABORT_ERR 9001ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19004
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9001
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "huya",
+   "name": "虎牙资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9001ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19005
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9001
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 1
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "bfzy",
+   "name": "暴风资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9001ms",
+    "search: 请求已取消 / ABORT_ERR 9000ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19002
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9000
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 1
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "dyttzy",
+   "name": "电影天堂",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9000ms",
+    "search: 请求已取消 / ABORT_ERR 9001ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19001
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9001
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "lzi",
+   "name": "量子资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9001ms",
+    "search: 请求已取消 / ABORT_ERR 9000ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19002
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9000
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "ffzy",
+   "name": "非凡资源",
+   "configuredEnabled": true,
+   "verdict": "playable",
+   "tests": 8,
+   "playable": 7,
+   "present": 7,
+   "blocked": 0,
+   "noMatch": 1,
+   "mediaFailed": 0,
+   "failures": [],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 12,
+     "format": "hls",
+     "quality": "720P",
+     "status": 200,
+     "manifestBytes": 66608,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 8028
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 24,
+     "format": "hls",
+     "quality": "720P",
+     "status": 200,
+     "manifestBytes": 66896,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 4704
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 240026,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 9043
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 206330,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 10184
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 5,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 37724,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 7250
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 206330,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 1963
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 18,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 164282,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 4962
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 287
+    }
+   ]
+  },
+  {
+   "key": "hongniu",
+   "name": "红牛资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9000ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19001
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9001
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "jyzy",
+   "name": "金鹰资源",
+   "configuredEnabled": true,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9002ms",
+    "search: 请求已取消 / ABORT_ERR 9001ms",
+    "search: 请求已取消 / ABORT_ERR 9000ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19004
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9000
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "360zy",
+   "name": "360资源",
+   "configuredEnabled": true,
+   "verdict": "playable",
+   "tests": 8,
+   "playable": 7,
+   "present": 7,
+   "blocked": 0,
+   "noMatch": 1,
+   "mediaFailed": 0,
+   "failures": [],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 12,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 125509,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 7685
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 24,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 125723,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6720
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 447890,
+     "segmentStatus": 206,
+     "segmentBytes": 27840,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 5629
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 389456,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 8863
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 5,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 71255,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 4277
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 389456,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 1992
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "360zy"
+     ],
+     "sourceEpisodes": 23,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 307801,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6805
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 1102
+    }
+   ]
+  },
+  {
+   "key": "maotaizy",
+   "name": "猫台资源",
+   "configuredEnabled": false,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 片源数据格式无效 2579ms",
+    "search: 片源数据格式无效 1033ms",
+    "search: 片源数据格式无效 1026ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 4613
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 1026
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 1
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "maoyan",
+   "name": "猫眼资源",
+   "configuredEnabled": false,
+   "verdict": "catalogue-only-or-media-broken",
+   "tests": 8,
+   "playable": 0,
+   "present": 7,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 7,
+   "failures": [
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5928ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5894ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5892ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5546ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5858ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5548ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5919ms",
+    "probe: 网络请求失败或超时 / 无法确认公开网络地址 5674ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "sourceEpisodes": 10,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 12401
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "sourceEpisodes": 29,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 12270
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 12371
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 16098
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "sourceEpisodes": 5,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 11660
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 11220
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "maoyan"
+     ],
+     "sourceEpisodes": 17,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 15047
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19002
+    }
+   ]
+  },
+  {
+   "key": "apibdzy",
+   "name": "百度云资源",
+   "configuredEnabled": false,
+   "verdict": "partial",
+   "tests": 8,
+   "playable": 3,
+   "present": 7,
+   "blocked": 0,
+   "noMatch": 1,
+   "mediaFailed": 4,
+   "failures": [
+    "probe: aborted 10002ms",
+    "probe: aborted 10001ms",
+    "probe: 请求已取消 / ABORT_ERR 10001ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "sourceEpisodes": 12,
+     "format": "hls",
+     "status": 200,
+     "manifestBytes": 132976,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 15935
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "sourceEpisodes": 24,
+     "format": "hls",
+     "quality": "480P",
+     "status": 200,
+     "manifestBytes": 133648,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 200,
+     "midBytes": 323623,
+     "ms": 18459
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 12161
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 11839
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "sourceEpisodes": 5,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 21278
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 400624,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 200,
+     "midBytes": 294295,
+     "ms": 25512
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "apibdzy"
+     ],
+     "sourceEpisodes": 19,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 11283
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 2534
+    }
+   ]
+  },
+  {
+   "key": "piaoling2",
+   "name": "飘零资源",
+   "configuredEnabled": false,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9000ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19003
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9000
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  },
+  {
+   "key": "jszy",
+   "name": "极速资源",
+   "configuredEnabled": false,
+   "verdict": "failed",
+   "tests": 8,
+   "playable": 0,
+   "present": 0,
+   "blocked": 0,
+   "noMatch": 0,
+   "mediaFailed": 0,
+   "failures": [
+    "search: 请求已取消 / ABORT_ERR 9002ms",
+    "search: 请求已取消 / ABORT_ERR 9001ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 19002
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 9002
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 0
+    }
+   ]
+  }
+ ]
+}

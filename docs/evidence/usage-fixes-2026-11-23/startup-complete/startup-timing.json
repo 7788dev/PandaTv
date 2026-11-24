@@ -1,0 +1,193 @@
+{
+  "at": "2026-11-22T19:27:16.845Z",
+  "executable": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\Panda.exe",
+  "unit": "ms after process creation",
+  "firstStarts": [
+    {
+      "skeleton": 431,
+      "topOfPage": 687,
+      "visibleArtwork": 1161,
+      "wholePage": 1640,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 486,
+      "topOfPage": 769,
+      "visibleArtwork": 1224,
+      "wholePage": 1692,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 439,
+      "topOfPage": 693,
+      "visibleArtwork": 1167,
+      "wholePage": 1666,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 438,
+      "topOfPage": 737,
+      "visibleArtwork": 1245,
+      "wholePage": 1907,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 421,
+      "topOfPage": 630,
+      "visibleArtwork": 1126,
+      "wholePage": 1675,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 433,
+      "topOfPage": 680,
+      "visibleArtwork": 1120,
+      "wholePage": 2088,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 436,
+      "topOfPage": 630,
+      "visibleArtwork": 1101,
+      "wholePage": 1998,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 472,
+      "topOfPage": 708,
+      "visibleArtwork": 1161,
+      "wholePage": 1696,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 430,
+      "topOfPage": 626,
+      "visibleArtwork": 1126,
+      "wholePage": 1684,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 462,
+      "topOfPage": 856,
+      "visibleArtwork": 1256,
+      "wholePage": 1707,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 420,
+      "topOfPage": 614,
+      "visibleArtwork": 1196,
+      "wholePage": 1705,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 435,
+      "topOfPage": 696,
+      "visibleArtwork": 1164,
+      "wholePage": 1717,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 469,
+      "topOfPage": 751,
+      "visibleArtwork": 1161,
+      "wholePage": 1700,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 421,
+      "topOfPage": 739,
+      "visibleArtwork": 2445,
+      "wholePage": 1659,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 513,
+      "topOfPage": 627,
+      "visibleArtwork": 1101,
+      "wholePage": 1661,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 450,
+      "topOfPage": 722,
+      "visibleArtwork": 1182,
+      "wholePage": 1713,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 437,
+      "topOfPage": 858,
+      "visibleArtwork": 1424,
+      "wholePage": 1683,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 438,
+      "topOfPage": 718,
+      "visibleArtwork": 1190,
+      "wholePage": 1697,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 494,
+      "topOfPage": 732,
+      "visibleArtwork": 1265,
+      "wholePage": 1700,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 549,
+      "topOfPage": 803,
+      "visibleArtwork": 1282,
+      "wholePage": 1774,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ],
+  "repeatStarts": [
+    {
+      "skeleton": 505,
+      "topOfPage": 655,
+      "visibleArtwork": 792,
+      "wholePage": 655,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 444,
+      "topOfPage": 600,
+      "visibleArtwork": 688,
+      "wholePage": 600,
+      "visibleImages": 18,
+      "failed": false
+    },
+    {
+      "skeleton": 443,
+      "topOfPage": 595,
+      "visibleArtwork": 690,
+      "wholePage": 595,
+      "visibleImages": 18,
+      "failed": false
+    }
+  ]
+}

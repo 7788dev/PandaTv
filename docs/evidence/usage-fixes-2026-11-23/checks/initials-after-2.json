@@ -1,0 +1,28 @@
+{
+  "stats": {
+    "startTime": "2026-11-22T19:31:11.813Z",
+    "duration": 5788.321,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "real title initials search finds Chinese films in a new profile",
+      "file": "search-initials.spec.ts",
+      "line": 6,
+      "outcome": "unexpected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "failed",
+          "durationMs": 5390,
+          "error": "Error: page.evaluate: Error: 暂时无法连接，请重试"
+        }
+      ]
+    }
+  ],
+  "rawReport": ".tmp/usage-fixes-2026-11-23/initials-after-2-results.json",
+  "rawSha256": "E453C35F0DECE6B7A82DC567B61EAAE5E596BF3E1AF570F67CB894DCD15AF8E4"
+}

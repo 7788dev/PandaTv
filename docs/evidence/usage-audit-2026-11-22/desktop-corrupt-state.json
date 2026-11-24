@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "at": "2026-11-22T15:08:15.317Z",
+      "identity": {
+        "appPath": "E:\\dev\\项目\\panda",
+        "packaged": false,
+        "userDataPath": "E:\\dev\\项目\\panda\\.tmp\\usage-audit-2026-11-22\\corrupt-profile-2MjwI6"
+      },
+      "retryReads": [
+        "操作失败，请重试",
+        "操作失败，请重试",
+        "操作失败，请重试"
+      ],
+      "settingsVisible": 0,
+      "channelCards": 0,
+      "originalMalformedFilePreserved": true,
+      "stateFileSha256": "c48150c6084a545e09ef9a2f7b6b12e381ad32fe65dcde2fca0d51d5ac02baca",
+      "runtime": "actual main/preload/current renderer with isolated damaged user state; hidden window"
+    },
+    {
+      "at": "2026-11-22T15:08:16.938Z",
+      "identity": {
+        "appPath": "E:\\dev\\项目\\panda",
+        "packaged": false,
+        "userDataPath": "E:\\dev\\项目\\panda\\.tmp\\usage-audit-2026-11-22\\corrupt-profile-6zBAGz"
+      },
+      "retryReads": [
+        "操作失败，请重试",
+        "操作失败，请重试",
+        "操作失败，请重试"
+      ],
+      "settingsVisible": 0,
+      "channelCards": 0,
+      "originalMalformedFilePreserved": true,
+      "stateFileSha256": "c48150c6084a545e09ef9a2f7b6b12e381ad32fe65dcde2fca0d51d5ac02baca",
+      "runtime": "actual main/preload/current renderer with isolated damaged user state; hidden window"
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "at": "2026-11-22T19:34:44.512Z",
+  "route": "system route",
+  "scope": "Same production data and playback services with each failing live-E2E source enabled alone; transport-stage diagnosis, not video-decoding acceptance.",
+  "rows": [
+    {
+      "at": "2026-11-22T19:34:36.541Z",
+      "round": 1,
+      "source": "bfzy",
+      "title": "漫长的季节",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1371
+    },
+    {
+      "at": "2026-11-22T19:34:37.912Z",
+      "round": 1,
+      "source": "dyttzy",
+      "title": "三体",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1337
+    },
+    {
+      "at": "2026-11-22T19:34:39.249Z",
+      "round": 1,
+      "source": "lzi",
+      "title": "庆余年 第二季",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1283
+    },
+    {
+      "at": "2026-11-22T19:34:40.532Z",
+      "round": 2,
+      "source": "bfzy",
+      "title": "漫长的季节",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1334
+    },
+    {
+      "at": "2026-11-22T19:34:41.866Z",
+      "round": 2,
+      "source": "dyttzy",
+      "title": "三体",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1359
+    },
+    {
+      "at": "2026-11-22T19:34:43.225Z",
+      "round": 2,
+      "source": "lzi",
+      "title": "庆余年 第二季",
+      "type": "tv",
+      "stage": "metadata-search",
+      "firstBytesRead": false,
+      "warnings": [
+        {
+          "operation": "search:primary",
+          "code": "UPSTREAM"
+        }
+      ],
+      "failures": [],
+      "error": "Metadata HTTP 400",
+      "totalMs": 1287
+    }
+  ]
+}

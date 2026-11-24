@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-22T18:34:16.479441+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "storage-1",
+      "passed": true,
+      "fault": "files directory chmod 555",
+      "saveErrorShown": true,
+      "processSurvived": true,
+      "oldStatePreserved": true,
+      "remoteStillResponds": true,
+      "retryCommitted": true
+    },
+    {
+      "name": "storage-2",
+      "passed": true,
+      "fault": "files directory chmod 555",
+      "saveErrorShown": true,
+      "processSurvived": true,
+      "oldStatePreserved": true,
+      "remoteStillResponds": true,
+      "retryCommitted": true
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "completeUserStateRestored": true,
+    "firewallRulesRestored": true,
+    "displaySettingsRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/storage-verified/report.json",
+  "rawSha256": "5DE56AE77848D7606768232373673ADBA38F9CCBA0F64BAD994002CBC24F34E5"
+}

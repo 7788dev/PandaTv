@@ -53,6 +53,9 @@ class MetadataStore(
                 val prev = existing?.item
                 val cur = value.item
                 val mergedItem = cur.copy(
+                    // A plain movie/tv card carries format, not evidence that a
+                    // previously verified thematic category disappeared.
+                    type = if (existing?.kind == value.kind && cur.type.wire == value.kind) prev!!.type else cur.type,
                     genres = if (cur.genres.isNotEmpty()) cur.genres else prev?.genres ?: emptyList(),
                     poster = cur.poster ?: prev?.poster,
                     backdrop = cur.backdrop ?: prev?.backdrop,

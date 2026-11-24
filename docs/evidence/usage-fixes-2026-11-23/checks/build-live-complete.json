@@ -1,0 +1,252 @@
+{
+  "stats": {
+    "startTime": "2026-11-22T19:14:49.778Z",
+    "duration": 339259.509,
+    "expected": 12,
+    "skipped": 2,
+    "unexpected": 3,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "title": "ad removal on bfzy: reserved ad path inside an implicit-IV AES-128 programme plays, seeks across the cut and keeps decoding",
+      "file": "ads.spec.ts",
+      "line": 34,
+      "outcome": "unexpected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "failed",
+          "durationMs": 67233,
+          "error": "TimeoutError: page.waitForFunction: Timeout 65000ms exceeded."
+        }
+      ]
+    },
+    {
+      "title": "ad removal on 360zy: out-of-directory blocks plays, seeks across the cut and keeps decoding",
+      "file": "ads.spec.ts",
+      "line": 34,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 20269,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "ad removal on dyttzy: duration fingerprints on a rotated CDN host plays, seeks across the cut and keeps decoding",
+      "file": "ads.spec.ts",
+      "line": 34,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25410,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "ad removal on lzi: CMS ad marker on a rotated CDN host plays, seeks across the cut and keeps decoding",
+      "file": "ads.spec.ts",
+      "line": 34,
+      "outcome": "unexpected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "failed",
+          "durationMs": 66987,
+          "error": "TimeoutError: page.waitForFunction: Timeout 65000ms exceeded."
+        }
+      ]
+    },
+    {
+      "title": "real Douban metadata, detailed channel facets, suggestions, hot searches and pagination",
+      "file": "data.spec.ts",
+      "line": 7,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 40671,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "real movie decodes, seeks, changes speed, enters fullscreen and persists history",
+      "file": "live.spec.ts",
+      "line": 4,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 25405,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "real serial exposes playable episodes and decodes after switching to the next episode",
+      "file": "live.spec.ts",
+      "line": 103,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 21599,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "real animation resolves by Douban identity and decodes its actual stream",
+      "file": "live.spec.ts",
+      "line": 133,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 9056,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "packaged live: real navigation, dialogs and hit targets at native window sizes",
+      "file": "packaged-ui.spec.ts",
+      "line": 7,
+      "outcome": "skipped",
+      "expectedStatus": "skipped",
+      "attempts": [
+        {
+          "status": "skipped",
+          "durationMs": 0,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "real Douban people: the few a title is known for, their photos, and everything one of them worked on",
+      "file": "people.spec.ts",
+      "line": 9,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 15386,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "desktop state recovery: exports original bytes and explicitly restores a valid backup",
+      "file": "recovery.spec.ts",
+      "line": 13,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1049,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "desktop state recovery: cancelling reset preserves damage and a confirmed reset survives restart",
+      "file": "recovery.spec.ts",
+      "line": 46,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1701,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "packaged live: UI frame samples and player resource release after repeated navigation",
+      "file": "runtime-ui.spec.ts",
+      "line": 34,
+      "outcome": "skipped",
+      "expectedStatus": "skipped",
+      "attempts": [
+        {
+          "status": "skipped",
+          "durationMs": 0,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "real title initials search finds Chinese films in a new profile",
+      "file": "search-initials.spec.ts",
+      "line": 6,
+      "outcome": "unexpected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "failed",
+          "durationMs": 36741,
+          "error": "Error: page.evaluate: Error: 暂时无法连接，请重试"
+        }
+      ]
+    },
+    {
+      "title": "startup: a reload during initial loading does not report application failure",
+      "file": "startup.spec.ts",
+      "line": 6,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 935,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "startup: a second start shows the home page and its artwork from what the first start saved",
+      "file": "startup.spec.ts",
+      "line": 51,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 3347,
+          "error": ""
+        }
+      ]
+    },
+    {
+      "title": "startup: restores a maximized window after a clean restart",
+      "file": "startup.spec.ts",
+      "line": 82,
+      "outcome": "expected",
+      "expectedStatus": "passed",
+      "attempts": [
+        {
+          "status": "passed",
+          "durationMs": 1260,
+          "error": ""
+        }
+      ]
+    }
+  ],
+  "rawReport": ".tmp/usage-fixes-2026-11-23/build-live-complete-results.json",
+  "rawSha256": "C2F585ED70D3DFB48B9CD4C665D9371AEAE9DA6F416314AE23E51D5E2D1AEE13"
+}

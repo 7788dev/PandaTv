@@ -1,0 +1,53 @@
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop-live] › e2e\quality.live.spec.ts:40:1 › real metadata initials filters paging and detail navigation (20.8s)
+  x  2 [desktop-live] › e2e\quality.live.spec.ts:67:1 › real playback episode source seek exit reentry and media resource release (1.3m)
+
+
+  1) [desktop-live] › e2e\quality.live.spec.ts:67:1 › real playback episode source seek exit reentry and media resource release 
+
+    TimeoutError: locator.hover: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '下一集', exact: true })
+        - locator resolved to <button type="button" aria-label="下一集" class="icon-btn " id="base-ui-_r_h_" data-base-ui-tooltip-trigger="">…</button>
+      - attempting hover action
+        2 × waiting for element to be visible and stable
+          - element is not stable
+        - retrying hover action
+        - waiting 20ms
+        - waiting for element to be visible and stable
+        - element is visible and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <video playsinline="" preload="auto" class="player__video" crossorigin="anonymous" src="blob:file:///936a41cb-b70c-41e9-ac10-f954ec7009f8" poster="http://127.0.0.1:51166/asset/282bac675234c66fa08a791bfed6959c21ca858f9b4b30cb"></video> intercepts pointer events
+      - retrying hover action
+        - waiting 100ms
+        - waiting for element to be visible and stable
+        - element is not stable
+      - retrying hover action
+        - waiting 100ms
+        12 × waiting for element to be visible and stable
+           - element is visible and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <video playsinline="" preload="auto" class="player__video" crossorigin="anonymous" src="blob:file:///936a41cb-b70c-41e9-ac10-f954ec7009f8" poster="http://127.0.0.1:51166/asset/282bac675234c66fa08a791bfed6959c21ca858f9b4b30cb"></video> intercepts pointer events
+         - retrying hover action
+           - waiting 500ms
+        - waiting for element to be visible and stable
+
+
+      90 |   await page.mouse.move(20, 200); await page.mouse.move(21, 201)
+      91 |   const nextEpisode = page.getByRole('button', { name: '下一集', exact: true })
+    > 92 |   await nextEpisode.hover()
+         |                     ^
+      93 |   await nextEpisode.click()
+      94 |   await expect.poll(() => page.evaluate(() => location.hash)).toBe('#/play/db-26647087/2')
+      95 |   await playing(page, 2, 90000)
+        at E:\dev\项目\panda\e2e\quality.live.spec.ts:92:21
+
+    Error Context: .tmp\e2e-results\desktop-packaged-live\quality.live-real-playback-26cea--and-media-resource-release-desktop-live\error-context.md
+
+  1 failed
+    [desktop-live] › e2e\quality.live.spec.ts:67:1 › real playback episode source seek exit reentry and media resource release 
+  1 passed (1.7m)

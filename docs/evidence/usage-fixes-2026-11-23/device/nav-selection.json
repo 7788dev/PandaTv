@@ -1,0 +1,42 @@
+{
+  "at": "2026-11-22T18:46:44.716913+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "剧集榜-1",
+      "passed": true
+    },
+    {
+      "name": "电影榜-1",
+      "passed": true
+    },
+    {
+      "name": "动漫榜-1",
+      "passed": true
+    },
+    {
+      "name": "剧集榜-2",
+      "passed": true
+    },
+    {
+      "name": "电影榜-2",
+      "passed": true
+    },
+    {
+      "name": "动漫榜-2",
+      "passed": true
+    }
+  ],
+  "passed": 6,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "userStateRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/nav-selection/report.json",
+  "rawSha256": "53247FCEAF5F9005BA34F458294B2B62F113C04E73B8EBAD8EF93931533F7DF2"
+}

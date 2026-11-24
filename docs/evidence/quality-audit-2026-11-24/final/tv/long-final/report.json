@@ -1,0 +1,336 @@
+{
+  "at": "2026-11-24T11:43:31.234196+00:00",
+  "cases": [
+    {
+      "name": "extended-playback",
+      "passed": true,
+      "selectedSubject": {
+        "requestedTitle": "三体",
+        "rating": "8.8",
+        "focusedLabels": [
+          "8.8",
+          "45分钟",
+          "三体",
+          "剧情 / 科幻"
+        ],
+        "bounds": [
+          97,
+          399,
+          366,
+          895
+        ]
+      },
+      "detailPlayFocus": {
+        "class": "android.widget.LinearLayout",
+        "bounds": [
+          506,
+          338,
+          701,
+          421
+        ],
+        "labels": [
+          "播放"
+        ]
+      },
+      "pid": "26033",
+      "seconds": 301.85,
+      "samples": [
+        {
+          "wallSeconds": 1.54,
+          "position": 3,
+          "javaHeapPssKb": 12580,
+          "nativeHeapPssKb": 34980,
+          "rendering": {
+            "totalFrames": 448,
+            "jankyFrames": 2,
+            "jankPct": 0.45,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "1.0",
+              "暂停",
+              "下一集",
+              "00:03 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "00:03 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 255
+          }
+        },
+        {
+          "wallSeconds": 62.62,
+          "position": 64,
+          "javaHeapPssKb": 14560,
+          "nativeHeapPssKb": 33368,
+          "rendering": {
+            "totalFrames": 457,
+            "jankyFrames": 2,
+            "jankPct": 0.44,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "25.0",
+              "暂停",
+              "下一集",
+              "01:04 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "01:04 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 48
+          }
+        },
+        {
+          "wallSeconds": 123.63,
+          "position": 125,
+          "javaHeapPssKb": 13852,
+          "nativeHeapPssKb": 33392,
+          "rendering": {
+            "totalFrames": 467,
+            "jankyFrames": 2,
+            "jankPct": 0.43,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "48.0",
+              "暂停",
+              "下一集",
+              "02:05 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "02:05 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 237
+          }
+        },
+        {
+          "wallSeconds": 184.59,
+          "position": 186,
+          "javaHeapPssKb": 14500,
+          "nativeHeapPssKb": 33440,
+          "rendering": {
+            "totalFrames": 477,
+            "jankyFrames": 2,
+            "jankPct": 0.42,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "72.0",
+              "暂停",
+              "下一集",
+              "03:06 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "03:06 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 255
+          }
+        },
+        {
+          "wallSeconds": 245.6,
+          "position": 247,
+          "javaHeapPssKb": 14660,
+          "nativeHeapPssKb": 33452,
+          "rendering": {
+            "totalFrames": 487,
+            "jankyFrames": 2,
+            "jankPct": 0.41,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "96.0",
+              "暂停",
+              "下一集",
+              "04:07 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "04:07 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 88
+          }
+        },
+        {
+          "wallSeconds": 301.85,
+          "position": 303,
+          "javaHeapPssKb": 13860,
+          "nativeHeapPssKb": 33328,
+          "rendering": {
+            "totalFrames": 497,
+            "jankyFrames": 2,
+            "jankPct": 0.4,
+            "p90Ms": 6,
+            "p95Ms": 7
+          },
+          "state": {
+            "texts": [
+              "返回",
+              "三体",
+              "第1集",
+              "118.0",
+              "暂停",
+              "下一集",
+              "05:03 / 42:44",
+              "选集",
+              "1080P",
+              "倍速"
+            ],
+            "clock": "05:03 / 42:44",
+            "player": true,
+            "spinner": false,
+            "focus": {
+              "class": "android.widget.LinearLayout",
+              "bounds": [
+                102,
+                945,
+                277,
+                1017
+              ],
+              "labels": [
+                "暂停"
+              ]
+            },
+            "nextTap": [
+              416,
+              981
+            ],
+            "loadingRegionMaxRgb": 255
+          }
+        }
+      ],
+      "decoder": {
+        "renderedOutputBuffers": 7624,
+        "droppedOutputBuffers": 0,
+        "skippedOutputBuffers": 0,
+        "dropRate": 0.0
+      },
+      "scope": "Finite extended playback, timeline, native heaps and final decoder counters; UI gfxinfo is separate from video frame counts"
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.14",
+  "apkSha256": "43D520C19966969226E5DC28F22CB1A2CF73221F27E1258ABC33049945991379",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

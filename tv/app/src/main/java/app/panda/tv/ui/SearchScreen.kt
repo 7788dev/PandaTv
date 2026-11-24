@@ -296,7 +296,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         searchError = null
         suggestJob?.cancel()
         suggestFrame.visibility = View.GONE
-        nav.app.userStore.dispatch(StateAction.AddSearch(q))
+        nav.saveUser(StateAction.AddSearch(q))
         searchJob?.cancel()
         val generation = ++searchGeneration
         activeTypeFilter = null
@@ -396,8 +396,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         if (recent.isNotEmpty()) {
             val clearBtn = Theme.pillButton(ctx, Copy.Action.CLEAR, padH = 12, padV = 5, sp = 12f).apply {
                 setOnClickListener {
-                    nav.app.userStore.dispatch(StateAction.ClearSearches)
-                    showDiscovery()
+                    nav.saveUser(StateAction.ClearSearches) { if (!destroyed) showDiscovery() }
                 }
             }
             col.addView(Theme.sectionHeader(ctx, Copy.Search.RECENT, m.pageH, Theme.dp(ctx, 8), clearBtn))

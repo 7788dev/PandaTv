@@ -1,0 +1,72 @@
+[
+  {
+    "at": 1795522351737,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522351821,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522353013,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}"
+  },
+  {
+    "at": 1795522354043,
+    "process": "main",
+    "message": "[source] hongniu search: 网络请求失败或超时 / ECONNRESET 295ms"
+  },
+  {
+    "at": 1795522355803,
+    "process": "main",
+    "message": "[source] huya search: 上游服务暂不可用（403） 2056ms"
+  },
+  {
+    "at": 1795522357531,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":8,\"removedSeconds\":35.134,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  },
+  {
+    "at": 1795522360550,
+    "process": "main",
+    "message": "[source] jyzy search: 上游服务暂不可用（403） 6802ms"
+  },
+  {
+    "at": 1795522362747,
+    "process": "main",
+    "message": "[source] subo search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522362747,
+    "process": "main",
+    "message": "[source] bfzy search: 请求已取消 / ABORT_ERR 9000ms"
+  },
+  {
+    "at": 1795522362747,
+    "process": "main",
+    "message": "[source] dyttzy search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522362748,
+    "process": "main",
+    "message": "[source] lzi search: 请求已取消 / ABORT_ERR 9001ms"
+  },
+  {
+    "at": 1795522362748,
+    "process": "main",
+    "message": "[source] ffzy search: 请求已取消 / ABORT_ERR 9000ms"
+  },
+  {
+    "at": 1795522363419,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":12,\"removedSeconds\":52.701,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  },
+  {
+    "at": 1795522368084,
+    "process": "main",
+    "message": "[media] 360zy {\"removedSegments\":12,\"removedSeconds\":52.701,\"reason\":\"filtered\",\"evidence\":[\"foreign\"]}"
+  }
+]

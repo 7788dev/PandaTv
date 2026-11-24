@@ -1,0 +1,151 @@
+{
+ "at": "2026-11-24T14:38:39.434Z",
+ "route": "system route",
+ "perType": 2,
+ "method": "Douban hot subject → one source forced at a time → sources() + resolve() → playlist and real segment bytes",
+ "sources": [
+  {
+   "key": "ffzy",
+   "name": "非凡资源",
+   "configuredEnabled": true,
+   "verdict": "partial",
+   "tests": 8,
+   "playable": 6,
+   "present": 7,
+   "blocked": 0,
+   "noMatch": 1,
+   "mediaFailed": 1,
+   "failures": [
+    "search: 网络请求失败或超时 / ECONNRESET 15ms"
+   ],
+   "rows": [
+    {
+     "type": "tv",
+     "title": "两京十五日",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 12,
+     "format": "hls",
+     "quality": "720P",
+     "status": 200,
+     "manifestBytes": 66608,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6339
+    },
+    {
+     "type": "tv",
+     "title": "今天是太阳雨",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 24,
+     "error": "片源暂时无法连接，请重试",
+     "failureKind": "playback-error",
+     "ms": 1294
+    },
+    {
+     "type": "movie",
+     "title": "可能的爱",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 240026,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 13125
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 206330,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 13524
+    },
+    {
+     "type": "anime",
+     "title": "谷雨街后巷",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 5,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 37724,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6654
+    },
+    {
+     "type": "anime",
+     "title": "八仙！",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 206330,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 3375
+    },
+    {
+     "type": "variety",
+     "title": "后会友期",
+     "year": 2026,
+     "present": [
+      "ffzy"
+     ],
+     "sourceEpisodes": 18,
+     "format": "hls",
+     "quality": "1080P",
+     "status": 200,
+     "manifestBytes": 164282,
+     "segmentStatus": 206,
+     "segmentBytes": 65536,
+     "midStatus": 206,
+     "midBytes": 65536,
+     "ms": 6893
+    },
+    {
+     "type": "variety",
+     "title": "不栩此行",
+     "year": 2026,
+     "present": [],
+     "error": "未找到这一集的可用片源",
+     "failureKind": "no-match",
+     "ms": 228
+    }
+   ]
+  }
+ ]
+}

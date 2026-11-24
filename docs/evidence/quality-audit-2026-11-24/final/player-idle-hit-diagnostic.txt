@@ -1,0 +1,202 @@
+{
+  "label": "idle",
+  "idle": "",
+  "bottom": {
+    "position": "absolute",
+    "zIndex": "auto",
+    "pointerEvents": "none",
+    "opacity": "0",
+    "transform": "none",
+    "display": "block"
+  },
+  "next": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "none",
+    "opacity": "1",
+    "transform": "none",
+    "display": "grid"
+  },
+  "nextRect": [
+    91.83333587646484,
+    846,
+    44,
+    44
+  ],
+  "hitAtCenter": {
+    "tag": "VIDEO",
+    "className": "player__video",
+    "label": null
+  },
+  "video": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "block",
+    "rect": [
+      0,
+      0,
+      1440,
+      902
+    ]
+  },
+  "bottomRect": [
+    0,
+    818,
+    1440,
+    92
+  ]
+}
+{
+  "label": "after-move-300ms",
+  "bottom": {
+    "position": "absolute",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "0.999963",
+    "transform": "none",
+    "display": "block"
+  },
+  "next": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "grid"
+  },
+  "nextRect": [
+    91.83333587646484,
+    838.0003662109375,
+    44,
+    44
+  ],
+  "hitAtCenter": {
+    "tag": "BUTTON",
+    "className": "icon-btn ",
+    "label": "下一集"
+  },
+  "video": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "block",
+    "rect": [
+      0,
+      0,
+      1440,
+      902
+    ]
+  },
+  "bottomRect": [
+    0,
+    810.0003662109375,
+    1440,
+    92
+  ]
+}
+{
+  "label": "after-3.5s-stationary",
+  "idle": "",
+  "bottom": {
+    "position": "absolute",
+    "zIndex": "auto",
+    "pointerEvents": "none",
+    "opacity": "0",
+    "transform": "none",
+    "display": "block"
+  },
+  "next": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "none",
+    "opacity": "1",
+    "transform": "none",
+    "display": "grid"
+  },
+  "nextRect": [
+    91.83333587646484,
+    846,
+    44,
+    44
+  ],
+  "hitAtCenter": {
+    "tag": "VIDEO",
+    "className": "player__video",
+    "label": null
+  },
+  "video": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "block",
+    "rect": [
+      0,
+      0,
+      1440,
+      902
+    ]
+  },
+  "bottomRect": [
+    0,
+    818,
+    1440,
+    92
+  ]
+}
+{
+  "label": "after-move-center",
+  "bottom": {
+    "position": "absolute",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "0.99987",
+    "transform": "none",
+    "display": "block"
+  },
+  "next": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "grid"
+  },
+  "nextRect": [
+    91.83333587646484,
+    838.0010986328125,
+    44,
+    44
+  ],
+  "hitAtCenter": {
+    "tag": "BUTTON",
+    "className": "icon-btn ",
+    "label": "下一集"
+  },
+  "video": {
+    "position": "static",
+    "zIndex": "auto",
+    "pointerEvents": "auto",
+    "opacity": "1",
+    "transform": "none",
+    "display": "block",
+    "rect": [
+      0,
+      0,
+      1440,
+      902
+    ]
+  },
+  "bottomRect": [
+    0,
+    810.0010986328125,
+    1440,
+    92
+  ]
+}

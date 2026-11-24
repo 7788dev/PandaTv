@@ -1,0 +1,71 @@
+{
+  "before": 61.71066,
+  "after": 64.276285,
+  "source": {
+    "list": [
+      {
+        "key": "a",
+        "name": "线路甲"
+      },
+      {
+        "key": "b",
+        "name": "线路乙"
+      },
+      {
+        "key": "c",
+        "name": "线路丙"
+      }
+    ],
+    "current": "c"
+  },
+  "probes": [
+    {
+      "host": "a.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 200
+    },
+    {
+      "host": "b.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 206
+    },
+    {
+      "host": "c.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 206
+    },
+    {
+      "host": "a.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 200
+    },
+    {
+      "host": "a.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 200
+    },
+    {
+      "host": "a.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 200
+    },
+    {
+      "host": "c.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 206
+    },
+    {
+      "host": "a.media.qa.example.org",
+      "path": "/episode-1.mp4",
+      "range": "bytes=0-16383",
+      "status": 200
+    }
+  ]
+}

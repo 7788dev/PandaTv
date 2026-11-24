@@ -1,0 +1,66 @@
+{
+  "at": "2026-11-22T10:27:16.046Z",
+  "executable": "E:\\dev\\\u9879\u76ee\\panda\\.tmp\\system-audit\\windows-final\\win-unpacked\\Panda.exe",
+  "unit": "ms after process creation",
+  "percentileMethod": "nearest rank",
+  "firstStarts": {
+    "count": 20,
+    "failed": 0,
+    "fields": {
+      "skeleton": {
+        "observed": 20,
+        "median": 465.5,
+        "p95": 512,
+        "max": 515
+      },
+      "topOfPage": {
+        "observed": 20,
+        "median": 782.5,
+        "p95": 1019,
+        "max": 1110
+      },
+      "visibleArtwork": {
+        "observed": 20,
+        "median": 1107.0,
+        "p95": 1405,
+        "max": 1551
+      },
+      "wholePage": {
+        "observed": 20,
+        "median": 1867.5,
+        "p95": 2025,
+        "max": 2279
+      }
+    }
+  },
+  "repeatStarts": {
+    "count": 3,
+    "failed": 0,
+    "fields": {
+      "skeleton": {
+        "observed": 3,
+        "median": 451,
+        "p95": 486,
+        "max": 486
+      },
+      "topOfPage": {
+        "observed": 3,
+        "median": 596,
+        "p95": 631,
+        "max": 631
+      },
+      "visibleArtwork": {
+        "observed": 3,
+        "median": 802,
+        "p95": 818,
+        "max": 818
+      },
+      "wholePage": {
+        "observed": 3,
+        "median": 596,
+        "p95": 631,
+        "max": 631
+      }
+    }
+  }
+}

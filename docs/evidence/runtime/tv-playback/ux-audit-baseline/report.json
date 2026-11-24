@@ -1,0 +1,114 @@
+{
+  "at": "2026-11-21T01:55:02.096930+00:00",
+  "cases": [
+    {
+      "name": "player-focus",
+      "passed": true,
+      "initial": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "next": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            285,
+            956,
+            482,
+            1028
+          ],
+          "labels": [
+            "下一集"
+          ]
+        },
+        "nextTap": [
+          407,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      },
+      "restored": {
+        "texts": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "播放",
+          "下一集",
+          "00:00 / 00:00",
+          "选集",
+          "倍速"
+        ],
+        "clock": "00:00 / 00:00",
+        "player": true,
+        "spinner": true,
+        "focus": {
+          "class": "android.widget.LinearLayout",
+          "bounds": [
+            92,
+            956,
+            267,
+            1028
+          ],
+          "labels": [
+            "播放"
+          ]
+        },
+        "nextTap": [
+          406,
+          992
+        ],
+        "loadingRegionMaxRgb": 0
+      }
+    }
+  ],
+  "unavailable": [],
+  "failures": [],
+  "version": "1.0.12",
+  "apkSha256": "8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974",
+  "userStateRestored": true,
+  "firewallRulesRestored": true
+}

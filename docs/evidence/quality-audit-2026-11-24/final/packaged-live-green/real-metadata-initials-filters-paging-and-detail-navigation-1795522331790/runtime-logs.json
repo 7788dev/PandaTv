@@ -1,0 +1,167 @@
+[
+  {
+    "at": 1795522334563,
+    "process": "main",
+    "message": "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}"
+  },
+  {
+    "at": 1795522334590,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522334592,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522334668,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522334742,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522334850,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522335030,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522335216,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522335389,
+    "process": "main",
+    "message": "[metadata] search:primary UPSTREAM"
+  },
+  {
+    "at": 1795522335650,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522336659,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522337662,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":4,\"identities\":4}"
+  },
+  {
+    "at": 1795522338650,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522339620,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522340623,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522341846,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522342736,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522343799,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}"
+  },
+  {
+    "at": 1795522344047,
+    "process": "main",
+    "message": "[search] {\"stage\":\"results\",\"returned\":10}"
+  },
+  {
+    "at": 1795522344409,
+    "process": "main",
+    "message": "[search] {\"stage\":\"initials\",\"vocabulary\":42437,\"candidates\":6}"
+  },
+  {
+    "at": 1795522344409,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522344409,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522344409,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":4,\"identities\":4}"
+  },
+  {
+    "at": 1795522344410,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522344621,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522345624,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522345625,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":1,\"identities\":1}"
+  },
+  {
+    "at": 1795522346617,
+    "process": "main",
+    "message": "[search] {\"stage\":\"fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522346618,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":2,\"identities\":2}"
+  },
+  {
+    "at": 1795522347713,
+    "process": "main",
+    "message": "[search] {\"stage\":\"global-fallback\",\"hints\":0,\"identities\":0}"
+  },
+  {
+    "at": 1795522347713,
+    "process": "main",
+    "message": "[search] {\"stage\":\"results\",\"returned\":10}"
+  },
+  {
+    "at": 1795522348057,
+    "process": "main",
+    "message": "[source] hongniu search: 网络请求失败或超时 / ECONNRESET 307ms"
+  },
+  {
+    "at": 1795522348941,
+    "process": "main",
+    "message": "[source] huya search: 上游服务暂不可用（403） 1193ms"
+  }
+]

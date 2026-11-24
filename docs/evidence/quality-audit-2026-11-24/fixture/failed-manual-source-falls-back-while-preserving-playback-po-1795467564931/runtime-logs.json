@@ -1,0 +1,42 @@
+[
+  {
+    "at": 1795467566978,
+    "process": "main",
+    "message": "[source] a probe: 媒体不可用 2ms"
+  },
+  {
+    "at": 1795467569561,
+    "process": "main",
+    "message": "[source] a probe: 媒体不可用 3ms"
+  },
+  {
+    "at": 1795467569561,
+    "process": "main",
+    "message": "[failure] PLAYBACK 片源暂时无法连接，请重试"
+  },
+  {
+    "at": 1795467570368,
+    "process": "main",
+    "message": "[source] a probe: 媒体不可用 1ms"
+  },
+  {
+    "at": 1795467570368,
+    "process": "main",
+    "message": "[failure] PLAYBACK 片源暂时无法连接，请重试"
+  },
+  {
+    "at": 1795467571173,
+    "process": "main",
+    "message": "[source] a probe: 媒体不可用 1ms"
+  },
+  {
+    "at": 1795467571173,
+    "process": "main",
+    "message": "[failure] PLAYBACK 片源暂时无法连接，请重试"
+  },
+  {
+    "at": 1795467571194,
+    "process": "main",
+    "message": "[source] a probe: 媒体不可用 8ms"
+  }
+]

@@ -1,0 +1,287 @@
+[
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/movie_latest/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/tv_hot/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/movie_real_time_hotest/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/subject_collection/tv_animation/items",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2001.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2003.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1001.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1002.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2004.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2002.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/2005.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1003.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1004.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1005.png",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "0",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/1001",
+    "status": 200
+  },
+  {
+    "host": "a.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归影片",
+    "status": 200
+  },
+  {
+    "host": "b.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归影片",
+    "status": 200
+  },
+  {
+    "host": "c.catalog.qa.example.org",
+    "path": "/api",
+    "q": "回归影片",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/1001/recommendations",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1006.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1008.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1009.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1007.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1010.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1011.png",
+    "status": 200
+  },
+  {
+    "host": "img1.doubanio.com",
+    "path": "/quality/1012.png",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 206
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 206
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-",
+    "status": 206
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/tv/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/recommend",
+    "start": "30",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/1001/credits",
+    "status": 200
+  },
+  {
+    "host": "m.douban.com",
+    "path": "/rexxar/api/v2/movie/1001/photos",
+    "status": 200
+  },
+  {
+    "host": "b.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=7241728-",
+    "status": 206
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 200
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 200
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 206
+  },
+  {
+    "host": "a.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-16383",
+    "status": 200
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=0-",
+    "status": 206
+  },
+  {
+    "host": "c.media.qa.example.org",
+    "path": "/episode-1.mp4",
+    "range": "bytes=12943360-",
+    "status": 206
+  }
+]

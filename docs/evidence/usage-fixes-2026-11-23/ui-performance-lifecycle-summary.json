@@ -1,0 +1,283 @@
+{
+  "at": "2026-11-22T19:26:40.595Z",
+  "asarSha256": "3B5E3482747CDEDEDD63BBAA3AF65C0E8380EC5212897478717FC8304645D643",
+  "scope": "Visible Electron renderer; finite six-cycle sample, not a long-duration or target-TV guarantee.",
+  "samples": [
+    {
+      "name": "search-open-close",
+      "frames": 379,
+      "p95Ms": 4.399999999999864,
+      "maxMs": 58.400000000000034,
+      "over20Ms": 6,
+      "visibility": "visible"
+    },
+    {
+      "name": "poster-hover-scroll",
+      "frames": 386,
+      "p95Ms": 4.300000000000182,
+      "maxMs": 96,
+      "over20Ms": 2,
+      "visibility": "visible"
+    },
+    {
+      "name": "detail-enter",
+      "frames": 330,
+      "p95Ms": 4.399999999999636,
+      "maxMs": 58.30000000000018,
+      "over20Ms": 2,
+      "visibility": "visible"
+    },
+    {
+      "name": "episode-open-close",
+      "frames": 359,
+      "p95Ms": 4.299999999999272,
+      "maxMs": 8.399999999999636,
+      "over20Ms": 0,
+      "visibility": "visible"
+    }
+  ],
+  "resourceFields": {
+    "before": {
+      "metrics": {
+        "Documents": 33,
+        "JSEventListeners": 485,
+        "Nodes": 9222,
+        "LayoutCount": 233,
+        "RecalcStyleCount": 924,
+        "JSHeapUsedSize": 5218256
+      },
+      "roots": {
+        "application": {
+          "window": {
+            "hashchange:false": 1,
+            "popstate:false": 1,
+            "online:false": 1,
+            "offline:false": 2,
+            "blur:false": 3
+          },
+          "document": {
+            "selectionchange:false": 1,
+            "pointerdown:false": 1,
+            "keydown:false": 1
+          }
+        },
+        "playwright": {
+          "window": {},
+          "document": {}
+        }
+      },
+      "activeTimers": [],
+      "retainedPlayers": []
+    },
+    "checkpoints": [
+      {
+        "metrics": {
+          "Documents": 25,
+          "JSEventListeners": 498,
+          "Nodes": 6887,
+          "LayoutCount": 358,
+          "RecalcStyleCount": 3337,
+          "JSHeapUsedSize": 8555000
+        },
+        "roots": {
+          "application": {
+            "window": {
+              "hashchange:false": 1,
+              "popstate:false": 1,
+              "offline:false": 2,
+              "blur:false": 3,
+              "online:false": 1
+            },
+            "document": {
+              "selectionchange:false": 1,
+              "pointerdown:false": 1,
+              "keydown:false": 1
+            }
+          },
+          "playwright": {
+            "window": {
+              "mousemove:true": 1,
+              "pointerdown:true": 1,
+              "pointerup:true": 1,
+              "touchstart:true": 1,
+              "touchend:true": 1,
+              "touchcancel:true": 1,
+              "mousedown:true": 1,
+              "mouseup:true": 1,
+              "click:true": 1,
+              "auxclick:true": 1,
+              "dblclick:true": 1,
+              "contextmenu:true": 1,
+              "__playwright_global_listeners_check__:false": 1
+            },
+            "document": {}
+          }
+        },
+        "activeTimers": [],
+        "retainedPlayers": [
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          }
+        ]
+      },
+      {
+        "metrics": {
+          "Documents": 20,
+          "JSEventListeners": 498,
+          "Nodes": 5437,
+          "LayoutCount": 452,
+          "RecalcStyleCount": 4038,
+          "JSHeapUsedSize": 9051944
+        },
+        "roots": {
+          "application": {
+            "window": {
+              "hashchange:false": 1,
+              "popstate:false": 1,
+              "offline:false": 2,
+              "blur:false": 3,
+              "online:false": 1
+            },
+            "document": {
+              "selectionchange:false": 1,
+              "pointerdown:false": 1,
+              "keydown:false": 1
+            }
+          },
+          "playwright": {
+            "window": {
+              "mousemove:true": 1,
+              "pointerdown:true": 1,
+              "pointerup:true": 1,
+              "touchstart:true": 1,
+              "touchend:true": 1,
+              "touchcancel:true": 1,
+              "mousedown:true": 1,
+              "mouseup:true": 1,
+              "click:true": 1,
+              "auxclick:true": 1,
+              "dblclick:true": 1,
+              "contextmenu:true": 1,
+              "__playwright_global_listeners_check__:false": 1
+            },
+            "document": {}
+          }
+        },
+        "activeTimers": [],
+        "retainedPlayers": [
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          },
+          {
+            "root": false,
+            "video": false
+          }
+        ]
+      }
+    ],
+    "after": {
+      "metrics": {
+        "Documents": 11,
+        "JSEventListeners": 498,
+        "Nodes": 2827,
+        "LayoutCount": 452,
+        "RecalcStyleCount": 4038,
+        "JSHeapUsedSize": 9051944
+      },
+      "roots": {
+        "application": {
+          "window": {
+            "hashchange:false": 1,
+            "popstate:false": 1,
+            "offline:false": 2,
+            "blur:false": 3,
+            "online:false": 1
+          },
+          "document": {
+            "selectionchange:false": 1,
+            "pointerdown:false": 1,
+            "keydown:false": 1
+          }
+        },
+        "playwright": {
+          "window": {
+            "mousemove:true": 1,
+            "pointerdown:true": 1,
+            "pointerup:true": 1,
+            "touchstart:true": 1,
+            "touchend:true": 1,
+            "touchcancel:true": 1,
+            "mousedown:true": 1,
+            "mouseup:true": 1,
+            "click:true": 1,
+            "auxclick:true": 1,
+            "dblclick:true": 1,
+            "contextmenu:true": 1,
+            "__playwright_global_listeners_check__:false": 1
+          },
+          "document": {}
+        }
+      },
+      "activeTimers": [],
+      "retainedPlayers": [
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        },
+        {
+          "root": false,
+          "video": false
+        }
+      ]
+    },
+    "harnessScriptIds": [
+      "112"
+    ],
+    "runtime": "desktop-packaged-live",
+    "renderer": "file:///E:/dev/%E9%A1%B9%E7%9B%AE/panda/.tmp/usage-fixes-2026-11-23/windows-final/win-unpacked/resources/app.asar/out/renderer/index.html#/settings"
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/packaged-live-complete/desktop-packaged-live/ui-performance-lifecycle.json",
+  "rawSha256": "55D8696EB0DA879B97A90A82033C40C78DEAE93CE42D3FACAC3C964842786716"
+}

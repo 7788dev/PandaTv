@@ -1,0 +1,4 @@
+
+> panda-desktop@1.1.4 typecheck
+> tsc --noEmit
+

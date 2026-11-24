@@ -1,7 +1,7 @@
-import type { ChannelFilters, ChannelQuery, DataSource, HomeFeed, MediaItem, MediaType, Page } from '../../../design/contract/types';
-import type { Credit, Detail, PersonInfo } from '../../shared/api';
+import type { ChannelFilters, ChannelQuery, DataSource, HomeFeed, MediaItem, MediaType, Page } from '../../contract/types';
+import type { Credit, Detail, LibraryPage, PersonInfo } from '../../shared/api';
 import { dataCopy } from '../../copy.extra';
-import { t } from '../../../design/contract/copy';
+import { t } from '../../contract/copy';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { DataError, DoubanHttp, type DataWarning } from './http';
@@ -389,8 +389,9 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
    * chose for it (`credits`): the same eight people at most on every read, with their photos.
    * The page shows those and nobody else.
    */
-  private async readSubject(rawId: string): Promise<Normalized> {
+  private async readSubject(rawId: string, signal?: AbortSignal): Promise<Normalized> {
     await this.store.ready;
+    signal?.throwIfAborted();
     const known = this.store.get(`db-${rawId}`);
     const first = known?.kind ?? 'movie';
     let detail: Normalized | undefined;
@@ -400,7 +401,7 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
           const normalized = normalize(value, kind);
           if (!normalized || normalized.item.id !== `db-${rawId}`) throw new DataError('NOT_FOUND', 'Douban subject not found');
           return normalized;
-        });
+        }, false, DETAIL_TTL, signal);
         break;
       } catch (error) {
         if (!(error instanceof DataError) || error.code !== 'NOT_FOUND' || kind !== first) throw error;
@@ -408,6 +409,12 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
     }
     if (!detail) throw new DataError('NOT_FOUND', 'Douban subject not found');
     return detail;
+  }
+  async subject(id: string, signal?: AbortSignal): Promise<MediaItem> {
+    const detail = await this.readSubject(subjectId(id), signal);
+    if (detail.item.cast) detail.item.cast = detail.item.cast.slice(0, LEAD_ACTORS);
+    signal?.throwIfAborted();
+    return (await this.remember([detail]))[0];
   }
   private async loadDetail(rawId: string): Promise<Detail> {
     const detail = await this.readSubject(rawId);
@@ -454,28 +461,66 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
   async related(id: string): Promise<MediaItem[]> {
     const rawId = subjectId(id);
     await this.store.ready;
-    if (!this.store.get(`db-${rawId}`)) await this.detail(rawId);
+    if (!this.store.get(`db-${rawId}`)) await this.subject(rawId);
     const kind = this.store.get(`db-${rawId}`)!.kind;
     const values = await this.http.json(endpoint(`${kind}/${rawId}/recommendations`, { count: 14 }), LIST_TTL, value => requiredArray(value));
     return this.remember(values.flatMap(value => normalize(value, kind) ?? []).filter(value => value.item.id !== `db-${rawId}`).slice(0, 14));
   }
 
   async byIds(ids: string[]): Promise<MediaItem[]> {
-    if (!Array.isArray(ids) || ids.length > 2500) throw new DataError('INVALID_INPUT', 'Too many metadata IDs');
-    const checked = ids.map(id => `db-${subjectId(id)}`);
-    await this.store.ready;
+    // Collection size follows UserStore, independently of the metadata cache's
+    // 2500-record eviction budget; uncached titles are read on demand below.
+    if (!Array.isArray(ids) || ids.length > 10000) throw new DataError('INVALID_INPUT', 'Too many metadata IDs');
     const output: MediaItem[] = [];
-    for (const id of checked) {
+    let cursor: string | undefined;
+    let firstFailure: { code: string } | undefined;
+    do {
+      const page = await this.libraryPage(ids, cursor);
+      output.push(...page.items);
+      firstFailure ??= page.failures.find(failure => failure.code !== 'NOT_FOUND');
+      cursor = page.next ?? undefined;
+    } while (cursor);
+    if (!output.length && firstFailure) throw new DataError(firstFailure.code as import('./http').DataErrorCode, 'Library metadata could not be read', true);
+    return output;
+  }
+
+  async libraryPage(ids: string[], cursor?: string, signal?: AbortSignal, cachedOnly = false): Promise<LibraryPage> {
+    if (!Array.isArray(ids) || ids.length > 10000) throw new DataError('INVALID_INPUT', 'Too many metadata IDs');
+    const checked = ids.map(id => `db-${subjectId(id)}`);
+    const start = Number(cursor ?? 0);
+    if (cursor !== undefined && (!/^\d{1,5}$/.test(cursor) || start % PAGE_SIZE !== 0 || start >= checked.length)) throw new DataError('INVALID_INPUT', 'Invalid library cursor');
+    await this.store.ready;
+    signal?.throwIfAborted();
+    const chunk = checked.slice(start, start + PAGE_SIZE);
+    const rows = new Array<MediaItem | undefined>(chunk.length);
+    const failures: Array<{ id: string; code: string }> = [];
+    const pending: string[] = [];
+    let next = 0;
+    const load = async () => {
+      while (next < chunk.length) {
+      signal?.throwIfAborted();
+      const position = next++, id = chunk[position]!;
       const cached = this.store.get(id);
       if (cached) {
         if (Date.now() - cached.updatedAt > DETAIL_TTL) this.warn({ code: 'CACHED', operation: `byIds:${id}`, message: 'Showing saved metadata; freshness is not guaranteed', at: Date.now() });
-        output.push(this.present(cached.item));
+        rows[position] = this.present(cached.item);
+      } else if (cachedOnly) {
+        pending.push(id);
       } else {
-        try { output.push(await this.detail(id)); }
-        catch (error) { if (error instanceof DataError && error.code === 'NOT_FOUND') this.diagnostic(`byIds:${id}`, error); else throw error; }
+        try { rows[position] = await this.subject(id, signal); }
+        catch (error) {
+          if (signal?.aborted) throw signal.reason;
+          const code = error instanceof DataError ? error.code : 'UPSTREAM';
+          failures.push({ id, code });
+          this.diagnostic(`byIds:${id}`, error);
+        }
       }
-    }
-    return output;
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(3, chunk.length) }, load));
+    signal?.throwIfAborted();
+    if (failures.length) this.warn({ code: 'PARTIAL', operation: 'library', message: 'Some saved titles could not be read', at: Date.now() });
+    return { items: rows.filter((item): item is MediaItem => Boolean(item)), next: start + PAGE_SIZE < checked.length ? String(start + PAGE_SIZE) : null, failures: failures.sort((a, b) => chunk.indexOf(a.id) - chunk.indexOf(b.id)), pending };
   }
 
   private async searchPage(q: string, start: number, count: number) {

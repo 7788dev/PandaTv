@@ -2,11 +2,11 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { Dialog } from '@base-ui/react/dialog'
 import { Slider } from '@base-ui/react/slider'
 import Hls from 'hls.js'
-import type { MediaItem, Playback, Quality, Speed } from '../../design/contract/types'
-import type { IconName } from '../../design/icons/names'
-import { HISTORY_SAVE_SECONDS, OSD_MS, PLAYER_IDLE_MS, QUALITIES, SEEK_STEP_SECONDS, SPEEDS, UNMUTE_VOLUME, VOLUME_STEP } from '../../design/contract/constants'
-import { clock, endPosition, episodeHeading, resumePosition, showSkipIntro, speedButtonLabel, speedLabel, startPosition, upNextSeconds, volumeIcon } from '../../design/contract/rules'
-import { fmt, t } from '../../design/contract/copy'
+import type { MediaItem, Playback, Quality, Speed } from '../contract/types'
+import type { IconName } from './icons/names'
+import { HISTORY_SAVE_SECONDS, OSD_MS, PLAYER_IDLE_MS, QUALITIES, SEEK_STEP_SECONDS, SPEEDS, UNMUTE_VOLUME, VOLUME_STEP } from '../contract/constants'
+import { clock, endPosition, episodeHeading, resumePosition, showSkipIntro, speedButtonLabel, speedLabel, startPosition, upNextSeconds, volumeIcon } from '../contract/rules'
+import { fmt, t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import type { PlaySources } from '../shared/api'
 import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './components'
@@ -14,10 +14,11 @@ import { errorText, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
 import { bufferedRanges, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
 import { createFrameRateState, FRAME_SAMPLE_MS, sampleFrameRate } from './playback-adaptation'
+import { playbackPreferences as sessionPreferences } from './playback-preferences'
+import { StartupWatchdog } from './startup-watchdog'
 
-const sessionPreferences: { speed?: Speed; activeSpeed?: Speed; quality?: Quality } = {}
 /** The quality the player will ask for; whoever prepares an episode ahead must ask for the same. */
-export const wantedQuality = (settings: { quality: Quality }) => sessionPreferences.quality ?? settings.quality
+export const wantedQuality = (settings: { quality: Quality }) => sessionPreferences.wantedQuality(settings)
 /** A source that has shown nothing this long after it was chosen is replaced. */
 const START_MS = 15_000
 /** A picture that stands still this long while nothing arrives is replaced the same way. */
@@ -39,19 +40,20 @@ type ClockState = { position: number; duration: number; buffered: { start: numbe
 export function Player({ id, episode: requested }: { id: string; episode: number }) {
   const { state } = useUser()
   const historyEpisode = useRef(state.history.find(entry => entry.id === id)?.episode ?? 1)
-  const item = useRemote(() => window.panda.data.detail(id), [id])
+  const item = useRemote(() => window.panda.data.subject(id), [id])
   const availability = useRemote(() => window.panda.data.availability(id), [id])
   const episode = requested || historyEpisode.current
-  if (!item.data) return <div className="player" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
+  if (!item.data) return <main className="player" aria-busy="true" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} onClick={() => back('/detail/' + id)} /></header>
-    <div className="player__center"><span className="spinner" /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
-  </div>
+    <div className="player__center"><span className="spinner" role="status" aria-label={extra.loading} /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
+  </main>
   const media: MediaItem = { ...item.data, ...availability.data, ...(item.data.type === 'variety' ? { unit: '期' as const } : {}) }
   return <PlayerMedia key={id + ':' + episode} item={media} episode={episode} />
 }
 
 function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const { state, dispatch } = useUser()
+
   const notify = useNotify()
   const root = useRef<HTMLDivElement>(null)
   const video = useRef<HTMLVideoElement>(null)
@@ -80,8 +82,10 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const osdTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const volumeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const handoffTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const startupWatch = useRef<StartupWatchdog | null>(null)
   const [quality, setQuality] = useState<Quality>(sessionPreferences.quality ?? state.settings.quality)
-  const [speed, setSpeed] = useState<Speed>(sessionPreferences.speed ?? state.settings.speed)
+  const [speed, setSpeed] = useState<Speed>(activeSpeed.current)
   const [volume, setVolumeState] = useState(state.settings.volume)
   const [muted, setMuted] = useState(state.settings.muted)
   const [request, setRequest] = useState<{ revision: number; retry: boolean; from?: string }>({ revision: 0, retry: false })
@@ -92,6 +96,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   // The failure that has been asked about again; it stays on hand until the new answer is in.
   const [askedAgain, setAskedAgain] = useState<unknown>(null)
   const resolvingAgain = Boolean(playback.error) && (playback.error === askedAgain || (!finalAnswer(playback.error) && resolveTries < RESOLVE_TRIES))
+  useEffect(() => { sessionPreferences.observeDefaults(state.settings) }, [state.settings])
   useEffect(() => { setResolveTries(0) }, [item.id, episode])
   useEffect(() => { if (playback.data) setResolveTries(0) }, [playback.data])
   useEffect(() => {
@@ -100,7 +105,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const timer = setTimeout(() => { setAskedAgain(failure); setResolveTries(value => value + 1); setRequest(value => ({ ...value, revision: value.revision + 1 })) }, RESOLVE_AGAIN_MS)
     return () => clearTimeout(timer)
   }, [resolvingAgain, playback.error, askedAgain])
-  const [paused, setPaused] = useState(true)
+  const [paused, setPaused] = useState(false)
   const [waiting, setWaiting] = useState(true)
   const [ready, setReady] = useState(false)
   const [time, setTime] = useState<ClockState>({ position: 0, duration: 0, buffered: [] })
@@ -180,7 +185,15 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   }
   const play = () => {
     const v = video.current
-    if (!v || !ready || error) return
+    if (!v || error) return
+    if (!ready) {
+      playRequested.current = !playRequested.current
+      setPaused(!playRequested.current)
+      startupWatch.current?.setEnabled(playRequested.current)
+      if (!playRequested.current) v.pause()
+      wake()
+      return
+    }
     if (v.ended) seekTo(0)
     playRequested.current = v.paused
     if (playRequested.current) void v.play().catch(error => { if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') setProblem(new Error(extra.playerRetry)) })
@@ -227,7 +240,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const changeQuality = (value: Quality) => {
     sessionPreferences.quality = value
     const target = qualityLevelIndex(levels, value)
-    if (hls.current && target !== undefined && levels.length > 1) { hls.current.currentLevel = target; hls.current.autoLevelCapping = target; setActualQuality(value); return }
+    if (hls.current && target !== undefined && levels.length > 1) { hls.current.currentLevel = target; hls.current.autoLevelCapping = target; setActualQuality(value); setQuality(value); return }
     keepPosition()
     setRequest(value => ({ ...value, retry: false }))
     setQuality(value)
@@ -238,7 +251,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     requestedSpeed.current = value
     activeSpeed.current = value
     setSpeed(value)
-    if (video.current) video.current.playbackRate = value
+    if (video.current) { video.current.defaultPlaybackRate = value; video.current.playbackRate = value }
   }
   const toggleFullscreen = () => void window.panda.window.fullscreen(!fullscreen).catch(error => notify(errorText(error)))
   const leave = () => {
@@ -315,7 +328,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       removeFlush(); removeWindow()
       document.removeEventListener('keydown', keyboard)
       playerRoot?.removeEventListener('pointermove', move)
-      clearTimeout(idleTimer.current); clearTimeout(osdTimer.current); clearTimeout(volumeTimer.current)
+      clearTimeout(idleTimer.current); clearTimeout(osdTimer.current); clearTimeout(volumeTimer.current); clearTimeout(handoffTimer.current)
       void controls.current.saveVolume()
       if (!location.hash.startsWith('#/play/')) void window.panda.window.fullscreen(false)
     }
@@ -331,8 +344,9 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     if (!v || !source) return
     activeSource.current = null
     sourceHealthy.current = false
-    setProblem(null); setWaiting(true); setReady(false); setPaused(true); setLevels([]); setActualQuality(source.quality)
-    v.volume = latest.current.volume; v.muted = latest.current.muted; v.playbackRate = activeSpeed.current
+    setProblem(null); setWaiting(true); setReady(false); setPaused(!playRequested.current); setLevels([]); setActualQuality(source.quality)
+    v.volume = latest.current.volume; v.muted = latest.current.muted
+    v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
     let active = true, failed = false, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now(), playingSince = 0
     let frameState = createFrameRateState()
     let lastPosition = -1
@@ -355,6 +369,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       if (autoAttempts.current < 2) { autoAttempts.current++; showOsd('refresh', extra.restoringSource); retry(true) }
       else { setProblem(new Error(extra.playerRetry)); setWaiting(false); setIdle(false) }
     }
+    const startup = new StartupWatchdog(START_MS, () => { if (active && !sourceStarted && playRequested.current) fail() })
+    startupWatch.current = startup
     const advance = () => {
       const current = latest.current
       if (current.settings.autoNext && !current.cancelled) next()
@@ -363,6 +379,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     }
     on('loadedmetadata', () => {
       if (!Number.isFinite(v.duration) || v.duration <= 0) return fail()
+      v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
+      setSpeed(activeSpeed.current)
       setReady(true)
       if (!positioned) {
         positioned = true
@@ -373,15 +391,17 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       refresh()
       if (playRequested.current) void v.play().catch(error => { if (error.name === 'NotAllowedError') { sourceStarted = true; setPaused(true); setWaiting(false) } else if (error.name !== 'AbortError') fail() })
     })
-    on('durationchange', refresh); on('progress', () => { alive(); refresh() })
-    on('play', () => { setPaused(false); wake() })
+    on('durationchange', refresh); on('progress', refresh)
+    on('play', () => { startup.setEnabled(playRequested.current); setPaused(false); wake() })
     const takeOver = () => {
+      startup.finish()
       sourceStarted = true; started.current = true; activeSource.current = source; sourceHealthy.current = true
       handoffPending.current = false
       bridgeActive.current = false
       if (handoff.current?.hasAttribute('data-visible')) {
         handoff.current?.removeAttribute('data-visible')
-        setTimeout(() => { if (!handoff.current?.hasAttribute('data-visible')) handoff.current?.removeAttribute('src') }, 240)
+        clearTimeout(handoffTimer.current)
+        handoffTimer.current = setTimeout(() => { if (!handoff.current?.hasAttribute('data-visible')) handoff.current?.removeAttribute('src') }, 240)
       }
     }
     on('playing', () => {
@@ -393,16 +413,16 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       } catch { frameState = createFrameRateState() }
       setPaused(false); setWaiting(false); refresh(); wake()
     })
-    on('pause', () => { frameState = createFrameRateState(); setPaused(true); setWaiting(false); setIdle(false); void save() })
-    on('waiting', () => { frameState = createFrameRateState(); if (!v.paused) setWaiting(true) })
-    on('seeking', () => { frameState = createFrameRateState(); alive(); setWaiting(!v.paused); refresh() })
+    on('pause', () => { startup.setEnabled(false); frameState = createFrameRateState(); playingSince = 0; setPaused(true); setWaiting(false); setIdle(false); void save() })
+    on('waiting', () => { frameState = createFrameRateState(); playingSince = 0; if (!v.paused) setWaiting(true) })
+    on('seeking', () => { frameState = createFrameRateState(); playingSince = 0; alive(); setWaiting(!v.paused); refresh() })
     on('seeked', () => { frameState = createFrameRateState(); setWaiting(false); refresh(); void save() })
     on('canplay', () => {
       frameState = createFrameRateState(); setWaiting(false); refresh()
       if (!playRequested.current && !v.seeking) { takeOver(); setPaused(true) }
     })
     on('timeupdate', () => {
-      refresh(); alive()
+      refresh()
       const current = latest.current
       if (autoAttempts.current && playingSince && Date.now() - playingSince > HEALTHY_MS) autoAttempts.current = 0
       // The next episode's source is chosen before this one ends, so it starts without a wait.
@@ -456,7 +476,6 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         startPosition: startAt > 0 ? startAt : -1,
       })
       hls.current = instance
-      instance.on(Hls.Events.FRAG_LOADED, alive); instance.on(Hls.Events.FRAG_BUFFERED, alive)
       instance.on(Hls.Events.MANIFEST_PARSED, (_event, manifest) => {
         const actual = manifest.levels.flatMap((level, index) => { const quality = resolutionQuality(level.width, level.height); return quality ? [{ quality, index, bitrate: level.bitrate }] : [] })
         setLevels(actual)
@@ -475,7 +494,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       instance.loadSource(source.url); instance.attachMedia(v)
     } else if (source.format === 'mp4' || v.canPlayType('application/vnd.apple.mpegurl')) v.src = source.url
     else { setProblem(new Error(extra.unsupportedPlayback)); setWaiting(false) }
-    const startup = setTimeout(() => { if (active && !sourceStarted) fail() }, START_MS)
+    startup.setEnabled(playRequested.current)
     // A source can die in the middle of an episode without ever reporting an error.
     const watchdog = setInterval(() => {
       if (!sourceStarted || v.paused || v.ended || latest.current.problem) { lastPosition = v.currentTime; alive(); return }
@@ -493,17 +512,19 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         const reduced = result.rate < activeSpeed.current
         activeSpeed.current = result.rate
         sessionPreferences.activeSpeed = result.rate
-        v.playbackRate = result.rate
+        v.defaultPlaybackRate = result.rate; v.playbackRate = result.rate
         setSpeed(result.rate)
         notify(fmt(reduced ? extra.speedReduced : extra.speedRestored, { speed: result.rate }))
         frameState = createFrameRateState()
       } catch { frameState = createFrameRateState() }
     }, 2000)
     return () => {
-      active = false; clearTimeout(startup); clearInterval(watchdog); clearInterval(frameMonitor)
+      active = false; startup.finish(); clearInterval(watchdog); clearInterval(frameMonitor)
+      if (startupWatch.current === startup) startupWatch.current = null
       void save(v)
       if (handoffPending.current && v.currentTime > 0) retryPosition.current = v.currentTime
       if (handoffPending.current && v.readyState >= 2 && v.videoWidth > 0 && v.videoHeight > 0 && handoff.current) {
+        clearTimeout(handoffTimer.current)
         try {
           const canvas = document.createElement('canvas')
           const scale = Math.min(1, 1280 / v.videoWidth, 720 / v.videoHeight)
@@ -532,27 +553,36 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const bounds = event.currentTarget.getBoundingClientRect()
     return bounds.width ? clamp((event.clientX - bounds.left) / bounds.width) : 0
   }
-  return <Dialog.Root open={panelOpen} onOpenChange={setPanelOpen}><div className="player" ref={root} data-paused={dataAttr(paused)} data-waiting={dataAttr(busy && !error)} data-error={dataAttr(error)} data-idle={dataAttr(idle && !error && !busy)} onPointerDown={wake} onFocus={wake}>
+  return <Dialog.Root open={panelOpen} onOpenChange={setPanelOpen}><main className="player" ref={root} data-paused={dataAttr(paused)} data-waiting={dataAttr(busy && !error)} data-error={dataAttr(error)} data-idle={dataAttr(idle && !error && !busy)} onPointerDown={wake} onFocus={wake} onKeyDown={wake}>
     <video className="player__video" ref={video} playsInline preload="auto" crossOrigin="anonymous" poster={item.backdrop ?? undefined} onClick={play} onDoubleClick={toggleFullscreen} />
     <img className="player__handoff" ref={handoff} alt="" aria-hidden="true" />
     <div className="player__shade" />
-    <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title" title={item.title}>{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
-    <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button><span className="spinner" /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
+    <header className="player__top" inert={idle && !error && !busy}><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title" role="heading" aria-level={1} title={item.title}>{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
+    <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button>{busy && !error && <span className="spinner" role="status" aria-label={extra.loading} />}<div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
     <div className="osd" role="status" data-open={dataAttr(osd)}>{osd && <><Icon name={osd.name} /><span>{osd.text}</span></>}</div>
     <button className="btn btn--glass player__skip" data-open={dataAttr(showSkipIntro(time.position, playback.data ?? {}, state.settings) && upNext === null && !panelOpen)} onClick={() => { if (playback.data?.intro) seekTo(playback.data.intro.end) }}>{t.player.skipIntro}</button>
     <div className="upnext" data-open={dataAttr(upNext !== null && !panelOpen)}><div className="upnext__label">{upNext !== null && fmt(t.player.upNext, { n: upNext })}</div><div className="upnext__title">{episodeHeading(item, episode + 1)}</div><div className="upnext__actions"><button className="btn btn--primary btn--sm" onClick={next}>{t.player.playNow}</button><button className="btn btn--ghost btn--sm" onClick={() => setCancelled(true)}>{t.action.cancel}</button></div></div>
-    <div className="player__bottom">
+    <div className="player__bottom" inert={idle && !error && !busy}>
       <div className="seek" role="slider" tabIndex={ready ? 0 : -1} aria-label={t.player.seek} aria-disabled={!ready} aria-valuemin={0} aria-valuemax={time.duration} aria-valuenow={Math.floor(position)} aria-valuetext={clock(position)} data-dragging={dataAttr(dragPosition !== null)}
         style={{ '--p': (time.duration ? 100 * position / time.duration : 0) + '%', '--h': hover * 100 + '%' } as CSSProperties}
         onPointerDown={event => { if (!ready) return; event.currentTarget.setPointerCapture(event.pointerId); setDragPosition(ratio(event) * time.duration) }}
         onPointerMove={event => { const p = ratio(event); setHover(p); if (dragPosition !== null) setDragPosition(p * time.duration) }}
         onPointerUp={event => { if (dragPosition !== null) { seekTo(ratio(event) * time.duration); setDragPosition(null) } }}
         onPointerCancel={() => setDragPosition(null)}
-        onKeyDown={event => { if (event.key === 'Home' || event.key === 'End') { event.preventDefault(); seekTo(event.key === 'Home' ? 0 : time.duration) } }}>
+        onKeyDown={event => {
+          if (!ready || event.ctrlKey || event.metaKey || event.altKey) return
+          const step = event.key === 'ArrowRight' || event.key === 'ArrowUp' ? SEEK_STEP_SECONDS
+            : event.key === 'ArrowLeft' || event.key === 'ArrowDown' ? -SEEK_STEP_SECONDS
+              : event.key === 'PageUp' ? SEEK_STEP_SECONDS * 6 : event.key === 'PageDown' ? -SEEK_STEP_SECONDS * 6 : 0
+          if (!step && event.key !== 'Home' && event.key !== 'End') return
+          event.preventDefault()
+          seekTo(event.key === 'Home' ? 0 : event.key === 'End' ? time.duration : (video.current?.currentTime ?? time.position) + step)
+          if (step) showOsd(step > 0 ? 'forward' : 'rewind', fmt(t.player.seconds, { n: Math.abs(step) }))
+        }}>
         <div className="seek__track">{time.buffered.map((range, i) => <i className="seek__buffer" key={i} style={{ left: range.start / time.duration * 100 + '%', width: (range.end - range.start) / time.duration * 100 + '%' }} />)}<i className="seek__played" /></div><i className="seek__thumb" /><span className="seek__tip">{clock(hover * time.duration)}</span>
       </div>
       <div className="player__bar"><div className="player__group">
-        <IconButton name={paused ? 'play' : 'pause'} className="player__play" label={paused ? t.player.play : t.player.pause} shortcut="Space" onClick={play} disabled={!ready || Boolean(error)} side="top" />
+        <IconButton name={paused ? 'play' : 'pause'} className="player__play" label={paused ? t.player.play : t.player.pause} shortcut="Space" onClick={play} disabled={Boolean(error)} side="top" />
         {hasNext && <IconButton name="next" label={t.player.next} shortcut="N" onClick={next} side="top" />}
         <div className="player__volume"><IconButton name={volumeIcon(volume, muted)} label={level ? t.player.mute : t.player.unmute} shortcut="M" onClick={mute} side="top" />
           <Slider.Root className="slider" min={0} max={100} step={1} value={Math.round(level * 100)} onValueChange={value => setVolume(Number(value) / 100)} onValueCommitted={() => void saveVolume()}>
@@ -585,5 +615,5 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         <div className="player__panel-body"><div className={item.episodeTitles?.length ? 'eplist' : 'eps'}><EpisodeCells item={item} current={episode} replace /></div></div>
       </Dialog.Popup>
     </Dialog.Portal>}
-  </div></Dialog.Root>
+  </main></Dialog.Root>
 }

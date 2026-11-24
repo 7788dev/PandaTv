@@ -1,0 +1,8 @@
+{"key":"dyttzy-www","api":"https://www.dyttzyapi.com/api.php/provide/vod/","ms":275,"error":"ENOTFOUND"}
+{"key":"dyttzy-bare","api":"https://dyttzyapi.com/api.php/provide/vod/","ms":415,"error":"ENOTFOUND"}
+{"key":"bfzy-site","api":"https://bfzy.tv/api.php/provide/vod","ms":7001,"error":"TimeoutError"}
+{"key":"lzi-site","api":"https://lzizy.net/api.php/provide/vod","ms":7001,"error":"TimeoutError"}
+{"key":"hongniu-bare","api":"https://hongniuzy2.com/api.php/provide/vod/","ms":7001,"error":"TimeoutError"}
+{"key":"huya-bare","api":"https://huyaapi.com/api.php/provide/vod/","ms":7001,"error":"TimeoutError"}
+{"key":"jinyingzy","api":"https://jinyingzy.com/api.php/provide/vod","ms":7001,"error":"TimeoutError"}
+{"key":"360zyzz","api":"https://360zyzz.com/api.php/provide/vod","ms":781,"status":200,"finalUrl":"https://360zyzz.com/api.php/provide/vod?ac=videolist&wd=%E4%B8%89%E4%BD%93&pg=1","contentType":"text/html;charset=utf-8","bytes":25261,"json":true,"list":6}

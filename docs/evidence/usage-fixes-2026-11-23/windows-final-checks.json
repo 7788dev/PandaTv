@@ -1,0 +1,75 @@
+[
+  {
+    "name": "windows-pack-complete",
+    "startedAt": "2026-11-23T03:14:43.8807751+08:00",
+    "finishedAt": "2026-11-23T03:14:48.5138106+08:00",
+    "binary": "node",
+    "arguments": [
+      "node_modules/electron-builder/out/cli/cli.js",
+      "--dir",
+      "--win",
+      "--x64",
+      "--publish",
+      "never",
+      "--config.directories.output=.tmp/usage-fixes-2026-11-23/windows-final",
+      "--config.electronDist=node_modules/electron/dist"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-pack-complete.log"
+  },
+  {
+    "name": "asar-check-complete",
+    "startedAt": "2026-11-23T03:14:49.2564582+08:00",
+    "finishedAt": "2026-11-23T03:14:49.3669391+08:00",
+    "binary": "node",
+    "arguments": [
+      "scripts/asar-check.cjs",
+      "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\windows-final\\win-unpacked\\resources\\app.asar"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\asar-check-complete.log"
+  },
+  {
+    "name": "build-live-complete",
+    "startedAt": "2026-11-23T03:14:49.3692474+08:00",
+    "finishedAt": "2026-11-23T03:20:29.0562606+08:00",
+    "binary": "node",
+    "arguments": [
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "--project=desktop-live",
+      "--reporter=list,json",
+      "--output=.tmp/usage-fixes-2026-11-23/build-live-complete-output"
+    ],
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\build-live-complete.log"
+  },
+  {
+    "name": "packaged-live-complete",
+    "startedAt": "2026-11-23T03:20:29.0581791+08:00",
+    "finishedAt": "2026-11-23T03:27:16.5300621+08:00",
+    "binary": "node",
+    "arguments": [
+      "node_modules/@playwright/test/cli.js",
+      "test",
+      "--project=desktop-live",
+      "--reporter=list,json",
+      "--output=.tmp/usage-fixes-2026-11-23/packaged-live-complete-output"
+    ],
+    "exitCode": 1,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\packaged-live-complete.log"
+  },
+  {
+    "name": "startup-complete",
+    "startedAt": "2026-11-23T03:27:16.5314390+08:00",
+    "finishedAt": "2026-11-23T03:27:58.9117792+08:00",
+    "binary": "node",
+    "arguments": [
+      "scripts/probe-startup.mjs",
+      "20",
+      "3"
+    ],
+    "exitCode": 0,
+    "log": "E:\\dev\\项目\\panda\\.tmp\\usage-fixes-2026-11-23\\startup-complete.log"
+  }
+]

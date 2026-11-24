@@ -1,0 +1,358 @@
+{
+  "at": "2026-11-24T23:42:00+08:00",
+  "route": "system route",
+  "method": "Douban hot titles -> one source forced at a time through production PlaybackService -> sources()/resolve() -> proxy playlist -> real first/middle segment bytes; direct API transport probed separately.",
+  "result": "Two independent sources are playable after the ffzy API update: 360zy and ffzy. Every other enabled source fails before a catalogue at the upstream/network layer. 电影天堂 has no newer public API; its current endpoint is blocked from this network.",
+  "sources": [
+    {
+      "key": "subo",
+      "name": "速播资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9002ms",
+        "search: 请求已取消 / ABORT_ERR 9000ms",
+        "search: 请求已取消 / ABORT_ERR 9001ms"
+      ],
+      "transport": {
+        "key": "subo",
+        "name": "速播资源",
+        "configuredEnabled": true,
+        "url": "https://subocaiji.com/api.php/provide/vod/",
+        "ms": 8001,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "huya",
+      "name": "虎牙资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9001ms"
+      ],
+      "transport": {
+        "key": "huya",
+        "name": "虎牙资源",
+        "configuredEnabled": true,
+        "url": "https://www.huyaapi.com/api.php/provide/vod/",
+        "ms": 8002,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "bfzy",
+      "name": "暴风资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9001ms",
+        "search: 请求已取消 / ABORT_ERR 9000ms"
+      ],
+      "transport": {
+        "key": "bfzy",
+        "name": "暴风资源",
+        "configuredEnabled": true,
+        "url": "https://bfzyapi.com/api.php/provide/vod/",
+        "ms": 8001,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "dyttzy",
+      "name": "电影天堂",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "Current public endpoint is still caiji.dyttzyapi.com; no newer domain found. HTTP and HTTPS both reset/timeout from this network; not an outdated-address problem.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9000ms",
+        "search: 请求已取消 / ABORT_ERR 9001ms"
+      ],
+      "transport": {
+        "key": "dyttzy",
+        "name": "电影天堂",
+        "configuredEnabled": true,
+        "url": "https://caiji.dyttzyapi.com/api.php/provide/vod/",
+        "ms": 8000,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "lzi",
+      "name": "量子资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9001ms",
+        "search: 请求已取消 / ABORT_ERR 9000ms"
+      ],
+      "transport": {
+        "key": "lzi",
+        "name": "量子资源",
+        "configuredEnabled": true,
+        "url": "https://cj.lziapi.com/api.php/provide/vod/",
+        "ms": 8002,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "ffzy",
+      "name": "非凡资源",
+      "configuredEnabled": true,
+      "verdict": "playable",
+      "samples": 8,
+      "playable": 7,
+      "catalogueReturned": 7,
+      "noMatch": 1,
+      "mediaFailed": 0,
+      "reason": "Updated API from cj.ffzyapi.com to api.ffzyapi.com. 7/8 samples played; HLS 720P/1080P; first/middle segments 206. TV final APK also completed an independent 360zy<->ffzy switch on 八仙！.",
+      "transport": {
+        "key": "ffzy",
+        "name": "非凡资源",
+        "configuredEnabled": true,
+        "url": "https://cj.ffzyapi.com/api.php/provide/vod/",
+        "ms": 8000,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "hongniu",
+      "name": "红牛资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9000ms"
+      ],
+      "transport": {
+        "key": "hongniu",
+        "name": "红牛资源",
+        "configuredEnabled": true,
+        "url": "https://www.hongniuzy2.com/api.php/provide/vod/",
+        "ms": 8001,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "jyzy",
+      "name": "金鹰资源",
+      "configuredEnabled": true,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9002ms",
+        "search: 请求已取消 / ABORT_ERR 9001ms",
+        "search: 请求已取消 / ABORT_ERR 9000ms"
+      ],
+      "transport": {
+        "key": "jyzy",
+        "name": "金鹰资源",
+        "configuredEnabled": true,
+        "url": "https://jyzyapi.com/api.php/provide/vod/",
+        "ms": 8001,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "360zy",
+      "name": "360资源",
+      "configuredEnabled": true,
+      "verdict": "playable",
+      "samples": 20,
+      "playable": 17,
+      "catalogueReturned": 17,
+      "noMatch": 3,
+      "mediaFailed": 0,
+      "reason": "20 deep samples: 17 played; 3 titles not carried; 0 media failures. One first probe timed out and the app retried successfully.",
+      "transport": {
+        "key": "360zy",
+        "name": "360资源",
+        "configuredEnabled": true,
+        "url": "https://360zy.com/api.php/provide/vod/",
+        "ms": 621,
+        "status": 200,
+        "contentType": "text/html;charset=utf-8",
+        "bytes": 25452,
+        "cloudflare": false
+      }
+    },
+    {
+      "key": "maotaizy",
+      "name": "猫台资源",
+      "configuredEnabled": false,
+      "verdict": "failed",
+      "samples": 8,
+      "playable": 0,
+      "reason": "Search returned an invalid catalogue format.",
+      "appFailures": [
+        "search: 片源数据格式无效 2579ms",
+        "search: 片源数据格式无效 1033ms",
+        "search: 片源数据格式无效 1026ms"
+      ]
+    },
+    {
+      "key": "maoyan",
+      "name": "猫眼资源",
+      "configuredEnabled": false,
+      "verdict": "catalogue-only-or-media-broken",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 7,
+      "noMatch": 0,
+      "mediaFailed": 7,
+      "reason": "Catalogue returned, but every media probe was rejected as a non-public address; not usable.",
+      "appFailures": [
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5928ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5894ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5892ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5546ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5858ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5548ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5919ms",
+        "probe: 网络请求失败或超时 / 无法确认公开网络地址 5674ms"
+      ]
+    },
+    {
+      "key": "apibdzy",
+      "name": "百度云资源",
+      "configuredEnabled": false,
+      "verdict": "partial",
+      "samples": 8,
+      "playable": 3,
+      "catalogueReturned": 7,
+      "noMatch": 1,
+      "mediaFailed": 4,
+      "reason": "Partial candidate: 3/8 played, 4 media probes aborted at 10s. Not enabled in the current 9-source config.",
+      "appFailures": [
+        "probe: aborted 10002ms",
+        "probe: aborted 10001ms",
+        "probe: 请求已取消 / ABORT_ERR 10001ms"
+      ]
+    },
+    {
+      "key": "piaoling2",
+      "name": "飘零资源",
+      "configuredEnabled": false,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9000ms"
+      ],
+      "transport": {
+        "key": "piaoling2",
+        "name": "飘零资源",
+        "configuredEnabled": false,
+        "url": "https://p2100.net/api.php/provide/vod/",
+        "ms": 8002,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    },
+    {
+      "key": "jszy",
+      "name": "极速资源",
+      "configuredEnabled": false,
+      "verdict": "unreachable",
+      "samples": 8,
+      "playable": 0,
+      "catalogueReturned": 0,
+      "noMatch": 0,
+      "mediaFailed": 0,
+      "reason": "No catalogue: upstream 403/timeout/connection reset from this network.",
+      "appFailures": [
+        "search: 请求已取消 / ABORT_ERR 9002ms",
+        "search: 请求已取消 / ABORT_ERR 9001ms"
+      ],
+      "transport": {
+        "key": "jszy",
+        "name": "极速资源",
+        "configuredEnabled": false,
+        "url": "https://jszyapi.com/api.php/provide/vod/",
+        "ms": 8001,
+        "error": "TimeoutError",
+        "message": "The operation was aborted due to timeout"
+      }
+    }
+  ],
+  "newCandidates": {
+    "apibdzy": "Partial: 3/8 played, 4 media probes aborted; not enabled.",
+    "maoyan": "Catalogue returned but media addresses were rejected by the public-address check; not usable.",
+    "maotaizy": "Invalid catalogue format.",
+    "360zyzz": "Alternate 360 entrance returned JSON and is the same upstream; not added to avoid duplicate lines."
+  },
+  "tvIndependentSwitch": {
+    "status": "passed",
+    "title": "八仙！",
+    "from": "非凡资源",
+    "to": "360资源",
+    "beforeClock": "00:02 / 2:23:16",
+    "afterClock": "00:07 / 2:23:16",
+    "evidence": "docs/evidence/source-playback-audit-2026-11-24/tv-switch-ffzy/report.json"
+  },
+  "evidence": {
+    "allSources": "docs/evidence/source-playback-audit-2026-11-24.json",
+    "360zyDeep": "docs/evidence/source-playback-audit-360zy-deep-2026-11-24.json",
+    "transport": "docs/evidence/source-transport-probe-2026-11-24.json",
+    "tvLogcat": "docs/evidence/source-availability-tv-2026-11-24.txt",
+    "tvSwitch": "docs/evidence/source-playback-audit-2026-11-24/tv-switch-ffzy/report.json"
+  },
+  "conclusions": [
+    "ffzy fixed by replacing the dead cj.ffzyapi.com endpoint with api.ffzyapi.com; verified on desktop and TV.",
+    "360zy and ffzy now provide two independent real sources; TV line switching passed on 八仙！.",
+    "电影天堂 public endpoint is unchanged; no newer domain found. Its failure is network blocking, not an old URL.",
+    "Most other sources are upstream-unreachable; no app parser/media failure was observed on a source that returned a catalogue.",
+    "No source was deleted or disabled to force a pass; disabled candidates remain labelled."
+  ]
+}

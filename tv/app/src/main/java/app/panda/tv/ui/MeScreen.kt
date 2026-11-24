@@ -14,6 +14,9 @@ import app.panda.tv.model.MediaItem
 import app.panda.tv.model.MediaType
 import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
+import app.panda.tv.data.DataError
+import app.panda.tv.data.LibraryFailure
+import app.panda.tv.data.LibraryPage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.ensureActive
 
 class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     override val activeTab: String = "me"
@@ -38,13 +42,13 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         setHorizontalSpacing(m.gridGapH)
         setVerticalSpacing(m.gridGapV)
         setPadding(m.pageH, Theme.dp(ctx, 12), m.pageH, Theme.dp(ctx, 40))
-        Theme.bindGridHeaderNavigation(this, columns = 6) { favTabBtn }
+        Theme.bindGridHeaderNavigation(this, columns = 6, onReachEnd = ::onGridEnd) { favTabBtn }
     }
     private val historyGrid = Theme.verticalGrid(ctx, bodyBox).apply {
         setHorizontalSpacing(m.wideGapH)
         setVerticalSpacing(m.gridGapV)
         setPadding(m.pageH, Theme.dp(ctx, 12), m.pageH, Theme.dp(ctx, 40))
-        Theme.bindGridHeaderNavigation(this, columns = 4) { histTabBtn }
+        Theme.bindGridHeaderNavigation(this, columns = 4, onReachEnd = ::onGridEnd) { histTabBtn }
     }
 
     private var tab = "favorites"
@@ -59,6 +63,15 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     private var requestedHistory: List<HistoryEntry>? = null
     private val favAdapter = EntryAdapter(wideCards = false)
     private val histAdapter = EntryAdapter(wideCards = true)
+    private val pageFooter = PosterPageFooter(ctx, posterGrid) { retryFailedOrPage() }
+    private val records = LinkedHashMap<String, MediaItem>()
+    private val failures = LinkedHashMap<String, LibraryFailure>()
+    private var nextCursor: String? = null
+    private var initialLoaded = false
+    private var loading = false
+    private var pageError: Throwable? = null
+    private var generation = 0L
+    private var resumePage = false
 
     override val view: View get() = root
 
@@ -67,6 +80,7 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         posterGrid.adapter = favAdapter
         historyGrid.adapter = histAdapter
         root.addView(bodyBox, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
+        root.addView(pageFooter)
         refresh()
     }
 
@@ -74,7 +88,10 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         val state = nav.app.userStore.get()
         val ids = if (tab == "history") state.history.map { it.id } else state.favorites
         if (requestedTab != tab || requestedIds != ids || (tab == "history" && requestedHistory != state.history)) refresh()
+        else if (!loading && pageError == null && (!initialLoaded || resumePage)) loadPage()
     }
+
+    override fun onHidden() { resumePage = loading; generation++; loadJob?.cancel(); loading = false }
 
     override fun onDestroy() {
         destroyed = true
@@ -125,9 +142,10 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             setOnKeyListener(upToTopBar)
             setOnClickListener {
                 nav.confirm(Copy.Me.CLEAR_HISTORY_TITLE, Copy.Action.CLEAR, destructive = true) {
-                    nav.app.userStore.dispatch(StateAction.ClearHistory)
-                    nav.toast(Copy.Toast.CLEARED)
-                    refresh()
+                    nav.saveUser(StateAction.ClearHistory) {
+                        nav.toast(Copy.Toast.CLEARED)
+                        if (!destroyed) refresh()
+                    }
                 }
             }
         }
@@ -152,64 +170,137 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
 
     private fun refresh() {
         syncTabs()
+        val interrupted = loading
         loadJob?.cancel()
         val isHistory = tab == "history"
         val state = nav.app.userStore.get()
         val ids = if (!isHistory) state.favorites else state.history.map { it.id }
+        val changed = requestedTab != tab || requestedIds != ids
         requestedTab = tab
         requestedIds = ids.toList()
         requestedHistory = if (isHistory) state.history.toList() else null
+        generation++
+        loading = false
+        pageFooter.bindGrid(if (isHistory) historyGrid else posterGrid)
+        if (changed) {
+            records.clear(); failures.clear(); entries = emptyList()
+            nextCursor = null; initialLoaded = false; pageError = null
+            favAdapter.notifyDataSetChanged(); histAdapter.notifyDataSetChanged()
+            resumePage = false
+        }
         if (ids.isEmpty()) {
             entries = emptyList()
             bodyBox.removeAllViews()
             bodyBox.addView(Theme.emptyOrErrorBox(ctx, if (!isHistory) Copy.Me.EMPTY_FAVORITES else Copy.Me.EMPTY_HISTORY))
+            pageFooter.show()
             return
         }
-        bodyBox.removeAllViews()
-        bodyBox.addView(Theme.loadingBox(ctx))
+        publishEntries()
+        if (changed || interrupted || resumePage || !initialLoaded || pageError != null) loadPage()
+    }
+
+    private fun onGridEnd(position: Int, isNewPress: Boolean) {
+        pageFooter.onGridEnd(position, isNewPress) { if (nextCursor != null) loadPage() else syncFooter() }
+    }
+
+    private fun retryFailedOrPage() {
+        val id = requestedIds?.firstOrNull { failures.containsKey(it) }
+        loadPage(id)
+    }
+
+    private fun syncFooter() {
+        val first = requestedIds?.firstOrNull { failures.containsKey(it) }?.let { failures[it] }
+        when {
+            loading -> pageFooter.show(Copy.Channel.LOADING_MORE)
+            first != null -> pageFooter.show("${Copy.fmt(Copy.Extra.LIBRARY_ITEM, "index" to ((requestedIds?.indexOf(first.id) ?: 0) + 1))} · ${Copy.errorText(DataError(first.code, "Library item"))}", retryable = true)
+            pageError != null -> pageFooter.show(Copy.errorText(pageError), retryable = true)
+            nextCursor == null && initialLoaded -> pageFooter.show(Copy.Channel.END)
+            else -> pageFooter.show()
+        }
+        pageFooter.showMore(if (nextCursor != null && !loading) ({ loadPage() }) else null)
+    }
+
+    private fun merge(page: LibraryPage) {
+        page.items.forEach { records[it.id] = it; failures.remove(it.id) }
+        page.failures.forEach { failures[it.id] = it }
+        publishEntries()
+    }
+
+    private fun publishEntries() {
+        val ids = requestedIds.orEmpty()
+        val history = requestedHistory.orEmpty().associateBy { it.id }
+        val previous = entries
+        entries = ids.mapNotNull { id -> records[id]?.let { enrichEpisodes(it) to history[id] } }
+        val grid = if (tab == "history") historyGrid else posterGrid
+        val adapter = if (tab == "history") histAdapter else favAdapter
+        if (entries.isNotEmpty()) {
+            if (grid.parent !== bodyBox) {
+                bodyBox.removeAllViews()
+                bodyBox.addView(grid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
+            }
+            val currentIds = previous.map { it.first.id }.toMutableList()
+            for (position in entries.indices) {
+                val id = entries[position].first.id
+                if (currentIds.getOrNull(position) == id) {
+                    if (previous.getOrNull(position) != entries[position]) adapter.notifyItemChanged(position)
+                } else {
+                    val old = currentIds.indexOf(id)
+                    if (old >= 0) { currentIds.removeAt(old); currentIds.add(position, id); adapter.notifyItemMoved(old, position) }
+                    else { currentIds.add(position, id); adapter.notifyItemInserted(position) }
+                }
+            }
+            while (currentIds.size > entries.size) { val at = currentIds.lastIndex; currentIds.removeAt(at); adapter.notifyItemRemoved(at) }
+        } else {
+            bodyBox.removeAllViews()
+            val first = ids.firstOrNull { failures.containsKey(it) }?.let { failures[it] }
+            if (first != null || pageError != null) {
+                val message = first?.let { "${Copy.fmt(Copy.Extra.LIBRARY_ITEM, "index" to (ids.indexOf(it.id) + 1))} · ${Copy.errorText(DataError(it.code, "Library item"))}" } ?: Copy.errorText(pageError)
+                val box = Theme.emptyOrErrorBox(ctx, message, Copy.Action.RETRY) { retryFailedOrPage() }
+                if (nextCursor != null) box.addView(Theme.pillButton(ctx, Copy.Extra.LOAD_MORE).apply { setOnClickListener { loadPage() } })
+                bodyBox.addView(box)
+            } else bodyBox.addView(Theme.loadingBox(ctx))
+        }
+        syncFooter()
+        if (entries.isEmpty()) pageFooter.visibility = View.INVISIBLE
+    }
+
+    private fun loadPage(retryId: String? = null) {
+        if (loading || destroyed) return
+        val ids = requestedIds.orEmpty()
+        if (ids.isEmpty() || (retryId == null && initialLoaded && nextCursor == null && pageError == null)) return
+        loading = true; pageError = null; resumePage = false
+        val at = ++generation
+        syncFooter()
         loadJob = scope.launch {
             try {
-                val items = nav.app.douban.byIds(ids)
-                if (destroyed) return@launch
-                val byId = items.associateBy { it.id }
-                val histById = state.history.associateBy { it.id }
-                entries = ids.mapNotNull { id ->
-                    val raw = byId[id] ?: return@mapNotNull null
-                    val it = if (isHistory) enrichEpisodes(raw) else raw
-                    it to (if (isHistory) histById[id] else null)
+                val cached = if (retryId == null) nav.app.douban.libraryPage(ids, nextCursor, cachedOnly = true) else null
+                coroutineContext.ensureActive()
+                if (destroyed || generation != at) return@launch
+                if (cached != null) merge(cached)
+                val pending = if (retryId != null) listOf(retryId) else cached!!.pending
+                for (group in pending.chunked(6)) {
+                    val loaded = nav.app.douban.libraryPage(group)
+                    coroutineContext.ensureActive()
+                    if (destroyed || generation != at) return@launch
+                    merge(loaded)
                 }
-                bodyBox.removeAllViews()
-                if (entries.isEmpty()) {
-                    bodyBox.addView(Theme.emptyOrErrorBox(ctx, if (!isHistory) Copy.Me.EMPTY_FAVORITES else Copy.Me.EMPTY_HISTORY))
-                } else if (isHistory) {
-                    histAdapter.notifyDataSetChanged()
-                    bodyBox.addView(historyGrid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
-
+                if (cached != null) { nextCursor = cached.next; initialLoaded = true }
+                loading = false
+                publishEntries()
+                if (tab == "history") {
                     val unresolved = entries.map { it.first }.filter { it.episodes == null && it.type != MediaType.MOVIE }.take(6)
-                    if (unresolved.isNotEmpty()) {
-                        var updated = false
-                        for (s in unresolved) {
-                            val avail = runCatching {
-                                nav.app.playback.availability(s, nav.app.douban.workHints(s.id))
-                            }.getOrNull()
-                            if (avail?.episodes != null) updated = true
-                        }
-                        if (!destroyed && tab == "history" && updated) {
-                            entries = entries.map { (it, h) -> enrichEpisodes(it) to h }
-                            histAdapter.notifyDataSetChanged()
-                        }
+                    for (item in unresolved) {
+                        runCatching { nav.app.playback.availability(item, nav.app.douban.workHints(item.id)) }
+                        coroutineContext.ensureActive()
+                        if (destroyed || generation != at) return@launch
+                        publishEntries()
                     }
-                } else {
-                    favAdapter.notifyDataSetChanged()
-                    bodyBox.addView(posterGrid, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
                 }
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (t: Throwable) {
                 if (!destroyed) {
-                    requestedTab = null
-                    bodyBox.removeAllViews()
-                    bodyBox.addView(Theme.emptyOrErrorBox(ctx, Copy.errorText(t), Copy.Action.RETRY) { refresh() })
+                    if (generation == at) { loading = false; pageError = t; publishEntries() }
                 }
             }
         }
@@ -250,9 +341,10 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
 
         private fun promptRemoveHistory(item: MediaItem) {
             nav.confirm("${Copy.Action.REMOVE}「${item.title}」？", Copy.Action.REMOVE, destructive = true) {
-                nav.app.userStore.dispatch(StateAction.RemoveHistory(item.id))
-                nav.toast(Copy.Toast.REMOVED)
-                refresh()
+                nav.saveUser(StateAction.RemoveHistory(item.id)) {
+                    nav.toast(Copy.Toast.REMOVED)
+                    if (!destroyed) refresh()
+                }
             }
         }
 

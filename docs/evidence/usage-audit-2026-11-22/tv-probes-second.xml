@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="app.panda.tv.UsageAuditProbeTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-11-22T14:43:24.171Z" hostname="DESKTOP-G3A3P0Q" time="1.005">
+  <properties/>
+  <testcase name="corruptUserFileSilentlyResetsAndNextWriteReplacesIt" classname="app.panda.tv.UsageAuditProbeTest" time="0.015"/>
+  <testcase name="optionalMetadataBlocksPrimaryDetail" classname="app.panda.tv.UsageAuditProbeTest" time="0.605"/>
+  <testcase name="detailFollowerInheritsCancelledLeader" classname="app.panda.tv.UsageAuditProbeTest" time="0.008"/>
+  <testcase name="oneUncachedFailureRejectsCachedLibrary" classname="app.panda.tv.UsageAuditProbeTest" time="0.372"/>
+  <testcase name="storageFailureEscapesUserDispatch" classname="app.panda.tv.UsageAuditProbeTest" time="0.004"/>
+  <system-out><![CDATA[USAGE_AUDIT corrupt-user initialFavorites=0 nextWriteFavorites=[db-2] originalSavedIdentityLost=true path=C:\Users\1\AppData\Local\Temp\panda-usage-corrupt-11071017111910279188\user-state.json
+USAGE_AUDIT optional-detail baseReady=true at600MsCompleted=false optionalRequests=2 afterRelease=db-1
+USAGE_AUDIT detail-cancellation activeFollower=true inheritedCancellation=true recoveryControl=db-1 calls=2
+USAGE_AUDIT partial-library seeded=2 mixedReadRejected=UPSTREAM cachedOnly=2
+USAGE_AUDIT failed-save escaped=java.io.FileNotFoundException inMemoryStatePreserved=true
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-22T18:35:11.039083+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": null,
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "history-1",
+      "passed": true,
+      "fault": "files directory chmod 555 during real playback",
+      "saveErrorShown": true,
+      "processSurvived": true,
+      "oldStatePreserved": true,
+      "positionBefore": 2,
+      "positionAfterFailure": 5,
+      "historyResumed": true,
+      "recordedEpisode": 1
+    },
+    {
+      "name": "history-2",
+      "passed": true,
+      "fault": "files directory chmod 555 during real playback",
+      "saveErrorShown": true,
+      "processSurvived": true,
+      "oldStatePreserved": true,
+      "positionBefore": 2,
+      "positionAfterFailure": 5,
+      "historyResumed": true,
+      "recordedEpisode": 1
+    }
+  ],
+  "passed": 2,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "completeUserStateRestored": true,
+    "firewallRulesRestored": true,
+    "displaySettingsRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/history-verified/report.json",
+  "rawSha256": "6471DA856977A320B478BA45325FB8E17EA3C53B7D83D6315619A689E9ABBA3A"
+}

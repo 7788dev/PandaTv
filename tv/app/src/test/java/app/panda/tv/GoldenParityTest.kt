@@ -299,9 +299,10 @@ class GoldenParityTest {
                 type = MediaType.fromWire(itRow["type"] as String)!!,
                 genres = emptyList(),
                 year = (itRow["year"] as? Number)?.toInt(),
+                region = itRow["region"] as? String,
             )
             val rawRow = Json.row(r["raw"])
-            val rawVod = RawVod(null, rawRow["vod_name"] as? String, rawRow["vod_year"] as? String, rawRow["type_name"] as? String, null, null)
+            val rawVod = RawVod(null, rawRow["vod_name"] as? String, rawRow["vod_year"] as? String, rawRow["type_name"] as? String, null, null, rawRow["vod_area"] as? String)
             val hRow = Json.row(r["hints"])
             val hints = WorkHints(
                 aliases = (hRow["aliases"] as? List<*>)?.map { it as String },
@@ -336,6 +337,17 @@ class GoldenParityTest {
         assertEquals(Json.list(svc["parseLines"]).size, parsed.size)
         assertEquals("https://b.com/v.mp4", parsed[1].episodes[0].url)
         assertEquals("mp4", parsed[1].episodes[0].format)
+
+        val mirrorVector = Json.row(svc["mirrorLines"])
+        val mirrorLines = PlaybackMatchers.parseLines("mp4", mirrorVector["input"] as String)
+        val expectedMirrors = Json.list(mirrorVector["output"]).map(Json::row)
+        assertEquals(expectedMirrors.size, mirrorLines.size)
+        for ((index, line) in mirrorLines.withIndex()) {
+            val expected = Json.list(expectedMirrors[index]["episodes"]).map(Json::row)
+            assertEquals(expected.map { it["url"] }, line.episodes.map { it.url })
+            assertEquals(expected.map { (it["number"] as Number).toInt() }, line.episodes.map { it.number })
+            assertTrue(PlaybackMatchers.numbering(line).numeric)
+        }
 
         val variants = PlaybackMatchers.manifestVariants(
             "#EXTM3U\n#EXT-X-STREAM-INF:BANDWIDTH=1000\nhttp://[bad\n#EXT-X-STREAM-INF:BANDWIDTH=1500\njavascript:alert(1)\n#EXT-X-STREAM-INF:BANDWIDTH=2000000,RESOLUTION=1920x1080\n1080/index.m3u8\n#EXT-X-STREAM-INF:BANDWIDTH=800000,RESOLUTION=1280x720\n720/index.m3u8\n",

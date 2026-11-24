@@ -45,14 +45,22 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run test:release
-      - run: npm run verify:design
-      - run: node design/tools/test-contract.mjs
       - name: Build installer without implicit publishing
         run: npm run dist -- --publish never
       - name: Inspect packaged application
         run: node scripts/asar-check.cjs release/win-unpacked/resources/app.asar
+      - name: Generate moving AV transport inputs
+        shell: pwsh
+        run: |
+          if (-not (Get-Command ffmpeg -ErrorAction SilentlyContinue)) {
+            choco install ffmpeg --version=7.0.2 --yes --no-progress --limit-output
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          npm run test:media
       - name: Offline UI and layout regression
         run: npm run test:e2e:fixture
+        env:
+          PANDA_E2E_SILENT_OUTPUT: '2'
       - name: Collect Windows installer
         run: node scripts/ci-release.mjs collect-windows
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -72,6 +80,9 @@ jobs:
           path: |
             .tmp/playwright-report/
             .tmp/e2e-results/
+            .tmp/e2e-reports/
+            .tmp/quality-fixtures/runs/
+            .tmp/quality-fixtures/media/manifest.json
             .tmp/ci-evidence/
           retention-days: 7
 

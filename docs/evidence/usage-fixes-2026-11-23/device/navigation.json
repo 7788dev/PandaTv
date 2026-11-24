@@ -1,0 +1,134 @@
+{
+  "at": "2026-11-22T18:38:25.739797+00:00",
+  "apkSha256": "59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401",
+  "display": {
+    "size": "Physical size: 1080x1920",
+    "density": "Physical density: 280"
+  },
+  "viewport": null,
+  "density": null,
+  "cases": [
+    {
+      "name": "动漫-1-normal",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "动漫-1-fast-right",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "动漫筛选展开回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "电影-1-normal",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "电影-1-fast-right",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "电影筛选展开回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "剧集-1-normal",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "剧集-1-fast-right",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "剧集筛选展开回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "综艺-1-normal",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "综艺-1-fast-right",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "综艺筛选展开回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "纪录片-1-normal",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "纪录片-1-fast-right",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "纪录片筛选展开回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "搜索结果回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "搜索末行保持列",
+      "passed": true,
+      "fast": true
+    },
+    {
+      "name": "影人作品回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "搜索与影人页面流程",
+      "passed": true
+    },
+    {
+      "name": "收藏列表回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "收藏详情返回位置",
+      "passed": true
+    },
+    {
+      "name": "历史列表回顶",
+      "passed": true,
+      "fast": false
+    },
+    {
+      "name": "收藏历史流程",
+      "passed": true
+    }
+  ],
+  "passed": 23,
+  "failed": 0,
+  "unavailable": [],
+  "failures": [],
+  "restoration": {
+    "libraryUserStateRestored": true,
+    "userStateRestored": true
+  },
+  "rawReport": ".tmp/usage-fixes-2026-11-23/device/navigation/report.json",
+  "rawSha256": "16752263D0D06CB1B063344003EE25136C6C686B1BAFE1C8BFF0D043F0878EBA"
+}

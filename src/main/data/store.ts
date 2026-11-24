@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import type { Normalized } from './normalize';
 import { normalize, positive, row, text } from './normalize';
 import type { DataWarning } from './http';
-import type { MediaType } from '../../../design/contract/types';
+import type { MediaType } from '../../contract/types';
 
 const TYPES = new Set<MediaType>(['tv', 'movie', 'variety', 'anime', 'doc']);
 
@@ -27,6 +27,7 @@ export class MetadataStore {
       const existing = this.entries.get(value.item.id);
       // Compact cards cannot erase previously fetched detailed metadata.
       const item = { ...existing?.item, ...value.item,
+        type: existing?.kind === value.kind && value.item.type === value.kind ? existing.item.type : value.item.type,
         genres: value.item.genres.length ? value.item.genres : existing?.item.genres ?? [],
         poster: value.item.poster ?? existing?.item.poster ?? null,
         backdrop: value.item.backdrop ?? existing?.item.backdrop ?? null,

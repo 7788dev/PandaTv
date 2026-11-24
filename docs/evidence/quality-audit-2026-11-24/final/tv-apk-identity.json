@@ -1,0 +1,10 @@
+{
+  "apk": "Panda-TV-quality-ffzy.apk",
+  "bytes": 1846722,
+  "sha256": "7688BF38BFE8DBD751B485A6898B32EDF18ADC9917FC43B756E33820D798AB3B",
+  "versionName": "1.0.14",
+  "versionCode": 15,
+  "minSdk": 22,
+  "installedDevice": "MuMu Android 15 (127.0.0.1:16416)",
+  "note": "Includes updated ffzy API and restored final UI/service sources; independent 360zy\u2194ffzy switch passed."
+}

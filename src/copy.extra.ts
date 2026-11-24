@@ -21,6 +21,9 @@ export const extra = {
   partialMetadata: '部分信息加载失败',
   cachedMetadata: '正在显示已保存的信息',
   hotSearchSource: '百度影视热搜',
+  pageScroll: '页面内容',
+  carouselPause: '暂停轮播',
+  carouselPlay: '继续轮播',
   stateCorrupt: '本机数据读取失败',
   startFailed: '应用启动失败',
   unsupportedPlayback: '此设备无法播放该视频',
@@ -34,6 +37,15 @@ export const extra = {
   speedRestored: '已恢复 {speed}×',
   personWorks: '全部作品',
   personNotFound: '未找到这位影人',
+  recoveryDescription: '可导出恢复文件，或恢复上次备份。恢复和重置都会保留原文件。',
+  exportRecovery: '导出恢复文件',
+  recoveryExported: '恢复文件已导出',
+  restoreBackup: '恢复备份',
+  resetData: '重置本机数据',
+  restoreConfirm: '恢复备份将替换收藏、历史、搜索记录和设置，原文件会保留。',
+  resetConfirm: '重置将清空收藏、历史和搜索记录，并恢复默认设置。原文件会保留。',
+  libraryItem: '第 {index} 个条目',
+  retryLibraryItem: '重试第 {index} 个条目',
 } as const
 
 export const dataCopy = {

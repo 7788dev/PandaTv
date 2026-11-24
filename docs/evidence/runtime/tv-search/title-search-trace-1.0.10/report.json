@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-20T09:42:12.396449+00:00",
+  "cases": [],
+  "failures": [
+    {
+      "name": "initials",
+      "round": 1,
+      "error": "Timed out after 50s; visible texts=['Panda', '首页', '剧集', '电影', '综艺', '动漫', '纪录片', '我的', '搜索', '设置', 'LBXX', '搜索', '清除', '返回', '没有找到相关内容']",
+      "state": {
+        "texts": [
+          "Panda",
+          "首页",
+          "剧集",
+          "电影",
+          "综艺",
+          "动漫",
+          "纪录片",
+          "我的",
+          "搜索",
+          "设置",
+          "LBXX",
+          "搜索",
+          "清除",
+          "返回",
+          "没有找到相关内容"
+        ],
+        "focus": [
+          "搜索"
+        ],
+        "keyboard": false,
+        "systemIme": false
+      }
+    }
+  ],
+  "version": "1.0.10",
+  "apkSha256": "F86E9997E01E06433EDC33B5F460982534B73B8666F7227D3D2B02C99C4FE13F",
+  "userStateRestored": true
+}

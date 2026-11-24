@@ -1,0 +1,53 @@
+
+Running 2 tests using 1 worker
+
+  ok 1 [desktop-live] › e2e\quality.live.spec.ts:39:1 › real metadata initials filters paging and detail navigation (23.4s)
+  x  2 [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release (1.3m)
+
+
+  1) [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '下一集', exact: true })
+        - locator resolved to <button type="button" aria-label="下一集" class="icon-btn " id="base-ui-_r_h_" data-base-ui-tooltip-trigger="">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is not stable
+        - retrying click action
+        - waiting 20ms
+        - waiting for element to be visible, enabled and stable
+        - element is visible, enabled and stable
+        - scrolling into view if needed
+        - done scrolling
+        - <video playsinline="" preload="auto" class="player__video" crossorigin="anonymous" src="blob:file:///5fc63af2-4aa9-485c-a721-bd19d00d04f8" poster="http://127.0.0.1:49683/asset/4a13a11a41ed9dde0b5d4f211294bc41196a90fc24ac2421"></video> intercepts pointer events
+      - retrying click action
+        - waiting 100ms
+        - waiting for element to be visible, enabled and stable
+        - element is not stable
+      - retrying click action
+        - waiting 100ms
+        12 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <video playsinline="" preload="auto" class="player__video" crossorigin="anonymous" src="blob:file:///5fc63af2-4aa9-485c-a721-bd19d00d04f8" poster="http://127.0.0.1:49683/asset/4a13a11a41ed9dde0b5d4f211294bc41196a90fc24ac2421"></video> intercepts pointer events
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      88 |   await screenshot(page, join(dir, 'episode-1-live.png'))
+      89 |   await page.mouse.move(20, 200); await page.mouse.move(21, 201)
+    > 90 |   await page.getByRole('button', { name: '下一集', exact: true }).click()
+         |                                                                ^
+      91 |   await expect.poll(() => page.evaluate(() => location.hash)).toBe('#/play/db-26647087/2')
+      92 |   await playing(page, 2, 90000)
+      93 |   const available = await page.evaluate(() => window.panda.data.sources('db-26647087', 2))
+        at E:\dev\项目\panda\e2e\quality.live.spec.ts:90:64
+
+    Error Context: .tmp\e2e-results\desktop-packaged-live\quality.live-real-playback-26cea--and-media-resource-release-desktop-live\error-context.md
+
+  1 failed
+    [desktop-live] › e2e\quality.live.spec.ts:66:1 › real playback episode source seek exit reentry and media resource release 
+  1 passed (1.7m)
