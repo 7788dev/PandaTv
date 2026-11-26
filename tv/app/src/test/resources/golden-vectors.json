@@ -2272,5 +2272,953 @@
       },
       "shortLength": 0
     }
+  },
+  "health": {
+    "configs": {
+      "standard": {
+        "basisVersion": "calib-a",
+        "decayVersion": "1",
+        "halfLifeDays": 30,
+        "baseline": 0.5,
+        "slowStartupSec": 6,
+        "playFloorSec": 60,
+        "workDeltaMax": 0.2,
+        "weights": {
+          "availability": 0.4,
+          "stability": 0.3,
+          "speed": 0.2,
+          "quality": 0.1
+        }
+      },
+      "shortHalfLife": {
+        "basisVersion": "calib-a",
+        "decayVersion": "1",
+        "halfLifeDays": 7,
+        "baseline": 0.5,
+        "slowStartupSec": 6,
+        "playFloorSec": 60,
+        "workDeltaMax": 0.2,
+        "weights": {
+          "availability": 0.4,
+          "stability": 0.3,
+          "speed": 0.2,
+          "quality": 0.1
+        }
+      }
+    },
+    "at": 1760000000000,
+    "cases": [
+      {
+        "label": "recovered",
+        "entry": {
+          "sourceKey": "ffzy",
+          "success": 20,
+          "failure": {
+            "catalogue": 0,
+            "probe": 0,
+            "firstSegment": 0,
+            "stall": 0,
+            "alignment": 0
+          },
+          "startupMedian": 1.2,
+          "startupWorst": 2.4,
+          "playSeconds": 600,
+          "stallSeconds": 18,
+          "shownQuality": "1080P",
+          "lastSuccessAt": 1759999999000,
+          "lastFailureAt": 1759913600000,
+          "lastFailureKind": "probe",
+          "score": 0,
+          "scoredAt": 1759913600000,
+          "decayVersion": "1",
+          "cooldownUntil": null,
+          "lastAlignmentDegrade": null
+        },
+        "outputs": {
+          "standard": {
+            "score": 0.8985036016723662,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.8985036016723662
+            }
+          },
+          "shortHalfLife": {
+            "score": 0.8693705779898078,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.8693705779898078
+            }
+          }
+        }
+      },
+      {
+        "label": "old-failure",
+        "entry": {
+          "sourceKey": "lzi",
+          "success": 0,
+          "failure": {
+            "catalogue": 0,
+            "probe": 5,
+            "firstSegment": 0,
+            "stall": 0,
+            "alignment": 0
+          },
+          "startupMedian": null,
+          "startupWorst": null,
+          "playSeconds": 0,
+          "stallSeconds": 0,
+          "shownQuality": "720P",
+          "lastSuccessAt": null,
+          "lastFailureAt": 1754816000000,
+          "lastFailureKind": "probe",
+          "score": 0,
+          "scoredAt": 1754816000000,
+          "decayVersion": "1",
+          "cooldownUntil": null,
+          "lastAlignmentDegrade": null
+        },
+        "outputs": {
+          "standard": {
+            "score": 0.5017857142857143,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.5017857142857143
+            }
+          },
+          "shortHalfLife": {
+            "score": 0.5000187765093838,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.5000187765093838
+            }
+          }
+        }
+      },
+      {
+        "label": "stalling",
+        "entry": {
+          "sourceKey": "bfzy",
+          "success": 8,
+          "failure": {
+            "catalogue": 0,
+            "probe": 0,
+            "firstSegment": 0,
+            "stall": 2,
+            "alignment": 0
+          },
+          "startupMedian": 2.4,
+          "startupWorst": 3.1,
+          "playSeconds": 600,
+          "stallSeconds": 108,
+          "shownQuality": "720P",
+          "lastSuccessAt": 1759996400000,
+          "lastFailureAt": 1759999400000,
+          "lastFailureKind": "stall",
+          "score": 0,
+          "scoredAt": 1759999400000,
+          "decayVersion": "1",
+          "cooldownUntil": null,
+          "lastAlignmentDegrade": null
+        },
+        "outputs": {
+          "standard": {
+            "score": 0.7159653454212228,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.7159653454212228
+            }
+          },
+          "shortHalfLife": {
+            "score": 0.7158515195181652,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.7158515195181652
+            }
+          }
+        }
+      },
+      {
+        "label": "cooled",
+        "entry": {
+          "sourceKey": "360zy",
+          "success": 12,
+          "failure": {
+            "catalogue": 1,
+            "probe": 0,
+            "firstSegment": 0,
+            "stall": 0,
+            "alignment": 0
+          },
+          "startupMedian": 0.9,
+          "startupWorst": 1.6,
+          "playSeconds": 900,
+          "stallSeconds": 12,
+          "shownQuality": "1080P",
+          "lastSuccessAt": 1759992800000,
+          "lastFailureAt": 1759999940000,
+          "lastFailureKind": "catalogue",
+          "score": 0,
+          "scoredAt": 1759996400000,
+          "decayVersion": "1",
+          "cooldownUntil": 1760000060000,
+          "lastAlignmentDegrade": null
+        },
+        "outputs": {
+          "standard": {
+            "score": 0.8872936378412302,
+            "verdict": {
+              "cooled": true,
+              "rank": -1
+            }
+          },
+          "shortHalfLife": {
+            "score": 0.8860704971048667,
+            "verdict": {
+              "cooled": true,
+              "rank": -1
+            }
+          }
+        }
+      },
+      {
+        "label": "fresh-strong",
+        "entry": {
+          "sourceKey": "jyzy",
+          "success": 30,
+          "failure": {
+            "catalogue": 0,
+            "probe": 0,
+            "firstSegment": 0,
+            "stall": 0,
+            "alignment": 0
+          },
+          "startupMedian": 0.8,
+          "startupWorst": 1.4,
+          "playSeconds": 3000,
+          "stallSeconds": 0,
+          "shownQuality": "4K",
+          "lastSuccessAt": 1759999400000,
+          "lastFailureAt": null,
+          "lastFailureKind": null,
+          "score": 0,
+          "scoredAt": 1759999400000,
+          "decayVersion": "1",
+          "cooldownUntil": null,
+          "lastAlignmentDegrade": null
+        },
+        "outputs": {
+          "standard": {
+            "score": 0.9607593982173462,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.9607593982173462
+            }
+          },
+          "shortHalfLife": {
+            "score": 0.9605165520584309,
+            "verdict": {
+              "cooled": false,
+              "rank": 0.9605165520584309
+            }
+          }
+        }
+      }
+    ]
+  },
+  "buffer": {
+    "configs": {
+      "standard": {
+        "startupTargetSec": 4,
+        "startupWindowSec": 3,
+        "playingLowSec": 6,
+        "playingRiseWindowSec": 5,
+        "seekLowSec": 3,
+        "stallPositionSec": 20
+      },
+      "highWater": {
+        "startupTargetSec": 4,
+        "startupWindowSec": 3,
+        "playingLowSec": 8,
+        "playingRiseWindowSec": 5,
+        "seekLowSec": 3,
+        "stallPositionSec": 20
+      }
+    },
+    "thresholds": {
+      "standard": {
+        "startup": 4,
+        "playing": 6,
+        "seek": 3
+      },
+      "highWater": {
+        "startup": 4,
+        "playing": 8,
+        "seek": 3
+      }
+    },
+    "cases": [
+      {
+        "label": "startup-low",
+        "scene": "startup",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 0,
+            "position": 0
+          },
+          {
+            "at": 1000,
+            "ahead": 0,
+            "position": 0
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": false,
+          "threshold": 4,
+          "ahead": 0
+        }
+      },
+      {
+        "label": "startup-timeout",
+        "scene": "startup",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 1,
+            "position": 0
+          },
+          {
+            "at": 3000,
+            "ahead": 2,
+            "position": 0
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": true,
+          "reason": "low-buffer",
+          "threshold": 4,
+          "ahead": 2
+        }
+      },
+      {
+        "label": "startup-recovered",
+        "scene": "startup",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 1,
+            "position": 0
+          },
+          {
+            "at": 3000,
+            "ahead": 4,
+            "position": 0
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": false,
+          "threshold": 4,
+          "ahead": 4
+        }
+      },
+      {
+        "label": "buffered-ending",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "position": 84,
+            "ahead": 6
+          },
+          {
+            "at": 1000,
+            "position": 85,
+            "ahead": 5,
+            "bufferedToEnd": true
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": false,
+          "threshold": 6,
+          "ahead": 5,
+          "riseSlope": -1
+        }
+      },
+      {
+        "label": "stalled-at-buffered-ending",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "position": 85,
+            "ahead": 5
+          },
+          {
+            "at": 21000,
+            "position": 85,
+            "ahead": 5,
+            "bufferedToEnd": true
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": true,
+          "reason": "stalled",
+          "threshold": 6,
+          "ahead": 5
+        }
+      },
+      {
+        "label": "recovering",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 2,
+            "position": 100
+          },
+          {
+            "at": 2000,
+            "ahead": 3,
+            "position": 102
+          },
+          {
+            "at": 4000,
+            "ahead": 5,
+            "position": 104
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": false,
+          "threshold": 6,
+          "ahead": 5,
+          "riseSlope": 0.75
+        }
+      },
+      {
+        "label": "falling",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 10,
+            "position": 100
+          },
+          {
+            "at": 2000,
+            "ahead": 8,
+            "position": 102
+          },
+          {
+            "at": 4000,
+            "ahead": 5,
+            "position": 104
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": true,
+          "reason": "low-buffer",
+          "threshold": 6,
+          "ahead": 5,
+          "riseSlope": -1.25
+        }
+      },
+      {
+        "label": "seek-low",
+        "scene": "seek",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 2,
+            "position": 100
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": true,
+          "reason": "low-buffer",
+          "threshold": 3,
+          "ahead": 2
+        }
+      },
+      {
+        "label": "stalled",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 20,
+            "position": 100
+          },
+          {
+            "at": 21000,
+            "ahead": 20,
+            "position": 100
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "takeOver": true,
+          "reason": "stalled",
+          "threshold": 6,
+          "ahead": 20
+        }
+      },
+      {
+        "label": "threshold-flip",
+        "scene": "playing",
+        "samples": [
+          {
+            "at": 0,
+            "ahead": 9,
+            "position": 100
+          },
+          {
+            "at": 2000,
+            "ahead": 8,
+            "position": 102
+          },
+          {
+            "at": 4000,
+            "ahead": 7,
+            "position": 104
+          }
+        ],
+        "config": "highWater",
+        "output": {
+          "takeOver": true,
+          "reason": "low-buffer",
+          "threshold": 8,
+          "ahead": 7,
+          "riseSlope": -0.5
+        }
+      }
+    ]
+  },
+  "budget": {
+    "configs": {
+      "standard": {
+        "maxSwitchesPerEpisode": 3,
+        "minIntervalSec": 30,
+        "failedSourceCooldownSec": 300
+      },
+      "tight": {
+        "maxSwitchesPerEpisode": 2,
+        "minIntervalSec": 30,
+        "failedSourceCooldownSec": 300
+      }
+    },
+    "at": 1760000000000,
+    "cases": [
+      {
+        "label": "first",
+        "events": [],
+        "config": "standard",
+        "output": {
+          "allowed": true,
+          "attempts": 0
+        }
+      },
+      {
+        "label": "limit",
+        "events": [
+          {
+            "at": 1759999880000,
+            "mode": "auto"
+          },
+          {
+            "at": 1759999910000,
+            "mode": "auto"
+          },
+          {
+            "at": 1759999940000,
+            "mode": "auto"
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "allowed": false,
+          "reason": "limit",
+          "attempts": 3
+        }
+      },
+      {
+        "label": "interval",
+        "events": [
+          {
+            "at": 1759999990000,
+            "mode": "auto"
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "allowed": false,
+          "reason": "interval",
+          "attempts": 1
+        }
+      },
+      {
+        "label": "manual",
+        "events": [
+          {
+            "at": 1759999999000,
+            "mode": "manual"
+          },
+          {
+            "at": 1759999998000,
+            "mode": "manual"
+          },
+          {
+            "at": 1759999997000,
+            "mode": "manual"
+          }
+        ],
+        "config": "standard",
+        "output": {
+          "allowed": true,
+          "attempts": 0
+        }
+      },
+      {
+        "label": "tight-limit",
+        "events": [
+          {
+            "at": 1759999880000,
+            "mode": "auto"
+          },
+          {
+            "at": 1759999910000,
+            "mode": "auto"
+          }
+        ],
+        "config": "tight",
+        "output": {
+          "allowed": false,
+          "reason": "limit",
+          "attempts": 2
+        }
+      }
+    ],
+    "mark": {
+      "sourceKey": "b",
+      "until": 1760000300000,
+      "unavailableAt": 1760000299000,
+      "availableAt": 1760000300000,
+      "unavailable": true,
+      "available": false
+    }
+  },
+  "alignment": {
+    "configs": {
+      "standard": {
+        "basisVersion": "calib-a",
+        "ratioTolerance": 0.001,
+        "absoluteToleranceSec": 5,
+        "historyConsistencyRatio": 0.05,
+        "workSpreadFactor": 4,
+        "windowSeconds": 3,
+        "sampleLimit": 5,
+        "frameBudgetMs": 1200,
+        "similarityThreshold": 0.9,
+        "offsetTtlDays": 7,
+        "takeoverHeadroomFactor": 1.5
+      },
+      "strict": {
+        "basisVersion": "calib-a",
+        "ratioTolerance": 0.0005,
+        "absoluteToleranceSec": 1,
+        "historyConsistencyRatio": 0.05,
+        "workSpreadFactor": 4,
+        "windowSeconds": 3,
+        "sampleLimit": 5,
+        "frameBudgetMs": 1200,
+        "similarityThreshold": 0.9,
+        "offsetTtlDays": 7,
+        "takeoverHeadroomFactor": 1.5
+      }
+    },
+    "duration": [
+      {
+        "label": "missing",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": null,
+          "toSource": "missing"
+        },
+        "history": {
+          "sourceSamples": [],
+          "workRatios": []
+        },
+        "config": "standard",
+        "output": {
+          "verdict": "unknown",
+          "measured": false,
+          "ratioDeviation": 0,
+          "absDeviation": 0,
+          "basisVersion": "calib-a",
+          "reason": "duration-missing"
+        }
+      },
+      {
+        "label": "longer",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1205,
+          "toSource": "hls-extinf"
+        },
+        "history": {
+          "sourceSamples": [],
+          "workRatios": []
+        },
+        "config": "standard",
+        "output": {
+          "measured": true,
+          "ratioDeviation": 0.004166666666666667,
+          "absDeviation": 5,
+          "basisVersion": "calib-a",
+          "verdict": "consistent"
+        }
+      },
+      {
+        "label": "shorter",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1195,
+          "toSource": "hls-extinf"
+        },
+        "history": {
+          "sourceSamples": [],
+          "workRatios": []
+        },
+        "config": "standard",
+        "output": {
+          "measured": true,
+          "ratioDeviation": 0.004166666666666667,
+          "absDeviation": 5,
+          "basisVersion": "calib-a",
+          "verdict": "consistent"
+        }
+      },
+      {
+        "label": "strict-suspect",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1205,
+          "toSource": "hls-extinf"
+        },
+        "history": {
+          "sourceSamples": [],
+          "workRatios": []
+        },
+        "config": "strict",
+        "output": {
+          "measured": true,
+          "ratioDeviation": 0.004166666666666667,
+          "absDeviation": 5,
+          "basisVersion": "calib-a",
+          "verdict": "suspect"
+        }
+      },
+      {
+        "label": "history-conflict",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1205,
+          "toSource": "hls-extinf"
+        },
+        "history": {
+          "sourceSamples": [
+            1200,
+            1500
+          ],
+          "workRatios": []
+        },
+        "config": "standard",
+        "output": {
+          "measured": true,
+          "ratioDeviation": 0.004166666666666667,
+          "absDeviation": 5,
+          "basisVersion": "calib-a",
+          "verdict": "suspect",
+          "reason": "history-inconsistent"
+        }
+      },
+      {
+        "label": "work-outlier",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1210,
+          "toSource": "hls-extinf"
+        },
+        "history": {
+          "sourceSamples": [],
+          "workRatios": [
+            0.001,
+            0.001,
+            0.001
+          ]
+        },
+        "config": "standard",
+        "output": {
+          "measured": true,
+          "ratioDeviation": 0.008333333333333333,
+          "absDeviation": 10,
+          "basisVersion": "calib-a",
+          "verdict": "suspect",
+          "reason": "work-outlier"
+        }
+      }
+    ],
+    "offsets": [
+      {
+        "label": "delta",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": 1205,
+          "toSource": "hls-extinf"
+        },
+        "config": "standard",
+        "output": [
+          0,
+          5,
+          -5
+        ]
+      },
+      {
+        "label": "missing",
+        "input": {
+          "fromSeconds": 1200,
+          "fromSource": "hls-extinf",
+          "toSeconds": null,
+          "toSource": "missing"
+        },
+        "config": "standard",
+        "output": [
+          0
+        ]
+      }
+    ],
+    "similarity": [
+      {
+        "label": "same",
+        "a": {
+          "valid": true,
+          "hash": "ffffffffffffffff"
+        },
+        "b": {
+          "valid": true,
+          "hash": "ffffffffffffffff"
+        },
+        "output": 1
+      },
+      {
+        "label": "opposite",
+        "a": {
+          "valid": true,
+          "hash": "ffffffffffffffff"
+        },
+        "b": {
+          "valid": true,
+          "hash": "0000000000000000"
+        },
+        "output": 0
+      },
+      {
+        "label": "invalid",
+        "a": {
+          "valid": false,
+          "hash": "ffffffffffffffff"
+        },
+        "b": {
+          "valid": true,
+          "hash": "ffffffffffffffff"
+        },
+        "output": 0
+      }
+    ],
+    "window": [
+      {
+        "label": "best",
+        "anchors": [
+          0,
+          5,
+          -5
+        ],
+        "samples": [
+          {
+            "offsetSeconds": 0,
+            "similarity": 0.2,
+            "valid": true
+          },
+          {
+            "offsetSeconds": 1,
+            "similarity": 0.95,
+            "valid": true
+          },
+          {
+            "offsetSeconds": 2,
+            "similarity": 0.4,
+            "valid": true
+          }
+        ],
+        "elapsedMs": 400,
+        "config": "standard",
+        "output": {
+          "offset": 1,
+          "used": 3
+        }
+      },
+      {
+        "label": "over-budget",
+        "anchors": [
+          0
+        ],
+        "samples": [
+          {
+            "offsetSeconds": 0,
+            "similarity": 0.2,
+            "valid": true
+          }
+        ],
+        "elapsedMs": 1201,
+        "config": "standard",
+        "output": {
+          "used": 0,
+          "reason": "over-budget"
+        }
+      },
+      {
+        "label": "no-match",
+        "anchors": [
+          0
+        ],
+        "samples": [
+          {
+            "offsetSeconds": 1,
+            "similarity": 0.5,
+            "valid": true
+          }
+        ],
+        "elapsedMs": 100,
+        "config": "standard",
+        "output": {
+          "used": 1,
+          "reason": "no-match"
+        }
+      }
+    ]
   }
 }

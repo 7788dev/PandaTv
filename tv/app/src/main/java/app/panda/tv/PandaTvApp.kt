@@ -7,9 +7,12 @@ import app.panda.tv.data.TitleSearchIndex
 import app.panda.tv.image.ImageLoader
 import app.panda.tv.net.TlsCompat
 import app.panda.tv.playback.PlaybackService
+import app.panda.tv.playback.RuleCalibration
+import app.panda.tv.playback.RuleCalibrationLoader
 import app.panda.tv.playback.SourceRules
 import app.panda.tv.playback.SourceRulesLoader
 import app.panda.tv.playback.WarmMediaCache
+import app.panda.tv.state.SourceHealthStore
 import app.panda.tv.state.UserStore
 import app.panda.tv.state.UserStateWriter
 import app.panda.tv.model.StateAction
@@ -32,6 +35,10 @@ class PandaTvApp : Application() {
     lateinit var warmCache: WarmMediaCache
         private set
     lateinit var playback: PlaybackService
+        private set
+    var sourceHealth: SourceHealthStore? = null
+        private set
+    var ruleCalibration: RuleCalibration? = null
         private set
     lateinit var images: ImageLoader
         private set
@@ -64,7 +71,16 @@ class PandaTvApp : Application() {
                 Log.i("PandaTV", "[ad] $src: ${res.reason} (-${res.removedSegments} segs, ${res.removedSeconds}s, ${res.evidence})")
             }
         }
-        playback = PlaybackService(sourceRules, warmCache) { src, reason, ms ->
+        ruleCalibration = RuleCalibrationLoader.load(assets)
+        sourceHealth = ruleCalibration?.let { calibration ->
+            SourceHealthStore(
+                File(filesDir, "source-health-v1.json"),
+                calibration.health,
+                calibration.budget,
+                onWriteFailure = { message -> Log.w("PandaTV", "[health] $message") },
+            )
+        }
+        playback = PlaybackService(sourceRules, warmCache, health = sourceHealth, alignment = ruleCalibration?.alignment) { src, reason, ms ->
             Log.i("PandaTV", "[source] $src (${ms}ms): $reason")
         }
         images = ImageLoader(this)
@@ -73,6 +89,7 @@ class PandaTvApp : Application() {
     fun flushAll() {
         appScope.launch(Dispatchers.IO) {
             douban.flush()
+            sourceHealth?.flush()
         }
     }
 }

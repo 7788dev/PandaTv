@@ -30,7 +30,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
+class SearchScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null) : Screen(ctx, nav) {
     override val chromeFocusKey = "search"
 
     private val m = Theme.metrics(ctx)
@@ -97,6 +97,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     private var hotTerms: List<String> = emptyList()
+    private var displayedSearches: List<String>? = null
     private var allResults: List<MediaItem> = emptyList()
     private var filteredResults: List<MediaItem> = emptyList()
     private var activeTypeFilter: MediaType? = null
@@ -117,6 +118,13 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
 
     override val view: View get() = root
 
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("query", input.text.toString().take(100))
+        putBoolean("results", !keyboardShown && completedQuery != null || searchJob?.isActive == true)
+        putString("type", activeTypeFilter?.wire)
+        putInt("position", resultsGrid.selectedPosition)
+    }
+
     init {
         buildHeader()
         suggestStrip.adapter = suggestAdapter
@@ -128,9 +136,22 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         root.addView(bodyBox, LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f))
         showDiscovery()
         loadHot()
+        val query = saved?.getString("query").orEmpty()
+        if (query.isNotEmpty()) {
+            input.setText(query)
+            input.setSelection(query.length)
+            if (saved?.getBoolean("results") == true) submit(query, remember = false,
+                filter = MediaType.fromWire(saved.getString("type")), position = saved.getInt("position", 0))
+        }
         input.post {
             input.requestFocus()
             hideIme()
+        }
+    }
+
+    override fun onShown() {
+        if (displayedSearches != null && displayedSearches != nav.app.userStore.get().searches) {
+            showDiscovery(showPad = keyboardShown)
         }
     }
 
@@ -199,6 +220,10 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 suggestJob?.cancel()
                 if (suggestFrame.visibility == View.VISIBLE) suggestFrame.visibility = View.INVISIBLE
                 if (q.isEmpty()) {
+                    if (editingKeypad && editingSavedQuery != null) {
+                        suggestFrame.visibility = View.GONE
+                        return
+                    }
                     resetSearch()
                     return
                 }
@@ -237,7 +262,10 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 rightMargin = Theme.dp(ctx, 10)
             }
             setOnClickListener {
+                restoringQuery = true
                 input.setText("")
+                restoringQuery = false
+                resetSearch()
                 input.requestFocus()
             }
         })
@@ -280,13 +308,14 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         showDiscovery()
     }
 
-    fun submit(raw: String) {
+    fun submit(raw: String, remember: Boolean = true, filter: MediaType? = null, position: Int = 0) {
         val q = raw.trim()
         if (q.isEmpty()) {
             resetSearch()
             return
         }
         hideIme()
+        displayedSearches = null
         if (bodyBox.hasFocus() || suggestFrame.hasFocus() || typeFilterFrame.hasFocus()) input.requestFocus()
         keyboardShown = false
         editingKeypad = false
@@ -296,7 +325,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         searchError = null
         suggestJob?.cancel()
         suggestFrame.visibility = View.GONE
-        nav.saveUser(StateAction.AddSearch(q))
+        if (remember) nav.saveUser(StateAction.AddSearch(q))
         searchJob?.cancel()
         val generation = ++searchGeneration
         activeTypeFilter = null
@@ -310,7 +339,9 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 if (destroyed || generation != searchGeneration || input.text.toString().trim() != q) return@launch
                 allResults = found
                 completedQuery = q
+                activeTypeFilter = filter
                 applyTypeFilter(focusGrid = true)
+                if (position in filteredResults.indices) resultsGrid.selectedPosition = position
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (t: Throwable) {
@@ -325,6 +356,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     private fun applyTypeFilter(focusGrid: Boolean) {
+        displayedSearches = null
         keyboardShown = false
         keypad = null
         val presentTypes = MediaType.entries.filter { tp -> allResults.any { it.type == tp } }
@@ -357,6 +389,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     private fun showSearchError(query: String, error: Throwable) {
+        displayedSearches = null
         keyboardShown = false
         keypad = null
         bodyBox.removeAllViews()
@@ -393,6 +426,7 @@ class SearchScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             setPadding(0, Theme.dp(ctx, 10), 0, Theme.dp(ctx, 36))
         }
         val recent = nav.app.userStore.get().searches
+        displayedSearches = recent
         if (recent.isNotEmpty()) {
             val clearBtn = Theme.pillButton(ctx, Copy.Action.CLEAR, padH = 12, padV = 5, sp = 12f).apply {
                 setOnClickListener {

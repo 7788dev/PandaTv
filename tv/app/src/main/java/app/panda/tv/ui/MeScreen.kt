@@ -26,7 +26,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.ensureActive
 
-class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
+class MeScreen(ctx: Context, nav: Navigator, initialTab: String? = null) : Screen(ctx, nav) {
     override val activeTab: String = "me"
 
     private val m = Theme.metrics(ctx)
@@ -51,7 +51,8 @@ class MeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         Theme.bindGridHeaderNavigation(this, columns = 4, onReachEnd = ::onGridEnd) { histTabBtn }
     }
 
-    private var tab = "favorites"
+    private var tab = if (initialTab == "history") "history" else "favorites"
+    override fun saveRoute() = super.saveRoute().apply { putString("tab", tab) }
     private lateinit var favTabBtn: LinearLayout
     private lateinit var histTabBtn: LinearLayout
     private lateinit var clearHistBtn: LinearLayout

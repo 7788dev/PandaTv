@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import { writeFileSync } from 'node:fs'
 import { choose, clickPlayerControl, clickPlayerLocator, contrast, fixtureDesktop, openFixturePlayer, playing, resize, screenshot } from './quality-desktop'
 import { t } from '../src/contract/copy'
+import { extra } from '../src/copy.extra'
 
 let desktop: Awaited<ReturnType<typeof fixtureDesktop>>
 test.beforeEach(async ({}, info) => { desktop = await fixtureDesktop(info.title.replace(/[^a-z0-9]/gi, '-').slice(0, 60)) })
@@ -84,6 +85,64 @@ test('watched numbers and titled episodes remain readable and actionable in the 
   await expect.poll(async () => (await contrast(named.locator('.eplist__num'))).ratio).toBeGreaterThanOrEqual(4.5)
   await screenshot(page, join(dir, 'watched-named-hover.png'))
   writeFileSync(join(dir, 'watched-contrast.json'), JSON.stringify({ detail, hover, focused, namedNumber: number, namedTitle: title }, null, 2))
+})
+
+test('a fully buffered film reaches ended on its original source', async () => {
+  const { page, dir } = desktop
+  await openFixturePlayer(page, 'db-1001')
+  const source = await page.evaluate(() => window.panda.data.sources('db-1001', 1).then(s => s.current))
+  await page.locator('.player__video').evaluate(node => {
+    const video = node as HTMLVideoElement
+    video.currentTime = video.duration - 9
+  })
+  await page.waitForFunction(() => document.querySelector<HTMLVideoElement>('.player__video')?.ended, undefined, { timeout: 25000 })
+  expect(await page.evaluate(() => window.panda.data.sources('db-1001', 1).then(s => s.current))).toBe(source)
+  await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+  await screenshot(page, join(dir, 'buffered-ending.png'))
+})
+
+test('a switch preserves the seek made while its probe is pending', async () => {
+  const { page, dir, network } = desktop
+  await openFixturePlayer(page, 'db-1001')
+  const info = await page.evaluate(() => window.panda.data.sources('db-1001', 1))
+  const target = info.list.find(line => line.key !== 'a' && line.key !== info.current)!
+  // A previously verified zero offset exercises the normal cache-hit path on the next switch.
+  const seeded = await page.evaluate(async ([from, to]) => {
+    const duration = document.querySelector<HTMLVideoElement>('.player__video')!.duration
+    const endpoint = (sourceKey: string) => ({ sourceKey, duration, durationSource: 'mp4-moov' as const })
+    return window.panda.data.align({ workId: 'db-1001', episode: 1, position: 1, from: endpoint(from), to: endpoint(to),
+      capability: 'frames', samples: [{ offsetSeconds: 0, valid: true, similarity: 1 }], elapsedMs: 100 })
+  }, [info.current!, target.key])
+  expect(seeded.verified).toBe(true)
+  const release = network.holdProbe(target.key)
+  const original = await page.locator('.player__video').evaluate(node => (node as HTMLVideoElement).currentSrc)
+  try {
+    await choose(page, '线路', target.name)
+    await page.locator('.seek').focus()
+    await page.keyboard.press('PageUp')
+    await playing(page, 60)
+  } finally { release() }
+  await page.waitForFunction(src => {
+    const video = document.querySelector<HTMLVideoElement>('.player__video')
+    return video && video.currentSrc && video.currentSrc !== src && !video.paused && video.currentTime >= 60
+  }, original)
+  expect(await page.evaluate(() => window.panda.data.sources('db-1001', 1).then(s => s.current))).toBe(target.key)
+  await screenshot(page, join(dir, 'switch-after-seek.png'))
+})
+
+test('rejecting a different cut leaves the original video and source selection active', async () => {
+  const { page, network, dir } = desktop
+  await openFixturePlayer(page)
+  const info = await page.evaluate(() => window.panda.data.sources('db-2001', 1))
+  const target = info.list.find(line => line.key !== 'a' && line.key !== info.current)!
+  network.state.shortPlaylist = target.key
+  const original = await page.locator('.player__video').evaluate(node => (node as HTMLVideoElement).currentSrc)
+  await choose(page, '线路', target.name)
+  await page.getByText(extra.lineSwitchFailed, { exact: true }).first().waitFor()
+  expect(await page.evaluate(() => window.panda.data.sources('db-2001', 1).then(s => s.current))).toBe(info.current)
+  expect(await page.locator('.player__video').evaluate(node => (node as HTMLVideoElement).currentSrc)).toBe(original)
+  await playing(page)
+  await screenshot(page, join(dir, 'rejected-cut.png'))
 })
 
 test('focused seek arrows and page keys seek without consuming global volume shortcuts', async () => {

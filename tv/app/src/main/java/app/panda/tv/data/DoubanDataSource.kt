@@ -24,6 +24,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
@@ -195,123 +196,41 @@ class DoubanDataSource(
     }
 
     private fun refreshHomeInBackground(saved: Map<String, List<MediaItem>>, onUpdate: ((HomeFeed) -> Unit)?) {
-        if (homeInFlight) return
-        homeInFlight = true
+        synchronized(lock) {
+            if (homeInFlight) return
+            homeInFlight = true
+        }
         scope.launch {
             try {
                 val results = fetchAllHomeLists(saved = true)
                 if (results.errors.isNotEmpty()) {
-                    warn(DataWarning("CACHED", "home", "Showing the saved home feed; a new one could not be read", System.currentTimeMillis()))
-                    return@launch
+                    warn(DataWarning("CACHED", "home", "Showing saved shelves whose refresh failed", System.currentTimeMillis()))
                 }
-                val complete = results.lists
-                homeState = CachedHome(System.currentTimeMillis(), complete)
-                saveHome(homeState!!)
-                if (complete != saved) {
-                    onUpdate?.invoke(buildFeed(complete, complete["movies"] ?: emptyList()))
-                }
+                val refreshed = saved + results.lists.filterKeys { it !in results.errors }
+                val at = if (results.errors.isEmpty()) System.currentTimeMillis() else homeState?.at ?: 0L
+                val updated = CachedHome(at, refreshed)
+                homeState = updated
+                if (results.errors.isEmpty() || refreshed != saved) saveHome(updated)
+                if (refreshed != saved) onUpdate?.invoke(buildFeed(refreshed, refreshed["movies"].orEmpty()))
             } finally {
-                homeInFlight = false
+                synchronized(lock) { homeInFlight = false }
             }
         }
     }
 
-    private suspend fun loadFreshHome(onUpdate: ((HomeFeed) -> Unit)?): HomeFeed = coroutineScope {
-        val lists = HashMap<String, List<MediaItem>>()
-        val errors = HashMap<String, Throwable>()
-        val topReady = CompletableDeferred<Result<HomeFeed>>()
-        var revealed = 0
-        var answered = false
-        val stateLock = Any()
-
-        suspend fun again(read: suspend () -> List<MediaItem>): List<MediaItem> {
-            for (pause in homeRetryMs) {
-                try {
-                    return read()
-                } catch (e: DataError) {
-                    if (!e.retryable) throw e
-                    delay(pause)
-                }
-            }
-            return read()
+    private suspend fun loadFreshHome(onUpdate: ((HomeFeed) -> Unit)?): HomeFeed {
+        val result = fetchAllHomeLists(saved = false, onUpdate = onUpdate)
+        if (result.lists.values.all { it.isEmpty() } && result.errors.isNotEmpty()) {
+            throw result.errors.values.first()
         }
-
-        fun shownLocked(): HomeFeed {
-            val visible = LinkedHashMap<String, List<MediaItem>>()
-            for (name in HOME_LISTS) visible[name] = emptyList()
-            for (idx in 0 until revealed) {
-                for (name in HOME_SHELVES[idx]) {
-                    visible[name] = lists[name] ?: emptyList()
-                }
-            }
-            return buildFeed(visible, lists["movies"] ?: emptyList())
+        if (result.errors.isEmpty()) {
+            val complete = CachedHome(System.currentTimeMillis(), result.lists)
+            homeState = complete
+            saveHome(complete)
+        } else {
+            result.errors.forEach { (name, error) -> diagnostic("home:$name", error) }
         }
-
-        val tasks = mapOf<String, suspend () -> List<MediaItem>>(
-            "tv" to { channel(MediaType.TV, ChannelQuery(sort = "hot")).items.take(14) },
-            "movies" to { chartItems("movie_latest", 20).take(14) },
-            "tvRank" to { again { chartItems("tv_hot").take(5) } },
-            "movieRank" to { again { chartItems("movie_real_time_hotest").take(5) } },
-            "animeRank" to { again { chartItems("tv_animation").take(5) } },
-            "variety" to { again { channel(MediaType.VARIETY, ChannelQuery(sort = "hot")).items.take(14) } },
-            "anime" to { again { channel(MediaType.ANIME, ChannelQuery(sort = "hot")).items.take(14) } },
-            "doc" to { again { channel(MediaType.DOC, ChannelQuery(sort = "hot")).items.take(14) } },
-        )
-
-        val jobs = tasks.map { (name, block) ->
-            async(Dispatchers.IO) {
-                try {
-                    val items = block()
-                    synchronized(stateLock) { lists[name] = items }
-                } catch (t: Throwable) {
-                    synchronized(stateLock) {
-                        lists[name] = emptyList()
-                        errors[name] = t
-                    }
-                }
-                var updateFeed: HomeFeed? = null
-                synchronized(stateLock) {
-                    if (!topReady.isCompleted && "tv" in lists && "movies" in lists) {
-                        val topErr = errors["tv"] ?: errors["movies"]
-                        if (topErr != null) {
-                            topReady.complete(Result.failure(topErr))
-                        } else {
-                            answered = true
-                            while (revealed < HOME_SHELVES.size && HOME_SHELVES[revealed].all { it in lists }) {
-                                revealed++
-                            }
-                            topReady.complete(Result.success(shownLocked()))
-                        }
-                    } else if (answered) {
-                        val before = revealed
-                        while (revealed < HOME_SHELVES.size && HOME_SHELVES[revealed].all { it in lists }) {
-                            revealed++
-                        }
-                        if (revealed > before) updateFeed = shownLocked()
-                    }
-                }
-                updateFeed?.let { onUpdate?.invoke(it) }
-            }
-        }
-
-        val initial = topReady.await()
-        if (initial.isFailure) {
-            for (j in jobs) j.cancel()
-            throw initial.exceptionOrNull()!!
-        }
-
-        scope.launch {
-            for (j in jobs) j.join()
-            if (errors.isEmpty()) {
-                val snap = synchronized(stateLock) { HashMap(lists) }
-                val cached = CachedHome(System.currentTimeMillis(), snap)
-                homeState = cached
-                saveHome(cached)
-            } else {
-                for ((name, err) in errors) diagnostic("home:$name", err)
-            }
-        }
-        initial.getOrThrow()
+        return buildFeed(result.lists, result.lists["movies"].orEmpty())
     }
 
     private data class AllListsResult(
@@ -319,42 +238,50 @@ class DoubanDataSource(
         val errors: Map<String, Throwable>,
     )
 
-    private suspend fun fetchAllHomeLists(saved: Boolean): AllListsResult = coroutineScope {
+    private suspend fun fetchAllHomeLists(
+        saved: Boolean,
+        onUpdate: ((HomeFeed) -> Unit)? = null,
+    ): AllListsResult = coroutineScope {
+        val tasks = mapOf<String, suspend () -> List<MediaItem>>(
+            "tv" to { channel(MediaType.TV, ChannelQuery(sort = "hot")).items.take(14) },
+            "movies" to { chartItems("movie_latest", 20).take(14) },
+            "tvRank" to { chartItems("tv_hot").take(5) },
+            "movieRank" to { chartItems("movie_real_time_hotest").take(5) },
+            "animeRank" to { chartItems("tv_animation").take(5) },
+            "variety" to { channel(MediaType.VARIETY, ChannelQuery(sort = "hot")).items.take(14) },
+            "anime" to { channel(MediaType.ANIME, ChannelQuery(sort = "hot")).items.take(14) },
+            "doc" to { channel(MediaType.DOC, ChannelQuery(sort = "hot")).items.take(14) },
+        )
+        val replies = Channel<Pair<String, Result<List<MediaItem>>>>(tasks.size)
+        for ((name, read) in tasks) launch(Dispatchers.IO) {
+            val result = try {
+                val pauses = if (saved || name == "tv" || name == "movies") emptyList() else homeRetryMs
+                var attempt = 0
+                var rows: List<MediaItem>
+                while (true) {
+                    try {
+                        rows = read()
+                        break
+                    } catch (e: DataError) {
+                        if (!e.retryable || attempt >= pauses.size) throw e
+                        delay(pauses[attempt++])
+                    }
+                }
+                Result.success(rows)
+            } catch (cancelled: CancellationException) { throw cancelled }
+            catch (error: Exception) { Result.failure(error) }
+            replies.send(name to result)
+        }
         val lists = LinkedHashMap<String, List<MediaItem>>()
         val errors = LinkedHashMap<String, Throwable>()
-        val pauses = if (saved) emptyList() else homeRetryMs
-        suspend fun runPart(name: String, block: suspend () -> List<MediaItem>) {
-            for (pause in pauses) {
-                try {
-                    val items = block()
-                    synchronized(lists) { lists[name] = items }
-                    return
-                } catch (e: DataError) {
-                    if (!e.retryable) {
-                        synchronized(lists) { lists[name] = emptyList(); errors[name] = e }
-                        return
-                    }
-                    delay(pause)
-                }
-            }
-            try {
-                val items = block()
-                synchronized(lists) { lists[name] = items }
-            } catch (t: Throwable) {
-                synchronized(lists) { lists[name] = emptyList(); errors[name] = t }
+        repeat(tasks.size) {
+            val (name, result) = replies.receive()
+            lists[name] = result.getOrElse { error -> errors[name] = error; emptyList() }
+            // Publish on the caller's context in receive order. The final return contains all replies.
+            if (onUpdate != null && ("tv" in lists && "movies" in lists) && lists.values.any { it.isNotEmpty() }) {
+                onUpdate(buildFeed(lists, lists["movies"].orEmpty()))
             }
         }
-        val jobs = listOf(
-            async { runPart("tv") { channel(MediaType.TV, ChannelQuery(sort = "hot")).items.take(14) } },
-            async { runPart("movies") { chartItems("movie_latest", 20).take(14) } },
-            async { runPart("tvRank") { chartItems("tv_hot").take(5) } },
-            async { runPart("movieRank") { chartItems("movie_real_time_hotest").take(5) } },
-            async { runPart("animeRank") { chartItems("tv_animation").take(5) } },
-            async { runPart("variety") { channel(MediaType.VARIETY, ChannelQuery(sort = "hot")).items.take(14) } },
-            async { runPart("anime") { channel(MediaType.ANIME, ChannelQuery(sort = "hot")).items.take(14) } },
-            async { runPart("doc") { channel(MediaType.DOC, ChannelQuery(sort = "hot")).items.take(14) } },
-        )
-        for (j in jobs) j.join()
         AllListsResult(lists, errors)
     }
 
@@ -918,13 +845,5 @@ class DoubanDataSource(
         private const val HOME_FILE = "home-v1.json"
         private val READ_SIZES = listOf(PAGE_SIZE, 10, 5)
         private val HOME_LISTS = listOf("tv", "movies", "variety", "anime", "doc", "tvRank", "movieRank", "animeRank")
-        private val HOME_SHELVES = listOf(
-            listOf("tv"),
-            listOf("tvRank", "movieRank", "animeRank"),
-            listOf("movies"),
-            listOf("variety"),
-            listOf("anime"),
-            listOf("doc"),
-        )
     }
 }

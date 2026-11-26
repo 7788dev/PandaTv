@@ -25,12 +25,18 @@ import { adultShelf } from '../src/main/adult';
 import { loadSourceRules } from '../src/main/playback/sources';
 import { compareDelivery, compareSourceOrder, playbackMargin } from '../src/main/playback/delivery';
 import { TitleSearchIndex, initialQuery, titleSearchScore, suggestedSubjectIds, type InitialsDictionary } from '../src/shared/title-search';
+import type { ResolvedAlignmentConfig, ResolvedBudgetConfig, ResolvedBufferConfig, ResolvedHealthConfig } from '../src/shared/rules/config';
+import type { BufferSample, DurationHistory, DurationInput, HealthEntry, ScoredSample, SwitchEvent } from '../src/shared/rules/types';
+import { scoreOf, verdictOf } from '../src/shared/rules/health';
+import { bufferThreshold, shouldTakeOver } from '../src/shared/rules/buffer';
+import { evaluateSwitch, isUnavailable, markUnavailableOnce } from '../src/shared/rules/switch-budget';
+import { durationVerdict, pickOffsets, similarity, windowSearch } from '../src/shared/rules/alignment';
 
 const root = resolve(process.cwd());
 const initialsDictionary = JSON.parse(readFileSync(resolve(root, 'resources/search-initials.json'), 'utf8')) as InitialsDictionary;
 const titleVocabulary = readFileSync(resolve(root, 'resources/search-titles.tsv'), 'utf8');
 const titleIndex = new TitleSearchIndex(initialsDictionary, titleVocabulary);
-for (const name of ['search-initials.json', 'search-titles.tsv', 'LICENSE-pinyin-pro.txt']) {
+for (const name of ['search-initials.json', 'search-titles.tsv', 'LICENSE-pinyin-pro.txt', 'rule-calibration.json']) {
   writeFileSync(resolve(root, 'tv/app/src/main/assets', name), readFileSync(resolve(root, 'resources', name)));
 }
 const rulesConfig = loadSourceRules(resolve(root, 'resources/play-sources.json'));
@@ -113,6 +119,219 @@ const aesKey = Buffer.from('0123456789abcdef');
 const aesIv = Buffer.alloc(16, 9);
 const cipher = createCipheriv('aes-128-cbc', aesKey, aesIv);
 const sealedSample = Buffer.concat([cipher.update(Buffer.concat([clearSample, Buffer.alloc(5000, 1)])), cipher.final()]);
+
+const ruleAt = 1_760_000_000_000;
+const healthConfigStandard: ResolvedHealthConfig = {
+  basisVersion: 'calib-a', decayVersion: '1', halfLifeDays: 30, baseline: 0.5,
+  slowStartupSec: 6, playFloorSec: 60, workDeltaMax: 0.2,
+  weights: { availability: 0.4, stability: 0.3, speed: 0.2, quality: 0.1 },
+};
+const healthConfigShortHalfLife: ResolvedHealthConfig = { ...healthConfigStandard, halfLifeDays: 7 };
+const healthEntries: Array<{ label: string; entry: HealthEntry }> = [
+  {
+    label: 'recovered',
+    entry: {
+      sourceKey: 'ffzy', success: 20, failure: { catalogue: 0, probe: 0, firstSegment: 0, stall: 0, alignment: 0 },
+      startupMedian: 1.2, startupWorst: 2.4, playSeconds: 600, stallSeconds: 18, shownQuality: '1080P',
+      lastSuccessAt: ruleAt - 1_000, lastFailureAt: ruleAt - 86_400_000, lastFailureKind: 'probe',
+      score: 0, scoredAt: ruleAt - 86_400_000, decayVersion: '1', cooldownUntil: null, lastAlignmentDegrade: null,
+    },
+  },
+  {
+    label: 'old-failure',
+    entry: {
+      sourceKey: 'lzi', success: 0, failure: { catalogue: 0, probe: 5, firstSegment: 0, stall: 0, alignment: 0 },
+      startupMedian: null, startupWorst: null, playSeconds: 0, stallSeconds: 0, shownQuality: '720P',
+      lastSuccessAt: null, lastFailureAt: ruleAt - 5_184_000_000, lastFailureKind: 'probe',
+      score: 0, scoredAt: ruleAt - 5_184_000_000, decayVersion: '1', cooldownUntil: null, lastAlignmentDegrade: null,
+    },
+  },
+  {
+    label: 'stalling',
+    entry: {
+      sourceKey: 'bfzy', success: 8, failure: { catalogue: 0, probe: 0, firstSegment: 0, stall: 2, alignment: 0 },
+      startupMedian: 2.4, startupWorst: 3.1, playSeconds: 600, stallSeconds: 108, shownQuality: '720P',
+      lastSuccessAt: ruleAt - 3_600_000, lastFailureAt: ruleAt - 600_000, lastFailureKind: 'stall',
+      score: 0, scoredAt: ruleAt - 600_000, decayVersion: '1', cooldownUntil: null, lastAlignmentDegrade: null,
+    },
+  },
+  {
+    label: 'cooled',
+    entry: {
+      sourceKey: '360zy', success: 12, failure: { catalogue: 1, probe: 0, firstSegment: 0, stall: 0, alignment: 0 },
+      startupMedian: 0.9, startupWorst: 1.6, playSeconds: 900, stallSeconds: 12, shownQuality: '1080P',
+      lastSuccessAt: ruleAt - 7_200_000, lastFailureAt: ruleAt - 60_000, lastFailureKind: 'catalogue',
+      score: 0, scoredAt: ruleAt - 3_600_000, decayVersion: '1', cooldownUntil: ruleAt + 60_000, lastAlignmentDegrade: null,
+    },
+  },
+  {
+    label: 'fresh-strong',
+    entry: {
+      sourceKey: 'jyzy', success: 30, failure: { catalogue: 0, probe: 0, firstSegment: 0, stall: 0, alignment: 0 },
+      startupMedian: 0.8, startupWorst: 1.4, playSeconds: 3_000, stallSeconds: 0, shownQuality: '4K',
+      lastSuccessAt: ruleAt - 600_000, lastFailureAt: null, lastFailureKind: null,
+      score: 0, scoredAt: ruleAt - 600_000, decayVersion: '1', cooldownUntil: null, lastAlignmentDegrade: null,
+    },
+  },
+];
+const healthVectors = {
+  configs: { standard: healthConfigStandard, shortHalfLife: healthConfigShortHalfLife },
+  at: ruleAt,
+  cases: healthEntries.map(({ label, entry }) => ({
+    label,
+    entry,
+    outputs: {
+      standard: { score: scoreOf(entry, ruleAt, healthConfigStandard), verdict: verdictOf(entry, ruleAt, healthConfigStandard) },
+      shortHalfLife: { score: scoreOf(entry, ruleAt, healthConfigShortHalfLife), verdict: verdictOf(entry, ruleAt, healthConfigShortHalfLife) },
+    },
+  })),
+};
+
+const bufferConfigStandard: ResolvedBufferConfig = {
+  startupTargetSec: 4, startupWindowSec: 3, playingLowSec: 6,
+  playingRiseWindowSec: 5, seekLowSec: 3, stallPositionSec: 20,
+};
+const bufferConfigHighWater: ResolvedBufferConfig = { ...bufferConfigStandard, playingLowSec: 8 };
+const bufferSamples = {
+  startupLow: [{ at: 0, ahead: 0, position: 0 }, { at: 1_000, ahead: 0, position: 0 }],
+  startupTimeout: [{ at: 0, ahead: 1, position: 0 }, { at: 3_000, ahead: 2, position: 0 }],
+  startupRecovered: [{ at: 0, ahead: 1, position: 0 }, { at: 3_000, ahead: 4, position: 0 }],
+  recovering: [{ at: 0, ahead: 2, position: 100 }, { at: 2_000, ahead: 3, position: 102 }, { at: 4_000, ahead: 5, position: 104 }],
+  falling: [{ at: 0, ahead: 10, position: 100 }, { at: 2_000, ahead: 8, position: 102 }, { at: 4_000, ahead: 5, position: 104 }],
+  flip: [{ at: 0, ahead: 9, position: 100 }, { at: 2_000, ahead: 8, position: 102 }, { at: 4_000, ahead: 7, position: 104 }],
+  seekLow: [{ at: 0, ahead: 2, position: 100 }],
+  stalled: [{ at: 0, ahead: 20, position: 100 }, { at: 21_000, ahead: 20, position: 100 }],
+} satisfies Record<string, BufferSample[]>;
+const bufferCases: Array<{ label: string; scene: 'startup' | 'playing' | 'seek'; samples: BufferSample[]; config: 'standard' | 'highWater' }> = [
+  { label: 'startup-low', scene: 'startup', samples: bufferSamples.startupLow, config: 'standard' },
+  { label: 'startup-timeout', scene: 'startup', samples: bufferSamples.startupTimeout, config: 'standard' },
+  { label: 'startup-recovered', scene: 'startup', samples: bufferSamples.startupRecovered, config: 'standard' },
+  { label: 'buffered-ending', scene: 'playing', samples: [{ at: 0, position: 84, ahead: 6 }, { at: 1000, position: 85, ahead: 5, bufferedToEnd: true }], config: 'standard' },
+  { label: 'stalled-at-buffered-ending', scene: 'playing', samples: [{ at: 0, position: 85, ahead: 5 }, { at: 21000, position: 85, ahead: 5, bufferedToEnd: true }], config: 'standard' },
+  { label: 'recovering', scene: 'playing', samples: bufferSamples.recovering, config: 'standard' },
+  { label: 'falling', scene: 'playing', samples: bufferSamples.falling, config: 'standard' },
+  { label: 'seek-low', scene: 'seek', samples: bufferSamples.seekLow, config: 'standard' },
+  { label: 'stalled', scene: 'playing', samples: bufferSamples.stalled, config: 'standard' },
+  { label: 'threshold-flip', scene: 'playing', samples: bufferSamples.flip, config: 'highWater' },
+];
+const bufferVectors = {
+  configs: { standard: bufferConfigStandard, highWater: bufferConfigHighWater },
+  thresholds: {
+    standard: {
+      startup: bufferThreshold('startup', bufferConfigStandard),
+      playing: bufferThreshold('playing', bufferConfigStandard),
+      seek: bufferThreshold('seek', bufferConfigStandard),
+    },
+    highWater: {
+      startup: bufferThreshold('startup', bufferConfigHighWater),
+      playing: bufferThreshold('playing', bufferConfigHighWater),
+      seek: bufferThreshold('seek', bufferConfigHighWater),
+    },
+  },
+  cases: bufferCases.map(({ label, scene, samples, config }) => ({
+    label, scene, samples, config,
+    output: shouldTakeOver(scene, samples, config === 'standard' ? bufferConfigStandard : bufferConfigHighWater),
+  })),
+};
+
+const budgetConfigStandard: ResolvedBudgetConfig = { maxSwitchesPerEpisode: 3, minIntervalSec: 30, failedSourceCooldownSec: 300 };
+const budgetConfigTight: ResolvedBudgetConfig = { ...budgetConfigStandard, maxSwitchesPerEpisode: 2 };
+const budgetEvents = {
+  first: [] as SwitchEvent[],
+  limit: [
+    { at: ruleAt - 120_000, mode: 'auto' },
+    { at: ruleAt - 90_000, mode: 'auto' },
+    { at: ruleAt - 60_000, mode: 'auto' },
+  ] as SwitchEvent[],
+  interval: [{ at: ruleAt - 10_000, mode: 'auto' }] as SwitchEvent[],
+  manual: [
+    { at: ruleAt - 1_000, mode: 'manual' },
+    { at: ruleAt - 2_000, mode: 'manual' },
+    { at: ruleAt - 3_000, mode: 'manual' },
+  ] as SwitchEvent[],
+  tight: [
+    { at: ruleAt - 120_000, mode: 'auto' },
+    { at: ruleAt - 90_000, mode: 'auto' },
+  ] as SwitchEvent[],
+};
+const budgetCases: Array<{ label: string; events: SwitchEvent[]; config: 'standard' | 'tight' }> = [
+  { label: 'first', events: budgetEvents.first, config: 'standard' },
+  { label: 'limit', events: budgetEvents.limit, config: 'standard' },
+  { label: 'interval', events: budgetEvents.interval, config: 'standard' },
+  { label: 'manual', events: budgetEvents.manual, config: 'standard' },
+  { label: 'tight-limit', events: budgetEvents.tight, config: 'tight' },
+];
+const unavailableMark = markUnavailableOnce('b', ruleAt, budgetConfigStandard);
+const budgetVectors = {
+  configs: { standard: budgetConfigStandard, tight: budgetConfigTight },
+  at: ruleAt,
+  cases: budgetCases.map(({ label, events, config }) => ({
+    label, events, config,
+    output: evaluateSwitch(events, ruleAt, config === 'standard' ? budgetConfigStandard : budgetConfigTight),
+  })),
+  mark: {
+    sourceKey: unavailableMark.sourceKey,
+    until: unavailableMark.until,
+    unavailableAt: ruleAt + 299_000,
+    availableAt: ruleAt + 300_000,
+    unavailable: isUnavailable(unavailableMark, ruleAt + 299_000),
+    available: isUnavailable(unavailableMark, ruleAt + 300_000),
+  },
+};
+
+const alignmentConfigStandard: ResolvedAlignmentConfig = {
+  basisVersion: 'calib-a', ratioTolerance: 0.001, absoluteToleranceSec: 5,
+  historyConsistencyRatio: 0.05, workSpreadFactor: 4, windowSeconds: 3,
+  sampleLimit: 5, frameBudgetMs: 1_200, similarityThreshold: 0.9,
+  offsetTtlDays: 7, takeoverHeadroomFactor: 1.5,
+};
+const alignmentConfigStrict: ResolvedAlignmentConfig = { ...alignmentConfigStandard, ratioTolerance: 0.0005, absoluteToleranceSec: 1 };
+const durationInput = (from: number | null, to: number | null): DurationInput => ({
+  fromSeconds: from, fromSource: from === null ? 'missing' : 'hls-extinf',
+  toSeconds: to, toSource: to === null ? 'missing' : 'hls-extinf',
+});
+const emptyDurationHistory: DurationHistory = { sourceSamples: [], workRatios: [] };
+const durationCases: Array<{ label: string; input: DurationInput; history: DurationHistory; config: 'standard' | 'strict' }> = [
+  { label: 'missing', input: durationInput(1200, null), history: emptyDurationHistory, config: 'standard' },
+  { label: 'longer', input: durationInput(1200, 1205), history: emptyDurationHistory, config: 'standard' },
+  { label: 'shorter', input: durationInput(1200, 1195), history: emptyDurationHistory, config: 'standard' },
+  { label: 'strict-suspect', input: durationInput(1200, 1205), history: emptyDurationHistory, config: 'strict' },
+  { label: 'history-conflict', input: durationInput(1200, 1205), history: { sourceSamples: [1200, 1500], workRatios: [] }, config: 'standard' },
+  { label: 'work-outlier', input: durationInput(1200, 1210), history: { sourceSamples: [], workRatios: [0.001, 0.001, 0.001] }, config: 'standard' },
+];
+const similarityCases = [
+  { label: 'same', a: { valid: true, hash: 'ffffffffffffffff' }, b: { valid: true, hash: 'ffffffffffffffff' } },
+  { label: 'opposite', a: { valid: true, hash: 'ffffffffffffffff' }, b: { valid: true, hash: '0000000000000000' } },
+  { label: 'invalid', a: { valid: false, hash: 'ffffffffffffffff' }, b: { valid: true, hash: 'ffffffffffffffff' } },
+];
+const windowSamples: ScoredSample[] = [
+  { offsetSeconds: 0, similarity: 0.2, valid: true },
+  { offsetSeconds: 1, similarity: 0.95, valid: true },
+  { offsetSeconds: 2, similarity: 0.4, valid: true },
+];
+const alignmentVectors = {
+  configs: { standard: alignmentConfigStandard, strict: alignmentConfigStrict },
+  duration: durationCases.map(({ label, input, history, config }) => ({
+    label, input, history, config,
+    output: durationVerdict(input, history, config === 'standard' ? alignmentConfigStandard : alignmentConfigStrict),
+  })),
+  offsets: [
+    { label: 'delta', input: durationInput(1200, 1205), config: 'standard' },
+    { label: 'missing', input: durationInput(1200, null), config: 'standard' },
+  ].map(({ label, input, config }) => ({
+    label, input, config,
+    output: pickOffsets(input, config === 'standard' ? alignmentConfigStandard : alignmentConfigStrict),
+  })),
+  similarity: similarityCases.map(({ label, a, b }) => ({ label, a, b, output: similarity(a, b) })),
+  window: [
+    { label: 'best', anchors: [0, 5, -5], samples: windowSamples, elapsedMs: 400, config: 'standard' },
+    { label: 'over-budget', anchors: [0], samples: windowSamples.slice(0, 1), elapsedMs: 1_201, config: 'standard' },
+    { label: 'no-match', anchors: [0], samples: [{ offsetSeconds: 1, similarity: 0.5, valid: true }], elapsedMs: 100, config: 'standard' },
+  ].map(({ label, anchors, samples, elapsedMs, config }) => ({
+    label, anchors, samples, elapsedMs, config,
+    output: windowSearch(anchors, samples, elapsedMs, config === 'standard' ? alignmentConfigStandard : alignmentConfigStrict),
+  })),
+};
 
 const vectors = {
   mp4Heads: [
@@ -329,6 +548,10 @@ const vectors = {
       shortLength: clearHead(sealedSample.subarray(0, 10), aesKey, aesIv).length,
     },
   },
+  health: healthVectors,
+  buffer: bufferVectors,
+  budget: budgetVectors,
+  alignment: alignmentVectors,
 };
 
 const outPath = resolve(root, 'tv/app/src/test/resources/golden-vectors.json');

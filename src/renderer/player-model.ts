@@ -16,6 +16,18 @@ export function bufferedRanges(buffered: TimeRanges, duration: number): { start:
   if (!Number.isFinite(duration) || duration <= 0) return []
   return Array.from({ length: buffered.length }, (_, i) => ({ start: Math.max(0, buffered.start(i)), end: Math.min(duration, buffered.end(i)) })).filter(range => range.end > range.start)
 }
+/** Only the range containing the playhead can supply the next frame. */
+export function playbackBuffer(buffered: TimeRanges, position: number, duration: number) {
+  for (let i = 0; i < buffered.length; i++) {
+    const end = buffered.end(i)
+    if (buffered.start(i) <= position && position <= end) {
+      // Media tracks can end a fraction of a frame apart.
+      return { ahead: end - position, bufferedToEnd: Number.isFinite(duration) && duration > 0 && end >= duration - 0.05 }
+    }
+  }
+  return { ahead: 0, bufferedToEnd: false }
+}
+
 /** Position when the media actually moved; undefined while it stands still or is seeking. */
 export function playbackProgress(previous: number, current: number, seeking: boolean): number | undefined {
   if (seeking || !Number.isFinite(current) || current < 0) return undefined

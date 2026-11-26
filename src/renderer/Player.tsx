@@ -9,13 +9,18 @@ import { clock, endPosition, episodeHeading, resumePosition, showSkipIntro, spee
 import { fmt, t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import type { PlaySources } from '../shared/api'
+import type { PlaybackRuntimeRules } from '../shared/api'
+import { evaluateSwitch } from '../shared/rules/switch-budget'
+import { shouldTakeOver } from '../shared/rules/buffer'
+import type { BufferSample, BufferScene, SwitchEvent } from '../shared/rules/types'
 import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './components'
 import { errorText, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
-import { bufferedRanges, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
-import { createFrameRateState, FRAME_SAMPLE_MS, sampleFrameRate } from './playback-adaptation'
+import { bufferedRanges, playbackBuffer, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
+import { createFrameRateState, sampleFrameRate } from './playback-adaptation'
 import { playbackPreferences as sessionPreferences } from './playback-preferences'
 import { StartupWatchdog } from './startup-watchdog'
+import { scorePlaybackOffsets, videoFrameSample, waitForSeek } from './playback-alignment'
 
 /** The quality the player will ask for; whoever prepares an episode ahead must ask for the same. */
 export const wantedQuality = (settings: { quality: Quality }) => sessionPreferences.wantedQuality(settings)
@@ -30,8 +35,6 @@ const RESOLVE_TRIES = 2
 const RESOLVE_AGAIN_MS = 800
 const FINAL_ANSWERS: string[] = [extra.sourceUnavailable, extra.noEpisode, extra.notFound, extra.invalidInput, extra.unsupportedPlayback]
 const finalAnswer = (error: unknown) => error instanceof Error && FINAL_ANSWERS.includes(error.message)
-/** After this much unbroken playback an earlier failure no longer counts against the episode. */
-const HEALTHY_MS = 60_000
 /** The next episode is prepared when this little of the current one is left. */
 const PREPARE_NEXT_SECONDS = 90
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value))
@@ -76,7 +79,15 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const prepared = useRef(false)
   const started = useRef(false)
   const savingAt = useRef(0)
-  const autoAttempts = useRef(0)
+  const switchEvents = useRef<SwitchEvent[]>([])
+  const bufferSamples = useRef<BufferSample[]>([])
+  const detachMedia = useRef<(() => void) | undefined>(undefined)
+  const installed = useRef<Playback | undefined>(undefined)
+  const [currentMedia, setCurrentMedia] = useState<Playback>()
+  const seekRevision = useRef(0)
+  const pendingSwitch = useRef<AbortController | undefined>(undefined)
+  const bufferScene = useRef<BufferScene>('playing')
+  const playbackRules = useRef<PlaybackRuntimeRules | undefined>(undefined)
   const autoAdvanced = useRef(false)
   const mounted = useRef(true)
   const idleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -88,8 +99,13 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [speed, setSpeed] = useState<Speed>(activeSpeed.current)
   const [volume, setVolumeState] = useState(state.settings.volume)
   const [muted, setMuted] = useState(state.settings.muted)
-  const [request, setRequest] = useState<{ revision: number; retry: boolean; from?: string }>({ revision: 0, retry: false })
-  const playback = useRemote(() => request.from ? window.panda.data.playbackFrom(item.id, episode, request.from, quality) : (request.retry ? window.panda.data.retryPlayback : window.panda.data.playback)(item.id, episode, quality), [item.id, episode, quality, request.revision], true, request.revision)
+  const [request, setRequest] = useState<{ revision: number; retry: boolean; retryFailure?: 'probe' | 'stall'; from?: string }>({ revision: 0, retry: false })
+  const playback = useRemote(() => {
+    if (installed.current || request.from || request.retry) return window.panda.data.prepareSwitch(item.id, episode, {
+      quality, from: request.from, retry: request.retry, failure: request.retry ? request.retryFailure : undefined,
+    })
+    return window.panda.data.playback(item.id, episode, quality)
+  }, [item.id, episode, quality, request.revision], true, request.revision)
   const [lines, setLines] = useState<PlaySources>()
   const [problem, setProblem] = useState<unknown>(null)
   const [resolveTries, setResolveTries] = useState(0)
@@ -97,6 +113,11 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [askedAgain, setAskedAgain] = useState<unknown>(null)
   const resolvingAgain = Boolean(playback.error) && (playback.error === askedAgain || (!finalAnswer(playback.error) && resolveTries < RESOLVE_TRIES))
   useEffect(() => { sessionPreferences.observeDefaults(state.settings) }, [state.settings])
+  useEffect(() => {
+    let active = true
+    void window.panda.data.playbackRules().then(value => { if (active) playbackRules.current = value }, () => {})
+    return () => { active = false }
+  }, [])
   useEffect(() => { setResolveTries(0) }, [item.id, episode])
   useEffect(() => { if (playback.data) setResolveTries(0) }, [playback.data])
   useEffect(() => {
@@ -118,16 +139,16 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [osd, setOsd] = useState<{ name: IconName; text: string } | null>(null)
   const [levels, setLevels] = useState<{ quality: Quality; index: number; bitrate: number }[]>([])
   const [actualQuality, setActualQuality] = useState<Quality | undefined>()
-  const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data })
-  latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, playback: playback.data }
+  const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted })
+  latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted }
   const bridgingActiveLine = Boolean(bridgeActive.current && sourceHealthy.current && activeSource.current && started.current && video.current)
   const hasNext = Boolean(item.episodes && episode < item.episodes)
   const error = (resolvingAgain || bridgingActiveLine ? null : playback.error) || problem
   const busy = (!bridgingActiveLine && playback.loading) || waiting || (resolvingAgain && !bridgingActiveLine)
   const position = dragPosition ?? time.position
-  const end = endPosition(playback.data ?? {}, time.duration, state.settings)
+  const end = endPosition(currentMedia ?? {}, time.duration, state.settings)
   const upNext = time.duration > 0 ? upNextSeconds(time.position, end, { hasNext, autoNext: state.settings.autoNext, cancelled }) : null
-  const choices = levels.length > 1 ? QUALITIES.filter(q => levels.some(level => level.quality === q)) : playback.data?.qualities ?? []
+  const choices = levels.length > 1 ? QUALITIES.filter(q => levels.some(level => level.quality === q)) : currentMedia?.qualities ?? []
   const level = muted ? 0 : volume
 
   const wake = () => {
@@ -178,6 +199,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const seekTo = (seconds: number) => {
     const v = video.current
     if (!v || !Number.isFinite(v.duration) || v.duration <= 0) return
+    seekRevision.current++
     v.currentTime = clamp(seconds, 0, v.duration)
     setTime(value => ({ ...value, position: v.currentTime }))
     autoAdvanced.current = false
@@ -212,7 +234,19 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     const v = video.current
     retryPosition.current = v && v.currentTime > 0 ? v.currentTime : intended.current || null
   }
-  const retry = (automatic = false) => {
+  const retry = (automatic = false, failure?: 'probe' | 'stall') => {
+    if (automatic) {
+      const allowed = playbackRules.current
+        ? evaluateSwitch(switchEvents.current, Date.now(), playbackRules.current.budget).allowed
+        : switchEvents.current.length < 2
+      if (!allowed) {
+        setProblem(new Error(extra.playerRetry)); setWaiting(false); setIdle(false)
+        return
+      }
+      switchEvents.current.push({ at: Date.now(), mode: 'auto' })
+      showOsd('refresh', extra.restoringSource)
+    }
+    pendingSwitch.current?.abort()
     keepPosition()
     void save()
     const canBridge = Boolean(sourceHealthy.current && activeSource.current && started.current && video.current && video.current.readyState >= 2)
@@ -220,11 +254,13 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     handoffPending.current ||= Boolean(started.current && video.current && video.current.readyState >= 2)
     bridgeActive.current = canBridge
     setProblem(null); setWaiting(!canBridge); setReady(canBridge); setIdle(false)
-    if (!automatic) { autoAttempts.current = 0; setResolveTries(0) }
-    setRequest(value => ({ revision: value.revision + 1, retry: true, from: undefined }))
+    if (!automatic) setResolveTries(0)
+    setRequest(value => ({ revision: value.revision + 1, retry: true, retryFailure: failure, from: undefined }))
   }
   const changeLine = (key: string) => {
     if (key === lines?.current) return
+    pendingSwitch.current?.abort()
+    bufferSamples.current = []
     keepPosition()
     void save()
     playRequested.current = video.current?.paused !== true
@@ -233,11 +269,12 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     bridgeActive.current = canBridge
     fallbackRequested.current = false
     setProblem(null); setWaiting(!canBridge); setReady(canBridge); setIdle(false)
-    autoAttempts.current = 0; setResolveTries(0)
+    setResolveTries(0)
     showOsd('refresh', extra.switchingLine)
     setRequest(value => ({ revision: value.revision + 1, retry: false, from: key }))
   }
   const changeQuality = (value: Quality) => {
+    pendingSwitch.current?.abort()
     sessionPreferences.quality = value
     const target = qualityLevelIndex(levels, value)
     if (hls.current && target !== undefined && levels.length > 1) { hls.current.currentLevel = target; hls.current.autoLevelCapping = target; setActualQuality(value); setQuality(value); return }
@@ -255,6 +292,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   }
   const toggleFullscreen = () => void window.panda.window.fullscreen(!fullscreen).catch(error => notify(errorText(error)))
   const leave = () => {
+    pendingSwitch.current?.abort()
     void save()
     void window.panda.window.fullscreen(false).catch(error => notify(errorText(error)))
     back('/detail/' + item.id)
@@ -338,216 +376,332 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     wake()
   }, [panelOpen])
 
+  useEffect(() => () => {
+    pendingSwitch.current?.abort()
+    detachMedia.current?.()
+    detachMedia.current = undefined
+    installed.current = undefined
+    activeSource.current = null
+  }, [])
+
   useEffect(() => {
     const v = video.current
     const source = playback.data
-    if (!v || !source) return
-    activeSource.current = null
-    sourceHealthy.current = false
-    setProblem(null); setWaiting(true); setReady(false); setPaused(!playRequested.current); setLevels([]); setActualQuality(source.quality)
-    v.volume = latest.current.volume; v.muted = latest.current.muted
-    v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
-    let active = true, failed = false, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now(), playingSince = 0
-    let frameState = createFrameRateState()
-    let lastPosition = -1
-    const startAt = (retryPosition.current ?? resumePosition(initialHistory.current, episode)) || startPosition(source, latest.current.settings)
-    intended.current = startAt
-    const alive = () => { progressAt = Date.now() }
-    const listeners: Array<[string, EventListener]> = []
-    const on = (name: string, listener: () => void) => { v.addEventListener(name, listener); listeners.push([name, listener]) }
-    const refresh = () => {
-      if (!active) return
-      const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0
-      if (handoffPending.current && !sourceStarted) return
-      setTime({ position: v.currentTime || 0, duration, buffered: bufferedRanges(v.buffered, duration) })
-    }
-    const fail = () => {
-      if (!active || failed) return
-      failed = true
-      sourceHealthy.current = false
-      v.pause()
-      if (autoAttempts.current < 2) { autoAttempts.current++; showOsd('refresh', extra.restoringSource); retry(true) }
-      else { setProblem(new Error(extra.playerRetry)); setWaiting(false); setIdle(false) }
-    }
-    const startup = new StartupWatchdog(START_MS, () => { if (active && !sourceStarted && playRequested.current) fail() })
-    startupWatch.current = startup
-    const advance = () => {
-      const current = latest.current
-      if (current.settings.autoNext && !current.cancelled) next()
-      else v.pause()
-      void save()
-    }
-    on('loadedmetadata', () => {
-      if (!Number.isFinite(v.duration) || v.duration <= 0) return fail()
-      v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
-      setSpeed(activeSpeed.current)
-      setReady(true)
-      if (!positioned) {
-        positioned = true
-        retryPosition.current = null
-        // hls.js has already started there; a file is moved to it here.
-        if (startAt > 0 && Math.abs(v.currentTime - startAt) > 1) v.currentTime = clamp(startAt, 0, Math.max(0, v.duration - 0.1))
+    if (!v || !source || playback.loading || playback.error || source === installed.current) return
+    const controller = new AbortController()
+    pendingSwitch.current = controller
+    const { signal } = controller
+    const initialize = async () => {
+      const origin = activeSource.current
+      const fromKey = origin?.sourceKey
+      let offset = 0
+      if (origin && fromKey && source.sourceKey && fromKey !== source.sourceKey) {
+        const rules = playbackRules.current ?? await window.panda.data.playbackRules()
+        // A seek during frame verification invalidates the old anchor. The old media
+        // stays attached and retains its clock, event handlers and playback intent.
+        for (;;) {
+          signal.throwIfAborted()
+          if (v.seeking) await waitForSeek(v, signal)
+          const revision = seekRevision.current
+          const position = v.currentTime
+          const startedAt = performance.now()
+          const input = {
+            workId: item.id, episode, position,
+            from: { sourceKey: fromKey, duration: origin.duration, durationSource: origin.durationSource, fingerprint: origin.manifestFingerprint },
+            to: { sourceKey: source.sourceKey, duration: source.duration, durationSource: source.durationSource, fingerprint: source.manifestFingerprint },
+            capability: 'frames' as const,
+            elapsedMs: 0,
+          }
+          let verdict = await window.panda.data.align(input)
+          signal.throwIfAborted()
+          if (revision !== seekRevision.current) continue
+          if (verdict.candidateOffsets?.length) {
+            const frame = videoFrameSample(v)
+            if (!frame.valid) throw new Error('frames-unavailable')
+            const samplePosition = v.currentTime
+            const remaining = rules.alignment.frameBudgetMs - (performance.now() - startedAt)
+            if (remaining <= 0) throw new Error('over-budget')
+            const samples = await scorePlaybackOffsets(source, samplePosition, verdict.candidateOffsets.slice(0, rules.alignment.sampleLimit), frame, remaining, signal)
+            signal.throwIfAborted()
+            if (revision !== seekRevision.current) continue
+            verdict = await window.panda.data.align({ ...input, position: samplePosition, samples, elapsedMs: performance.now() - startedAt })
+          }
+          signal.throwIfAborted()
+          if (revision !== seekRevision.current) continue
+          if (verdict.offsetSeconds === undefined || (verdict.layer !== 'offset-cache' && !verdict.verified)) throw new Error(verdict.reason ?? 'no-match')
+          offset = verdict.offsetSeconds
+          break
+        }
       }
-      refresh()
-      if (playRequested.current) void v.play().catch(error => { if (error.name === 'NotAllowedError') { sourceStarted = true; setPaused(true); setWaiting(false) } else if (error.name !== 'AbortError') fail() })
-    })
-    on('durationchange', refresh); on('progress', refresh)
-    on('play', () => { startup.setEnabled(playRequested.current); setPaused(false); wake() })
-    const takeOver = () => {
-      startup.finish()
-      sourceStarted = true; started.current = true; activeSource.current = source; sourceHealthy.current = true
+      signal.throwIfAborted()
+      if (source.selectionId !== undefined && !await window.panda.data.acceptSwitch(item.id, episode, source.selectionId)) throw new Error(extra.lineSwitchFailed)
+      signal.throwIfAborted()
+      const startAt = origin ? Math.max(0, v.currentTime + offset)
+        : (retryPosition.current ?? resumePosition(initialHistory.current, episode)) || startPosition(source, latest.current.settings)
+      detachMedia.current?.()
+      installed.current = source
+      setCurrentMedia(source)
+      activeSource.current = null
+      started.current = false
+      sourceHealthy.current = false
+      setProblem(null); setWaiting(true); setReady(false); setPaused(!playRequested.current); setLevels([]); setActualQuality(source.quality)
+      v.volume = latest.current.volume; v.muted = latest.current.muted
+      v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
+      let active = true, failed = false, recovered = false, positioned = false, sourceStarted = false, progressAt = Date.now()
+      bufferScene.current = 'playing'
+      let frameState = createFrameRateState()
+      let lastPosition = -1
+      intended.current = startAt
+      let lastHealthAt = Date.now()
+      let lastHealthPosition = v.currentTime
+      let buffering = false
+      let nextHealthFlush = Date.now() + 5000
+      let healthPlaySeconds = 0
+      let healthStallSeconds = 0
+      bufferSamples.current = [{ at: Date.now(), ahead: 0, position: v.currentTime }]
+      const alive = () => { progressAt = Date.now() }
+      const listeners: Array<[string, EventListener]> = []
+      const on = (name: string, listener: () => void) => { v.addEventListener(name, listener); listeners.push([name, listener]) }
+      const refresh = () => {
+        if (!active) return
+        const duration = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0
+        if (handoffPending.current && !sourceStarted) return
+        setTime({ position: v.currentTime || 0, duration, buffered: bufferedRanges(v.buffered, duration) })
+      }
+      const fail = () => {
+        if (!active || failed) return
+        failed = true
+        sourceHealthy.current = false
+        v.pause()
+        retry(true, sourceStarted ? 'stall' : 'probe')
+      }
+      const startup = new StartupWatchdog(START_MS, () => { if (active && !sourceStarted && playRequested.current) fail() })
+      startupWatch.current = startup
+      const advance = () => {
+        const current = latest.current
+        if (current.settings.autoNext && !current.cancelled) next()
+        else v.pause()
+        void save()
+      }
+      on('loadedmetadata', () => {
+        if (!Number.isFinite(v.duration) || v.duration <= 0) return fail()
+        v.defaultPlaybackRate = activeSpeed.current; v.playbackRate = activeSpeed.current
+        setSpeed(activeSpeed.current)
+        setReady(true)
+        if (!positioned) {
+          positioned = true
+          retryPosition.current = null
+          // hls.js has already started there; a file is moved to it here.
+          if (startAt > 0 && Math.abs(v.currentTime - startAt) > 1) v.currentTime = clamp(startAt, 0, Math.max(0, v.duration - 0.1))
+        }
+        refresh()
+        if (playRequested.current) void v.play().catch(error => { if (error.name === 'NotAllowedError') { sourceStarted = true; setPaused(true); setWaiting(false) } else if (error.name !== 'AbortError') fail() })
+      })
+      on('durationchange', refresh); on('progress', refresh)
+      on('play', () => { startup.setEnabled(playRequested.current); setPaused(false); wake() })
+      const takeOver = () => {
+        startup.finish()
+        sourceStarted = true; started.current = true; activeSource.current = source; sourceHealthy.current = true
+        bufferScene.current = 'playing'; bufferSamples.current = []
+        handoffPending.current = false
+        bridgeActive.current = false
+        if (handoff.current?.hasAttribute('data-visible')) {
+          handoff.current?.removeAttribute('data-visible')
+          clearTimeout(handoffTimer.current)
+          handoffTimer.current = setTimeout(() => { if (!handoff.current?.hasAttribute('data-visible')) handoff.current?.removeAttribute('src') }, 240)
+        }
+      }
+      on('playing', () => {
+        takeOver(); alive()
+        buffering = false
+        try {
+          const quality = v.getVideoPlaybackQuality()
+          frameState = createFrameRateState()
+          frameState = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current).state
+        } catch { frameState = createFrameRateState() }
+        setPaused(false); setWaiting(false); refresh(); wake()
+      })
+      on('pause', () => { startup.setEnabled(false); frameState = createFrameRateState(); setPaused(true); setWaiting(false); setIdle(false); void save() })
+      on('waiting', () => { frameState = createFrameRateState(); buffering = true; if (!v.paused) setWaiting(true) })
+      on('seeking', () => { seekRevision.current++; frameState = createFrameRateState(); bufferSamples.current = []; alive(); setWaiting(!v.paused); refresh() })
+      on('seeked', () => { frameState = createFrameRateState(); buffering = false; bufferScene.current = 'seek'; setWaiting(false); refresh(); void save() })
+      on('canplay', () => {
+        frameState = createFrameRateState(); setWaiting(false); refresh()
+        if (!playRequested.current && !v.seeking) { takeOver(); setPaused(true) }
+      })
+      on('timeupdate', () => {
+        refresh()
+        const current = latest.current
+        // The next episode's source is chosen before this one ends, so it starts without a wait.
+        if (!prepared.current && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS && current.item.episodes && episode < current.item.episodes) {
+          prepared.current = true
+          void window.panda.data.playback(item.id, episode + 1, wantedQuality(current.settings)).catch(() => {})
+        }
+        if (!v.paused && current.settings.skipIntro && source.intro && v.currentTime >= source.intro.start && v.currentTime < source.intro.end) v.currentTime = Math.min(source.intro.end, v.duration)
+        if (started.current && Date.now() - savingAt.current >= HISTORY_SAVE_SECONDS * 1000) void save()
+        if (source.outro !== undefined && current.settings.skipIntro && v.currentTime >= source.outro && source.outro < v.duration) advance()
+      })
+      on('ended', advance)
+      on('error', () => { if (!hls.current) fail() })
+      if (source.format === 'hls' && Hls.isSupported()) {
+        // Keep a larger forward buffer for the rotating public CDNs, while bounding the reverse
+        // buffer so long viewing sessions do not retain hundreds of megabytes in the renderer.
+        // Failed fragments retry briefly, then the player watchdog can move to another source.
+        const instance = new Hls({
+          enableWorker: true,
+          capLevelToPlayerSize: true,
+          startFragPrefetch: true,
+          maxBufferLength: 90,
+          maxMaxBufferLength: 180,
+          maxBufferSize: 96 * 1000 * 1000,
+          maxBufferHole: 0.2,
+          backBufferLength: 30,
+          manifestLoadPolicy: {
+            default: {
+              maxTimeToFirstByteMs: 8_000,
+              maxLoadTimeMs: 15_000,
+              timeoutRetry: { maxNumRetry: 1, retryDelayMs: 0, maxRetryDelayMs: 0 },
+              errorRetry: { maxNumRetry: 2, retryDelayMs: 500, maxRetryDelayMs: 4_000 },
+            },
+          },
+          playlistLoadPolicy: {
+            default: {
+              maxTimeToFirstByteMs: 8_000,
+              maxLoadTimeMs: 15_000,
+              timeoutRetry: { maxNumRetry: 1, retryDelayMs: 0, maxRetryDelayMs: 0 },
+              errorRetry: { maxNumRetry: 3, retryDelayMs: 500, maxRetryDelayMs: 4_000 },
+            },
+          },
+          fragLoadPolicy: {
+            default: {
+              maxTimeToFirstByteMs: 10_000,
+              maxLoadTimeMs: 45_000,
+              timeoutRetry: { maxNumRetry: 2, retryDelayMs: 0, maxRetryDelayMs: 0 },
+              errorRetry: { maxNumRetry: 3, retryDelayMs: 500, maxRetryDelayMs: 8_000 },
+            },
+          },
+          startPosition: startAt > 0 ? startAt : -1,
+        })
+        hls.current = instance
+        instance.on(Hls.Events.MANIFEST_PARSED, (_event, manifest) => {
+          const actual = manifest.levels.flatMap((level, index) => { const quality = resolutionQuality(level.width, level.height); return quality ? [{ quality, index, bitrate: level.bitrate }] : [] })
+          setLevels(actual)
+          const preferred = qualityLevelIndex(actual, sessionPreferences.quality ?? quality)
+          if (preferred !== undefined) { instance.currentLevel = preferred; instance.autoLevelCapping = preferred }
+        })
+        instance.on(Hls.Events.LEVEL_SWITCHED, (_event, event) => {
+          const level = instance.levels[event.level]
+          if (level) setActualQuality(resolutionQuality(level.width, level.height))
+        })
+        instance.on(Hls.Events.ERROR, (_event, error) => {
+          if (!error.fatal || !active) return
+          if (error.type === Hls.ErrorTypes.MEDIA_ERROR && !recovered) { recovered = true; instance.recoverMediaError() }
+          else fail()
+        })
+        instance.loadSource(source.url); instance.attachMedia(v)
+      } else if (source.format === 'mp4' || v.canPlayType('application/vnd.apple.mpegurl')) v.src = source.url
+      else { setProblem(new Error(extra.unsupportedPlayback)); setWaiting(false) }
+      startup.setEnabled(playRequested.current)
+      // A source can die in the middle of an episode without ever reporting an error.
+      const watchdog = setInterval(() => {
+        const now = Date.now()
+        const elapsed = Math.min(5, Math.max(0, (now - lastHealthAt) / 1000))
+        lastHealthAt = now
+        if (sourceStarted && !v.paused && !v.ended) {
+          if (buffering || Math.abs(v.currentTime - lastHealthPosition) < 0.05) healthStallSeconds += elapsed
+          else healthPlaySeconds += elapsed
+        }
+        lastHealthPosition = v.currentTime
+        if (sourceStarted && source.sourceKey && now >= nextHealthFlush) {
+          nextHealthFlush = now + 5000
+          const play = healthPlaySeconds, stall = healthStallSeconds
+          healthPlaySeconds = 0; healthStallSeconds = 0
+          void window.panda.sources.observe(source.sourceKey, play, stall).catch(() => {})
+        }
+        if (v.paused || v.ended || v.seeking || latest.current.problem) {
+          lastPosition = v.currentTime; alive(); return
+        }
+        const rules = playbackRules.current
+        if (rules) {
+          const sample = { at: now, position: v.currentTime, ...playbackBuffer(v.buffered, v.currentTime, v.duration) }
+          bufferSamples.current = [...bufferSamples.current.filter(value => now - value.at <= 30_000), sample]
+          const scene = sourceStarted ? bufferScene.current : 'startup'
+          bufferScene.current = 'playing'
+          if (shouldTakeOver(scene, bufferSamples.current, rules.buffer).takeOver) {
+            alive(); fail(); return
+          }
+        }
+        if (!sourceStarted) return
+        const advanced = playbackProgress(lastPosition, v.currentTime, v.seeking)
+        if (advanced !== undefined) { lastPosition = advanced; alive() }
+        else {
+          if (now - progressAt > (rules?.buffer.stallPositionSec ?? STALL_MS / 1000) * 1000) { alive(); fail() }
+        }
+      }, 1000)
+      const frameMonitor = setInterval(() => {
+        if (!active || v.paused || v.ended || v.seeking || v.readyState < 2) { frameState = createFrameRateState(); return }
+        try {
+          const quality = v.getVideoPlaybackQuality()
+          const result = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current)
+          frameState = result.state
+          if (result.rate === activeSpeed.current) return
+          const reduced = result.rate < activeSpeed.current
+          activeSpeed.current = result.rate
+          sessionPreferences.activeSpeed = result.rate
+          v.defaultPlaybackRate = result.rate; v.playbackRate = result.rate
+          setSpeed(result.rate)
+          notify(fmt(reduced ? extra.speedReduced : extra.speedRestored, { speed: result.rate }))
+          frameState = createFrameRateState()
+        } catch { frameState = createFrameRateState() }
+      }, 2000)
+      detachMedia.current = () => {
+        active = false; startup.finish(); clearInterval(watchdog); clearInterval(frameMonitor)
+        if (source.sourceKey && (healthPlaySeconds > 0 || healthStallSeconds > 0)) {
+          void window.panda.sources.observe(source.sourceKey, healthPlaySeconds, healthStallSeconds).catch(() => {})
+        }
+        if (startupWatch.current === startup) startupWatch.current = null
+        void save(v)
+        if (handoffPending.current && v.currentTime > 0) retryPosition.current = v.currentTime
+        if (handoffPending.current && v.readyState >= 2 && v.videoWidth > 0 && v.videoHeight > 0 && handoff.current) {
+          clearTimeout(handoffTimer.current)
+          try {
+            const canvas = document.createElement('canvas')
+            const scale = Math.min(1, 1280 / v.videoWidth, 720 / v.videoHeight)
+            canvas.width = Math.max(1, Math.floor(v.videoWidth * scale))
+            canvas.height = Math.max(1, Math.floor(v.videoHeight * scale))
+            canvas.getContext('2d')?.drawImage(v, 0, 0, canvas.width, canvas.height)
+            handoff.current.src = canvas.toDataURL('image/jpeg', 0.78)
+            handoff.current.setAttribute('data-visible', '')
+          } catch { /* Some streams forbid snapshots; a failed capture does not interrupt playback. */ }
+        }
+        listeners.forEach(([name, listener]) => v.removeEventListener(name, listener))
+        hls.current?.destroy(); hls.current = null
+        v.pause(); v.removeAttribute('src'); v.load()
+      }
+    }
+    void initialize().catch(error => {
+      if (signal.aborted) return
+      const reason = error instanceof Error ? error.message : ''
+      if (source.sourceKey && ['frames-unavailable', 'alignment-media-unavailable', 'alignment-budget-exceeded',
+        'duration-suspect', 'history-inconsistent', 'no-match', 'over-budget'].includes(reason)) {
+        console.info('[alignment]', source.sourceKey, reason)
+      }
       handoffPending.current = false
       bridgeActive.current = false
-      if (handoff.current?.hasAttribute('data-visible')) {
-        handoff.current?.removeAttribute('data-visible')
-        clearTimeout(handoffTimer.current)
-        handoffTimer.current = setTimeout(() => { if (!handoff.current?.hasAttribute('data-visible')) handoff.current?.removeAttribute('src') }, 240)
-      }
-    }
-    on('playing', () => {
-      takeOver(); playingSince ||= Date.now(); alive()
-      try {
-        const quality = v.getVideoPlaybackQuality()
-        frameState = createFrameRateState()
-        frameState = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current).state
-      } catch { frameState = createFrameRateState() }
-      setPaused(false); setWaiting(false); refresh(); wake()
+      setWaiting(false)
+      if (sourceHealthy.current) { setReady(true); notify(extra.lineSwitchFailed) }
+      else { setProblem(new Error(extra.playerRetry)); setIdle(false) }
     })
-    on('pause', () => { startup.setEnabled(false); frameState = createFrameRateState(); playingSince = 0; setPaused(true); setWaiting(false); setIdle(false); void save() })
-    on('waiting', () => { frameState = createFrameRateState(); playingSince = 0; if (!v.paused) setWaiting(true) })
-    on('seeking', () => { frameState = createFrameRateState(); playingSince = 0; alive(); setWaiting(!v.paused); refresh() })
-    on('seeked', () => { frameState = createFrameRateState(); setWaiting(false); refresh(); void save() })
-    on('canplay', () => {
-      frameState = createFrameRateState(); setWaiting(false); refresh()
-      if (!playRequested.current && !v.seeking) { takeOver(); setPaused(true) }
-    })
-    on('timeupdate', () => {
-      refresh()
-      const current = latest.current
-      if (autoAttempts.current && playingSince && Date.now() - playingSince > HEALTHY_MS) autoAttempts.current = 0
-      // The next episode's source is chosen before this one ends, so it starts without a wait.
-      if (!prepared.current && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS && current.item.episodes && episode < current.item.episodes) {
-        prepared.current = true
-        void window.panda.data.playback(item.id, episode + 1, wantedQuality(current.settings)).catch(() => {})
-      }
-      if (!v.paused && current.settings.skipIntro && source.intro && v.currentTime >= source.intro.start && v.currentTime < source.intro.end) v.currentTime = Math.min(source.intro.end, v.duration)
-      if (started.current && Date.now() - savingAt.current >= HISTORY_SAVE_SECONDS * 1000) void save()
-      if (source.outro !== undefined && current.settings.skipIntro && v.currentTime >= source.outro && source.outro < v.duration) advance()
-    })
-    on('ended', advance)
-    on('error', () => { if (!hls.current) fail() })
-    if (source.format === 'hls' && Hls.isSupported()) {
-      // Keep a larger forward buffer for the rotating public CDNs, while bounding the reverse
-      // buffer so long viewing sessions do not retain hundreds of megabytes in the renderer.
-      // Failed fragments retry briefly, then the player watchdog can move to another source.
-      const instance = new Hls({
-        enableWorker: true,
-        capLevelToPlayerSize: true,
-        startFragPrefetch: true,
-        maxBufferLength: 90,
-        maxMaxBufferLength: 180,
-        maxBufferSize: 96 * 1000 * 1000,
-        maxBufferHole: 0.2,
-        backBufferLength: 30,
-        manifestLoadPolicy: {
-          default: {
-            maxTimeToFirstByteMs: 8_000,
-            maxLoadTimeMs: 15_000,
-            timeoutRetry: { maxNumRetry: 1, retryDelayMs: 0, maxRetryDelayMs: 0 },
-            errorRetry: { maxNumRetry: 2, retryDelayMs: 500, maxRetryDelayMs: 4_000 },
-          },
-        },
-        playlistLoadPolicy: {
-          default: {
-            maxTimeToFirstByteMs: 8_000,
-            maxLoadTimeMs: 15_000,
-            timeoutRetry: { maxNumRetry: 1, retryDelayMs: 0, maxRetryDelayMs: 0 },
-            errorRetry: { maxNumRetry: 3, retryDelayMs: 500, maxRetryDelayMs: 4_000 },
-          },
-        },
-        fragLoadPolicy: {
-          default: {
-            maxTimeToFirstByteMs: 10_000,
-            maxLoadTimeMs: 45_000,
-            timeoutRetry: { maxNumRetry: 2, retryDelayMs: 0, maxRetryDelayMs: 0 },
-            errorRetry: { maxNumRetry: 3, retryDelayMs: 500, maxRetryDelayMs: 8_000 },
-          },
-        },
-        startPosition: startAt > 0 ? startAt : -1,
-      })
-      hls.current = instance
-      instance.on(Hls.Events.MANIFEST_PARSED, (_event, manifest) => {
-        const actual = manifest.levels.flatMap((level, index) => { const quality = resolutionQuality(level.width, level.height); return quality ? [{ quality, index, bitrate: level.bitrate }] : [] })
-        setLevels(actual)
-        const preferred = qualityLevelIndex(actual, sessionPreferences.quality ?? quality)
-        if (preferred !== undefined) { instance.currentLevel = preferred; instance.autoLevelCapping = preferred }
-      })
-      instance.on(Hls.Events.LEVEL_SWITCHED, (_event, event) => {
-        const level = instance.levels[event.level]
-        if (level) setActualQuality(resolutionQuality(level.width, level.height))
-      })
-      instance.on(Hls.Events.ERROR, (_event, error) => {
-        if (!error.fatal || !active) return
-        if (error.type === Hls.ErrorTypes.MEDIA_ERROR && !recovered) { recovered = true; instance.recoverMediaError() }
-        else fail()
-      })
-      instance.loadSource(source.url); instance.attachMedia(v)
-    } else if (source.format === 'mp4' || v.canPlayType('application/vnd.apple.mpegurl')) v.src = source.url
-    else { setProblem(new Error(extra.unsupportedPlayback)); setWaiting(false) }
-    startup.setEnabled(playRequested.current)
-    // A source can die in the middle of an episode without ever reporting an error.
-    const watchdog = setInterval(() => {
-      if (!sourceStarted || v.paused || v.ended || latest.current.problem) { lastPosition = v.currentTime; alive(); return }
-      const advanced = playbackProgress(lastPosition, v.currentTime, v.seeking)
-      if (advanced !== undefined) { lastPosition = advanced; alive() }
-      else if (Date.now() - progressAt > STALL_MS) { alive(); fail() }
-    }, 2000)
-    const frameMonitor = setInterval(() => {
-      if (!active || v.paused || v.ended || v.seeking || v.readyState < 2) { frameState = createFrameRateState(); return }
-      try {
-        const quality = v.getVideoPlaybackQuality()
-        const result = sampleFrameRate(frameState, { at: Date.now(), totalFrames: quality.totalVideoFrames, droppedFrames: quality.droppedVideoFrames }, activeSpeed.current, requestedSpeed.current)
-        frameState = result.state
-        if (result.rate === activeSpeed.current) return
-        const reduced = result.rate < activeSpeed.current
-        activeSpeed.current = result.rate
-        sessionPreferences.activeSpeed = result.rate
-        v.defaultPlaybackRate = result.rate; v.playbackRate = result.rate
-        setSpeed(result.rate)
-        notify(fmt(reduced ? extra.speedReduced : extra.speedRestored, { speed: result.rate }))
-        frameState = createFrameRateState()
-      } catch { frameState = createFrameRateState() }
-    }, 2000)
-    return () => {
-      active = false; startup.finish(); clearInterval(watchdog); clearInterval(frameMonitor)
-      if (startupWatch.current === startup) startupWatch.current = null
-      void save(v)
-      if (handoffPending.current && v.currentTime > 0) retryPosition.current = v.currentTime
-      if (handoffPending.current && v.readyState >= 2 && v.videoWidth > 0 && v.videoHeight > 0 && handoff.current) {
-        clearTimeout(handoffTimer.current)
-        try {
-          const canvas = document.createElement('canvas')
-          const scale = Math.min(1, 1280 / v.videoWidth, 720 / v.videoHeight)
-          canvas.width = Math.max(1, Math.floor(v.videoWidth * scale))
-          canvas.height = Math.max(1, Math.floor(v.videoHeight * scale))
-          canvas.getContext('2d')?.drawImage(v, 0, 0, canvas.width, canvas.height)
-          handoff.current.src = canvas.toDataURL('image/jpeg', 0.78)
-          handoff.current.setAttribute('data-visible', '')
-        } catch { /* Some streams forbid snapshots; a failed capture does not interrupt playback. */ }
-      }
-      listeners.forEach(([name, listener]) => v.removeEventListener(name, listener))
-      hls.current?.destroy(); hls.current = null
-      v.pause(); v.removeAttribute('src'); v.load()
-    }
-  }, [playback.data])
+    return () => controller.abort()
+  }, [playback.data, playback.loading, playback.error])
 
   useEffect(() => {
-    if (!playback.data) return
+    if (!currentMedia) return
     let active = true
     // Asked once the episode has a source, so the answer says which one that is.
     void window.panda.data.sources(item.id, episode).then(value => { if (active) setLines(value) }, () => {})
     return () => { active = false }
-  }, [playback.data])
+  }, [currentMedia])
 
   const ratio = (event: PointerEvent<HTMLElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect()
@@ -560,7 +714,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     <header className="player__top" inert={idle && !error && !busy}><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} shortcut="Esc" onClick={leave} /><div className="player__heading"><span className="player__title" role="heading" aria-level={1} title={item.title}>{item.title}</span>{episodeHeading(item, episode) && <span className="player__ep">{episodeHeading(item, episode)}</span>}</div></header>
     <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button>{busy && !error && <span className="spinner" role="status" aria-label={extra.loading} />}<div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
     <div className="osd" role="status" data-open={dataAttr(osd)}>{osd && <><Icon name={osd.name} /><span>{osd.text}</span></>}</div>
-    <button className="btn btn--glass player__skip" data-open={dataAttr(showSkipIntro(time.position, playback.data ?? {}, state.settings) && upNext === null && !panelOpen)} onClick={() => { if (playback.data?.intro) seekTo(playback.data.intro.end) }}>{t.player.skipIntro}</button>
+    <button className="btn btn--glass player__skip" data-open={dataAttr(showSkipIntro(time.position, currentMedia ?? {}, state.settings) && upNext === null && !panelOpen)} onClick={() => { if (currentMedia?.intro) seekTo(currentMedia.intro.end) }}>{t.player.skipIntro}</button>
     <div className="upnext" data-open={dataAttr(upNext !== null && !panelOpen)}><div className="upnext__label">{upNext !== null && fmt(t.player.upNext, { n: upNext })}</div><div className="upnext__title">{episodeHeading(item, episode + 1)}</div><div className="upnext__actions"><button className="btn btn--primary btn--sm" onClick={next}>{t.player.playNow}</button><button className="btn btn--ghost btn--sm" onClick={() => setCancelled(true)}>{t.action.cancel}</button></div></div>
     <div className="player__bottom" inert={idle && !error && !busy}>
       <div className="seek" role="slider" tabIndex={ready ? 0 : -1} aria-label={t.player.seek} aria-disabled={!ready} aria-valuemin={0} aria-valuemax={time.duration} aria-valuenow={Math.floor(position)} aria-valuetext={clock(position)} data-dragging={dataAttr(dragPosition !== null)}
@@ -598,7 +752,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
       </div><div className="player__group">
         {item.episodes && <Dialog.Trigger className="btn btn--ghost">{t.player.episodes}</Dialog.Trigger>}
         <SelectMenu className="btn btn--ghost" label={t.player.speed} side="top" value={speed} items={SPEEDS.map(value => ({ value, label: speedLabel(value) }))} onChange={changeSpeed}>{speedButtonLabel(speed)}</SelectMenu>
-        {choices.length > 1 && <SelectMenu className="btn btn--ghost" label={t.player.quality} side="top" value={actualQuality ?? playback.data?.quality ?? quality} items={choices.map(value => ({ value, label: value }))} onChange={changeQuality}>{actualQuality ?? playback.data?.quality ?? t.player.quality}</SelectMenu>}
+        {choices.length > 1 && <SelectMenu className="btn btn--ghost" label={t.player.quality} side="top" value={actualQuality ?? currentMedia?.quality ?? quality} items={choices.map(value => ({ value, label: value }))} onChange={changeQuality}>{actualQuality ?? currentMedia?.quality ?? t.player.quality}</SelectMenu>}
         {lines && lines.list.length > 1 && <SelectMenu className="btn btn--ghost" label={extra.line} side="top" value={lines.current ?? ''} items={lines.list.map(entry => ({ value: entry.key, label: entry.name }))} onChange={changeLine}>{extra.line}</SelectMenu>}
         {document.pictureInPictureEnabled && <IconButton name="pip" label={t.player.pip} onClick={() => void pip()} disabled={!ready} side="top" />}
         <IconButton name={fullscreen ? 'fullscreen-exit' : 'fullscreen'} label={fullscreen ? t.player.exitFullscreen : t.player.fullscreen} shortcut="F" onClick={toggleFullscreen} side="top" />

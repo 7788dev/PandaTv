@@ -8,11 +8,21 @@ import { DataError } from './data/http'
 import type { DoubanDataSource } from './data/douban'
 import type { PlaybackService, WorkHints } from './playback/service'
 import { UserStore, validId } from './state'
+import type { SourceHealthStore } from './health/store'
+import type { OffsetCache } from './playback/offset-cache'
+import { align } from './playback/alignment-engine'
+import type { ResolvedAlignmentConfig, ResolvedBudgetConfig, ResolvedBufferConfig } from '../shared/rules/config'
+import type { AlignEndpoint, DurationSource, ScoredSample } from '../shared/rules/types'
 
 const types = ['tv', 'movie', 'variety', 'anime', 'doc']
 export interface Services {
   data: DoubanDataSource
   playback: PlaybackService
+  health?: SourceHealthStore
+  offsets?: OffsetCache
+  alignment?: ResolvedAlignmentConfig
+  buffer?: ResolvedBufferConfig
+  budget?: ResolvedBudgetConfig
   user: () => UserStore
   changed: () => void
   libraryRequests?: Map<string, AbortController>
@@ -46,6 +56,41 @@ function person(value: unknown): string {
 function number(value: unknown): number {
   if (typeof value !== 'number' || !Number.isInteger(value) || value < 1 || value > 10000) return invalid()
   return value
+}
+function finiteNumber(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return invalid()
+  return value
+}
+function decimal(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0) return invalid()
+  return value
+}
+function alignEndpoint(value: unknown): AlignEndpoint {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return invalid()
+  const raw = value as Record<string, unknown>
+  const sourceKey = string(raw.sourceKey, 40)
+  const duration = raw.duration === undefined ? undefined : decimal(raw.duration)
+  const durationSource = raw.durationSource === undefined ? undefined
+    : ['hls-extinf', 'mp4-moov', 'missing'].includes(String(raw.durationSource))
+      ? raw.durationSource as DurationSource : invalid()
+  const fingerprint = raw.fingerprint === undefined ? undefined : string(raw.fingerprint, 80)
+  return {
+    sourceKey,
+    ...(duration !== undefined ? { duration } : {}),
+    ...(durationSource !== undefined ? { durationSource } : {}),
+    ...(fingerprint !== undefined ? { fingerprint } : {}),
+  }
+}
+function alignSamples(value: unknown): ScoredSample[] | undefined {
+  if (value === undefined) return undefined
+  if (!Array.isArray(value) || value.length > 5) return invalid()
+  return value.map(item => {
+    if (!item || typeof item !== 'object' || Array.isArray(item)) return invalid()
+    const raw = item as Record<string, unknown>
+    const similarity = decimal(raw.similarity)
+    if (similarity > 1) return invalid()
+    return { offsetSeconds: finiteNumber(raw.offsetSeconds), similarity, valid: raw.valid === true }
+  })
 }
 function type(value: unknown): MediaType {
   if (typeof value !== 'string' || !types.includes(value)) return invalid()
@@ -120,14 +165,68 @@ export async function invokeData(method: string, args: unknown[], services: Serv
       const episode = number(args[1]), quality = args[picked ? 3 : 2]
       if (quality !== undefined && !QUALITIES.includes(quality as Quality)) return invalid()
       const from = picked ? string(args[2], 40) : undefined
+      const retryFailure = method === 'data.retryPlayback' && args[3] !== undefined
+        ? args[3] === 'stall' || args[3] === 'probe' ? args[3] : invalid()
+        : undefined
       if (from !== undefined && !/^[\w-]+$/.test(from)) return invalid()
       const item = await data.subject(id(args[0]))
-      return playback.resolve(item, episode, quality as Quality | undefined, method === 'data.retryPlayback', hints(data, item.id), from)
+      return playback.resolve(item, episode, quality as Quality | undefined, method === 'data.retryPlayback', hints(data, item.id), from, retryFailure)
     }
     case 'data.sources': {
       const episode = number(args[1])
       const item = await data.subject(id(args[0]))
       return playback.sources(item, episode, hints(data, item.id))
+    }
+    case 'playback.rules': {
+      if (!services.alignment || !services.buffer || !services.budget) throw new DataError('UNAVAILABLE', 'Playback rules are unavailable')
+      return { alignment: services.alignment, buffer: services.buffer, budget: services.budget }
+    }
+    case 'playback.prepareSwitch': {
+      const workId = id(args[0]), episode = number(args[1])
+      const input = args[2]
+      if (!input || typeof input !== 'object' || Array.isArray(input)) return invalid()
+      const { quality, retry, failure, from } = input as Record<string, unknown>
+      if (!QUALITIES.includes(quality as Quality) || (retry !== undefined && typeof retry !== 'boolean')) return invalid()
+      if (failure !== undefined && (retry !== true || (failure !== 'probe' && failure !== 'stall'))) return invalid()
+      if (from !== undefined && (typeof from !== 'string' || !/^[\w-]{1,40}$/.test(from) || retry)) return invalid()
+      const item = await data.subject(workId)
+      return playback.resolve(item, episode, quality as Quality, retry === true, hints(data, workId), from, failure, true)
+    }
+    case 'playback.acceptSwitch': {
+      const selection = args[2]
+      if (typeof selection !== 'number' || !Number.isSafeInteger(selection) || selection < 1) return invalid()
+      return playback.acceptSwitch(id(args[0]), number(args[1]), selection)
+    }
+    case 'sources.observe': {
+      const sourceKey = string(args[0], 40)
+      if (!/^[\w-]+$/.test(sourceKey)) return invalid()
+      const playSeconds = decimal(args[1]), stallSeconds = decimal(args[2])
+      services.health?.updateLive(sourceKey, { playSeconds, stallSeconds })
+      return
+    }
+    case 'sources.health': {
+      const workId = args[0] === undefined ? undefined : id(args[0])
+      if (!services.health) throw new DataError('UNAVAILABLE', 'Source health is unavailable')
+      return services.health.snapshot(workId)
+    }
+    case 'playback.align': {
+      const raw = args[0]
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return invalid()
+      const input = raw as Record<string, unknown>
+      if (input.capability !== 'frames' && input.capability !== 'no-frames') return invalid()
+      const offsets = services.offsets, alignment = services.alignment
+      if (!offsets || !alignment) throw new DataError('UNAVAILABLE', 'Alignment is unavailable')
+      const workId = id(input.workId), episode = number(input.episode)
+      const from = alignEndpoint(input.from), to = alignEndpoint(input.to)
+      return align({
+        workId, episode,
+        position: decimal(input.position),
+        from, to,
+        history: services.health?.durationHistory(workId, episode, from.sourceKey, to.sourceKey) ?? { sourceSamples: [], workRatios: [] },
+        capability: input.capability,
+        samples: alignSamples(input.samples),
+        elapsedMs: input.elapsedMs === undefined ? invalid() : decimal(input.elapsedMs),
+      }, { offsets, config: alignment })
     }
     case 'user.get': return services.user().get()
     case 'user.recovery': return services.recovery?.() ?? invalid()

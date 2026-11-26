@@ -13,6 +13,7 @@ data class PlaySource(
     val priority: Int,
     val adPaths: List<String>,
     val fingerprints: List<List<Double>>,
+    val excludedRecordIds: Set<String> = emptySet(),
 )
 
 data class SourceRules(
@@ -24,6 +25,7 @@ data class SourceRules(
 )
 
 object SourceRulesLoader {
+    private val RECORD_ID = Regex("^[A-Za-z0-9_-]{1,64}$")
     private val KEY_REGEX = Regex("^[a-z0-9-]{1,32}$")
     private val AD_PATH_REGEX = Regex("^/(?:[A-Za-z0-9_-]+/){2,6}$")
     private val DATE_PREFIX_REGEX = Regex("^\\d{4}-\\d{2}-\\d{2}.*$")
@@ -83,7 +85,12 @@ object SourceRulesLoader {
                     d
                 }
             }
-            sources.add(PlaySource(key, name, api, enabled, priorityNum.toInt(), adPaths, fingerprints))
+            val excluded = if ("excludedRecordIds" in row) {
+                val ids = row["excludedRecordIds"] as? List<*> ?: throw IllegalArgumentException("片源排除记录无效")
+                require(ids.size <= 2048 && ids.all { it is String && it.matches(RECORD_ID) }) { "片源排除记录无效" }
+                ids.filterIsInstance<String>().toSet()
+            } else emptySet()
+            sources.add(PlaySource(key, name, api, enabled, priorityNum.toInt(), adPaths, fingerprints, excluded))
         }
         return SourceRules(version, verifiedAt, maxDropRatio, foreignMax, sources)
     }

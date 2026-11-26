@@ -26,6 +26,13 @@ class PersonScreen(
     private val nameHint: String? = null,
     private val photoHint: String? = null,
 ) : Screen(ctx, nav) {
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("page", "person")
+        putString("id", personId)
+        putString("name", nameHint)
+        putString("photo", photoHint)
+    }
+
     override val showTopBar: Boolean = false
 
     private val m = Theme.metrics(ctx)

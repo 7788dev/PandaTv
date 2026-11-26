@@ -3,6 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { choose, clickPlayerControl, playing, resize, screenshot } from './quality-desktop'
+import { extra } from '../src/copy.extra'
 
 let app: ElectronApplication, page: Page, dir: string
 const errors: string[] = []
@@ -91,7 +92,7 @@ test('real playback episode source seek exit reentry and media resource release'
   await expect.poll(() => page.evaluate(() => location.hash)).toBe('#/play/db-26647087/2')
   await playing(page, 2, 90000)
   const available = await page.evaluate(() => window.panda.data.sources('db-26647087', 2))
-  const switchAt = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentTime)
+
   const attempts: Array<Record<string, unknown>> = []
   report.sourceAttempts = attempts
   test.setTimeout(180000 + available.list.length * 45000)
@@ -101,9 +102,25 @@ test('real playback episode source seek exit reentry and media resource release'
     const beforePosition = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentTime)
     const previousMedia = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentSrc)
     const switchStarted = Date.now()
+    const withheld = () => logs.find(entry => entry.at >= switchStarted && entry.process === 'renderer' &&
+      entry.message.startsWith('[alignment] ' + alternative.key + ' '))
     await choose(page, '线路', alternative.name)
     try {
-      await expect.poll(() => page.evaluate(() => window.panda.data.sources('db-26647087', 2).then(value => value.current)), { timeout: 45000 }).toBe(alternative.key)
+      await expect.poll(async () => {
+        if (withheld()) return true
+        return await page.evaluate(() => window.panda.data.sources('db-26647087', 2).then(value => value.current)) === alternative.key
+      }, { timeout: 45000 }).toBe(true)
+      const refusal = withheld()
+      if (refusal) {
+        await expect(page.getByText(extra.lineSwitchFailed, { exact: true }).first()).toBeVisible()
+        expect(await page.evaluate(() => window.panda.data.sources('db-26647087', 2).then(s => s.current))).toBe(before.current)
+        expect(await page.locator('.player__video').evaluate(v => (v as HTMLVideoElement).currentSrc)).toBe(previousMedia)
+        await playing(page, beforePosition + 1, 15000)
+        await expect(page.locator('.player')).not.toHaveAttribute('data-error', '')
+        attempts.push({ requested: alternative, outcome: 'alignment withheld', reason: refusal.message, retained: before.current })
+        checkpoint()
+        continue
+      }
       await page.waitForFunction(previous => {
         const v = document.querySelector('video')
         return Boolean(v && v.currentSrc && v.currentSrc !== previous && v.readyState >= 2 && v.videoWidth > 0 && !v.paused)
@@ -118,6 +135,7 @@ test('real playback episode source seek exit reentry and media resource release'
       checkpoint()
       break
     } catch (error) {
+      if (withheld()) throw error
       const failures = logs.filter(value => value.at >= switchStarted && value.process === 'main' && value.message.includes(alternative.key) && value.message.includes('probe:')).map(value => value.message.replace(/https?:\/\/\S+/g, '<redacted-url>'))
       if (!failures.length) throw error
       const after = await page.evaluate(() => window.panda.data.sources('db-26647087', 2))
@@ -131,7 +149,7 @@ test('real playback episode source seek exit reentry and media resource release'
       checkpoint()
     }
   }
-  if (!report.switchedSource) report.sourceSwitchUnavailable = { reason: attempts.length ? 'Every selectable alternative reported a real probe failure; fallback playback stayed active' : 'Only one catalogue was selectable', available, attempts }
+  if (!report.switchedSource) report.sourceSwitchUnavailable = { reason: attempts.length ? 'Alternatives failed probing or alignment; playback stayed active' : 'Only one catalogue was selectable', available, attempts }
   const seekAt = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentTime)
   const seekStarted = Date.now()
   await page.locator('.seek').focus(); await page.keyboard.press('PageUp')

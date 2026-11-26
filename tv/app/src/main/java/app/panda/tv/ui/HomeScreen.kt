@@ -30,7 +30,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
+class HomeScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null) : Screen(ctx, nav) {
     override val activeTab: String = "home"
 
     private val m = Theme.metrics(ctx)
@@ -72,7 +72,14 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     private val homeAdapter = HomeAdapter()
     private var feed: HomeFeed? = null
     private var continuePairs: List<Pair<MediaItem, HistoryEntry>> = emptyList()
-    private var heroIndex = 0
+    private var heroIndex = saved?.getInt("hero") ?: 0
+    private var restoreShelf = saved?.getString("shelf")
+    private var lastShelf: String? = null
+
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("shelf", restoreShelf ?: if (visible) homeAdapter.keyAt(homeList.selectedPosition) else lastShelf)
+        putInt("hero", heroIndex)
+    }
     private var loadJob: Job? = null
     private var heroAutoJob: Job? = null
     private var visible = false
@@ -93,6 +100,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     override fun onHidden() {
+        if (visible) lastShelf = homeAdapter.keyAt(homeList.selectedPosition) ?: lastShelf
         visible = false
         heroAutoJob?.cancel()
     }
@@ -205,14 +213,17 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             Theme.reveal(homeList)
         }
         syncBlocks()
-        if (firstMount && container.findFocus() == null) {
+        if (firstMount && savedInitialFocusAbsent() && container.findFocus() == null) {
             homeList.post {
+                if (!container.isShown || !savedInitialFocusAbsent()) return@post
                 homeList.selectedPosition = 0
                 val target = activeHeroHolder?.primaryButton ?: homeList
                 target.requestFocus()
             }
         }
     }
+
+    private fun savedInitialFocusAbsent() = pendingFocus == null && restoreShelf == null && lastShelf == null
 
     private fun syncBlocks() {
         val current = feed ?: return
@@ -237,6 +248,14 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
         }
         homeAdapter.submit(next)
+        restoreShelf?.let { key ->
+            val index = next.indexOfFirst { it.key == key }
+            if (index >= 0) {
+                lastShelf = key
+                restoreShelf = null
+                homeList.selectedPosition = index
+            }
+        }
     }
 
     private sealed interface HomeBlock {
@@ -275,6 +294,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         init {
             setHasStableIds(true)
         }
+
+        fun keyAt(index: Int) = blocks.getOrNull(index)?.key
 
         fun submit(next: List<HomeBlock>) {
             if (blocks.isEmpty()) {
@@ -624,6 +645,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             if (moreBtn.visibility != View.VISIBLE) moreBtn.visibility = View.VISIBLE
             moreBtn.setOnClickListener { nav.openChannel(shelf.moreType) }
             cardsAdapter.setItems(shelf.items, emptyMap())
+            val index = shelf.items.indexOfFirst { it.id == pendingFocus }
+            if (index >= 0) rowGrid.selectedPosition = index
         }
 
         fun bindContinue(pairs: List<Pair<MediaItem, HistoryEntry>>) {

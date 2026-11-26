@@ -19,8 +19,9 @@ export async function qualityNetwork() {
   const media = resolve('.tmp/quality-fixtures/media')
   if (!statSync(join(media, '720/playback.mp4')).isFile()) throw new Error('Run scripts/generate-fixture-hls.py before fixture E2E')
   const calls: NetworkCall[] = []
-  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false }
+  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false, shortPlaylist: '' }
   const held = new Set<() => void>()
+  const probeGates = new Map<string, Promise<void>>()
   const json = (res: ServerResponse, value: unknown, status = 200) => { const body = Buffer.from(JSON.stringify(value)); res.writeHead(status, { 'content-type': 'application/json', 'content-length': body.length }); res.end(body) }
   const server = createServer(async (req, res) => {
     const host = String(req.headers.host).split(':')[0]
@@ -44,6 +45,7 @@ export async function qualityNetwork() {
     }
     if (host.includes('.media.qa.')) {
       const source = host[0] as Source, behaviour = state.sources[source]
+      if (req.headers.range === 'bytes=0-16383') await probeGates.get(source)
       if (behaviour === 'offline') { record.status = 503; json(res, { error: 'Injected media failure' }, 503); return }
       if (behaviour === 'json') { json(res, { error: 'Successful HTTP response without media' }); return }
       if (behaviour === 'empty') { res.writeHead(200, { 'content-type': 'video/mp4', 'content-length': 0 }); res.end(); return }
@@ -57,7 +59,10 @@ export async function qualityNetwork() {
       if (!file.startsWith(media + '\\') && !file.startsWith(media + '/')) throw new Error('Invalid media fixture path')
       let body: Buffer
       try { body = readFileSync(file) } catch { record.status = 404; json(res, { error: 'Missing transport fixture' }, 404); return }
-      if (relative.endsWith('.m3u8')) { res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl' }); res.end(body); return }
+      if (relative.endsWith('.m3u8')) {
+        if (source === state.shortPlaylist) body = Buffer.from('#EXTM3U\n#EXT-X-TARGETDURATION:2\n#EXTINF:2,\nsegment-000.ts\n#EXT-X-ENDLIST\n')
+        res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl' }); res.end(body); return
+      }
       const range = /^bytes=(\d+)-(\d*)$/.exec(req.headers.range ?? '')
       const start = range ? Number(range[1]) : 0, end = range?.[2] ? Math.min(Number(range[2]), body.length - 1) : body.length - 1
       if (start >= body.length) { record.status = 416; res.writeHead(416, { 'content-range': `bytes */${body.length}` }); res.end(); return }
@@ -110,6 +115,11 @@ export async function qualityNetwork() {
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
   const port = (server.address() as { port: number }).port
   return { origin: `http://127.0.0.1:${port}`, state, calls,
+    holdProbe: (source: string) => {
+      let release!: () => void
+      probeGates.set(source, new Promise<void>(resolve => { release = resolve }))
+      return () => { probeGates.delete(source); release() }
+    },
     releasePlayback: () => { state.holdPlayback = false; for (const release of [...held]) release() },
     close: async () => { for (const release of [...held]) release(); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())) } }
 }

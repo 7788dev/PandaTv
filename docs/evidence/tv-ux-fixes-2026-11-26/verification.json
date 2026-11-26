@@ -1,0 +1,1173 @@
+{
+  "date": "2026-11-26",
+  "platform": "Android 15 API 35, MuMu, 1920x1080",
+  "package": "app.panda.tv",
+  "version": "1.0.14",
+  "versionCode": 15,
+  "releaseSha256": "4f758509ee087627c81d707154039eb8a0451a6d0e909f740dff3714d2fac907",
+  "installedSha256": "4f758509ee087627c81d707154039eb8a0451a6d0e909f740dff3714d2fac907",
+  "releaseSignerSha256": "d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd",
+  "signature": {
+    "v1": true,
+    "v2": true
+  },
+  "checks": {
+    "tvUnit": {
+      "tests": 159,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "cases": {
+      "app.panda.tv.HomeAndUpdatesTest": [
+        "coldHomeKeepsUsableSectionsWhenOnePrimaryFeedFails",
+        "coldHomeKeepsEveryPublishedShelf",
+        "updateUsesTheSignedTvAssetFromPublishedStableReleases"
+      ],
+      "app.panda.tv.playback.ChapterReaderTest": [
+        "manualTimesFollowOnlyValidEpisodeDurations",
+        "unmarkedAndTruncatedMp4HaveNoGuessedChapters",
+        "mp4FindsTailChaptersWithoutReadingTheWholeVideo",
+        "hlsMapsExplicitWallTimeChaptersAcrossMidnight"
+      ],
+      "app.panda.tv.playback.TvRecoveryTest": [
+        "adBearingEditionIsExcludedBeforeCandidateLimit",
+        "retryInsideDirectoryCooldownKeepsTheOriginalDeadline",
+        "userRetryReopensTheOnlyWorkingSource",
+        "blockedDirectoryIoCannotHoldAdmissionPastBothDeadlines",
+        "dismissingPlayerDoesNotPoisonAnotherWork",
+        "laterDirectoryUpdatesEpisodesAndSourcesWithoutAnotherLookup"
+      ],
+      "app.panda.tv.ui.PlaybackProgressPolicyTest": [
+        "playing without any timeline movement reaches the stall deadline",
+        "ongoing low speed playback refreshes progress at its actual timeline rate",
+        "seek rewind reanchors the watched position and timeout",
+        "lowBufferDoesNotInterruptAnAdvancingOrOnlySource"
+      ]
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 34
+    },
+    "desktopUnitPassed": 132,
+    "electronFixturePassed": 13,
+    "releaseToolingPassed": 6
+  },
+  "firstInstallDownKeys": [
+    [
+      0,
+      [
+        "播放"
+      ],
+      [
+        "热播剧集"
+      ]
+    ],
+    [
+      1,
+      [
+        "两京十五日",
+        "剧情 / 古装"
+      ],
+      [
+        "热播剧集",
+        "剧集榜",
+        "电影榜",
+        "动漫榜"
+      ]
+    ],
+    [
+      2,
+      [
+        "更多"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      3,
+      [
+        "1",
+        "两京十五日",
+        "剧情 · 2026"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      4,
+      [
+        "2",
+        "我的有罪之人",
+        "剧情 · 2026",
+        "8.6"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      5,
+      [
+        "3",
+        "无声的回响",
+        "剧情 · 2026"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      6,
+      [
+        "4",
+        "今天是太阳雨",
+        "剧情 · 2026",
+        "7.9"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      7,
+      [
+        "5",
+        "谷雨",
+        "剧情 · 2026",
+        "6.3"
+      ],
+      [
+        "剧集榜",
+        "电影榜",
+        "动漫榜",
+        "最新电影"
+      ]
+    ],
+    [
+      8,
+      [
+        "6.1",
+        "余命一年买男人",
+        "剧情 / 爱情"
+      ],
+      [
+        "最新电影",
+        "综艺"
+      ]
+    ],
+    [
+      9,
+      [
+        "8.7",
+        "后会友期",
+        "真人秀"
+      ],
+      [
+        "综艺",
+        "动漫"
+      ]
+    ],
+    [
+      10,
+      [
+        "7.7",
+        "凡人修仙传 年番4",
+        "动作 / 动画 / 奇幻"
+      ],
+      [
+        "动漫",
+        "纪录片"
+      ]
+    ],
+    [
+      11,
+      [
+        "生命奇观2",
+        "纪录片"
+      ],
+      [
+        "纪录片",
+        "纪录片",
+        "纪录片"
+      ]
+    ]
+  ],
+  "processDeath": {
+    "before": [
+      "14518",
+      "13"
+    ],
+    "after": [
+      "14862",
+      "13"
+    ],
+    "detailFocus": "收藏",
+    "returnFocus": [
+      "8.2",
+      "144分钟",
+      "八仙！",
+      "喜剧 / 动画 / 奇幻 / 冒险"
+    ]
+  },
+  "releaseDevice": [
+    {
+      "capture": "03-film-detail",
+      "focus": [
+        "播放"
+      ],
+      "labels": [
+        "返回",
+        "八仙！",
+        "8.2",
+        "播放",
+        "收藏"
+      ]
+    },
+    {
+      "capture": "04-restored-film",
+      "focus": [
+        "收藏"
+      ],
+      "labels": [
+        "返回",
+        "八仙！",
+        "收藏"
+      ]
+    },
+    {
+      "capture": "05-return-to-anime-card",
+      "focus": [
+        "8.2",
+        "144分钟",
+        "八仙！",
+        "喜剧 / 动画 / 奇幻 / 冒险"
+      ],
+      "labels": [
+        "动漫",
+        "动漫",
+        "八仙！"
+      ]
+    },
+    {
+      "capture": "10-search-result",
+      "focus": [
+        "S/T",
+        "短片"
+      ],
+      "labels": [
+        "ST",
+        "全部",
+        "S/T"
+      ]
+    },
+    {
+      "capture": "11-undo-empty-query",
+      "focus": [
+        "ST"
+      ],
+      "labels": [
+        "ST",
+        "全部",
+        "S/T"
+      ]
+    },
+    {
+      "capture": "12-recent-before",
+      "focus": [
+        "片名 / 首字母"
+      ],
+      "labels": [
+        "最近搜索",
+        "ST"
+      ]
+    },
+    {
+      "capture": "13-recent-cleared",
+      "focus": [
+        "设置"
+      ],
+      "labels": [
+        "片名 / 首字母",
+        "热搜",
+        "已清空"
+      ]
+    },
+    {
+      "capture": "14-update-response",
+      "focus": [
+        "版本 1.0.14",
+        "已是最新版本"
+      ],
+      "labels": [
+        "版本 1.0.14",
+        "已是最新版本"
+      ]
+    },
+    {
+      "capture": "15-drama-detail",
+      "focus": [
+        "播放"
+      ],
+      "labels": [
+        "三体",
+        "8.8",
+        "播放",
+        "收藏",
+        "导演：杨磊"
+      ]
+    },
+    {
+      "capture": "16-drama-first-frame",
+      "focus": [
+        "暂停"
+      ],
+      "labels": [
+        "三体",
+        "第1集",
+        "暂停",
+        "720P"
+      ]
+    },
+    {
+      "capture": "17-drama-continued",
+      "focus": [
+        "播放"
+      ],
+      "labels": [
+        "三体",
+        "第1集",
+        "播放",
+        "720P"
+      ]
+    }
+  ],
+  "liveDrama": {
+    "elapsed": 126.51,
+    "sources": [],
+    "ticks": [
+      [
+        0.9,
+        "00:00 / 00:00"
+      ],
+      [
+        4.9,
+        "00:00 / 42:44"
+      ],
+      [
+        6.04,
+        "00:01 / 42:44"
+      ],
+      [
+        7.06,
+        "00:02 / 42:44"
+      ],
+      [
+        8.15,
+        "00:03 / 42:44"
+      ],
+      [
+        9.0,
+        "00:04 / 42:44"
+      ],
+      [
+        10.16,
+        "00:05 / 42:44"
+      ],
+      [
+        11.01,
+        "00:06 / 42:44"
+      ],
+      [
+        12.09,
+        "00:07 / 42:44"
+      ],
+      [
+        12.95,
+        "00:08 / 42:44"
+      ],
+      [
+        14.1,
+        "00:09 / 42:44"
+      ],
+      [
+        15.48,
+        "00:10 / 42:44"
+      ],
+      [
+        16.05,
+        "00:11 / 42:44"
+      ],
+      [
+        16.91,
+        "00:12 / 42:44"
+      ],
+      [
+        18.07,
+        "00:13 / 42:44"
+      ],
+      [
+        19.18,
+        "00:14 / 42:44"
+      ],
+      [
+        20.03,
+        "00:15 / 42:44"
+      ],
+      [
+        20.9,
+        "00:16 / 42:44"
+      ],
+      [
+        22.05,
+        "00:17 / 42:44"
+      ],
+      [
+        23.15,
+        "00:18 / 42:44"
+      ],
+      [
+        24.01,
+        "00:19 / 42:44"
+      ],
+      [
+        25.17,
+        "00:20 / 42:44"
+      ],
+      [
+        26.54,
+        "00:21 / 42:44"
+      ],
+      [
+        27.11,
+        "00:22 / 42:44"
+      ],
+      [
+        27.96,
+        "00:23 / 42:44"
+      ],
+      [
+        29.11,
+        "00:24 / 42:44"
+      ],
+      [
+        30.22,
+        "00:25 / 42:44"
+      ],
+      [
+        31.07,
+        "00:26 / 42:44"
+      ],
+      [
+        31.93,
+        "00:27 / 42:44"
+      ],
+      [
+        33.07,
+        "00:28 / 42:44"
+      ],
+      [
+        34.19,
+        "00:29 / 42:44"
+      ],
+      [
+        35.05,
+        "00:30 / 42:44"
+      ],
+      [
+        35.92,
+        "00:31 / 42:44"
+      ],
+      [
+        37.59,
+        "00:32 / 42:44"
+      ],
+      [
+        38.16,
+        "00:33 / 42:44"
+      ],
+      [
+        39.02,
+        "00:34 / 42:44"
+      ],
+      [
+        40.17,
+        "00:35 / 42:44"
+      ],
+      [
+        41.25,
+        "00:36 / 42:44"
+      ],
+      [
+        42.11,
+        "00:37 / 42:44"
+      ],
+      [
+        42.96,
+        "00:38 / 42:44"
+      ],
+      [
+        44.1,
+        "00:39 / 42:44"
+      ],
+      [
+        44.91,
+        "00:40 / 42:44"
+      ],
+      [
+        46.03,
+        "00:41 / 42:44"
+      ],
+      [
+        47.17,
+        "00:42 / 42:44"
+      ],
+      [
+        48.54,
+        "00:43 / 42:44"
+      ],
+      [
+        49.1,
+        "00:44 / 42:44"
+      ],
+      [
+        49.96,
+        "00:45 / 42:44"
+      ],
+      [
+        51.12,
+        "00:46 / 42:44"
+      ],
+      [
+        52.22,
+        "00:47 / 42:44"
+      ],
+      [
+        53.07,
+        "00:48 / 42:44"
+      ],
+      [
+        53.93,
+        "00:49 / 42:44"
+      ],
+      [
+        55.07,
+        "00:50 / 42:44"
+      ],
+      [
+        56.16,
+        "00:51 / 42:44"
+      ],
+      [
+        57.03,
+        "00:52 / 42:44"
+      ],
+      [
+        58.16,
+        "00:53 / 42:44"
+      ],
+      [
+        59.56,
+        "00:54 / 42:44"
+      ],
+      [
+        60.14,
+        "00:55 / 42:44"
+      ],
+      [
+        61.01,
+        "00:56 / 42:44"
+      ],
+      [
+        62.15,
+        "00:57 / 42:44"
+      ],
+      [
+        63.25,
+        "00:58 / 42:44"
+      ],
+      [
+        64.1,
+        "00:59 / 42:44"
+      ],
+      [
+        64.95,
+        "01:00 / 42:44"
+      ],
+      [
+        66.1,
+        "01:01 / 42:44"
+      ],
+      [
+        67.2,
+        "01:02 / 42:44"
+      ],
+      [
+        68.04,
+        "01:03 / 42:44"
+      ],
+      [
+        69.2,
+        "01:04 / 42:44"
+      ],
+      [
+        70.56,
+        "01:05 / 42:44"
+      ],
+      [
+        71.14,
+        "01:06 / 42:44"
+      ],
+      [
+        71.98,
+        "01:07 / 42:44"
+      ],
+      [
+        73.12,
+        "01:08 / 42:44"
+      ],
+      [
+        74.23,
+        "01:09 / 42:44"
+      ],
+      [
+        75.1,
+        "01:10 / 42:44"
+      ],
+      [
+        75.97,
+        "01:11 / 42:44"
+      ],
+      [
+        77.12,
+        "01:12 / 42:44"
+      ],
+      [
+        77.94,
+        "01:13 / 42:44"
+      ],
+      [
+        79.09,
+        "01:14 / 42:44"
+      ],
+      [
+        79.94,
+        "01:15 / 42:44"
+      ],
+      [
+        81.6,
+        "01:16 / 42:44"
+      ],
+      [
+        82.18,
+        "01:17 / 42:44"
+      ],
+      [
+        83.03,
+        "01:18 / 42:44"
+      ],
+      [
+        84.2,
+        "01:19 / 42:44"
+      ],
+      [
+        85.29,
+        "01:20 / 42:44"
+      ],
+      [
+        86.13,
+        "01:21 / 42:44"
+      ],
+      [
+        87.0,
+        "01:22 / 42:44"
+      ],
+      [
+        88.14,
+        "01:23 / 42:44"
+      ],
+      [
+        88.96,
+        "01:24 / 42:44"
+      ],
+      [
+        90.11,
+        "01:25 / 42:44"
+      ],
+      [
+        90.97,
+        "01:26 / 42:44"
+      ],
+      [
+        92.61,
+        "01:27 / 42:44"
+      ],
+      [
+        93.18,
+        "01:28 / 42:44"
+      ],
+      [
+        94.03,
+        "01:29 / 42:44"
+      ],
+      [
+        95.18,
+        "01:30 / 42:44"
+      ],
+      [
+        96.29,
+        "01:31 / 42:44"
+      ],
+      [
+        97.16,
+        "01:32 / 42:44"
+      ],
+      [
+        98.01,
+        "01:33 / 42:44"
+      ],
+      [
+        99.16,
+        "01:34 / 42:44"
+      ],
+      [
+        99.98,
+        "01:35 / 42:44"
+      ],
+      [
+        101.09,
+        "01:36 / 42:44"
+      ],
+      [
+        101.94,
+        "01:37 / 42:44"
+      ],
+      [
+        103.62,
+        "01:38 / 42:44"
+      ],
+      [
+        104.19,
+        "01:39 / 42:44"
+      ],
+      [
+        105.06,
+        "01:40 / 42:44"
+      ],
+      [
+        105.95,
+        "01:41 / 42:44"
+      ],
+      [
+        107.32,
+        "01:42 / 42:44"
+      ],
+      [
+        108.17,
+        "01:43 / 42:44"
+      ],
+      [
+        109.04,
+        "01:44 / 42:44"
+      ],
+      [
+        110.17,
+        "01:45 / 42:44"
+      ],
+      [
+        110.98,
+        "01:46 / 42:44"
+      ],
+      [
+        112.09,
+        "01:47 / 42:44"
+      ],
+      [
+        112.95,
+        "01:48 / 42:44"
+      ],
+      [
+        114.61,
+        "01:49 / 42:44"
+      ],
+      [
+        115.19,
+        "01:50 / 42:44"
+      ],
+      [
+        116.06,
+        "01:51 / 42:44"
+      ],
+      [
+        117.2,
+        "01:52 / 42:44"
+      ],
+      [
+        118.28,
+        "01:53 / 42:44"
+      ],
+      [
+        119.12,
+        "01:54 / 42:44"
+      ],
+      [
+        119.96,
+        "01:55 / 42:44"
+      ],
+      [
+        121.11,
+        "01:56 / 42:44"
+      ],
+      [
+        122.19,
+        "01:57 / 42:44"
+      ],
+      [
+        123.02,
+        "01:58 / 42:44"
+      ],
+      [
+        124.17,
+        "01:59 / 42:44"
+      ],
+      [
+        125.55,
+        "02:00 / 42:44"
+      ]
+    ]
+  },
+  "directoryTimeoutLog": [
+    "11-26 23:05:58.328 14862 14921 I PandaTV : [source] subo (9000ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:05:58.329 14862 14922 I PandaTV : [source] bfzy (9001ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:05:58.329 14862 14877 I PandaTV : [source] dyttzy (9000ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:05:58.329 14862 14876 I PandaTV : [source] lzi (9000ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:06:39.493 14862 14919 I PandaTV : [source] subo (9001ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:06:39.493 14862 14924 I PandaTV : [source] lzi (9000ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:06:39.493 14862 14877 I PandaTV : [source] bfzy (9000ms): search: Timed out waiting for 9000 ms",
+    "11-26 23:06:39.493 14862 14933 I PandaTV : [source] dyttzy (9000ms): search: Timed out waiting for 9000 ms"
+  ],
+  "adEvidence": {
+    "source": "hongniu",
+    "vodId": "71759",
+    "episodeOneSeconds": 2622.375,
+    "sampledEpisodes": [
+      1,
+      2,
+      3
+    ],
+    "promotionSeenAtSeconds": {
+      "1": [
+        0.3,
+        3,
+        7.2,
+        10.5,
+        2467.4
+      ],
+      "2": [
+        0.3,
+        3,
+        10.1
+      ],
+      "3": [
+        0.3,
+        3,
+        10.1
+      ]
+    },
+    "discontinuitiesInFirstThreeMediaPlaylists": [
+      0,
+      0,
+      0
+    ]
+  },
+  "networkFixture": {
+    "package": "app.panda.tv.uxfixture",
+    "builtSha256": "13faa52cd8afa01496c866592498688a8cb7c3a03a24bc8b75133d646a6cac5f",
+    "installedSha256": "13faa52cd8afa01496c866592498688a8cb7c3a03a24bc8b75133d646a6cac5f",
+    "productionUiFileSha256": {
+      "ChannelPageState.kt": "2cdd5d2d980f95c0e10f6157dc64a789881e1d0f358e107f79471c7776b34091",
+      "ChannelScreen.kt": "43f258cf8a205a8a9f282f41fa128d5faaf7fc6314663e4b01eacd81b6baa20c",
+      "DetailScreen.kt": "de53781e591c98e7b5417c2af415e84c3077c070a992ab4076e5dcb18dfb6459",
+      "HomeScreen.kt": "87f4f9a6ff89a86caf8cf4ac8b13c21d35c41c8a53efb1273d99b25eed73d30f",
+      "MainActivity.kt": "b2be049c453d9582c1ed9eceae2bb79880ef7c1653a0fe2e46b0026d3faffef8",
+      "MeScreen.kt": "3a9215b39b55fcacd89d2af9b2abbb2a60c5aab7749820e34f9b6dbab7f56007",
+      "PersonPageLoad.kt": "0fddafcb557c5b9cf31c36998469235d747c4442946169cc6660402970734812",
+      "PersonScreen.kt": "23f34a1eef27c92fdbdda3af18bfb8a2f058ba3e2b09de2bc0c0c6297a4cffb6",
+      "PlaybackBufferPolicy.kt": "a213028fa6adecfebd06b122a69139d82efb4461165a2afb53df5c6495e499d5",
+      "PlaybackPreferences.kt": "ccc6c80d759f73acdc3d5c4553d649f0abc5c7b1cb6a854528e76999c42487f3",
+      "PlaybackProgressPolicy.kt": "cc0959e60491752d901c691787f02a1efe96a54a4cb341360e2fa74e159a204d",
+      "PlaybackSpeedPolicy.kt": "3eaafbfc310ee8ddb67b02419bb2f1c642232f722914b9b1665738b038ddde20",
+      "PlaybackStartupBudget.kt": "5892c259f1b00fda23603c812fb85af8361e7422daf8e1d903d9ec3c2b2c0e6d",
+      "PlayerScreen.kt": "50560c014295e5fbed864304d58f80e1b7566271e8b87a2bc187f1f678c9ca68",
+      "PosterPage.kt": "8bdfd0751c30feca57596cc57b006ed2c529cae5d74678d58bdbf30a20e1752a",
+      "RecoveryScreen.kt": "aaab4322a7cf3fea9ccf284bc3db4b35e4d9bbceb1209c64e92c2079df859a28",
+      "Screen.kt": "ce881948e8138485d4dc942356bbb97c21122bc62dce3774a7d49763e74d5c42",
+      "SearchRequest.kt": "dad4c828901f522feafa9811ff3f47b3e3d284f8ae0b2f043aa24a9152abf0ee",
+      "SearchScreen.kt": "7cc262a63153339dd0c82fe76c9a8ea7b2f4be0eab4a04254d2319299133fd45",
+      "SettingsScreen.kt": "b31f33c6609bb9631172df23e03447357f1d0d58425cbff1f69a686faf77f481",
+      "Theme.kt": "506cb3ab6511a45dfc8ced9ab13a4f39a15028ebea26fe2e9fb693fda8b0aef3",
+      "TvIcons.kt": "c968586d0ba00a5af940030eee64bbaa2ae05d773ed8943b147bee85bf3a2322"
+    },
+    "lateDirectoryAndChapters": [
+      [
+        2.73,
+        null,
+        "00:04 / 00:28",
+        false,
+        false
+      ],
+      [
+        3.71,
+        null,
+        "00:05 / 00:28",
+        false,
+        false
+      ],
+      [
+        4.71,
+        null,
+        "00:06 / 00:28",
+        false,
+        false
+      ],
+      [
+        5.75,
+        null,
+        "00:07 / 00:28",
+        false,
+        false
+      ],
+      [
+        6.71,
+        null,
+        "00:08 / 00:28",
+        false,
+        false
+      ],
+      [
+        7.68,
+        null,
+        "00:09 / 00:28",
+        false,
+        false
+      ],
+      [
+        8.09,
+        "第1集",
+        "00:09 / 00:28",
+        true,
+        true
+      ],
+      [
+        8.83,
+        "第1集",
+        "00:10 / 00:28",
+        true,
+        true
+      ],
+      [
+        19.8,
+        "第2集",
+        "00:00 / 00:28",
+        false,
+        true
+      ],
+      [
+        20.81,
+        "第2集",
+        "00:04 / 00:28",
+        false,
+        true
+      ]
+    ],
+    "detailAndRetry": {
+      "detailFirstSec": 1.33,
+      "detailCompleteSec": 7.91,
+      "retryToClockSec": 1.15,
+      "preRetryErrorRequests": [
+        "11-26 23:10:18.241 22676 22716 I TvUxFixture: 503 sample.mp4",
+        "11-26 23:10:18.242 22676 22721 I TvUxFixture: 503 sample.m3u8"
+      ],
+      "mediaRequestsAfterRetry": [
+        "11-26 23:10:20.256 22676 22714 I TvUxFixture: media /502/1/sample.m3u8",
+        "11-26 23:10:20.256 22676 22700 I TvUxFixture: media /502/1/sample.mp4",
+        "11-26 23:10:20.259 22676 22714 I TvUxFixture: media /502/1/part00.ts",
+        "11-26 23:10:20.267 22676 24672 I TvUxFixture: media /502/1/part02.ts",
+        "11-26 23:10:20.273 22676 24672 I TvUxFixture: media /502/1/part03.ts",
+        "11-26 23:10:20.290 22676 24672 I TvUxFixture: media /502/1/part04.ts",
+        "11-26 23:10:20.293 22676 24672 I TvUxFixture: media /502/1/part05.ts",
+        "11-26 23:10:20.306 22676 24672 I TvUxFixture: media /502/1/part06.ts",
+        "11-26 23:10:20.309 22676 24672 I TvUxFixture: media /502/1/part07.ts",
+        "11-26 23:10:20.311 22676 24672 I TvUxFixture: media /502/1/part08.ts",
+        "11-26 23:10:20.313 22676 24672 I TvUxFixture: media /502/1/part09.ts",
+        "11-26 23:10:20.314 22676 24672 I TvUxFixture: media /502/1/part10.ts",
+        "11-26 23:10:20.316 22676 24672 I TvUxFixture: media /502/1/part11.ts",
+        "11-26 23:10:20.318 22676 24672 I TvUxFixture: media /502/1/part12.ts",
+        "11-26 23:10:20.320 22676 24672 I TvUxFixture: media /502/1/part13.ts"
+      ]
+    },
+    "manualMarkerReplay": {
+      "saved": 15,
+      "ticks": [
+        [
+          0.93,
+          0
+        ],
+        [
+          1.12,
+          0
+        ],
+        [
+          1.33,
+          0
+        ],
+        [
+          1.52,
+          0
+        ],
+        [
+          1.75,
+          0
+        ],
+        [
+          1.95,
+          16
+        ]
+      ]
+    },
+    "skipDisabled": [
+      [
+        2.08,
+        0,
+        null
+      ],
+      [
+        3.09,
+        1,
+        null
+      ],
+      [
+        4.08,
+        2,
+        null
+      ],
+      [
+        5.06,
+        3,
+        null
+      ],
+      [
+        6.27,
+        4,
+        null
+      ],
+      [
+        7.22,
+        5,
+        null
+      ],
+      [
+        8.22,
+        6,
+        "第1集"
+      ],
+      [
+        9.46,
+        7,
+        "第1集"
+      ],
+      [
+        10.22,
+        8,
+        "第1集"
+      ],
+      [
+        11.21,
+        9,
+        "第1集"
+      ],
+      [
+        12.21,
+        10,
+        "第1集"
+      ],
+      [
+        13.18,
+        11,
+        "第1集"
+      ],
+      [
+        14.18,
+        12,
+        "第1集"
+      ],
+      [
+        15.13,
+        13,
+        "第1集"
+      ],
+      [
+        16.13,
+        14,
+        "第1集"
+      ],
+      [
+        17.12,
+        15,
+        "第1集"
+      ],
+      [
+        18.12,
+        16,
+        "第1集"
+      ],
+      [
+        19.13,
+        17,
+        "第1集"
+      ],
+      [
+        20.6,
+        18,
+        "第1集"
+      ],
+      [
+        21.08,
+        19,
+        "第1集"
+      ],
+      [
+        22.32,
+        20,
+        "第1集"
+      ],
+      [
+        23.3,
+        21,
+        "第1集"
+      ],
+      [
+        24.26,
+        22,
+        "第1集"
+      ]
+    ]
+  }
+}

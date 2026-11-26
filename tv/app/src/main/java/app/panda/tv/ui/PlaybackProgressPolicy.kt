@@ -18,6 +18,18 @@ internal object PlaybackProgressPolicy {
         }
     }
 
+    fun needsBufferRecovery(
+        reason: String?,
+        buffering: Boolean,
+        alternatives: Boolean,
+        sinceProgressMs: Long,
+        refillWindowSec: Double,
+    ): Boolean = when (reason) {
+        "stalled" -> true
+        "low-buffer" -> buffering && alternatives && sinceProgressMs >= refillWindowSec * 1000.0
+        else -> false
+    }
+
     fun isStalled(nowMs: Long, sample: PlaybackProgressSample): Boolean =
         nowMs - sample.advancedAtMs >= STALL_TIMEOUT_MS
 }

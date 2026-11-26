@@ -4,11 +4,15 @@ import { getText, openPublic, readLimited, unreachableHere, WorkLimiter } from '
 import { MediaProxy } from './proxy'
 import { clearHead, pictureOf } from './picture'
 import { isMp4Head } from './media-head'
+import { filterPlaylist } from './filter'
+import { hlsDuration, mp4Duration } from './duration'
 import { loadSourceRules, type PlaySource, type SourceRules } from './sources'
 import { extra } from '../../copy.extra'
 import { adultShelf } from '../adult'
 import { REGIONS, REGION_GROUPS } from '../data/taxonomy'
 import { compareDelivery, compareSourceOrder, playbackMargin, PLAYBACK_HEADROOM, type DeliveryScore, type SourceOrderScore } from './delivery'
+import { compareHealthRank } from '../health/rank'
+import type { SourceHealthStore } from '../health/store'
 
 interface RawVod { vod_id?: string | number; vod_name?: string; vod_year?: string | number; type_name?: string; vod_area?: string; vod_play_from?: string; vod_play_url?: string }
 export interface Episode { title: string; url: string; format: 'hls' | 'mp4'; number?: number }
@@ -71,7 +75,7 @@ const SOURCE_GONE_AFTER = 2 * 60000
 const CATALOGUE_CONCURRENCY = 12
 const SEARCH_GRACE_MS = 1_200
 
-interface ServiceOptions { proxy: MediaProxy; rules?: SourceRules; requeryDelayMs?: number; /** How long the catalogues that have not answered are waited for once the work is found. */ searchGraceMs?: number; /** Overrides FIRST_SEGMENT_GRACE_MS. */ firstSegmentGraceMs?: number; /** Overrides BETTER_PICTURE_MS. */ betterPictureMs?: number; /** Overrides TURN_MS. */ turnMs?: number; /** Told why a source's catalogue could not be read; for the main-process log only. */ onSourceFailure?: (source: string, reason: string, ms: number) => void }
+interface ServiceOptions { proxy: MediaProxy; rules?: SourceRules; requeryDelayMs?: number; /** How long the catalogues that have not answered are waited for once the work is found. */ searchGraceMs?: number; /** Overrides FIRST_SEGMENT_GRACE_MS. */ firstSegmentGraceMs?: number; /** Overrides BETTER_PICTURE_MS. */ betterPictureMs?: number; /** Overrides TURN_MS. */ turnMs?: number; /** Told why a source's catalogue could not be read; for the main-process log only. */ onSourceFailure?: (source: string, reason: string, ms: number) => void; /** Cross-session source health; absent means no archive. */ health?: SourceHealthStore }
 
 const LANGUAGE = /(?:国语版?|普通话版?|粤语版?|英语版?|日语版?|韩语版?|泰语版?|中字|双语|高清|完整版|未删减版)$/
 const CJK_DIGIT: Record<string, number> = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 }
@@ -369,6 +373,7 @@ export class PlaybackService {
   private readonly preferenceRevisions = new Map<string, number>()
   private readonly manualIntents = new Map<string, number>()
   private readonly selectionIntents = new Map<string, { intent: number; key: string }>()
+  private readonly proposals = new Map<string, { id: number; accept: () => boolean }>()
   private revisionClock = 0
   /** Work → the last source that won; used only to break a tie in the next episode's race. */
   private readonly winners = new Map<string, string>()
@@ -432,7 +437,7 @@ export class PlaybackService {
    * (the detail page, the episode before) makes pressing play immediate; `retry` always chooses
    * anew, and so does `from`, which names the one source the viewer asked for.
    */
-  async resolve(item: MediaItem, episode: number, quality?: Quality, retry = false, hints: WorkHints = {}, from?: string): Promise<Playback> {
+  async resolve(item: MediaItem, episode: number, quality?: Quality, retry = false, hints: WorkHints = {}, from?: string, retryFailure?: 'probe' | 'stall', propose = false): Promise<Playback> {
     if (!Number.isInteger(episode) || episode < 1 || episode > 10000) throw new Error('集数无效')
     const revision = this.revision(item.id)
     const intent = from ? ++this.revisionClock : undefined
@@ -440,24 +445,68 @@ export class PlaybackService {
     const key = [this.workKey(item, hints), episode, quality ?? '', revision].join('|')
     const selectionKey = item.id + ':' + episode
     const known = this.resolved.get(key)
-    if (!retry && !from && known && known.expires > Date.now() && this.selectionIntents.get(selectionKey)?.key === key) return known.value
+    if (!propose && !retry && !from && known && known.expires > Date.now() && this.selectionIntents.get(selectionKey)?.key === key) {
+      const selected = this.selected.get(selectionKey)
+      if (!selected || !this.options.health?.rankFor(selected, item.id).cooled) return known.value
+    }
     const selectionIntent = ++this.revisionClock
+    this.proposals.delete(selectionKey)
     this.selectionIntents.delete(selectionKey)
     this.selectionIntents.set(selectionKey, { intent: selectionIntent, key })
     while (this.selectionIntents.size > 512) this.selectionIntents.delete(this.selectionIntents.keys().next().value!)
-    const task = this.choose(item, episode, quality, retry, hints, from, revision, selectionIntent, intent)
+    const isCurrent = () => this.selectionIntents.get(selectionKey)?.intent === selectionIntent &&
+      (from ? this.manualIntents.get(item.id) === intent : this.preferenceRevisions.get(item.id) === revision)
+    const task = this.choose(item, episode, quality, retry, hints, from, retryFailure, isCurrent)
+    if (propose) {
+      const candidate = await task
+      if (isCurrent()) {
+        if (this.proposals.size >= 512) this.proposals.delete(this.proposals.keys().next().value!)
+        this.proposals.set(selectionKey, { id: selectionIntent, accept: () => {
+          if (!isCurrent()) return false
+          this.select(item.id, episode, candidate.sourceKey!, from)
+          const current = [this.workKey(item, hints), episode, quality ?? '', this.revision(item.id)].join('|')
+          this.cachePlayback(current, task)
+          this.selectionIntents.set(selectionKey, { intent: selectionIntent, key: current })
+          return true
+        } })
+      }
+      return { ...candidate, selectionId: selectionIntent }
+    }
+    const chosen = task.then(candidate => {
+      if (isCurrent()) this.select(item.id, episode, candidate.sourceKey!, from)
+      return candidate
+    })
+    this.cachePlayback(key, chosen)
+    if (from) void chosen.then(() => {
+      if (!isCurrent() || this.preferred.get(item.id) !== from) return
+      const current = [this.workKey(item, hints), episode, quality ?? '', this.revision(item.id)].join('|')
+      this.cachePlayback(current, chosen)
+      this.selectionIntents.set(selectionKey, { intent: selectionIntent, key: current })
+    }, () => {})
+    chosen.catch(() => { if (this.resolved.get(key)?.value === chosen) this.resolved.delete(key) })
+    return chosen
+  }
+
+  acceptSwitch(work: string, episode: number, id: number): boolean {
+    const key = work + ':' + episode
+    const proposal = this.proposals.get(key)
+    if (proposal?.id !== id) return false
+    this.proposals.delete(key)
+    return proposal.accept()
+  }
+
+  private select(work: string, episode: number, source: string, from?: string) {
+    if (from) this.prefer(work, from)
+    if (this.selected.size > 512) this.selected.delete(this.selected.keys().next().value!)
+    this.selected.set(work + ':' + episode, source)
+    if (this.winners.size > 256) this.winners.delete(this.winners.keys().next().value!)
+    this.winners.set(work, source)
+  }
+
+  private cachePlayback(key: string, task: Promise<Playback>) {
     this.resolved.delete(key)
     if (this.resolved.size >= 64) this.resolved.delete(this.resolved.keys().next().value!)
     this.resolved.set(key, { value: task, expires: Date.now() + RESOLVED_MS })
-    if (from) void task.then(() => {
-      if (this.selectionIntents.get(selectionKey)?.intent !== selectionIntent || this.manualIntents.get(item.id) !== intent || this.preferred.get(item.id) !== from) return
-      const current = [this.workKey(item, hints), episode, quality ?? '', this.revision(item.id)].join('|')
-      if (this.resolved.size >= 64) this.resolved.delete(this.resolved.keys().next().value!)
-      this.resolved.set(current, { value: task, expires: Date.now() + RESOLVED_MS })
-      this.selectionIntents.set(selectionKey, { intent: selectionIntent, key: current })
-    }, () => {})
-    task.catch(() => { if (this.resolved.get(key)?.value === task) this.resolved.delete(key) })
-    return task
   }
 
   /** The sources that carry an episode, best first, and the one it is playing from. */
@@ -488,20 +537,31 @@ export class PlaybackService {
     return attempts
   }
 
-  private async choose(item: MediaItem, episode: number, quality: Quality | undefined, retry: boolean, hints: WorkHints, from: string | undefined, revision: number, selectionIntent: number, intent?: number): Promise<Playback> {
+  private async choose(item: MediaItem, episode: number, quality: Quality | undefined, retry: boolean, hints: WorkHints, from: string | undefined, retryFailure: 'probe' | 'stall' | undefined, isCurrent: () => boolean): Promise<Playback> {
     const selectionKey = item.id + ':' + episode
     const previous = this.selected.get(selectionKey)
     // The player asks again when what it was given did not play.
-    if (retry && previous) this.setBack(item.id, previous)
+    if (retry && previous) {
+      this.setBack(item.id, previous)
+      if (retryFailure) this.options.health?.recordFailure(previous, retryFailure, item.id, episode)
+    }
     const back = (key: string) => Number((this.behind.get(this.behindKey(item.id, key)) ?? 0) > Date.now())
     const winner = this.winners.get(item.id)
-    const attempts = (await this.attempts(item, episode, hints)).sort((a, b) => {
+    const candidates = await this.attempts(item, episode, hints)
+    const healthRanks = new Map(candidates.map(attempt => [
+      attempt,
+      this.options.health?.rankFor(attempt.source.key, item.id) ?? { cooled: false, rank: 0.5 },
+    ]))
+    const attempts = candidates.filter(attempt => attempt.source.key === from || !healthRanks.get(attempt)!.cooled)
+    attempts.sort((a, b) => {
       const score = (attempt: typeof a): SourceOrderScore => ({
-        behind: Boolean(back(attempt.source.key)),
+        behind: Boolean(back(attempt.source.key)) || (healthRanks.get(attempt)?.cooled ?? false),
         previous: attempt.source.key === previous,
         winner: attempt.source.key === winner,
       })
-      return compareSourceOrder(score(a), score(b), retry)
+      const order = compareSourceOrder(score(a), score(b), retry)
+      if (order) return order
+      return compareHealthRank(healthRanks.get(a)!, healthRanks.get(b)!)
     })
     // Give other providers the first chance. The old provider may have recovered in the meantime.
     const alternatives = retry && previous ? attempts.filter(attempt => attempt.source.key !== previous) : attempts
@@ -525,6 +585,7 @@ export class PlaybackService {
       const grace = this.options.firstSegmentGraceMs ?? FIRST_SEGMENT_GRACE_MS
       const turn = this.options.turnMs ?? TURN_MS
       const live = new Map<typeof list[number], { controller: AbortController; started: number; reached?: Reached }>()
+      const startedAt = new Map<typeof list[number], number>()
       /** Sources whose first segment is in but whose picture is smaller than asked for, in the order they came in. */
       const held: Array<{ attempt: typeof list[number]; playback: Playback; score: DeliveryScore }> = []
       const timers = new Set<ReturnType<typeof setTimeout>>()
@@ -537,8 +598,18 @@ export class PlaybackService {
         over = true
         for (const timer of timers) clearTimeout(timer)
         for (const [attempt, entry] of live) {
+          if (attempt === keep) continue
           // A full turn without a whole segment: slow from here, whatever it is elsewhere.
-          if (Date.now() - entry.started >= turn) this.setBack(item.id, attempt.source.key)
+          if (Date.now() - entry.started >= turn) {
+            this.setBack(item.id, attempt.source.key)
+            this.options.health?.recordFailure(
+              attempt.source.key,
+              entry.reached ? 'first-segment' : 'probe',
+              item.id,
+              episode,
+              Date.now(),
+            )
+          }
           if (attempt !== keep) entry.controller.abort()
         }
       }
@@ -548,14 +619,9 @@ export class PlaybackService {
       const win = (attempt: typeof list[number], playback: Playback) => {
         if (over) return
         stop(attempt)
-        const current = this.selectionIntents.get(selectionKey)?.intent === selectionIntent && (from ? this.manualIntents.get(item.id) === intent : this.preferenceRevisions.get(item.id) === revision)
-        if (current) {
-          if (from) this.prefer(item.id, from)
-          if (this.selected.size > 512) this.selected.delete(this.selected.keys().next().value!)
-          this.selected.set(selectionKey, attempt.source.key)
-          if (this.winners.size > 256) this.winners.delete(this.winners.keys().next().value!)
-          this.winners.set(item.id, attempt.source.key)
-        }
+        const finished = Date.now()
+        const started = startedAt.get(attempt) ?? finished
+        if (isCurrent()) this.options.health?.recordSuccess(attempt.source.key, item.id, episode, finished, Math.max(0, finished - started) / 1000, playback.quality)
         resolve(playback)
       }
       /** The best picture among those held; the earliest of equals. */
@@ -582,9 +648,17 @@ export class PlaybackService {
         if (!live.size) settleNow()
       }
       const lose = (attempt: typeof list[number], error: unknown) => {
+        const entry = live.get(attempt)
         live.delete(attempt)
         if (over) return
         this.setBack(item.id, attempt.source.key)
+        this.options.health?.recordFailure(
+          attempt.source.key,
+          entry?.reached ? 'first-segment' : 'probe',
+          item.id,
+          episode,
+          Date.now(),
+        )
         failed.set(attempt, error)
         start()
         if (live.size) return
@@ -616,11 +690,13 @@ export class PlaybackService {
           const attempt = list[next++]!, asked = Date.now()
           const entry: { controller: AbortController; started: number; reached?: Reached } = { controller: new AbortController(), started: asked }
           live.set(attempt, entry)
+          startedAt.set(attempt, asked)
           // After its turn it keeps downloading, and no longer holds back the next source.
           later(start, turn + 5)
           this.probe(attempt.target, attempt.source, quality, entry.controller.signal).then(reached => {
             if (over) return
             entry.reached = reached
+            if (reached.playback.duration !== undefined) this.options.health?.observeDuration(item.id, episode, attempt.source.key, reached.playback.duration)
             reached.whole.then(() => delivered(attempt, reached), error => lose(attempt, error))
           }, error => {
             if (!over) this.options.onSourceFailure?.(attempt.source.key, 'probe: ' + reason(error), Date.now() - asked)
@@ -632,10 +708,14 @@ export class PlaybackService {
       start()
       if (!live.size) reject(new Error('片源暂时无法连接，请重试'))
     })
-    for (const list of [own, rest, lastChance]) if (list.length) { try { return await contest(list) } catch { /* asked again below where that can help */ } }
+    const eligible = (attempt: typeof attempts[number]) => attempt.source.key === from || !this.options.health?.rankFor(attempt.source.key, item.id).cooled
+    for (const group of [own, rest, lastChance]) {
+      const list = group.filter(eligible)
+      if (list.length) { try { return await contest(list) } catch { /* Continue with the remaining candidates. */ } }
+    }
     // A reset connection or a deadline says nothing about the episode. Before telling the viewer
     // that it cannot be played, ask once more those that failed that way.
-    const again = [...own, ...rest].filter(attempt => TRANSIENT.test(reason(failed.get(attempt)))).slice(0, 3)
+    const again = [...own, ...rest].filter(attempt => eligible(attempt) && TRANSIENT.test(reason(failed.get(attempt)))).slice(0, 3)
     if (again.length) { try { return await contest(again) } catch { /* reported below */ } }
     throw new Error('片源暂时无法连接，请重试')
   }
@@ -687,7 +767,8 @@ export class PlaybackService {
           })())
           if (!isMp4Head(head)) throw new Error('媒体不可用')
         } finally { response.destroy() }
-        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4' }, whole: Promise.resolve(), margin: () => undefined, received: () => head.length }
+        const reading = mp4Duration(head)
+        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4', sourceKey: source.key, duration: reading.seconds ?? undefined, durationSource: reading.source }, whole: Promise.resolve(), margin: () => undefined, received: () => head.length }
       }
       let current = episode.url; let selected: Quality | undefined; let qualities: Quality[] | undefined; let preserveTimeline = false
       for (let depth = 0; depth < 4; depth++) {
@@ -704,6 +785,8 @@ export class PlaybackService {
           selected = variant.quality; current = variant.url; continue
         }
         // The segment the player will ask for first: the first one left after ad removal.
+        const filtered = preserveTimeline ? text : filterPlaylist(text, url, source, this.rules).text
+        const reading = hlsDuration(filtered)
         const first = /#EXTINF:/.test(text) ? this.options.proxy.firstSegment(text, url, source, preserveTimeline) : undefined
         if (!first) throw new Error('播放清单没有媒体分片')
         const segment = first.url
@@ -758,7 +841,10 @@ export class PlaybackService {
         // where it offers one, its name is the picture that was read.
         const several = Boolean(qualities && qualities.length > 1)
         const label = several ? selected : shown ?? selected
-        return { playback: { url: this.options.proxy.registerMedia(target, source, preserveTimeline), format: 'hls', ...(!preserveTimeline && label ? { quality: label } : {}), ...(!preserveTimeline && several ? { qualities } : {}) }, whole, shown: shown ?? selected, margin: () => playbackMargin(first.seconds, declared > 0 ? declared : undefined, size, (measuredUntil ?? Date.now()) - segmentStarted, complete), received: () => size }
+        const durationFields = reading.seconds !== null
+          ? { duration: reading.seconds, durationSource: reading.source, ...(reading.fingerprint ? { manifestFingerprint: reading.fingerprint } : {}) }
+          : { durationSource: 'missing' as const }
+        return { playback: { url: this.options.proxy.registerMedia(target, source, preserveTimeline), format: 'hls', sourceKey: source.key, ...durationFields, ...(!preserveTimeline && label ? { quality: label } : {}), ...(!preserveTimeline && several ? { qualities } : {}) }, whole, shown: shown ?? selected, margin: () => playbackMargin(first.seconds, declared > 0 ? declared : undefined, size, (measuredUntil ?? Date.now()) - segmentStarted, complete), received: () => size }
       }
       throw new Error('播放清单嵌套过深')
     } catch (error) { own.abort(); throw error }
@@ -810,7 +896,8 @@ export class PlaybackService {
             const payload = JSON.parse((await getText(url, { signal })).text) as { list?: RawVod[]; pagecount?: number }
             if (!Array.isArray(payload.list)) throw new Error('片源数据格式无效')
             successes++
-            for (const raw of payload.list.filter(row => matchRecord(item, row, hints)).slice(0, 4)) {
+            const matches = payload.list.filter(row => !source.excludedRecordIds?.includes(String(row.vod_id)) && matchRecord(item, row, hints))
+            for (const raw of matches.slice(0, 4)) {
               if (raw.vod_id == null || seen.has(String(raw.vod_id))) continue
               const id = String(raw.vod_id); seen.add(id)
               // List rows of some sources omit play URLs; the record itself is authoritative.

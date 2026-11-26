@@ -132,6 +132,10 @@ export type Speed = (typeof SPEEDS)[number]
 export interface Playback {
   /** 播放地址 */
   url: string
+  /** 选源的稳定标识 */
+  sourceKey?: string
+  /** A proposed source switch becomes current only after the player accepts it. */
+  selectionId?: number
   /** hls 交给 hls.js，mp4 直接给 <video> */
   format: 'hls' | 'mp4'
   /** 这一集实际给的是哪一档清晰度。清晰度按钮上显示它 */
@@ -142,6 +146,14 @@ export interface Playback {
   intro?: { start: number; end: number }
   /** 片尾开始的位置（秒）。没有就按整集时长算 */
   outro?: number
+  /** 源侧媒体总时长（秒）。HLS 为过滤后 #EXTINF 总和，mp4 为 moov/mvhd。缺失表示判据不可得 */
+  duration?: number
+  /** duration 的来源。missing 表示采集失败，不产生数值 */
+  durationSource?: 'hls-extinf' | 'mp4-moov' | 'missing'
+  /** 参与偏移缓存键的清单指纹（过滤后文本的稳定摘要），不面向用户 */
+  manifestFingerprint?: string
+  /** 选源时的档案提示，用于播放页标注降级清晰度与诊断 */
+  healthHint?: { score: number; cooled: boolean; lastFailure?: string }
 }
 
 // ───────────────────────── 数据源 ─────────────────────────

@@ -2,6 +2,8 @@ package app.panda.tv.playback
 
 import app.panda.tv.model.Quality
 import app.panda.tv.net.PublicResponse
+import app.panda.tv.state.SourceHealthStore
+import app.panda.tv.ui.playbackFailureKind
 import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -10,16 +12,87 @@ import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.CountDownLatch
+import java.nio.file.Files
 
 class MediaAdmissionTest {
-    private fun client(keys: List<String>, fetcher: MediaFetcher, serial: Boolean = false, hlsSource: String? = null, betterPictureMs: Long = 1000): PlaybackService {
+    private fun client(
+        keys: List<String>,
+        fetcher: MediaFetcher,
+        serial: Boolean = false,
+        hlsSource: String? = null,
+        betterPictureMs: Long = 1000,
+        turnMs: Long = 2_500,
+        health: SourceHealthStore? = null,
+        alignment: AlignmentConfig? = null,
+    ): PlaybackService {
         val rules = admissionRules(keys)
         return PlaybackService(rules, WarmMediaCache(rules), admissionCatalogue(if (serial) admissionSerial else admissionMovie, hlsSource),
-            searchGraceMs = 100, betterPictureMs = betterPictureMs, firstSegmentGraceMs = 3000, mediaFetcher = fetcher)
+            searchGraceMs = 100, betterPictureMs = betterPictureMs, firstSegmentGraceMs = 3000, turnMs = turnMs,
+            mediaFetcher = fetcher, health = health, alignment = alignment)
     }
+
+    private fun health(file: java.io.File) = SourceHealthStore(
+        file,
+        HealthConfig(
+            basisVersion = "test",
+            decayVersion = "1",
+            halfLifeDays = 30.0,
+            baseline = 0.5,
+            slowStartupSec = 8.0,
+            playFloorSec = 60.0,
+            workDeltaMax = 0.2,
+            weights = HealthWeights(0.4, 0.3, 0.2, 0.1),
+        ),
+        BudgetConfig(3, 30.0, 300.0),
+    )
     private fun media(respond: suspend (String) -> PublicResponse) = object : MediaFetcher {
         override suspend fun text(url: String): Pair<String, String> = error("Unexpected manifest")
         override suspend fun open(url: String, headers: Map<String, String>) = respond(url)
+    }
+
+    @Test fun `a different cut cannot replace the active media or manual preference`() = runBlocking {
+        val dir = Files.createTempDirectory("panda-tv-duration").toFile()
+        try {
+            val archive = java.io.File(dir, "health.json")
+            val store = health(archive)
+            val config = AlignmentConfig("test", .01, 5.0, .05, 4.0, 3.0, 5, 1200L, .9, 7.0, 1.5)
+            val fetch = media { url ->
+                val seconds = if (url.contains("a.media")) 90 else 30
+                val mvhd = java.nio.ByteBuffer.allocate(32).apply {
+                    position(4); put("mvhd".toByteArray()); putInt(20, 1000); putInt(24, seconds * 1000)
+                }.array()
+                admissionResponse(url, mp4Opening + mvhd).first
+            }
+            val service = client(listOf("a", "b"), fetch, serial = true, health = store, alignment = config)
+            val original = service.resolve(admissionSerial, 1, from = "a")
+            assertEquals(90.0, original.duration!!, 0.01)
+            assertTrue(runCatching { service.resolve(admissionSerial, 1, from = "b", switchingFrom = original) }.isFailure)
+            assertEquals("a", service.sources(admissionSerial, 1).current)
+            assertEquals("a", service.resolve(admissionSerial, 2).sourceKey)
+            store.flush()
+            val restored = health(archive)
+            assertEquals(listOf(30.0), restored.durationHistory(admissionSerial.id, 1, "a", "b").sourceSamples)
+            assertEquals(1, restored.snapshot().globals.first { it.sourceKey == "b" }.failure.alignment)
+        } finally { dir.deleteRecursively() }
+    }
+
+    @Test fun `startup failure and stall cool their own sources and an explicit pick can recover`() = runBlocking {
+        val dir = Files.createTempDirectory("panda-tv-cooled").toFile()
+        try {
+            val store = health(java.io.File(dir, "health.json"))
+            val opens = AtomicInteger()
+            val service = client(listOf("a", "b"), media { url -> opens.incrementAndGet(); admissionResponse(url).first }, health = store)
+            service.resolve(admissionMovie, 1, from = "a")
+            assertEquals("b", service.resolve(admissionMovie, 1, retry = true, retryFailureKind = playbackFailureKind(false)).sourceKey)
+            opens.set(0)
+            assertTrue(runCatching { service.resolve(admissionMovie, 1, retry = true, retryFailureKind = playbackFailureKind(true)) }.isFailure)
+            assertEquals(0, opens.get())
+            val entries = store.snapshot().globals.associateBy { it.sourceKey }
+            assertEquals(FailureCounts(probe = 1), entries.getValue("a").failure)
+            assertEquals(FailureCounts(stall = 1), entries.getValue("b").failure)
+            assertTrue(entries.values.all { it.cooled })
+            assertEquals("a", service.resolve(admissionMovie, 1, from = "a").sourceKey)
+        } finally { dir.deleteRecursively() }
     }
 
     @Test fun `fast winner does not await a canceled blocking probe`() = runBlocking {
@@ -66,6 +139,74 @@ class MediaAdmissionTest {
         val result = runCatching { withTimeout(5000) { service.resolve(admissionMovie, 1) } }
         assertTrue(result.isFailure)
         assertNull(service.sources(admissionMovie, 1).current)
+    }
+
+    @Test fun `failed MP4 probe cools only its source and persists the failure`() = runBlocking {
+        val dir = Files.createTempDirectory("panda-tv-probe-health").toFile()
+        try {
+            val path = java.io.File(dir, "health.json")
+            val store = health(path)
+            val service = client(
+                listOf("a"), media { admissionResponse(it, "{}".toByteArray()).first }, health = store,
+            )
+            val result = runCatching { withTimeout(5000) { service.resolve(admissionMovie, 1) } }
+            assertTrue(result.isFailure)
+            val entry = store.snapshot().globals.single()
+            assertTrue(entry.cooled)
+            assertEquals(1, entry.failure.probe)
+            assertEquals(0, entry.failure.firstSegment)
+            assertEquals(FailureKind.PROBE, entry.lastFailureKind)
+            store.flush()
+            val restored = health(path).snapshot().globals.single()
+            assertTrue(restored.cooled)
+            assertEquals(1, restored.failure.probe)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test fun `a slow but complete HLS winner is not recorded as a first segment failure`() = runBlocking {
+        val dir = Files.createTempDirectory("panda-tv-slow-health").toFile()
+        try {
+            val store = health(java.io.File(dir, "health.json"))
+            val media = object : MediaFetcher {
+                override suspend fun text(url: String) =
+                    "#EXTM3U\n#EXT-X-TARGETDURATION:6\n#EXTINF:6,\nfirst.ts\n#EXT-X-ENDLIST\n" to url
+
+                override suspend fun open(url: String, headers: Map<String, String>): PublicResponse {
+                    delay(30)
+                    return admissionResponse(url, codecHead("1080"), "video/mp2t").first
+                }
+            }
+            val service = client(
+                listOf("a"), media, hlsSource = "a", betterPictureMs = 20, turnMs = 5, health = store,
+            )
+            withTimeout(5000) { service.resolve(admissionMovie, 1, Quality.Q1080P) }
+            val entry = store.snapshot().globals.single()
+            assertEquals(1, entry.success)
+            assertEquals(FailureCounts(), entry.failure)
+            assertEquals(Quality.Q1080P, entry.shownQuality)
+            assertTrue((entry.startupMedian ?: 0.0) > 0.0)
+            assertNull(entry.lastFailureKind)
+        } finally {
+            dir.deleteRecursively()
+        }
+    }
+
+    @Test fun `an unclassified retry does not record a stall against the previous source`() = runBlocking {
+        val dir = Files.createTempDirectory("panda-tv-retry-health").toFile()
+        try {
+            val store = health(java.io.File(dir, "health.json"))
+            val service = client(listOf("a"), media { admissionResponse(it).first }, health = store)
+            withTimeout(5000) { service.resolve(admissionMovie, 1) }
+            withTimeout(5000) { service.resolve(admissionMovie, 1, retry = true) }
+            val entry = store.snapshot().globals.single()
+            assertEquals(2, entry.success)
+            assertEquals(0, entry.failure.stall)
+            assertNull(entry.lastFailureKind)
+        } finally {
+            dir.deleteRecursively()
+        }
     }
 
     @Test fun `a newer automatic request owns its winner after an older request completes`() = runBlocking {

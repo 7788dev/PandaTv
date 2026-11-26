@@ -7,6 +7,15 @@ import org.junit.Test
 
 class PlaybackProgressPolicyTest {
     @Test
+    fun lowBufferDoesNotInterruptAnAdvancingOrOnlySource() {
+        assertFalse(PlaybackProgressPolicy.needsBufferRecovery("low-buffer", false, true, 6000, 5.0))
+        assertFalse(PlaybackProgressPolicy.needsBufferRecovery("low-buffer", true, false, 6000, 5.0))
+        assertFalse(PlaybackProgressPolicy.needsBufferRecovery("low-buffer", true, true, 1000, 5.0))
+        assertTrue(PlaybackProgressPolicy.needsBufferRecovery("low-buffer", true, true, 6000, 5.0))
+        assertTrue(PlaybackProgressPolicy.needsBufferRecovery("stalled", true, false, 20000, 5.0))
+    }
+
+    @Test
     fun `playing without any timeline movement reaches the stall deadline`() {
         var sample = PlaybackProgressSample(positionMs = 0L, advancedAtMs = 0L)
         sample = PlaybackProgressPolicy.observe(positionMs = 0L, nowMs = 19_999L, previous = sample)
