@@ -57,12 +57,13 @@ test('real metadata initials filters paging and detail navigation', async () => 
   await expect(page.getByRole('heading', { name: '三体', exact: true })).toBeVisible()
   await screenshot(page, join(dir, 'detail-live.png'))
   await page.locator('a[href="#/channel/movie"]').click()
-  await page.locator('.grid .card').first().waitFor({ timeout: 45000 })
-  const first = await page.locator('.grid .card').count()
+  const cards = page.locator('.grid .card[data-id]')
+  await cards.first().waitFor({ timeout: 45000 })
+  const first = await cards.count()
   const viewport = page.locator('.scroll__viewport')
   await viewport.evaluate(el => { el.scrollTop = el.scrollHeight })
-  await expect.poll(() => page.locator('.grid .card').count(), { timeout: 45000 }).toBeGreaterThan(first)
-  report.channel = { first, after: await page.locator('.grid .card').count() }
+  await expect.poll(() => cards.count(), { timeout: 45000 }).toBeGreaterThan(first)
+  report.channel = { first, after: await cards.count() }
   await resize(app, 1080, 640)
   await screenshot(page, join(dir, 'channel-small-live.png'))
   writeFileSync(join(dir, 'metadata-live.json'), JSON.stringify(report, null, 2))

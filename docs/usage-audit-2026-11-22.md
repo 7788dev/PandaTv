@@ -1,5 +1,7 @@
 # Panda 实际使用场景审计 · 2026-11-22
 
+下文的 Android runtime 日志为当次设备输出，已归档的结果见[验证汇总](evidence/usage-audit-2026-11-22/validation.json)。
+
 本文是 2026-11-22 的修复前审计快照。后续 D01–D07 与 A01–A04 的修复、最终候选与实际验收边界见[2026-11-23 修复报告](usage-fixes-2026-11-23.md)；以下保留当时的发现与取证。
 
 审计时的工作区确认了 **7 项尚未修复的缺陷：3 项 P1、4 项 P2**，以及 4 项有复现依据的改进点。最先应处理 TV 的存储异常、损坏状态覆盖和请求取消传播；桌面主要问题集中在分页返回、预加载与换线、默认画质和媒体加载后的倍速。
@@ -39,7 +41,7 @@ P1 表示可导致应用退出、用户数据恢复材料丢失或有效播放�
 
 ### D01 · TV 未处理持久化写入异常
 
-**触发与结果。** 在已安装的最终候选 APK 上，先确认实际焦点为“自动播放下一集”，临时把 app files 目录设为只读，再按 D-pad 确认。两次都出现 `FileNotFoundException / EACCES`、`FATAL EXCEPTION: main` 和进程退出。旧状态在失败时保持不变。证据见 [设备摘要](evidence/usage-audit-2026-11-22/tv-storage-summary.json)及两次 [AndroidRuntime 日志](evidence/usage-audit-2026-11-22/tv-storage/run-1-android-runtime.log)、[第二次日志](evidence/usage-audit-2026-11-22/tv-storage/run-2-android-runtime.log)。
+**触发与结果。** 在已安装的最终候选 APK 上，先确认实际焦点为“自动播放下一集”，临时把 app files 目录设为只读，再按 D-pad 确认。两次都出现 `FileNotFoundException / EACCES`、`FATAL EXCEPTION: main` 和进程退出。旧状态在失败时保持不变。证据见 [设备摘要](evidence/usage-audit-2026-11-22/tv-storage-summary.json)及两次 AndroidRuntime 日志（`run-1-android-runtime.log`）、第二次日志（`run-2-android-runtime.log`）。
 
 **原因。** [TV UserStore](../tv/app/src/main/java/app/panda/tv/state/UserStore.kt) 第 25、30、53–58 行在 dispatch 中同步写文件并直接抛出 I/O 异常；[SettingsScreen](../tv/app/src/main/java/app/panda/tv/ui/SettingsScreen.kt) 第 89 行的 UI 回调未处理失败。复核全部 TV dispatch 入口还发现播放历史保存（[PlayerScreen](../tv/app/src/main/java/app/panda/tv/ui/PlayerScreen.kt) 第 1230 行）等调用同样缺少错误边界。设备实测的是设置入口和写权限错误；磁盘不足、其他入口的具体崩溃尚未分别回放。
 
@@ -67,7 +69,7 @@ P1 表示可导致应用退出、用户数据恢复材料丢失或有效播放�
 
 数据见 [renderer 第一轮](evidence/usage-audit-2026-11-22/ui-probes-first.json)、[第二轮](evidence/usage-audit-2026-11-22/ui-probes-second.json)；频道的[离开前截图](evidence/usage-audit-2026-11-22/channel-second-before.png)与[返回后截图](evidence/usage-audit-2026-11-22/channel-second-after.png)属于**测试数据证据**，不作为真实目录或线上元数据证据。
 
-**原因。** [pages.tsx](../src/renderer/pages.tsx) 第 99–108 行把追加分页仅存在 `PagedGrid` 的组件 state 中；进入详情会卸载它。频道和影人页都用该组件（第 140、221 行）。[App.tsx](../src/renderer/App.tsx) 第 148、153 行只保留滚动值，返回时没有相应列表高度和卡片。现有返回滚动用例 [layout.spec.ts](../e2e/layout.spec.ts) 第 175 行测试首页，未覆盖追加分页。
+**原因。** [pages.tsx](../src/renderer/pages.tsx) 第 99–108 行把追加分页仅存在 `PagedGrid` 的组件 state 中；进入详情会卸载它。频道和影人页都用该组件（第 140、221 行）。[App.tsx](../src/renderer/App.tsx) 第 148、153 行只保留滚动值，返回时没有相应列表高度和卡片。现有返回滚动用例 [layout.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/layout.spec.ts) 第 175 行测试首页，未覆盖追加分页。
 
 **建议与验收。** 按频道筛选/影人 ID 保存有界的分页快照、cursor 与离开时锚点，先恢复内容再恢复位置。三页返回须保留原卡片和滚动/焦点；修改筛选后不得混入旧结果；淘汰页面快照后须有明确的重建行为，不能无限保留页面。
 
@@ -77,7 +79,7 @@ P1 表示可导致应用退出、用户数据恢复材料丢失或有效播放�
 
 该复现执行真实 `PlaybackService.resolve / choose / attempts` 和缓存，仅替代目录及媒体获取，证明服务逻辑问题；它不是两个线上片源的实际接管测试。
 
-**原因。** [service.ts](../src/main/playback/service.ts) 第 373 行的解析缓存键只有作品、集数和画质；第 375 行在检查新偏好之前返回缓存。第 432 行和第 478 行虽会读取/更新作品级 preferred，但未使已预加载集数失效。缓存有效期为 3 分钟（第 61 行）。现有 [playback-start.test.ts](../tests/playback-start.test.ts) 第 369 行验证手动选择后下一集使用同一源，但没有先预加载下一集。
+**原因。** [service.ts](../src/main/playback/service.ts) 第 373 行的解析缓存键只有作品、集数和画质；第 375 行在检查新偏好之前返回缓存。第 432 行和第 478 行虽会读取/更新作品级 preferred，但未使已预加载集数失效。缓存有效期为 3 分钟（第 61 行）。现有 [playback-start.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/playback-start.test.ts) 第 369 行验证手动选择后下一集使用同一源，但没有先预加载下一集。
 
 **建议与验收。** 让手动线路选择推进作品的偏好版本，或精确使该作品相关解析缓存失效；晚到的旧预加载也不得重新写入有效缓存。回归须先预加载再换线，并覆盖正在进行的预加载、同画质下一集以及手动源失败后的既有回退。TV [PlaybackService.kt](../tv/app/src/main/java/app/panda/tv/playback/PlaybackService.kt) 第 508–529 行有类似缓存结构，应单独验证，本文不把未执行的 TV 情况算成第八项缺陷。
 

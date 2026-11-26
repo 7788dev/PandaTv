@@ -6,7 +6,7 @@
 
 推送 `master` 或提交 Pull Request 自动运行 [CI](../.github/workflows/ci.yml)，复用同一份[构建流程](../.github/workflows/build.yml)：
 
-- Windows：Node 24、锁文件安装、TypeScript、离线单测、发布脚本测试、设计 SHA256、原型契约检查、NSIS x64 安装包、asar 内容检查、fixture 与布局 E2E。
+- Windows 使用 Node 24，依次检查锁文件安装、TypeScript、规则参数、单元测试和发布脚本，构建 NSIS x64 安装包并核验 asar。随后用 FFmpeg 生成音视频素材，在编译后的 Electron 应用中运行离线交互和布局测试。
 - TV：JDK 21、从项目读取的 Gradle / Android SDK 版本、双端黄金向量一致性、单测、兼容性 lint、release APK。保持 `minSdk = 22`。
 - 成功的安装包上传到该次 Actions 运行的 Artifacts，保留 14 天；失败的测试报告保留 7 天。自动 CI 的 TV 包标为 `-unsigned.apk`，仅供编译检查，不能作为正常安装包使用。
 
@@ -31,11 +31,12 @@ gh run download <run-id> --dir release/cloud
 
 1. 修改根 `package.json` 及 `package-lock.json` 的桌面版本；若更新 TV，同时递增 `tv/app/build.gradle.kts` 的 `versionName` 和 `versionCode`。两个客户端版本独立，发布标签跟随桌面版本。
 2. 提交、推送代码，等待该提交的 CI 通过。
-3. 为已验收的提交创建并推送 `v<桌面版本>` 标签。例如桌面版本为 `1.1.4` 时：
+3. 为已验收的提交创建并推送与新桌面版本对应的标签。
 
    ```powershell
-   git tag -a v1.1.4 -m "Panda 1.1.4"
-   git push origin v1.1.4
+   $releaseVersion = node -p "require('./package.json').version"
+   git tag -a "v$releaseVersion" -m "Panda $releaseVersion"
+   if ($LASTEXITCODE -eq 0) { git push origin "v$releaseVersion" }
    ```
 
 4. [Release 工作流](../.github/workflows/release.yml)重新执行全部云端检查和构建，验证 TV v1/v2 签名及现有证书指纹，生成 `SHA256SUMS.txt`，再创建 GitHub Release。
@@ -63,10 +64,12 @@ gh workflow run release.yml --ref v1.1.4
 
 必须复用原密钥。工作流核对既有证书 SHA256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`，以保持覆盖升级能力；不生成新的发行密钥。签名配置只存在于本次 runner，结束时清理，不上传到 artifact。普通自动 CI 不使用签名密钥，外部 fork PR 也不需要 secret。
 
-桌面端继续使用既有未签名 NSIS 配置；应用内自动更新服务的配置仍独立于此发布流程。
+桌面 NSIS 安装程序目前未做代码签名。两端设置的“检查更新”默认读取公开的稳定 Release，分别识别已上传的 Windows 安装程序和 TV APK。查看发布页后由用户选择下载安装。桌面部署也可用 `PANDA_UPDATE_URL` 指定自有 HTTPS 版本清单。
 
 ## 验证边界
 
-云端 CI 的 Electron 回归使用离线 fixture，检查 UI、布局与本地媒体控制。它不能替代真实豆瓣/片源播放、国内出口探针、TV 遥控器、实际电视兼容性、长时间播放及安装卸载验收；这些仍按 [AGENTS.md](../AGENTS.md) 和 [TV 设备流程](../.agents/skills/tv-runtime-regression/SKILL.md) 执行，报告分别记录结果。
+云端 CI 的 Electron 回归使用离线 fixture 检查 UI、布局与本地媒体控制。真实上游回放在本地运行 `npm run test:e2e`。TV 导航、焦点和播放分别用[导航脚本](../scripts/verify-tv-navigation.py)、[动效脚本](../scripts/verify-tv-motion.py)和[播放切换脚本](../scripts/verify-tv-playback-transitions.py)在已安装应用的设备上核验。设备、系统版本和 APK 摘要随结果记录。
+
+播放切换脚本启动时读取设备防火墙规则和应用私有状态，完整回放需要具备相应权限的测试模拟器。普通 ADB 设备可用遥控器操作应用，验证切集、暂停和退出后的续播入口。
 
 本地验证工作流语法可用 `actionlint`；发布脚本测试为 `npm run test:release`。完整验证记录见 [CI 接入证据](evidence/ci-release.txt)。

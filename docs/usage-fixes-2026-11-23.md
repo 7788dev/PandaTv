@@ -1,5 +1,7 @@
 # Panda 使用问题修复与验证 · 2026-11-23
 
+本页记录 11 月 23 日的工作区。文中的本地日志名和临时安装包名用于识别该次运行，仓库内可复核的汇总见[验证记录](evidence/usage-fixes-2026-11-23/validation.json)。
+
 [使用审计](usage-audit-2026-11-22.md)中的 **7 项缺陷（D01–D07）和 4 项改进（A01–A04）已在当前工作区修复**。相同输入的回归由失败转为通过，桌面离线 317/317、完整 fixture 40/40、TV 离线 70/70 通过。最终 Windows 候选与已安装 TV APK 均完成运行验证。
 
 **完整联网验收仍有失败。** Windows 构建为 12 通过、3 失败、2 跳过，最终 unpacked 包为 12 通过、4 失败、1 跳过；失败集中在限定单源起播与首字母检索。下文保留每次失败和分阶段复验，不能把本次交付概括成“全部联网测试通过”。
@@ -13,14 +15,14 @@
 | D01 | P1 · TV 保存设置或播放历史遇到写权限错误 | 应用级串行 IO 队列保存，成功后更新状态；失败显示保存提示并保持最后提交的状态。恢复权限后可重试，播放继续前进 | 原 APK 的 EACCES 崩溃[复现两次](evidence/usage-audit-2026-11-22/tv-storage-summary.json)；最终 APK 的[设置保存 2/2](evidence/usage-fixes-2026-11-23/device/storage-verified.json)、[播放中历史保存 2/2](evidence/usage-fixes-2026-11-23/device/history-verified.json)，播放时钟均由 2 秒继续到 5 秒 |
 | D02 | P1 · TV 损坏状态被默认为空并覆盖 | 区分首次使用和损坏状态；损坏时阻止普通读写、进入恢复页。确认恢复/重置前逐字节归档原件和已有备份 | 冻结源码上的[新回归失败](evidence/usage-fixes-2026-11-23/before-tv-state-and-cancel.xml)，原审计另有两轮 JVM 复验；当前 UserStore 回归通过，最终 APK 的[恢复流程 2/2](evidence/usage-fixes-2026-11-23/device/recovery-verified.json)覆盖取消、Back、有效/无效备份、重置和重启 |
 | D03 | P1 · 旧 TV 详情调用取消误伤有效跟随者 | 有效跟随者检查自己的协程后重新取得任务；自己的取消继续传播，普通错误仍可共享 | 冻结源码上的[取消回归失败](evidence/usage-fixes-2026-11-23/before-tv-state-and-cancel.xml)；当前[UsageStateTest](evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.UsageStateTest.xml)通过领导者取消、跟随者自身取消、普通错误共享三个独立时序 |
-| D04 | P2 · 桌面第三页卡片进入详情后返回丢失 | 按路由/筛选共同保存分页内容、cursor、离开时滚动和实际链接焦点；预算淘汰时一起重建 | 原 renderer 的[频道/影人三页返回均失败，两轮](evidence/usage-fixes-2026-11-23/before-fixture-corrected.log)；当前相同回放两轮通过，收藏第三页返回也通过，见[28 项重复回放](evidence/usage-fixes-2026-11-23/usage-complete.log) |
-| D05 | P2 · 手动换线未使下一集预加载失效 | 成功的最新手动选择推进作品偏好版本，清除旧预加载；晚到自动结果和已被替代的手动结果不能覆盖赢家。两端规则一致，映射有界 | [已完成预加载的原回归](evidence/usage-fixes-2026-11-23/before-desktop-unit-second.log)及[晚到/重复选择两轮红灯](evidence/usage-fixes-2026-11-23/before-source-races-red-1.log)；当前桌面离线全套通过。TV 三个相同时序[两轮红灯](evidence/usage-fixes-2026-11-23/before-tv-preferences-first.xml)→[最终通过](evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackPreferencesTest.xml)，并强制复跑 |
-| D06 | P2 · 新保存的默认画质被旧会话偏好覆盖 | 成功保存对应默认值后清除旧临时偏好；相同值的显式保存也采用这个优先级 | 原 renderer 的“480P → 设置 720P → 新影片”[两轮失败](evidence/usage-fixes-2026-11-23/before-fixture-corrected.log)；当前[真实菜单与本地 MP4 回放两轮通过](evidence/usage-fixes-2026-11-23/usage-complete.log)，新影片请求采用 720P |
-| D07 | P2 · 倍速标签和实际媒体速率分离 | source 加载前、loadedmetadata、手动改速和自适应调整同时同步默认速率与实际速率 | 原 MP4 两轮失败，HLS [扩展红灯](evidence/usage-fixes-2026-11-23/before-fixture-extended-red.log)；当前[MP4/HLS 原生解码回放](evidence/usage-fixes-2026-11-23/usage-complete.log)覆盖非 1×首次加载、换画质和 HLS 切集，两轮通过；既有丢帧自适应与换线回归也通过 |
-| A01 | 可选演职员、照片阻塞基础内容和播放 | 首屏及播放使用经过校验的基础 subject，完整 detail 独立补充；主要演职员契约保留。TV 补充内容维护既有控件，并等待焦点离开演职员 holder 后再替换 | 桌面[原回归红灯](evidence/usage-fixes-2026-11-23/before-desktop-unit-second.log)→当前 unit/renderer 同输入通过。TV 同一 optional gate [第一轮](evidence/usage-fixes-2026-11-23/tv-primary-before-1.xml)、[第二轮](evidence/usage-fixes-2026-11-23/tv-primary-before-2.xml)失败→[第一轮](evidence/usage-fixes-2026-11-23/tv-primary-after-1.xml)、[第二轮](evidence/usage-fixes-2026-11-23/tv-primary-after-2.xml)通过；full detail 仍在等待 gate |
-| A02 | 大型收藏首屏迟滞、整批失败、离开后继续请求 | 双端每页最多 30 个 ID、最多 3 个缺失元数据读者，先显示缓存；桌面按 6 项补充。返回有序成功、局部失败和待加载项；离开取消，失败项单独重试 | 原[串行/整批失败](evidence/usage-fixes-2026-11-23/before-desktop-unit-second.log)和[2501/10000 首屏、部分错误、取消回放](evidence/usage-fixes-2026-11-23/before-fixture-extended-red.log)失败→当前相同回放通过；TV JVM 验证大列表、局部 503 和取消，最终 APK 回放“我的”与返回状态 |
-| A03 | 桌面损坏状态只能反复重试 | 独立恢复页提供导出、恢复备份与确认后重置；渲染器不提供文件目的路径。有效原件和备份保留 | 原 main/preload/renderer [4 次失败](evidence/usage-fixes-2026-11-23/before-recovery.log)→当前[定向重复回放 4/4](evidence/usage-fixes-2026-11-23/after-recovery-verified.log)，最终 unpacked 包两项恢复回放也通过；核对实际导出字节、取消、归档和重启 |
-| A04 | 图片磁盘预算只在启动清理时约束 | 累积写入达阈值后合并安排延迟清理；清理期间的新写入继续触发后续批次；关闭等待写入并最终清理 | 相同 40 KiB 预算 / 20 次写入的[原回归超额](evidence/usage-fixes-2026-11-23/before-desktop-unit-second.log)→当前自动清理回归通过；并发写入、关闭和重启通过，最终包 20 次首次启动性能回放通过 |
+| D04 | P2 · 桌面第三页卡片进入详情后返回丢失 | 按路由/筛选共同保存分页内容、cursor、离开时滚动和实际链接焦点；预算淘汰时一起重建 | 原 renderer 的频道/影人三页返回均失败，两轮（`before-fixture-corrected.log`）；当前相同回放两轮通过，收藏第三页返回也通过，见28 项重复回放（`usage-complete.log`） |
+| D05 | P2 · 手动换线未使下一集预加载失效 | 成功的最新手动选择推进作品偏好版本，清除旧预加载；晚到自动结果和已被替代的手动结果不能覆盖赢家。两端规则一致，映射有界 | 已完成预加载的原回归（`before-desktop-unit-second.log`）及晚到/重复选择两轮红灯（`before-source-races-red-1.log`）；当前桌面离线全套通过。TV 三个相同时序[两轮红灯](evidence/usage-fixes-2026-11-23/before-tv-preferences-first.xml)→[最终通过](evidence/usage-fixes-2026-11-23/tv-unit-complete/TEST-app.panda.tv.PlaybackPreferencesTest.xml)，并强制复跑 |
+| D06 | P2 · 新保存的默认画质被旧会话偏好覆盖 | 成功保存对应默认值后清除旧临时偏好；相同值的显式保存也采用这个优先级 | 原 renderer 的“480P → 设置 720P → 新影片”两轮失败（`before-fixture-corrected.log`）；当前真实菜单与本地 MP4 回放两轮通过（`usage-complete.log`），新影片请求采用 720P |
+| D07 | P2 · 倍速标签和实际媒体速率分离 | source 加载前、loadedmetadata、手动改速和自适应调整同时同步默认速率与实际速率 | 原 MP4 两轮失败，HLS 扩展红灯（`before-fixture-extended-red.log`）；当前MP4/HLS 原生解码回放（`usage-complete.log`）覆盖非 1×首次加载、换画质和 HLS 切集，两轮通过；既有丢帧自适应与换线回归也通过 |
+| A01 | 可选演职员、照片阻塞基础内容和播放 | 首屏及播放使用经过校验的基础 subject，完整 detail 独立补充；主要演职员契约保留。TV 补充内容维护既有控件，并等待焦点离开演职员 holder 后再替换 | 桌面原回归红灯（`before-desktop-unit-second.log`）→当前 unit/renderer 同输入通过。TV 同一 optional gate [第一轮](evidence/usage-fixes-2026-11-23/tv-primary-before-1.xml)、[第二轮](evidence/usage-fixes-2026-11-23/tv-primary-before-2.xml)失败→[第一轮](evidence/usage-fixes-2026-11-23/tv-primary-after-1.xml)、[第二轮](evidence/usage-fixes-2026-11-23/tv-primary-after-2.xml)通过；full detail 仍在等待 gate |
+| A02 | 大型收藏首屏迟滞、整批失败、离开后继续请求 | 双端每页最多 30 个 ID、最多 3 个缺失元数据读者，先显示缓存；桌面按 6 项补充。返回有序成功、局部失败和待加载项；离开取消，失败项单独重试 | 原串行/整批失败（`before-desktop-unit-second.log`）和2501/10000 首屏、部分错误、取消回放（`before-fixture-extended-red.log`）失败→当前相同回放通过；TV JVM 验证大列表、局部 503 和取消，最终 APK 回放“我的”与返回状态 |
+| A03 | 桌面损坏状态只能反复重试 | 独立恢复页提供导出、恢复备份与确认后重置；渲染器不提供文件目的路径。有效原件和备份保留 | 原 main/preload/renderer 4 次失败（`before-recovery.log`）→当前定向重复回放 4/4（`after-recovery-verified.log`），最终 unpacked 包两项恢复回放也通过；核对实际导出字节、取消、归档和重启 |
+| A04 | 图片磁盘预算只在启动清理时约束 | 累积写入达阈值后合并安排延迟清理；清理期间的新写入继续触发后续批次；关闭等待写入并最终清理 | 相同 40 KiB 预算 / 20 次写入的原回归超额（`before-desktop-unit-second.log`）→当前自动清理回归通过；并发写入、关闭和重启通过，最终包 20 次首次启动性能回放通过 |
 
 TV 的 A01 兼容测试在冻结原源码缺少 `subject` 成员时，以测试扩展映射到当时 MainActivity 使用的 `detail`；最终成员函数优先。两轮使用同一 JUnit 文件和 HTTP gate，原 DoubanDataSource 没有改写，摘要见[映射与校验](evidence/usage-fixes-2026-11-23/tv-primary-admission-adapter.json)。D05 的原 TV 时序测试只加媒体读取适配，未改变缓存、偏好或赢家逻辑，见[IO 适配摘要](evidence/usage-fixes-2026-11-23/tv-before-probe-adapter.json)。这些是确定性业务证据。
 
@@ -36,25 +38,25 @@ TV 的 A01 兼容测试在冻结原源码缺少 `subject` 成员时，以测试�
 
 全套回放另暴露了两个返回/重试边界，均完成两次故障复现与当前验证：
 
-- 筛选空页被旧返回快照复用：[两次红灯](evidence/usage-fixes-2026-11-23/empty-memory-red.log)→[相同全场景两次通过](evidence/usage-fixes-2026-11-23/empty-memory-verified.log)。
-- 收藏和历史单项重试后的焦点恢复：先纠正无效的 `a.card` 测试选择器，再复现[收藏真实焦点失败](evidence/usage-fixes-2026-11-23/library-focus-corrected-red.log)与[历史播放链接焦点失败](evidence/usage-fixes-2026-11-23/history-focus-red.log)。当前定位卡片内的实际 `.card__link`，两入口都在最终 fixture 中通过。
+- 筛选空页被旧返回快照复用：两次红灯（`empty-memory-red.log`）→相同全场景两次通过（`empty-memory-verified.log`）。
+- 收藏和历史单项重试后的焦点恢复：先纠正无效的 `a.card` 测试选择器，再复现收藏真实焦点失败（`library-focus-corrected-red.log`）与历史播放链接焦点失败（`history-focus-red.log`）。当前定位卡片内的实际 `.card__link`，两入口都在最终 fixture 中通过。
 
 早期 `.cmd` 正则转义、缺少目录连接、错误卡片选择器、协程线程名后缀以及存储 helper 漏掉“自动”字样等无效探针保留在 `.tmp/`，不计作产品缺陷或修复证据。HLS `.ts` 媒体被 TypeScript 当源码的构建问题已通过排除 `e2e/fixtures` 解决。全部测试素材继续留在测试目录。
 
-技术取舍与备选方案见[状态/加载/返回记忆决策](../.agents/notes/implemented/architecture/2026-11-23-usage-recovery.md)、[播放稳定性](../.agents/notes/implemented/architecture/2026-11-19-playback-stability.md)与[启动缓存](../.agents/notes/implemented/architecture/2026-11-17-startup.md)。
+技术取舍与备选方案见状态/加载/返回记忆决策（`2026-11-23-usage-recovery.md`）、[播放稳定性](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-19-playback-stability.md)与[启动缓存](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-startup.md)。
 
 ## 最终校验
 
 | 层级 | 时间与结果 | 证据 |
 | --- | --- | --- |
-| 桌面类型与构建 | 03:02:49–03:02:57，含 typecheck，通过；renderer `index-CNamo9sS.js`，保留既有大 bundle 提示 | [构建](evidence/usage-fixes-2026-11-23/build-complete.log) |
-| 桌面离线 | 03:02:50 起，22.54 秒，26 文件、317/317 | [offline](evidence/usage-fixes-2026-11-23/offline-complete.log) |
-| 使用问题重复回放 | 03:02:57–03:04:41，14 场景各两轮，28/28 | [usage](evidence/usage-fixes-2026-11-23/usage-complete.log) |
-| 完整 fixture | 03:04:41–03:11:27，40/40 | [fixture](evidence/usage-fixes-2026-11-23/fixture-complete.log) |
-| TV 离线与最终包 | 03:48:46–03:49:01，全套 70/70、lintRelease、assembleRelease 通过；最后补充的 A01 两轮转绿。新增内容只在测试目录，APK 字节保持一致 | [Gradle](evidence/usage-fixes-2026-11-23/tv-checks-complete.log)、[JUnit 摘要](evidence/usage-fixes-2026-11-23/validation.json) |
-| 黄金向量与兼容边界 | 重导黄金向量，parity 测试通过；minSdk 22、Media3 1.8.1；无 NewApi fatal。APK v1/v2 签名通过 | [签名](evidence/usage-fixes-2026-11-23/tv-final-signature.log)、[golden vectors](../tv/app/src/test/resources/golden-vectors.json) |
-| 设计与原契约 | 03:21:54，206 文件 SHA256 不变，405 原契约断言通过；发行工具测试 6/6 | [design](evidence/usage-fixes-2026-11-23/design-complete.log)、[contract](evidence/usage-fixes-2026-11-23/contract-complete.log)、[release tools](evidence/usage-fixes-2026-11-23/release-tools-final.log) |
-| Windows 包内容 | app.asar 271 项；测试、e2e、脚本、source map、node_modules、design mock/art/preview 均为 0 | [asar check](evidence/usage-fixes-2026-11-23/asar-check-complete.log) |
+| 桌面类型与构建 | 03:02:49–03:02:57，含 typecheck，通过；renderer `index-CNamo9sS.js`，保留既有大 bundle 提示 | 构建（`build-complete.log`） |
+| 桌面离线 | 03:02:50 起，22.54 秒，26 文件、317/317 | offline（`offline-complete.log`） |
+| 使用问题重复回放 | 03:02:57–03:04:41，14 场景各两轮，28/28 | usage（`usage-complete.log`） |
+| 完整 fixture | 03:04:41–03:11:27，40/40 | fixture（`fixture-complete.log`） |
+| TV 离线与最终包 | 03:48:46–03:49:01，全套 70/70、lintRelease、assembleRelease 通过；最后补充的 A01 两轮转绿。新增内容只在测试目录，APK 字节保持一致 | Gradle（`tv-checks-complete.log`）、[JUnit 摘要](evidence/usage-fixes-2026-11-23/validation.json) |
+| 黄金向量与兼容边界 | 重导黄金向量，parity 测试通过；minSdk 22、Media3 1.8.1；无 NewApi fatal。APK v1/v2 签名通过 | 签名（`tv-final-signature.log`）、[golden vectors](../tv/app/src/test/resources/golden-vectors.json) |
+| 设计与原契约 | 03:21:54，206 文件 SHA256 不变，405 原契约断言通过；发行工具测试 6/6 | design（`design-complete.log`）、contract（`contract-complete.log`）、release tools（`release-tools-final.log`） |
+| Windows 包内容 | app.asar 271 项；测试、e2e、脚本、source map、node_modules、design mock/art/preview 均为 0 | asar check（`asar-check-complete.log`） |
 
 全部 Electron 回放串行执行，使用新的隔离 profile。修复前的已编译 renderer、业务源文件和 APK 保留在 `.tmp/usage-fixes-2026-11-23/`；最终构建证据与旧包、固定数据证据分开。
 
@@ -78,7 +80,7 @@ Windows 的完整构建/包回放分别于 **03:14:49–03:20:29**、**03:20:29�
 | 其中带集数区间的条目 | 30/31 | 29/31 |
 | 起播与中段读取，16 部 | 12/16；成功样本 probe total 中位 1,612 ms、最慢 6,254 ms | 13/16；中位 1,446 ms、最慢 4,698 ms |
 
-记录见[源第一轮](evidence/usage-fixes-2026-11-23/network/sources-first.json)、[源第二轮](evidence/usage-fixes-2026-11-23/network/sources-second.json)、[起播第一轮](evidence/usage-fixes-2026-11-23/network/start-first.log)、[起播第二轮](evidence/usage-fixes-2026-11-23/network/start-second.log)。`probe total` 是目录搜索、解析、清单与首片读取之和，基础 subject 和中段读取分别记录。首字节可读不等于完整解码；自然超时、目录未完整收录和未来条目均保留原结果。没有据此全局停用片源，也没有把本机结果扩大为国内网络可靠性结论。
+记录见[源第一轮](evidence/usage-fixes-2026-11-23/network/sources-first.json)、[源第二轮](evidence/usage-fixes-2026-11-23/network/sources-second.json)、起播第一轮（`start-first.log`）、起播第二轮（`start-second.log`）。`probe total` 是目录搜索、解析、清单与首片读取之和，基础 subject 和中段读取分别记录。首字节可读不等于完整解码；自然超时、目录未完整收录和未来条目均保留原结果。没有据此全局停用片源，也没有把本机结果扩大为国内网络可靠性结论。
 
 对额外联网失败又做了独立复验：
 
@@ -120,8 +122,8 @@ TV 使用 MuMu 实例 1、Android 15 / API 35、实际查询得到的 serial `12
 
 | 候选 | 身份 |
 | --- | --- |
-| [Windows unpacked](../.tmp/usage-fixes-2026-11-23/windows-final/win-unpacked/Panda.exe) | 1.1.4；app.asar 13,812,954 字节，SHA256 `3B5E3482747CDEDEDD63BBAA3AF65C0E8380EC5212897478717FC8304645D643`；[完整身份](evidence/usage-fixes-2026-11-23/windows-final-identity.json) |
-| [TV APK](../.tmp/usage-fixes-2026-11-23/Panda-TV-1.0.14-usage.apk) | 1.0.14 / versionCode 15 / minSdk 22；1,842,556 字节，SHA256 `59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401`；v1/v2，证书 SHA256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd` |
+| Windows unpacked（`Panda.exe`） | 1.1.4；app.asar 13,812,954 字节，SHA256 `3B5E3482747CDEDEDD63BBAA3AF65C0E8380EC5212897478717FC8304645D643`；[完整身份](evidence/usage-fixes-2026-11-23/windows-final-identity.json) |
+| TV APK（`Panda-TV-1.0.14-usage.apk`） | 1.0.14 / versionCode 15 / minSdk 22；1,842,556 字节，SHA256 `59EA7C0082A09BA8568E8325BFAB2BF0C3FF427AA751E36B373A0557DEEA1401`；v1/v2，证书 SHA256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd` |
 
 版本号沿用原候选，以上字节摘要区分本轮工作区与已发布包。Windows 验证对象是该独立 unpacked 可执行文件，NSIS 升级/卸载和用户安装目录没有在本轮验收。
 

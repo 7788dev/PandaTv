@@ -29,11 +29,11 @@
 ## 编码里程碑与验收
 
 - [x] 审阅全部原型脚本、CSS、19张截图、契约、素材、构建与见界参考链路；形成清单。
-- [x] 建立工程、固定IPC、窗口/更新服务与持久化；安全与状态测试。证据：[state.test.ts](../tests/state.test.ts)、[startup.spec.ts](../e2e/startup.spec.ts)。
-- [x] 豆瓣home/filter/channel/detail/related/byIds/search/suggest真实接入；字段/分页/错误/缓存测试。影视热搜改用百度电影/电视剧榜。证据：[豆瓣审阅](douban-audit.md)、[data.test.ts](../tests/data.test.ts)、[data.spec.ts](../e2e/data.spec.ts)、[筛选词表实测](evidence/filter-vocabulary.json)。
+- [x] 建立工程、固定IPC、窗口/更新服务与持久化；安全与状态测试。证据：[state.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/state.test.ts)、[startup.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/startup.spec.ts)。
+- [x] 豆瓣home/filter/channel/detail/related/byIds/search/suggest真实接入；字段/分页/错误/缓存测试。影视热搜改用百度电影/电视剧榜。证据：[豆瓣审阅](douban-audit.md)、[data.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/data.test.ts)、[data.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/data.spec.ts)、[筛选词表实测](evidence/filter-vocabulary.json)。
 - [x] 播放源精确检索、可播集数、HLS/MP4代理；去广告规则 v2 与回归测试。证据：[播放审阅](playback-audit.md)、[去广告线上审计](evidence/ad-audit.json)、[片源覆盖实测](evidence/source-coverage.json)。
-- [x] 首页、五频道、详情、搜索、收藏、历史、设置、全部浮层与状态还原。证据：[fixture.spec.ts](../e2e/fixture.spec.ts)、[界面审阅](ui-audit.md)。
-- [x] 真实播放器播放/暂停/缓冲/进度/音量/倍速/可用画质/选集/全屏/画中画/下一集/错误重试，历史节流和退出刷新。证据：[live.spec.ts](../e2e/live.spec.ts)、[player-model.test.ts](../tests/player-model.test.ts)。
+- [x] 首页、五频道、详情、搜索、收藏、历史、设置、全部浮层与状态还原。证据：[fixture.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/fixture.spec.ts)、[界面审阅](ui-audit.md)。
+- [x] 真实播放器播放/暂停/缓冲/进度/音量/倍速/可用画质/选集/全屏/画中画/下一集/错误重试，历史节流和退出刷新。证据：[live.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/live.spec.ts)、[player-model.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/player-model.test.ts)。
 - [x] 类型检查、离线单测、Electron E2E、真实API与真实视频起播/拖动/切集、重启持久化、离线/错误/空态/加载态验证。结果见[交付报告](delivery-report.md)。
 - [x] 当时做过原型/fixture 单一视口的[截图与几何对照](evidence/visual/overlay-report.json)。旧对照已退役，不是现版交互验收。
 - [x] 生产构建、NSIS安装包、实际安装启动、打包内容检查、设计SHA256不变、交付报告。证据：[install.txt](evidence/install.txt)、[交付报告](delivery-report.md)。
@@ -48,4 +48,4 @@
 
 ## 2026-11-16 接续复核
 
-现有骨架基线见 [实际结果](evidence/baseline-2026-11-16.txt)。重新核对全部19张状态截图、契约、CSS与现有生产结构后继续实现。用户追加完整细分类筛选要求；总体取舍与备选项目（LibreTV、LunaTV、DailyHotApi 等）的比较见[决策记录](../.agents/notes/implemented/architecture/2026-11-16-production-completion.md)，细分决定见同目录其余记录。
+现有骨架基线见 [实际结果](evidence/baseline-2026-11-16.txt)。重新核对全部19张状态截图、契约、CSS与现有生产结构后继续实现。用户追加完整细分类筛选要求；总体取舍与备选项目（LibreTV、LunaTV、DailyHotApi 等）的比较见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-production-completion.md)，细分决定见同目录其余记录。

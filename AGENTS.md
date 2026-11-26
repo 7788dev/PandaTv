@@ -18,7 +18,7 @@ Use Node.js 24 and npm; TV builds use JDK 21 and Android SDK/build-tools 37.
 - `npm test`: run Vitest once; `npm run test:release`: test release tooling.
 - `npm run build`: compile desktop bundles into `out/`.
 - `npm run dist -- --publish never`: create a Windows x64 NSIS installer in `release/`.
-- `npm run test:e2e:fixture` / `npm run test:e2e`: offline fixture / live network UI tests; build first.
+- `npm run test:e2e:fixture` / `npm run test:e2e`: offline fixture / live network UI tests. Build first. Generate the offline media once with FFmpeg and `npm run test:media`.
 - From `tv/`, run `.\gradlew.bat testDebugUnitTest lintRelease assembleRelease` for unit tests, compatibility lint, and a release APK.
 
 ## Coding Style & Naming Conventions

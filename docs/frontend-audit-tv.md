@@ -1,5 +1,7 @@
 # Android TV 前端交互与排版审查
 
+本文保留当时版本的审查结果。2026-11-27 的布局、播放与设备验证见[双端质量复核](cross-platform-quality-2026-11-27.md)。
+
 日期：2026-11-21，UTC+8。本文只评估 `tv/` 的原生 Android 客户端；不是 Electron 的 TV CSS 分支。Windows 结论见[独立报告](frontend-audit-windows.md)，旧材料的可信度见[证据审阅](ui-evidence-review.md)。
 
 ## 2026-11-22 TV 1.0.14 复验

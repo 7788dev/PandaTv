@@ -1,5 +1,7 @@
 # Panda 系统审查与可验证修复
 
+下文的测试名按审计当天记录。现存的两端结果见[验证汇总](evidence/system-audit-2026-11-22/validation.json)。
+
 本轮确认并修复四项产品缺陷：桌面播放位置冻结时恢复被下载事件掩盖、双端简略卡片覆盖已确认分类、合法的 2501 条收藏读取被拒绝，以及限流器交接时突破并发容量。修复前后使用同一组触发条件复验，最终源码的离线测试和构建检查通过。真实网络验收有通过项，也保留了目录超时、TV 起播失败和换线样本不足，不能据此声称所有源、设备和播放场景都已通过。
 
 审查日期为 **2026-11-22，以下时间均为 Asia/Shanghai（UTC+8）**。工作区起点为 `4220d6dff973a55f42508a49a9c0c3d43d3b296a`，开始时已跟踪文件无修改；原有未跟踪证据保留。本轮未提交、推送或发布，也未升级用户的 Windows 安装。候选沿用桌面 1.1.4 / TV 1.0.14 版本号，须用下文包摘要识别。
@@ -28,9 +30,9 @@
 
 现在这些事件只更新必要界面状态；看门狗按实际播放位置前进更新时间。暂停、缓冲和 seek 重置连续健康计时，避免把这些间隔计入 60 秒稳定播放窗口。正常的播放/seek 生命周期仍会重置看门狗基线。
 
-新增 [renderer 回归](../e2e/interaction.spec.ts) 先确认视频已输出帧，再把原生 `playbackRate` 设为 0 冻结实际位置，保持用户播放意图，持续派发 `progress` / `timeupdate` 并加速测试时钟。同一隐藏测试器加载原发布 ASAR renderer，**18:04:34–18:05:13 三次均未触发恢复**；修复后编译 renderer 在 **18:05:13–18:05:37 三次均触发 `data.retryPlayback` 并恢复解码**。
+新增 [renderer 回归](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/interaction.spec.ts) 先确认视频已输出帧，再把原生 `playbackRate` 设为 0 冻结实际位置，保持用户播放意图，持续派发 `progress` / `timeupdate` 并加速测试时钟。同一隐藏测试器加载原发布 ASAR renderer，**18:04:34–18:05:13 三次均未触发恢复**；修复后编译 renderer 在 **18:05:13–18:05:37 三次均触发 `data.retryPlayback` 并恢复解码**。
 
-这是对特定停滞机制的可重复故障注入，不能当作第三方流自然发生解码冻结的线上证据。生产改动在 [Player.tsx](../src/renderer/Player.tsx)，取舍归入 [playback-stability](../.agents/notes/implemented/architecture/2026-11-19-playback-stability.md)。
+这是对特定停滞机制的可重复故障注入，不能当作第三方流自然发生解码冻结的线上证据。生产改动在 [Player.tsx](../src/renderer/Player.tsx)，取舍归入 [playback-stability](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-19-playback-stability.md)。
 
 **2. 简略卡片把动画、纪录片或综艺降回普通 movie/tv。**
 
@@ -38,13 +40,13 @@
 
 双端现在在格式相同、传入类型仅为 `movie` / `tv` 时保留既有主题类别。新明确主题证据或格式变化仍采用新记录。通过归一化后的合成输入复验动画、纪录片和 `is_show` 综艺，并检查保存与重新加载；新的动画证据仍可提升原普通格式。
 
-桌面原代码在三类保留断言上失败，修后通过；TV 原代码在对应聚合测试上失败，修后通过。代码位于 [desktop MetadataStore](../src/main/data/store.ts) 和 [TV MetadataStore](../tv/app/src/main/java/app/panda/tv/data/MetadataStore.kt)，测试为 [desktop](../tests/metadata-store.test.ts) / [TV](../tv/app/src/test/java/app/panda/tv/MetadataStoreTest.kt)。这一选择把主题字段缺失视为证据不足；若上游仅用省略字段表示更正，缓存主题类别不会降级。决策见 [metadata-card-merge](../.agents/notes/implemented/architecture/2026-11-22-metadata-card-merge.md)。
+桌面原代码在三类保留断言上失败，修后通过；TV 原代码在对应聚合测试上失败，修后通过。代码位于 [desktop MetadataStore](../src/main/data/store.ts) 和 [TV MetadataStore](../tv/app/src/main/java/app/panda/tv/data/MetadataStore.kt)，测试为 desktop（`metadata-store.test.ts`） / [TV](../tv/app/src/test/java/app/panda/tv/MetadataStoreTest.kt)。这一选择把主题字段缺失视为证据不足；若上游仅用省略字段表示更正，缓存主题类别不会降级。决策见 metadata-card-merge（`2026-11-22-metadata-card-merge.md`）。
 
 **3. 用户状态接受的 2501 条收藏无法交给元数据层读取。**
 
 UserStore 与桌面 IPC 接受最多 10000 个 ID，但双端 `byIds` 限制为 2500。合法收藏刚超过缓存预算，就在取列表时整批报错。现把读取上限对齐到 10000，缓存预算仍独立限制内存和磁盘。
 
-[桌面回归](../tests/library-metadata.test.ts) 用真实用户状态 reducer 生成 2501 个合法收藏，替代详情请求，验证返回顺序和每个缺失 ID 的读取；10001 个 ID 仍在任何请求前拒绝。[TV 回归](../tv/app/src/test/java/app/panda/tv/MetadataStoreTest.kt) 预置 2500 条缓存，再读取一个缺失 ID，避免发出数千真实请求。两端原代码均复现拒绝，修后通过。实现为 [desktop byIds](../src/main/data/douban.ts) / [TV byIds](../tv/app/src/main/java/app/panda/tv/data/DoubanDataSource.kt)。
+桌面回归（`library-metadata.test.ts`） 用真实用户状态 reducer 生成 2501 个合法收藏，替代详情请求，验证返回顺序和每个缺失 ID 的读取；10001 个 ID 仍在任何请求前拒绝。[TV 回归](../tv/app/src/test/java/app/panda/tv/MetadataStoreTest.kt) 预置 2500 条缓存，再读取一个缺失 ID，避免发出数千真实请求。两端原代码均复现拒绝，修后通过。实现为 [desktop byIds](../src/main/data/douban.ts) / [TV byIds](../tv/app/src/main/java/app/panda/tv/data/DoubanDataSource.kt)。
 
 这次解决容量契约矛盾；**大型收藏分页和冷缓存加载性能尚未解决**。桌面缓存仍为 2500 条，TV 写入后仍保留 1200 条，缺失元数据继续逐条读取。
 
@@ -52,7 +54,7 @@ UserStore 与桌面 IPC 接受最多 10000 个 ID，但双端 `byIds` 限制为 
 
 原实现先 `active--`，再唤醒一个等待者；被唤醒者尚未恢复执行时，新微任务会看到空槽位并进入，随后等待者也进入。大量并行请求下，实际并发可超过配置容量，并进一步加重网络超时。
 
-[限流器](../src/main/playback/network.ts) 现在直接把占用槽位转交队首等待者，仅在无人等待时减计数。[交接回归](../tests/network-regression.test.ts) 固定微任务顺序：容量 1，旧代码实测最大并发 **2**，修后为 **1**，执行顺序保持等待者在新请求前。既有排队、Range 和 HLS 回归也继续通过，决策补入 [startup](../.agents/notes/implemented/architecture/2026-11-17-startup.md)。
+[限流器](../src/main/playback/network.ts) 现在直接把占用槽位转交队首等待者，仅在无人等待时减计数。[交接回归](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/network-regression.test.ts) 固定微任务顺序：容量 1，旧代码实测最大并发 **2**，修后为 **1**，执行顺序保持等待者在新请求前。既有排队、Range 和 HLS 回归也继续通过，决策补入 [startup](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-startup.md)。
 
 四项中的数据/请求定向测试于 **17:56** 在原代码上得出 **11 项中 5 失败、6 通过**；于 **18:01** 在修后代码上 **11/11 通过**。TV 原代码加同一回归组为 **56 项中 2 失败**，修后最终 suite **56/56**。原生产源码副本和失败日志留在 `../.tmp/system-audit/before-source/`、`before-unit-reproductions.log`、`tv-before-unit.log`、`tv-before-results/`，未用修后结果覆盖。
 

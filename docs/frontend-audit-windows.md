@@ -1,5 +1,7 @@
 # Windows Electron 前端独立审查
 
+本文保留当时版本的审查结果。2026-11-27 的布局、播放与设备验证见[双端质量复核](cross-platform-quality-2026-11-27.md)。
+
 日期：2026-11-21，UTC+8。本文只评估 Windows 的鼠标/键盘、悬停、窗口与 Electron renderer；不会按 TV 的 overscan、遥控器行列导航或大字号标准给桌面制造问题。TV 见[独立报告](frontend-audit-tv.md)。
 
 ## 2026-11-22 排版与播放器复验（1.1.4）

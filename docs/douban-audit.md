@@ -54,19 +54,19 @@
 
 | 事实 | 证据 | 处理 |
 | --- | --- | --- |
-| 频道筛选需要远多于 `recommend_categories` 的词 | 逐项用生产数据源读取首页，至少 6 部才保留：共 738 项全部通过（剧集 类型 72 / 地区 46 / 年份 23，电影 102 / 46 / 23，动画 84 / 46 / 23，综艺 62 / 42 / 23，纪录片 77 / 46 / 23），见 [filter-vocabulary.json](evidence/filter-vocabulary.json) | 词表在 [taxonomy.ts](../src/main/data/taxonomy.ts)；`npm run probe:filters` 可重放，单测要求词表与证据逐项一致。取舍见[决策记录](../.agents/notes/implemented/architecture/2026-11-16-filter-vocabulary.md) |
+| 频道筛选需要远多于 `recommend_categories` 的词 | 逐项用生产数据源读取首页，至少 6 部才保留：共 738 项全部通过（剧集 类型 72 / 地区 46 / 年份 23，电影 102 / 46 / 23，动画 84 / 46 / 23，综艺 62 / 42 / 23，纪录片 77 / 46 / 23），见 [filter-vocabulary.json](evidence/filter-vocabulary.json) | 词表在 [taxonomy.ts](../src/main/data/taxonomy.ts)；`npm run probe:filters` 可重放，单测要求词表与证据逐项一致。取舍见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-filter-vocabulary.md) |
 | 冷门筛选组合是现算的 | 请求要么挂起到算完（实测最长约 14 秒），要么约 1.2 秒返回“部分页”：`total` 正确、条目只有几条，同一请求可稳定重复返回同一部分页 | 列表请求等待 20 秒且超时不重发；条数不足即判为部分页、不缓存、重读一次，再不完整就拆成 10 条、5 条的小页；仍读不全报超时，不把部分页当结果 |
-| 合集条目的海报字段不同 | `subject_collection/movie_latest/items` 的条目没有 `pic`，海报在 `cover.url`（对象）；`tv_hot`、`tv_animation` 等仍用 `pic`。漏读时首页“最新电影”整栏没有海报 | 归一化按 `pic.large` → `pic.normal` → `cover_url` → `cover` → `cover.url` 取第一个豆瓣图片地址（[data.test.ts](../tests/data.test.ts)）；[data.spec.ts](../e2e/data.spec.ts) 断言首页每一栏的海报都在真实窗口里解码 |
-| 详情的 `genres` 最多三项 | 《罗小黑战记》详情 `genres` 为 剧情/喜剧/动作，`card_subtitle` 为“剧情 喜剧 动作 动画 奇幻”；只用前者时，打开详情后该片从动画变成剧集 | 类型取 `genres` 与副标题类型的并集（[data.test.ts](../tests/data.test.ts)） |
+| 合集条目的海报字段不同 | `subject_collection/movie_latest/items` 的条目没有 `pic`，海报在 `cover.url`（对象）；`tv_hot`、`tv_animation` 等仍用 `pic`。漏读时首页“最新电影”整栏没有海报 | 归一化按 `pic.large` → `pic.normal` → `cover_url` → `cover` → `cover.url` 取第一个豆瓣图片地址（[data.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/data.test.ts)）；[data.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/data.spec.ts) 断言首页每一栏的海报都在真实窗口里解码 |
+| 详情的 `genres` 最多三项 | 《罗小黑战记》详情 `genres` 为 剧情/喜剧/动作，`card_subtitle` 为“剧情 喜剧 动作 动画 奇幻”；只用前者时，打开详情后该片从动画变成剧集 | 类型取 `genres` 与副标题类型的并集（[data.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/data.test.ts)） |
 | 详情 `aka` 给出连载区间 | 《凡人修仙传 年番4》`aka` 含“凡人修仙传 第177-228集” | 别名留在主进程元数据里供片源匹配使用，不进入渲染器契约，也不当作原名显示。见[播放审阅](playback-audit.md) |
 | 标题末尾可能带零宽字符 | “斗破苍穹剧场版 双帝之战”“凡人修仙传：外海风云”末尾各有一个不可见字符 | 匹配与检索前去除；显示保持上游原文 |
-| 影视热搜 | 百度电影榜、电视剧榜 JSON 两次请求均返回带“热搜指数”的条目 | [hot-search.ts](../src/main/data/hot-search.ts) 校验后合并；备选来源的比较见[决策记录](../.agents/notes/implemented/architecture/2026-11-16-production-completion.md) |
+| 影视热搜 | 百度电影榜、电视剧榜 JSON 两次请求均返回带“热搜指数”的条目 | [hot-search.ts](../src/main/data/hot-search.ts) 校验后合并；备选来源的比较见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-production-completion.md) |
 
 上文“实现清单与边界”第 3 条的请求预算对列表请求有一处修正：列表单次等待 20 秒且不自动重发（重发会让豆瓣重新计算）；其余端点不变。
 
 ## 启动路径的修正（2026-11-17）
 
-依据与取舍见[启动决策记录](../.agents/notes/implemented/architecture/2026-11-17-startup.md)；本节只列与上文不同的事实。
+依据与取舍见[启动决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-startup.md)；本节只列与上文不同的事实。
 
 | 事实 | 证据 | 处理 |
 | --- | --- | --- |
@@ -78,7 +78,7 @@
 
 ## 演职员与影人作品（2026-11-17）
 
-依据与取舍见[决策记录](../.agents/notes/implemented/architecture/2026-11-17-people.md)；可重放：`node docs/evidence/probe-people.mjs`，结果在 [people-audit.json](evidence/people-audit.json)（45 部作品、3 位影人；文件里是 21:21 那次，21:15 那次的数字在决策记录里）。
+依据与取舍见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-people.md)；可重放：`node docs/evidence/probe-people.mjs`，结果在 [people-audit.json](evidence/people-audit.json)（45 部作品、3 位影人；文件里是 21:21 那次，21:15 那次的数字在决策记录里）。
 
 | 用途 | 官方端点 | 实测与处理 |
 | --- | --- | --- |
