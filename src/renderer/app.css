@@ -1,4 +1,4 @@
-/* Desktop wiring only. The visual system is the read-only design stylesheet. */
+/* Electron window integration and desktop layout adjustments. */
 @layer base {
   #root { height: 100%; }
 }
@@ -82,7 +82,7 @@
   .seek:focus-visible .seek__track { box-shadow: 0 0 0 2px var(--c-accent); }
 
   @media (max-width: 1240px) {
-    .hero__body { width: min(560px, 48vw); }
+    .hero__body { max-width: 560px; }
     .topbar .search__panel { width: min(360px, calc(100vw - var(--gutter) * 2)); }
     .player__bar { gap: var(--sp-2); }
     .player__bar .btn--ghost { padding-inline: var(--sp-2); }
@@ -94,7 +94,16 @@
     .hero__kicker { margin-bottom: var(--sp-2); }
     .hero__tagline { margin-top: var(--sp-2); font-size: var(--fs-14); }
     .hero__actions { margin-top: var(--sp-4); }
-    .hero__body, .hero__pager { bottom: calc(var(--hero-overlap) + var(--sp-10)); }
+    .hero { padding-bottom: calc(var(--hero-overlap) + var(--sp-10)); }
+  }
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); }
+    .hero__pager { justify-self: start; }
+    .rank { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6); }
+    .nav { margin-left: var(--sp-2); }
+    .nav__item { padding-inline: var(--sp-2); }
+    .topbar__spacer { min-width: var(--sp-2); }
+    .field__hint { display: none; }
   }
   @media (max-width: 1200px) {
     .detail__head { grid-template-columns: clamp(168px, 18vw, 220px) minmax(0, 1fr); gap: var(--sp-8); padding-top: calc(var(--bar-h) + var(--sp-8)); }

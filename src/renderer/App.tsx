@@ -1,4 +1,4 @@
-import { Component, useEffect, useId, useLayoutEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react'
+import { Component, lazy, Suspense, useEffect, useId, useLayoutEffect, useRef, useState, type ErrorInfo, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import type { MediaItem, MediaType } from '../contract/types'
 import { SCROLLED_PX } from '../contract/constants'
@@ -11,7 +11,7 @@ import { errorText, UiProvider, useNotify, useRemote, UserProvider, useUser, use
 import { back, go, onRouteLeave, useRoute } from './router'
 import { pageMemory, pageMemoryKey } from './page-memory'
 import { ChannelPage, DetailPage, HomePage, LibraryPage, mediaTypes, PersonPage, RecoveryPage, SearchPage, SettingsPage } from './pages'
-import { Player } from './Player'
+const Player = lazy(() => import('./Player'))
 
 function WindowControls({ state }: { state: WindowState }) {
   const notify = useNotify()
@@ -188,7 +188,9 @@ function PageScroll({ children, pageKey, onScroll }: { children: ReactNode; page
       el.scrollBy({ top: step, behavior: 'auto' })
     }} onPointerDown={event => {
       if (event.target !== event.currentTarget || !thumb.current || !viewport.current) return
-      viewport.current.scrollBy({ top: (event.clientY < thumb.current.getBoundingClientRect().top ? -1 : 1) * viewport.current.clientHeight * 0.9, behavior: 'smooth' })
+      const direction = event.clientY < thumb.current.getBoundingClientRect().top ? -1 : 1
+      viewport.current.scrollBy({ top: direction * viewport.current.clientHeight * 0.9,
+        behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })
     }}><div className="scroll__thumb" ref={thumb} onPointerDown={event => {
       const el = viewport.current
       if (!el || !bar.current || !thumb.current) return
@@ -218,7 +220,10 @@ function AppContent() {
   let page: ReactNode
   if (user.error) page = <RecoveryPage error={user.error} />
   else if (!user.ready) page = <main className="page"><Spinner /></main>
-  else if (playing) page = <Player key={playing[1]} id={playing[1]} episode={Number(playing[2]) || 0} />
+  else if (playing) page = <Suspense fallback={<main className="player" aria-busy="true" data-waiting="">
+    <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} onClick={() => back('/detail/' + playing[1])} /></header>
+    <div className="player__center"><span className="spinner" role="status" aria-label={extra.loading} /></div>
+  </main>}><Player key={playing[1]} id={playing[1]} episode={Number(playing[2]) || 0} /></Suspense>
   else if (route.path === '/') page = <HomePage />
   else if (route.path.startsWith('/channel/') && mediaTypes.includes(route.path.slice(9) as MediaType)) page = <ChannelPage key={route.path} type={route.path.slice(9) as MediaType} params={route.query} />
   else if (/^\/detail\/[^/]+$/.test(route.path)) page = <DetailPage id={route.path.slice(8)} key={route.path} />

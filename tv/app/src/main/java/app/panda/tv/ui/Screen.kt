@@ -1,6 +1,9 @@
 package app.panda.tv.ui
 
 import android.content.Context
+import android.os.Bundle
+import android.widget.TextView
+import android.view.ViewGroup
 import android.view.KeyEvent
 import android.view.View
 import androidx.leanback.widget.BaseGridView
@@ -88,6 +91,36 @@ abstract class Screen(val ctx: Context, val nav: Navigator) {
         return grid.requestFocus()
     }
 
+    open fun saveRoute(): Bundle = Bundle().apply { putString("page", chromeFocusKey) }
+
+    internal var pendingFocus: String? = null
+
+    internal fun focusKey(target: View?): String? {
+        if (target == null) return null
+        target.tag?.let { return it.toString() }
+        if (target is TextView) return target.text.toString().takeIf { it.isNotEmpty() }
+        if (target is ViewGroup) {
+            for (index in 0 until target.childCount) focusKey(target.getChildAt(index))?.let { return it }
+        }
+        return target.contentDescription?.toString()
+    }
+
+    internal fun saveFocusKey(): String? = pendingFocus ?: focusKey(view.findFocus() ?: contentFocus)
+
+    internal fun restoreRouteFocus() {
+        val key = pendingFocus ?: return
+        val choices = ArrayList<View>()
+        view.addFocusables(choices, View.FOCUS_FORWARD)
+        val match = choices.firstOrNull { it.isShown && focusKey(it) == key } ?: return
+        view.post {
+            if (pendingFocus == key && match.isShown && match.requestFocus()) {
+                pendingFocus = null
+                onRouteFocusRestored()
+            }
+        }
+    }
+
+    protected open fun onRouteFocusRestored() {}
     open fun onShown() {}
     open fun onHidden() {}
     open fun onDestroy() {}

@@ -15,6 +15,23 @@ import java.nio.file.Files
 
 class MetadataStoreTest {
     @Test
+    fun oversizedNewestRecordKeepsRecentWholeUtf8Records() = runBlocking {
+        val directory = Files.createTempDirectory("panda-tv-metadata-").toFile()
+        try {
+            val synopsis = "影".repeat(400_000)
+            val store = MetadataStore(directory)
+            store.set((1..5).map { id -> Normalize.normalize(mapOf(
+                "id" to id.toString(), "title" to "影片$id", "intro" to if (id == 5) synopsis.repeat(4) else synopsis,
+            ))!! })
+            store.flush()
+            val restored = MetadataStore(directory)
+            assertEquals(listOf("db-2", "db-3", "db-4"), restored.values().map { it.item.id })
+            assertEquals(synopsis.length, restored.get("db-4")!!.item.synopsis!!.length)
+            org.junit.Assert.assertTrue(File(directory, "metadata-v1.json").length() <= 4 * 1024 * 1024)
+        } finally { directory.deleteRecursively() }
+    }
+
+    @Test
     fun `compact cards cannot erase a verified thematic type across a restart`() = runBlocking {
         for ((type, evidence) in listOf(
             MediaType.ANIME to mapOf("genres" to listOf("动画", "奇幻")),

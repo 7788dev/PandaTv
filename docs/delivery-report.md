@@ -1,5 +1,9 @@
 # Panda 交付报告
 
+当前源码的构建入口见[项目指南](../README.md)。本轮变更、运行环境和验证结果见[双端质量复核](cross-platform-quality-2026-11-27.md)。11 月 26 日 TV 播放恢复、目录补全和遥控器复测另有[设备记录](tv-ux-fixes-2026-11-26.md)。
+
+## 历次验收
+
 2026-11-24 完成[双端体验与质量排查](quality-audit-2026-11-24.md)：按分析、修复、回归顺序落地 Q01–Q16，覆盖干净检出样式交付、TV 编译参数、播放器控件禁用/焦点/对比度、长时间暂停预算、媒体头准入、请求世代、截断分片、错误页重试、影人页独立加载、地区冲突与彩蛋/镜像集号。当前工作区生产代码实际结果：Vitest 36/36、发布工具 6/6、TV JUnit 98/98、lintRelease/assembleRelease 通过；桌面在 `PANDA_E2E_SILENT_OUTPUT=2` 静音且 `PANDA_E2E_SHOW_INACTIVE=1` 不抢前台条件下，受控 fixture 10/10（含此前失败的 test 5/test 7）、真实网络 2/2、最终 unpacked 打包候选联网 2/2 全绿；TV 最终 APK（1,846,716 字节，SHA-256 `43D520C1…91379`）完成起播→切集→seek→暂停 22s→退出/重进闭环、FHD 8/8、720p 3/3、4K+字体 3/3、扩展导航 8/8、搜索取消 3/3、动画 4/4、错误恢复/准入取消/媒体键/6 次退出/301.85s 连续播放。源地址更新：非凡资源旧接口 `cj.ffzyapi.com` 已失效，改为 `https://api.ffzyapi.com/api.php/provide/vod` 后桌面 7/8 个样本真实播放，TV 最终 APK 在《八仙！》上完成 360资源 ↔ 非凡资源独立真实切源（`00:02 → 00:07`）。电影天堂的公开最新入口仍是 `http://caiji.dyttzyapi.com/api.php/provide/vod`，未找到更新域名；本机 HTTP/HTTPS 均连接重置/超时。仍保留的边界：电影天堂、虎牙、金鹰、红牛、速播、暴风、量子等源上游不可达（403/超时/连接重置）；实体音频、实体 Android 5.1 电视未验证。另完成[全量片源真实播放排查](source-playback-audit-2026-11-24.md)：9 个启用源逐一强制运行生产播放链路，仅 360zy 返回目录并读出真实媒体；其余源均在目录前 403/超时/连接拒绝，未发现应用侧“目录正常但媒体解析/分片失败”的源。证据入口为[本轮 manifest](evidence/quality-audit-2026-11-24/final/manifest.json)。本轮未提交、发布或升级用户 Windows 安装。
 
 2026-11-23 完成[使用问题修复与验证](usage-fixes-2026-11-23.md)：修复使用审计的 7 项缺陷和 4 项改进，覆盖 TV 保存/恢复/取消、桌面分页返回与播放偏好、基础详情准入、大型片单和持续图片清理。工作区候选离线 317/317、完整 fixture 40/40、定向重复回放 28/28、TV 离线 70/70 与 lint/构建通过。最终 Windows unpacked 的完整联网测试为 12 通过、4 失败、1 开发 hook 跳过，20 次首次与 3 次再次启动全部加载成功；TV 最终 APK 在 API 35 MuMu 完成导航、存储/恢复、真实播放和三种视口回放，用户状态及临时规则已独立恢复，模拟器恢复关闭。限定单源起播、首字母检索和硬件/长时验证的剩余边界详见报告。本轮未提交、发布或升级用户 Windows 安装，候选身份以报告中的 SHA256 识别。
@@ -18,26 +22,26 @@
 - **本轮离线与界面验证**：`npm run typecheck`、`npm test`（21 文件、295 项；发布包构建时为 288 项，发布后补 7 项：4 项 HLS/LoadPolicy 静态回归、3 项布局契约）、`npm run build`、`npm run test:e2e:fixture`（最终提交后重跑，25/25，5.8 分钟）、`npm run verify:design`（206 文件 SHA256 不变）、`node design/tools/test-contract.mjs`（405 项）通过。TV 运行 `testDebugUnitTest`（53 项）、`lintRelease`、`assembleRelease` 通过（BUILD SUCCESSFUL，1m25s）。
 - **真实播放验证**：`release/win-unpacked/Panda.exe`（最终 app.asar）上真实剧集《三体》第 1→2→3 集 HLS 解码与选集/下一集通过，1/1，29.1 秒；同一用例在 `out/` 构建上 1/1，20.7 秒。`npm run probe:sources` 于 2026-11-22 12:26 前后完成：热门剧集 14/14、电影 9/14、动画 7/14、综艺 11/14、纪录片 1/14，六组长篇 37/48，带集数区间 27/32。`npm run probe:start` 于 2026-11-22 12:28:59（UTC+8）运行 16 部，13 部读到首片，成功样本总耗时中位 5,668 ms、最慢 14,559 ms，360zy 获胜 13 次。上述网络结果只描述本机网络，不替代国内可用性结论。
 - **回归用例与发布方式**：竞速“starts the last bundled fallback… / asks every source in turn, three at a time / does not let three slow sources hold up a fourth…”在 `tests/playback-start.test.ts`；回退“is found when that source fails once… / answers from the source again once it recovers… / prefers the source that delivers a whole first segment…”、缓存“does not ask twice when every source answered… / reuses the choice for an episode… / does not ask again once another source carries the work…”与工作级健康“keeps a failed source behind for this work without penalizing other titles… / leaves a source that keeps failing alone…”在 `tests/playback-start.test.ts` 与 `tests/source-requery.test.ts`；预取、HLS 缓冲与 manifest/playlist/frag LoadPolicy 在 `tests/player-policy.test.ts`，`--sp-*` 与断点契约在 `tests/layout-contract.test.ts`。master 的 `src/renderer/Player.tsx`、`player-model.ts` 与发布提交 a822f97 无差异，后续提交只含测试与文档。`resources/play-sources.json` 本轮未修改（diff 0 行），未全局删源。发布为本地构建直发：Release 工作流在发布窗口临时停用，避免云端重建覆盖已校验包，完成后恢复 active；附件另含 `SHA256SUMS.txt`。云端 CI run 44989033047（master 879a9a9）已通过 typecheck、295 项单测、构建、offline UI/layout、TV 53 项/lint/assemble/签名；该 CI 未生成 Release 附件，发布附件仍为本地构建。
-- **发布物**：[Panda-1.1.4-Setup.exe](../release/Panda-1.1.4-Setup.exe)，133,288,990 字节，SHA-256 `0868FC0F239231C264560B4A6DC49CC085B2E36F9C56512D13EDB8430AE26BE1`；app.asar 13,791,289 字节，SHA-256 `9FBE21EA11AF38239AD63D7BFADBFB136BC06BBF98CE5FB55C8B5DA771133D26`，271 项，不含 node_modules、设计 mock/art/preview、测试、e2e、脚本或 source map。[Panda-TV-1.0.14.apk](../release/Panda-TV-1.0.14.apk)，1,821,909 字节，SHA-256 `25E9963471F04405A8DA8CE76FF80345ECD069CD4360D3BEB1D663B0D3001DD6`，versionCode 15、versionName 1.0.14、minSdk 22，v1/v2 签名验证通过，证书 SHA-256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`。GitHub Release：[v1.1.4](https://github.com/7788dev/PandaTv/releases/tag/v1.1.4)。首次 electron-builder 在线下载超时；随后以镜像与本地 Electron 重跑字面命令 `npm run dist -- --publish never --config.directories.output=.tmp/dist-check`，成功产出 133,205,969 字节检查包；已发布附件保持上述哈希。
+- **发布物**：[Panda-1.1.4-Setup.exe](https://github.com/7788dev/PandaTv/releases/download/v1.1.4/Panda-1.1.4-Setup.exe)，133,288,990 字节，SHA-256 `0868FC0F239231C264560B4A6DC49CC085B2E36F9C56512D13EDB8430AE26BE1`；app.asar 13,791,289 字节，SHA-256 `9FBE21EA11AF38239AD63D7BFADBFB136BC06BBF98CE5FB55C8B5DA771133D26`，271 项，不含 node_modules、设计 mock/art/preview、测试、e2e、脚本或 source map。[Panda-TV-1.0.14.apk](https://github.com/7788dev/PandaTv/releases/download/v1.1.4/Panda-TV-1.0.14.apk)，1,821,909 字节，SHA-256 `25E9963471F04405A8DA8CE76FF80345ECD069CD4360D3BEB1D663B0D3001DD6`，versionCode 15、versionName 1.0.14、minSdk 22，v1/v2 签名验证通过，证书 SHA-256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`。GitHub Release：[v1.1.4](https://github.com/7788dev/PandaTv/releases/tag/v1.1.4)。首次 electron-builder 在线下载超时；随后以镜像与本地 Electron 重跑字面命令 `npm run dist -- --publish never --config.directories.output=.tmp/dist-check`，成功产出 133,205,969 字节检查包；已发布附件保持上述哈希。
 - **未验证**：NSIS 包未安装，未启动用户现有安装；打包验证使用 `release/win-unpacked` 候选，不是安装目录。TV 端 `adb devices` 为空，未做 MuMu 或 TCL 真机导航/播放回归，不能把本轮构建当作真机通过。真实网络未覆盖所有源、清晰度与影片组合；安装包无代码签名，首次运行仍会出现 SmartScreen 提示。
 
 ## 启动方式
 
 GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说明](ci-release.md)，接入及激活状态见[CI 验证记录](evidence/ci-release.txt)。
 
-桌面端需要 Node 24、Windows 10/11 x64；电视端构建需要 JDK 17+（本机 JDK 21）与 Android SDK（`local.properties` 指向本机 `E:\dev\android-sdk`）。
+桌面源码构建使用 Node.js 24、npm 和 Windows 10/11 x64。TV 构建使用 JDK 21 与 Android SDK 37，可通过 `ANDROID_HOME` 或未纳入 Git 的 `tv/local.properties` 配置 SDK 路径。
 
 | 目的 | 命令 |
 | --- | --- |
-| 安装依赖 | `npm install` |
+| 安装锁定依赖 | `npm ci` |
 | 开发运行 | `npm run dev` |
 | 类型检查 / 离线单测 | `npm run typecheck` / `npm test` |
 | 桌面真实 E2E（需要联网） | `npm run test:e2e`；不设 `PANDA_E2E_EXECUTABLE` 时先 `npm run build`，运行 `out/`；设定后运行对应 `Panda.exe` |
-| 桌面离线状态与布局（无可见窗口） | `npm run build` 后 `npm run test:e2e:fixture`；测试数据，不作安装包证据 |
-| 生成桌面安装包 | `npm run dist` → `release/Panda-1.1.4-Setup.exe` |
-| 构建并校验 Android TV 包 | 在 `tv/` 运行 `.\gradlew.bat testDebugUnitTest lintRelease assembleRelease` → `tv/app/build/outputs/apk/release/app-release.apk`；不自动更新 `release/` |
+| 桌面离线交互与布局 | 首次用 FFmpeg 和 `npm run test:media` 生成媒体。运行 `npm run build` 和 `npm run test:e2e:fixture` 检查实际 Electron 界面 |
+| 生成桌面安装包 | `npm run dist -- --publish never`，产物位于 `release/` |
+| 构建并校验 Android TV 包 | 在 `tv/` 运行 `.\gradlew.bat testDebugUnitTest lintRelease assembleRelease`，产物位于 `app/build/outputs/apk/release/`。文件名随签名配置而变 |
 | 导出双端对齐黄金向量 | `node scripts/export-tv-vectors.mjs` |
-| TV 列表 / 搜索 / 动画 / 播放回归 | 按 [TV 设备规程](../.agents/skills/tv-runtime-regression/SKILL.md) 指定安装包和设备序列号后串行重放 |
+| TV 列表、搜索、动效与播放回归 | [设备检查脚本](../scripts/)接受 `--serial`。按脚本的 `--help` 指定本次 APK、用例和输出目录 |
 | 重放线上审计 | `npm run probe:filters`、`npm run probe:sources`、`npm run audit:ads`、`npm run probe:start`、`npm run probe:startup` |
 
 安装包为按用户安装的 NSIS 程序，默认安装到 `%LOCALAPPDATA%\Programs\Panda`（安装向导里可改目录；再次安装会沿用上次的目录原地升级），创建开始菜单与桌面快捷方式，可从“应用和功能”卸载，卸载保留 `%APPDATA%\Panda` 里的收藏与历史。
@@ -50,7 +54,7 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 | --- | --- |
 | `PANDA_USER_DATA_DIR` | 改用指定目录保存收藏、历史、设置（测试用它隔离数据） |
 | `PANDA_SOURCE_CONFIG` | 用指定的 `play-sources.json` 取代内置片源与去广告规则 |
-| `PANDA_UPDATE_URL` | 返回 `{ "version": "x.y.z" }` 的 HTTPS 地址；未设置时“检查更新”提示“更新服务未配置” |
+| `PANDA_UPDATE_URL` | 可选的 HTTPS 版本清单，格式为 `{ "version": "x.y.z" }`。默认检查 GitHub 稳定 Release 的 Windows 安装程序 |
 
 不改环境变量也可以更新规则：把通过校验且版本不低于内置的 `play-sources.json` 放进用户数据目录即可，规则从不联网拉取。
 
@@ -60,15 +64,15 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 
 - 渲染进程开启 sandbox 与 contextIsolation，只拿到契约类型的数据和本机 loopback 上的不透明资源句柄；构建产物 `out/renderer`、`out/preload` 中不含任何上游主机、接口路径或 Cookie 字样。
 - 请求、归一化、缓存、限流重试、播放解析、去广告、DNS 校验全部在 [src/main](../src/main/)。
-- 界面直接引用原型的 CSS、文案、图标、字体与契约类型；`design/` 206 个文件 SHA256 未变，`design/mock|art|preview` 不进入发行包。
-- 选型与理由见[实现清单](implementation-plan.md)，各项取舍见[决策记录](../.agents/notes/implemented/architecture/)。
+- 桌面使用 [renderer 样式和组件](../src/renderer/)、[契约与文案](../src/contract/)和随包字体。Android TV 的布局与焦点在 [Kotlin UI](../tv/app/src/main/java/app/panda/tv/ui/) 中实现。
+- 立项时的技术选型见[实现清单](implementation-plan.md)，当前模块和验证命令见[项目指南](../README.md)。
 
 ## 数据链路
 
 豆瓣移动端官方接口（无凭据）→ 形状校验 → 归一化为契约类型 → 按端点缓存（列表 10 分钟、搜索 2 分钟、详情 24 小时）→ IPC。并发上限 4，同请求合并，瞬态错误退避重试一次；错误按离线 / 超时 / 限流 / 上游异常分类后显示并可重试，不回退到任何内置数据。缺失字段直接不显示。
 
 - 首页栏目与榜单、频道、搜索、联想、详情、演职员、影人作品、剧照、相关推荐均为真实数据；热搜来自百度电影榜与电视剧榜（豆瓣没有影视热搜接口）。
-- 详情页的演职员是豆瓣详情页自己用的主要演职员名单：最多 8 人（导演、最多 6 位主演、其他部门负责人），带照片；点其中一人列出他的全部作品（按评分从高到低，每次 30 部，滚动加载）。[记录](../.agents/notes/implemented/architecture/2026-11-17-people.md)
+- 详情页的演职员是豆瓣详情页自己用的主要演职员名单：最多 8 人（导演、最多 6 位主演、其他部门负责人），带照片；点其中一人列出他的全部作品（按评分从高到低，每次 30 部，滚动加载）。[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-people.md)
 - 频道筛选共 736 项（类型 / 地区 / 年份，每频道 127–171 项），2026-11-20 实测 736/736 有内容。
 - 细节与实测见[豆瓣审阅](douban-audit.md)。
 
@@ -77,11 +81,11 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 豆瓣条目（片名、年份、分类、别名、集数）→ 9 个片源同时检索（限流容量 12；找到后最多再等 1.2 秒，不等最慢的）→ 身份匹配 → 按集号对齐各源线路 → 3 个源同时起播比较：先看首片的实际传输余量，再比较真实画面 → 本机代理（清单改写、去广告、分片 / 密钥转发）→ hls.js / 原生 video。TV 源池保持相同的 12 个搜索槽，避免排在末位的回退目录在前八个请求迟滞时无法启动。
 
 - 身份以“名称 + 年份 + 分类”互证；豆瓣按年拆分的长篇连载用别名里的集数区间映射到片源的累计记录。
-- 片源表 v3：速播、虎牙、暴风、电影天堂、量子、非凡、红牛、金鹰、360；本次新增速播、虎牙、红牛，停用飘零（接口关闭），极速仍停用。依据是在北京服务器上的实测，见 [cn-sources.md](evidence/cn-sources.md)。
-- 选源不靠固定排名：以媒体时长与实际下载耗时估计播放余量，至少 1.25 倍的源优先，再比较从首片读到的实际画面；已经测慢的源排后。慢的源 2.5 秒让位，会话内记住当前网络的表现。清晰度标签仍来自实际画面；一次测量不能保证之后永不卡顿。[记录](../.agents/notes/implemented/architecture/2026-11-17-source-contest.md)
-- 失败、超时或余量不足的源按“作品 + 源”延后 10 分钟，不污染其它作品；下一集优先复用上一集赢家，同时保留替代源竞速。桌面 hls.js 使用 `LoadPolicy` 短重试与 90/180 秒前向缓冲、30 秒回看缓冲；TV Media3 按内存使用 10--30 秒或 12--48 秒缓冲，起播看门狗以首帧输出为准，缓冲后 2 秒重新起播。倍速按真实解码帧窗口降速并逐步恢复。[记录](../.agents/notes/implemented/architecture/2026-11-19-playback-stability.md)
+- 当前内置片源表版本为 6，有 9 个启用项。两端使用相同资产，源地址和身份排除规则见[片源清单](../resources/play-sources.json)。
+- 选源综合作品身份、媒体准入、实测画质、传输余量和历史可用性。规则参数与运行数据分开保存。校准文件标为 provisional。[参数](../resources/rule-calibration.json)
+- 桌面 hls.js 配置短重试、90 秒目标前向缓冲、180 秒前向上限和 30 秒回看。TV Media3 按设备内存选择缓冲预算。[桌面播放器](../src/renderer/Player.tsx) · [TV 内存策略](../tv/app/src/main/java/app/panda/tv/ui/PlaybackBufferPolicy.kt)
 - 起播实测（每频道热门前几部的第 1 集，搜索 + 选源 + 清单 + 首片）：北京 31/32，中位 2.6 秒，27 部 1080P；开发机网络 23/24，中位 1.7 秒。两处唯一没播成的是同一部各源都没有收录的综艺。
-- 播放器：选源失败先自动再要 2 次才提示；起播 15 秒无画面或中途 20 秒不动自动换源（最多 2 次）并回到原位置；可在“线路”菜单手动换源；提前选好下一集的源。
+- 两端在停滞时尝试恢复，同一集的自动换线次数与最短间隔由[校准参数](../resources/rule-calibration.json)决定。桌面换线在切换前检查时间对齐。
 - 播放器的播放 / 暂停、进度与缓冲、音量、倍速、清晰度（片源真有多档时）、选集、全屏、画中画、下一集、出错重试均接真实媒体状态；重试会换源。
 - 实测覆盖（真实详情 → 匹配 → 解析第 1 集并读到媒体数据，2026-11-17 15:41）：剧集热门前 14 条 14/14，电影 12/14，动画 14/14，综艺 13/14，纪录片 9/14；六个长篇连载的 48 个豆瓣条目 44 个可播，其中带集数区间的分年条目 32/33。未通过的 12 条都是各源答复“没有收录”的条目（含尚未上线的）。
 - 细节见[播放审阅](playback-audit.md)。
@@ -98,8 +102,8 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 
 ## 审查前发布包（2026-11-21，桌面 1.1.2 / TV 1.0.12）
 
-- 桌面安装程序：[Panda-1.1.2-Setup.exe](../release/Panda-1.1.2-Setup.exe)，133,204,226 字节，SHA-256 `81231C2397F59F2E7ADAF94C34BA93989AB45036F33DAF0ED77422ECF23A5C8D`。已原位升级既有 1.1.1；安装记录为 [install-1.1.2.txt](evidence/install-1.1.2.txt)，asar 271 项，不含 node_modules、原型 mock/art/preview、测试、脚本或 source map。该机器已有用户安装未卸载，未清除用户资料。
-- TV 安装包：[Panda-TV-1.0.12.apk](../release/Panda-TV-1.0.12.apk)，1,812,339 字节，SHA-256 `8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974`，versionCode 13、minSdk 22；v1/v2 签名通过，证书 SHA-256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`，MuMu 安装了此 APK。
+- 桌面安装程序：`Panda-1.1.2-Setup.exe`，133,204,226 字节，SHA-256 `81231C2397F59F2E7ADAF94C34BA93989AB45036F33DAF0ED77422ECF23A5C8D`。已原位升级既有 1.1.1；安装记录为 [install-1.1.2.txt](evidence/install-1.1.2.txt)，asar 271 项，不含 node_modules、原型 mock/art/preview、测试、脚本或 source map。该机器已有用户安装未卸载，未清除用户资料。
+- TV 安装包：`Panda-TV-1.0.12.apk`，1,812,339 字节，SHA-256 `8AD82282BDDA56C1203F06685734FEBD2874E2C57128E6D646EE35C1C4D8E974`，versionCode 13、minSdk 22；v1/v2 签名通过，证书 SHA-256 `d49e8eaee47712b2dac54444ef627d53fd2bf302ddc67ecdcbd3d8d695073fcd`，MuMu 安装了此 APK。
 - `npm run typecheck`、`npm test`（19 个文件、282 项）、`npm run verify:design`（206 个文件不变）、405 项原型契约检查和 TV `testDebugUnitTest lintRelease assembleRelease` 通过。发行包验证详情见[1.1.2 发布验收](#2026-11-20-112-发布验收)。
 
 ## 2026-11-20 1.1.2 发布验收
@@ -126,7 +130,7 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 
 ## Android TV 版本（Android 5.1+）
 
-针对客厅电视 TCL L55P2-UD（Android 5.1 / API 22，晶晨 T968 四核 Cortex-A53，1.5 GB 内存，8 GB 闪存，55 英寸遥控器交互），在 [tv/](../tv/) 下采用原生 Kotlin + Android Views + Leanback 焦点网格 + Media3 ExoPlayer `1.8.1`（支持 API 22 的最后一代分支）独立实现，当前包为 [Panda-TV-1.0.14.apk](../release/Panda-TV-1.0.14.apk)（[决策记录](../.agents/notes/implemented/architecture/2026-11-18-android-tv.md)）：
+针对客厅电视 TCL L55P2-UD（Android 5.1 / API 22，晶晨 T968 四核 Cortex-A53，1.5 GB 内存，8 GB 闪存，55 英寸遥控器交互），在 [tv/](../tv/) 下采用原生 Kotlin + Android Views + Leanback 焦点网格 + Media3 ExoPlayer `1.8.1`独立实现，v1.1.4 的发布附件为 [Panda-TV-1.0.14.apk](https://github.com/7788dev/PandaTv/releases/download/v1.1.4/Panda-TV-1.0.14.apk)（[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-18-android-tv.md)）：
 
 - **体积与签名**：不引入 WebView、JS 引擎、跨端框架或 `.so` 原生库；开启 R8 压缩、资源压缩与中文语言过滤（`localeFilters`），v1 + v2 双签名（Android 7.0 以下必须含 v1 签名），同时声明 `LAUNCHER` 与 `LEANBACK_LAUNCHER` 入口及电视横幅。当前 release APK 为 1,821,909 字节（约 1.74 MiB），versionCode 15、versionName 1.0.14、minSdk 22，v1/v2 签名验证通过；单 DEX，全架构通用。
 - **老系统与小内存 / 小闪存 / 滚动帧率优化**：内置当前 Mozilla 根证书束（140+ 根证书）与系统证书库组合校验，保留底层 Conscrypt SNI 并在后台线程异步初始化 TLS 1.2，不阻塞冷启动首帧；针对 Android 5.1 Bitmap 占用受管 Java 堆的特性，海报按显示尺寸降采样并以 `RGB_565` 解码，限制并发解码并在回收视图时立即取消陈旧加载任务，无锁读取磁盘图片缓存，关闭焦点动态阴影投射并采用增量分页（`notifyItemRangeInserted`）；首片 `.ts` 预热数据在播放器读取后立即释放，低内存设备（`lowRamDevice`、总内存 ≤2 GB、`memoryClass` ≤192 MB 或最大堆 ≤192 MB）使用 16 MiB、10--30 秒缓冲，其余设备使用 32 MiB、12--48 秒缓冲，起播/重缓冲阈值为 1/2 秒；磁盘图片缓存封顶 36 MB、元数据缓存封顶 4 MB；自定义图标与开关零 `onDraw` 对象分配。
@@ -140,7 +144,7 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 - **立即切集**：选择下一集或选集立即停止旧视频与声音、清空进度和画面、切换标题，再加载新集；连续选择以最后一集为准，观看历史记录实际播放的集数。旧版两次保留旧时间轴；新版两次完成第 3 集实际播放与对应历史。
 - **播放首片竞态**：修复预热下载已结束、播放器稍晚开始读取时得到空分片的问题；保留同一份字节给迟到读取者，读完释放。
 
-取舍与已撤回的验收误判见 [TV interaction](../.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)。以下为 1.0.2/1.0.3 等旧版记录；[tv-verification.json](evidence/tv-verification.json) 不作为现版包的多密度、起播或帧率证据。
+取舍与已撤回的验收误判见 [TV interaction](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-18-tv-interaction.md)。以下为 1.0.2/1.0.3 等旧版记录；[tv-verification.json](evidence/tv-verification.json) 不作为现版包的多密度、起播或帧率证据。
 
 ## 已修复的问题
 
@@ -148,34 +152,34 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 
 | 问题 | 处理 |
 | --- | --- |
-| 本机代理把图片域名解析成保留地址，海报全部 502 | 主进程经 HTTPS 解析真实地址并固定连接，[记录](../.agents/notes/implemented/architecture/2026-11-16-safe-proxy-dns.md) |
-| 确认弹窗打开时窗口按钮失效；弹窗未居中 | 弹窗与窗口按钮放入同一模态范围，[记录](../.agents/notes/implemented/architecture/2026-11-16-desktop-confirmation.md) |
+| 本机代理把图片域名解析成保留地址，海报全部 502 | 主进程经 HTTPS 解析真实地址并固定连接，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-safe-proxy-dns.md) |
+| 确认弹窗打开时窗口按钮失效；弹窗未居中 | 弹窗与窗口按钮放入同一模态范围，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-desktop-confirmation.md) |
 | 启动加载中刷新会报“应用连接失败” | 修复并加 E2E |
-| 筛选只有十来个分类；冷门组合返回残缺页导致列表提前结束 | 738 项实测词表；残缺页识别、重读、拆小页，[记录](../.agents/notes/implemented/architecture/2026-11-16-filter-vocabulary.md) |
+| 筛选只有十来个分类；冷门组合返回残缺页导致列表提前结束 | 738 项实测词表；残缺页识别、重读、拆小页，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-filter-vocabulary.md) |
 | 首页“最新电影”整栏只有片名没有海报，主推区少两部电影 | 豆瓣部分合集把海报放在 `cover.url` 而不是 `pic`，归一化漏读；补上并加单测与真实窗口里的海报解码断言 |
 | 打开详情后动画片变成剧集 | 豆瓣详情类型只给三项，改为与副标题取并集 |
-| 分年连载（《凡人修仙传 年番4》等）找不到片源或集数不对 | 集数区间映射、基准线路选择、年份差一年与别名的弱匹配，[记录](../.agents/notes/implemented/architecture/2026-11-16-source-identity.md) |
+| 分年连载（《凡人修仙传 年番4》等）找不到片源或集数不对 | 集数区间映射、基准线路选择、年份差一年与别名的弱匹配，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-source-identity.md) |
 | 累计记录里夹着“第240集上/下”等条目，整条线路作废，分年条目只剩一个源 | 取区间时跳过附加项 |
-| 单个源一次不答复，被缓存成“未找到可用片源” | 追问失败的源；未答复时提示重试且不缓存，[记录](../.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
-| 媒体代理只放行 80/443，金鹰等源的分片被拒 | 与浏览器一致的端口策略，[记录](../.agents/notes/implemented/architecture/2026-11-16-media-ports.md) |
+| 单个源一次不答复，被缓存成“未找到可用片源” | 追问失败的源；未答复时提示重试且不缓存，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
+| 媒体代理只放行 80/443，金鹰等源的分片被拒 | 与浏览器一致的端口策略，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-media-ports.md) |
 | 片源迟迟不起播时一直转圈 | 35 秒内自动换源恢复，有 E2E |
-| 去广告规则依赖域名名单与到期日、跳过加密清单 | 规则 v2，[记录](../.agents/notes/implemented/architecture/2026-11-16-ad-evidence.md) |
-| 安装包重复打入 node_modules，Panda.exe 没有图标与版本信息 | asar 79.7 MB → 13.9 MB，保留版本信息，[记录](../.agents/notes/implemented/architecture/2026-11-16-packaging.md) |
-| 完全退出后再打开，首页要等几秒 | 先显示上次的首页与落盘的海报；握手卡住的连接 1.5 秒换一条；DNS 双路查询。24 次全新启动页首中位 0.7 秒、最慢 1.0 秒，[记录](../.agents/notes/implemented/architecture/2026-11-17-startup.md) |
-| 选源按固定排名，慢源拖住起播，清晰度标签照抄清单声明 | 按首片实际画面与当前网速选源，[记录](../.agents/notes/implemented/architecture/2026-11-17-source-contest.md) |
+| 去广告规则依赖域名名单与到期日、跳过加密清单 | 规则 v2，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-ad-evidence.md) |
+| 安装包重复打入 node_modules，Panda.exe 没有图标与版本信息 | asar 79.7 MB → 13.9 MB，保留版本信息，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-packaging.md) |
+| 完全退出后再打开，首页要等几秒 | 先显示上次的首页与落盘的海报；握手卡住的连接 1.5 秒换一条；DNS 双路查询。24 次全新启动页首中位 0.7 秒、最慢 1.0 秒，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-startup.md) |
+| 选源按固定排名，慢源拖住起播，清晰度标签照抄清单声明 | 按首片实际画面与当前网速选源，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-source-contest.md) |
 | 片尾标“第30集已完结”的线路整条作废，完结剧少了几个源 | 集号解析接受“已完结 / 大结局” |
 | 分片在 1024 以下端口的源（红牛 65 端口）被拒 | 端口规则改为与浏览器完全一致的禁用名单 |
 | 另一部作品搜索时的一次超时，让之后没有片源的作品都提示“暂时无法连接” | 只看本次搜索里没答复的源；解析到非公开地址的源记为此网络不可达 |
 | 一个目录拖满 9 秒，所有作品的起播都跟着等 | 找到作品后不再等最慢的目录，迟到的答复补进线路列表 |
-| 详情页把演职员全部列出（《三体》68 人），没有照片，不能按人找作品 | 改用豆瓣的主要演职员名单（《三体》8 人，实测 45 部作品每部 4–8 人），带照片；点人进入“全部作品”页，[记录](../.agents/notes/implemented/architecture/2026-11-17-people.md) |
+| 详情页把演职员全部列出（《三体》68 人），没有照片，不能按人找作品 | 改用豆瓣的主要演职员名单（《三体》8 人，实测 45 部作品每部 4–8 人），带照片；点人进入“全部作品”页，[记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-people.md) |
 
 ## 已知限制
 
-- 安装包没有代码签名，首次运行会出现 SmartScreen 提示；没有发布服务，应用内不能自动更新。
+- Windows 安装程序尚未做代码签名。设置页可以检查已发布版本，下载安装由用户完成。
 - 豆瓣、百度榜单与各片源都没有可用性承诺。接口变更或限流时界面显示错误与重试，不会显示假数据。
 - 片源没有收录的作品无法播放（上面未通过的条目），桌面显示“未找到可用片源”，TV 在详情页显示“该影片没有片源，请稍后再试”；有目录没答复时显示网络失败或超时并允许重试。360zy 在国内网络解析不到，等于少一个源。
 - 没有集数区间别名的连载条目只能按标题匹配，累计记录会把整部连载的集数都列在该条目下（如《吞噬星空 第1季》列出 249 集）。
-- 时长指纹只认截取过的广告；源方更换广告后会漏删（不会误删），需要重跑 `npm run audit:ads` 补指纹。
+- 时长指纹依据已采样的广告片段。源方更换片段后需要重新抽样核对并更新规则。
 - 冷门筛选组合首次打开可能等待十几秒。
 - 主要演职员名单读不到时，详情页只有姓名，没有照片和链接；没有照片的影人显示姓名首字。影人的作品列表是豆瓣收录的全部影视条目（含未上映的），首次打开一个人实测要等 1.5–4.4 秒。
 - 清晰度切换、跳过片头只在片源提供多档清晰度、片头标记时出现；实测的片源都不提供片头标记。H.265 或 fMP4 的片源读不出画面大小，不显示清晰度。
@@ -195,7 +199,7 @@ GitHub 托管构建、手动打包与标签发布配置见[云端构建发布说
 | 去广告线上审计 | 见上表 | [ad-audit.json](evidence/ad-audit.json)、截帧 `evidence/ad-frame-v2-*.jpg` |
 | 原型未改动 | 206 个文件 SHA256 一致；契约检查 405 项通过 | `npm run verify:design`、`node design/tools/test-contract.mjs` |
 | 历史桌面 1.0.1 | 打包目录 E2E 16/19，三项强制单源用例失败，asar 268 项。该轮未执行 1.0.1 安装程序；不是对 1.1.2 的结论 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt)、[install.txt](evidence/install.txt) |
-| Android TV 安装包 | [Panda-TV-1.0.3.apk](../release/Panda-TV-1.0.3.apk) 1,068,444 字节、SHA-256 `6112B93C49BA76EC9C7C22E2935564F403DEA8F5404DC3351D56F797542EDEDB`；versionCode 4、minSdk 22、v1/v2 签名通过 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt) |
+| Android TV 安装包 | `Panda-TV-1.0.3.apk` 1,068,444 字节、SHA-256 `6112B93C49BA76EC9C7C22E2935564F403DEA8F5404DC3351D56F797542EDEDB`；versionCode 4、minSdk 22、v1/v2 签名通过 | [playback-stability-checks.txt](evidence/playback-stability-checks.txt) |
 | TV 遥控器列表与搜索 | 1.0.3 重跑完整导航全部通过，user/library 状态恢复；搜索 3 项通过，user 状态恢复。第一次导航的一项偶发焦点错误未复现 | [导航](evidence/runtime/tv-navigation/playback-stability-1.0.3-repeat/report.json)、[搜索](evidence/runtime/tv-navigation/playback-stability-1.0.3/report.json) |
 | TV 播放器与查源 | 1.0.3 播放按钮焦点、连续切至第 3 集、历史记录和无源重试通过；user 状态、防火墙规则恢复 | [播放](evidence/runtime/tv-playback/playback-stability-1.0.3/report.json) |
 | TV 动画与滚动 | 1.0.3 重复 4 组首页与展开筛选网格方向键、连续连按；0 卡顿帧、p95 5 ms。Android 15 模拟器结果不替代 TCL Android 5.1 真机表现 | [motion](evidence/runtime/tv-motion/playback-stability-1.0.3/report.json) |

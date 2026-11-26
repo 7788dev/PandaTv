@@ -26,7 +26,6 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 class MainActivity : Activity(), Navigator {
     override lateinit var app: PandaTvApp
@@ -97,7 +96,54 @@ class MainActivity : Activity(), Navigator {
         setContentView(rootLayout)
         if (rootLayout.isAttachedToWindow) bindFocusMemory()
 
-        if (app.userStore.recovery().needed) openRecovery() else openHome()
+        rootLayout.viewTreeObserver.addOnGlobalLayoutListener { stack.lastOrNull()?.restoreRouteFocus() }
+        if (app.userStore.recovery().needed) openRecovery()
+        else if (!restoreNavigation(savedInstanceState?.getBundle("navigation"))) openHome()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val pages = Bundle()
+        stack.forEachIndexed { index, screen ->
+            val route = screen.saveRoute()
+            route.putString("focus", screen.saveFocusKey())
+            pages.putBundle(index.toString(), route)
+        }
+        pages.putInt("size", stack.size)
+        val chrome = (launchers + navPills).entries.firstOrNull { it.value === currentFocus }?.key
+        pages.putString("chrome", chrome)
+        outState.putBundle("navigation", pages)
+    }
+
+    private fun restoreNavigation(pages: Bundle?): Boolean {
+        if (pages == null) return false
+        for (i in 0 until pages.getInt("size")) {
+            val route = pages.getBundle(i.toString()) ?: break
+            val key = route.getString("page") ?: break
+            val type = MediaType.fromWire(key)
+            when {
+                i == 0 && type != null -> replaceRoot(key) { ChannelScreen(this, this, type, saved = route) }
+                i == 0 && key == "home" -> replaceRoot(key) { HomeScreen(this, this, route) }
+                i == 0 && key == "me" -> replaceRoot(key) { MeScreen(this, this, route.getString("tab")) }
+                i == 0 -> return false
+                key == "detail" -> pushScreen(DetailScreen(this, this, route.getString("id") ?: break, route))
+                key == "person" -> openPerson(route.getString("id") ?: break, route.getString("name"), route.getString("photo"))
+                key == "search" -> pushScreen(SearchScreen(this, this, route))
+                key == "settings" -> openSettings()
+                key == "player" -> {
+                    openPlayer(route.getString("id") ?: break, route.getInt("episode", 1), route)
+                    break
+                }
+                else -> break
+            }
+            stack.lastOrNull()?.pendingFocus = route.getString("focus")
+        }
+        val chrome = pages.getString("chrome")
+        if (chrome != null) {
+            stack.lastOrNull()?.pendingFocus = null
+            (launchers[chrome] ?: navPills[chrome])?.post { (launchers[chrome] ?: navPills[chrome])?.requestFocus() }
+        }
+        return stack.isNotEmpty()
     }
 
     override fun onPause() {
@@ -140,6 +186,7 @@ class MainActivity : Activity(), Navigator {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN) stack.lastOrNull()?.pendingFocus = null
         if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount > 0 &&
             (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER || event.keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
         ) return true
@@ -360,7 +407,9 @@ class MainActivity : Activity(), Navigator {
         pushScreen(PersonScreen(this, this, id, nameHint, photoHint))
     }
 
-    override fun openPlayer(id: String, episode: Int) {
+    override fun openPlayer(id: String, episode: Int) = openPlayer(id, episode, null)
+
+    private fun openPlayer(id: String, episode: Int, restored: Bundle?) {
         if (app.userStore.recovery().needed) { openRecovery(); return }
         if (playerCheckTarget == (id to episode)) return
         val origin = stack.lastOrNull() ?: return
@@ -387,14 +436,12 @@ class MainActivity : Activity(), Navigator {
         cancel.requestFocus()
         playerCheckJob = scope.launch {
             try {
-                val item = withTimeout(22_000L) {
-                    val metadata = app.douban.subject(id)
-                    app.playback.prepareItem(metadata, episode, app.douban.workHints(id))
-                }
+                val metadata = awaitScreenRequest(scope, timeoutMs = 22_000L) { app.douban.subject(id) }
+                val item = app.playback.prepareItem(metadata, episode, app.douban.workHints(id))
                 coroutineContext.ensureActive()
                 if (generation != playerCheckGeneration || stack.lastOrNull() !== origin) return@launch
                 clearPlayerCheck()
-                pushScreen(PlayerScreen(this@MainActivity, this@MainActivity, item, episode))
+                pushScreen(PlayerScreen(this@MainActivity, this@MainActivity, item, episode, restored).apply { pendingFocus = restored?.getString("focus") })
             } catch (timeout: TimeoutCancellationException) {
                 if (generation == playerCheckGeneration) toast(Copy.Extra.TIMEOUT)
             } catch (cancelled: CancellationException) {
@@ -454,6 +501,7 @@ class MainActivity : Activity(), Navigator {
                     if (stack.lastOrNull() !== prev) return@post
                     val target = prev.lastFocused
                     if (target != null && (target in launchers.values || target in navPills.values) && target.isShown) target.requestFocus()
+                    else if (prev.pendingFocus != null) prev.restoreRouteFocus()
                     else if (!prev.restoreContentFocus() && prev.view.findFocus() == null) focusTopBar()
                 } finally {
                     rememberFocusChanges = true

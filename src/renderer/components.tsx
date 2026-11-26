@@ -143,7 +143,11 @@ export function Shelf({ title, more, wide = false, children }: { title: string; 
   useEffect(() => {
     const el = track.current
     if (!el) return
-    const sync = () => setEdge({ start: el.scrollLeft < SHELF_EDGE_PX, end: el.scrollLeft + el.clientWidth > el.scrollWidth - SHELF_EDGE_PX })
+    const sync = () => {
+      const start = el.scrollLeft < SHELF_EDGE_PX
+      const end = el.scrollLeft + el.clientWidth > el.scrollWidth - SHELF_EDGE_PX
+      setEdge(previous => previous.start === start && previous.end === end ? previous : { start, end })
+    }
     const resize = new ResizeObserver(sync)
     resize.observe(el)
     el.addEventListener('scroll', sync, { passive: true })
@@ -157,7 +161,7 @@ export function Shelf({ title, more, wide = false, children }: { title: string; 
     const step = el.clientWidth - parseFloat(css.paddingLeft) * 2 + parseFloat(css.columnGap)
     const max = Math.max(0, el.scrollWidth - el.clientWidth)
     const target = direction > 0 ? Math.min(max, el.scrollLeft + step) : Math.max(0, el.scrollLeft - step)
-    el.scrollTo({ left: target, behavior: 'smooth' })
+    el.scrollTo({ left: target })
   }
   return <section className={`section shelf${wide ? ' shelf--wide' : ''}`} data-at-start={dataAttr(edge.start)} data-at-end={dataAttr(edge.end)}>
     <header className="section__head"><h2 className="section__title">{title}</h2>{more && <a className="text-btn" href={`#${more}`}>{t.action.more}<Icon name="chevron-right" /></a>}</header>

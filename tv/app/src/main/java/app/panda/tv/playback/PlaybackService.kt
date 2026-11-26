@@ -12,6 +12,7 @@ import app.panda.tv.model.Quality
 import app.panda.tv.model.SourceOption
 import app.panda.tv.data.Taxonomy
 import app.panda.tv.net.PublicNetwork
+import app.panda.tv.state.SourceHealthStore
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
@@ -26,6 +27,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import java.net.URI
@@ -460,6 +462,10 @@ class PlaybackService(
     private val betterPictureMs: Long = 1_500L,
     private val turnMs: Long = 2_500L,
     private val mediaFetcher: MediaFetcher? = null,
+    private val health: SourceHealthStore? = null,
+    private val alignment: AlignmentConfig? = null,
+    private val catalogueTimeoutMs: Int = 9000,
+    private val catalogueClock: () -> Long = System::currentTimeMillis,
     private val onFailureLog: (String, String, Long) -> Unit = { _, _, _ -> },
 ) {
     private data class CachedCandidates(val value: List<Candidate>, val expires: Long)
@@ -467,6 +473,7 @@ class PlaybackService(
     private data class SelectionIntent(val intent: Long, val key: String)
     private data class FailureState(val count: Int, val until: Long, val since: Long)
     private data class Attempt(val source: PlaySource, val line: Line, val target: Episode)
+    private class AlignmentMismatch : IllegalStateException(Copy.Extra.LINE_SWITCH_FAILED)
     private class Reached(
         val playback: Playback,
         val whole: CompletableDeferred<Unit>,
@@ -477,7 +484,12 @@ class PlaybackService(
 
     private val lock = Any()
     private val cache = LinkedHashMap<String, CachedCandidates>(32, 0.75f, true)
-    private val inflight = HashMap<String, CompletableDeferred<List<Candidate>>>()
+    private class CatalogueLookup {
+        val first = CompletableDeferred<List<Candidate>>()
+        val complete = CompletableDeferred<List<Candidate>>()
+    }
+
+    private val inflight = HashMap<String, CatalogueLookup>()
     private val resolved = LinkedHashMap<String, CachedPlayback>(32, 0.75f, true)
     private val failures = HashMap<String, FailureState>()
     private val selected = LinkedHashMap<String, String>(64, 0.75f, true)
@@ -541,7 +553,8 @@ class PlaybackService(
 
     suspend fun prepareItem(item: MediaItem, episode: Int, hints: WorkHints = WorkHints()): MediaItem {
         require(episode in 1..10000) { Copy.Extra.INVALID_INPUT }
-        val available = availability(item, hints)
+        var available = availability(item, hints)
+        if (episode > (available.episodes ?: 1)) available = availability(item, hints, complete = true)
         val prepared = item.copy(
             episodes = available.episodes ?: item.episodes,
             episodeTitles = available.episodeTitles ?: item.episodeTitles,
@@ -552,9 +565,9 @@ class PlaybackService(
         return prepared
     }
 
-    suspend fun availability(item: MediaItem, hints: WorkHints = WorkHints()): Availability {
+    suspend fun availability(item: MediaItem, hints: WorkHints = WorkHints(), complete: Boolean = false): Availability {
         val single = hints.single ?: (item.type == MediaType.MOVIE)
-        val candidates = candidates(item, hints)
+        val candidates = candidates(item, hints, complete)
         val line = PlaybackMatchers.referenceLine(candidates.flatMap { it.lines })
             ?: throw IllegalStateException(Copy.Extra.SOURCE_UNAVAILABLE)
         val plan = PlaybackMatchers.numbering(line)
@@ -584,6 +597,9 @@ class PlaybackService(
         retry: Boolean = false,
         hints: WorkHints = WorkHints(),
         from: String? = null,
+        retryFailureKind: FailureKind? = null,
+        switchingFrom: Playback? = null,
+        userRetry: Boolean = false,
     ): Playback {
         require(episode in 1..10000) { "集数无效" }
         val (revision, intent) = synchronized(lock) {
@@ -595,7 +611,7 @@ class PlaybackService(
         val deferred = CompletableDeferred<Playback>()
         val known = synchronized(lock) {
             val cached = resolved[key]
-            if (!retry && from == null && cached != null && cached.expires > System.currentTimeMillis() && selectionIntents[selectionKey]?.key == key) {
+            if (switchingFrom == null && !retry && !userRetry && from == null && cached != null && cached.expires > System.currentTimeMillis() && selectionIntents[selectionKey]?.key == key) {
                 cached.value
             } else {
                 selectionIntent = ++revisionClock
@@ -612,18 +628,21 @@ class PlaybackService(
         }
         if (known != null) {
             try {
-                return known.await()
+                val cached = known.await()
+                if (cached.sourceKey?.let { health?.rankFor(it, item.id)?.cooled } != true) return cached
+                synchronized(lock) { if (resolved[key]?.value === known) resolved.remove(key) }
+                return resolve(item, episode, quality, retry, hints, from, retryFailureKind, switchingFrom, userRetry)
             } catch (cancelled: CancellationException) {
                 // The preload's owner may have gone away while this screen is
                 // still awaiting its result. Only the current caller's own
                 // cancellation is terminal; otherwise create/join a fresh task.
                 currentCoroutineContext().ensureActive()
                 synchronized(lock) { if (resolved[key]?.value === known) resolved.remove(key) }
-                return resolve(item, episode, quality, retry, hints, from)
+                return resolve(item, episode, quality, retry, hints, from, retryFailureKind, switchingFrom, userRetry)
             }
         }
         return try {
-            val result = choose(item, episode, quality, retry, hints, from, revision, selectionIntent, intent)
+            val result = choose(item, episode, quality, retry, hints, from, revision, selectionIntent, intent, retryFailureKind, switchingFrom, userRetry)
             deferred.complete(result)
             if (from != null) synchronized(lock) {
                 if (selectionIntents[selectionKey]?.intent == selectionIntent && manualIntents[item.id] == intent && preferred[item.id] == from) {
@@ -643,8 +662,8 @@ class PlaybackService(
         }
     }
 
-    suspend fun sources(item: MediaItem, episode: Int, hints: WorkHints = WorkHints()): PlaySources {
-        val attempts = attempts(item, episode, hints)
+    suspend fun sources(item: MediaItem, episode: Int, hints: WorkHints = WorkHints(), complete: Boolean = false): PlaySources {
+        val attempts = attempts(item, episode, hints, complete)
         val seen = LinkedHashMap<String, SourceOption>()
         for (a in attempts) {
             if (!seen.containsKey(a.source.key)) {
@@ -656,9 +675,9 @@ class PlaybackService(
         return PlaySources(list, current?.takeIf { cur -> list.any { it.key == cur } })
     }
 
-    private suspend fun attempts(item: MediaItem, episode: Int, hints: WorkHints): List<Attempt> {
+    private suspend fun attempts(item: MediaItem, episode: Int, hints: WorkHints, complete: Boolean = false): List<Attempt> {
         val single = hints.single ?: (item.type == MediaType.MOVIE)
-        val candidates = candidates(item, hints)
+        val candidates = candidates(item, hints, complete)
         val primary = PlaybackMatchers.referenceLine(candidates.flatMap { it.lines })
         val plan = primary?.let { PlaybackMatchers.numbering(it) }
         val wanted = plan?.byNumber?.get(episode)
@@ -677,6 +696,7 @@ class PlaybackService(
                 if (target != null) out.add(Attempt(c.source, line, target))
             }
         }
+        if (out.isEmpty() && !complete) return attempts(item, episode, hints, complete = true)
         if (out.isEmpty()) throw IllegalStateException(Copy.Extra.NO_EPISODE)
         return out
     }
@@ -691,20 +711,31 @@ class PlaybackService(
         revision: Long,
         selectionIntent: Long,
         intent: Long?,
+        retryFailureKind: FailureKind?,
+        switchingFrom: Playback?,
+        userRetry: Boolean,
     ): Playback {
         val selectionKey = "${item.id}:$episode"
         val previous = synchronized(lock) { selected[selectionKey] }
-        if (retry && previous != null) setBack(item.id, previous)
+        if (retry && previous != null) {
+            setBack(item.id, previous)
+            if (retryFailureKind != null) health?.recordFailure(previous, retryFailureKind, item.id, episode)
+        }
         val now = System.currentTimeMillis()
-        val rawAttempts = attempts(item, episode, hints)
+        val rawAttempts = attempts(item, episode, hints, complete = from != null)
         val winner = synchronized(lock) { winners[item.id] }
-        val sorted = rawAttempts.sortedWith(Comparator { a, b ->
+        val ranks = rawAttempts.associateWith {
+            health?.rankFor(it.source.key, item.id, now) ?: HealthVerdict(false, 0.5)
+        }
+        val sorted = rawAttempts.filter { it.source.key == from || !ranks.getValue(it).cooled }.sortedWith(Comparator { a, b ->
             fun score(attempt: Attempt) = SourceOrderScore(
-                behind = synchronized(lock) { (behind[behindKey(item.id, attempt.source.key)] ?: 0L) > now },
+                behind = synchronized(lock) { (behind[behindKey(item.id, attempt.source.key)] ?: 0L) > now } ||
+                    ranks[attempt]?.cooled == true,
                 previous = attempt.source.key == previous,
                 winner = attempt.source.key == winner,
             )
-            DeliverySpeed.compareSourceOrder(score(a), score(b), retry)
+            val order = DeliverySpeed.compareSourceOrder(score(a), score(b), retry)
+            if (order != 0) order else HealthRules.compareRank(ranks.getValue(a), ranks.getValue(b))
         })
         val alternatives = if (retry && previous != null && from == null) sorted.filter { it.source.key != previous } else emptyList()
         val ordered = alternatives.ifEmpty { sorted }
@@ -731,6 +762,7 @@ class PlaybackService(
             var waiting = false
             var extended = false
             val jobs = ArrayList<kotlinx.coroutines.Job>()
+            val startedAt = HashMap<Attempt, Long>()
 
             fun track(job: kotlinx.coroutines.Job) {
                 synchronized(cLock) { if (over) job.cancel() else jobs.add(job) }
@@ -739,8 +771,11 @@ class PlaybackService(
             fun stop(keep: Attempt?) {
                 over = true
                 for (entry in live) {
-                    if (System.currentTimeMillis() - entry.started >= turnMs) setBack(item.id, entry.attempt.source.key)
-                    if (entry.attempt !== keep) entry.cancellation.cancel()
+                    if (entry.attempt === keep) continue
+                    if (keep != null && System.currentTimeMillis() - entry.started >= turnMs) {
+                        setBack(item.id, entry.attempt.source.key)
+                    }
+                    entry.cancellation.cancel()
                 }
                 for (j in jobs) j.cancel()
             }
@@ -754,11 +789,15 @@ class PlaybackService(
                     val current = selectionIntents[selectionKey]?.intent == selectionIntent &&
                         (if (from != null) manualIntents[item.id] == intent else preferenceRevisions[item.id] == revision)
                     if (current) {
-                    if (from != null) preferLocked(item.id, from)
-                    if (selected.size > 512) selected.keys.firstOrNull()?.let { selected.remove(it) }
-                    selected[selectionKey] = attempt.source.key
-                    if (winners.size > 256) winners.keys.firstOrNull()?.let { winners.remove(it) }
-                    winners[item.id] = attempt.source.key
+                        if (from != null) preferLocked(item.id, from)
+                        if (selected.size > 512) selected.keys.firstOrNull()?.let { selected.remove(it) }
+                        selected[selectionKey] = attempt.source.key
+                        if (winners.size > 256) winners.keys.firstOrNull()?.let { winners.remove(it) }
+                        winners[item.id] = attempt.source.key
+                        val finished = System.currentTimeMillis()
+                        val started = startedAt[attempt] ?: finished
+                        health?.recordSuccess(attempt.source.key, item.id, episode, finished,
+                            startupSec = (finished - started).coerceAtLeast(0L) / 1000.0, quality = playback.quality)
                     }
                 }
                 winner.complete(playback)
@@ -869,6 +908,12 @@ class PlaybackService(
                     if (over) return
                     setBack(item.id, entry.attempt.source.key)
                     failed[entry.attempt] = error
+                    health?.recordFailure(
+                        entry.attempt.source.key,
+                        if (error is AlignmentMismatch) FailureKind.ALIGNMENT else if (entry.reached == null) FailureKind.PROBE else FailureKind.FIRST_SEGMENT,
+                        item.id,
+                        episode,
+                    )
                     if (live.isEmpty()) {
                         if (held.isNotEmpty()) emptyWithHeld = true else emptyNoHeld = true
                     }
@@ -896,6 +941,7 @@ class PlaybackService(
                     ) {
                         val attempt = list[nextIdx++]
                         val entry = LiveEntry(attempt, System.currentTimeMillis())
+                        startedAt[attempt] = entry.started
                         live.add(entry)
                         spawned.add(entry)
                     }
@@ -915,6 +961,16 @@ class PlaybackService(
                         try {
                             val reached = withTimeout(REACH_MS) { reaching.await() }
                             if (synchronized(cLock) { over }) return@launch
+                            val source = entry.attempt.source.key
+                            val candidate = reached.playback
+                            candidate.duration?.let { health?.observeDuration(item.id, episode, source, it) }
+                            val origin = switchingFrom?.sourceKey
+                            if (origin != null && origin != source && alignment != null) {
+                                val history = health?.durationHistory(item.id, episode, origin, source) ?: DurationHistory(emptyList(), emptyList())
+                                val input = DurationInput(switchingFrom.duration, switchingFrom.durationSource ?: "missing",
+                                    candidate.duration, candidate.durationSource ?: "missing")
+                                if (AlignmentRules.durationVerdict(input, history, alignment).verdict == "suspect") throw AlignmentMismatch()
+                            }
                             entry.reached = reached
                             reached.whole.await()
                             onDelivered(entry, reached)
@@ -947,7 +1003,9 @@ class PlaybackService(
             }
         }
 
-        for (list in listOf(own, rest, lastChance)) {
+        fun eligible(attempt: Attempt) = attempt.source.key == from || health?.rankFor(attempt.source.key, item.id)?.cooled != true
+        for (group in listOf(own, rest, lastChance)) {
+            val list = group.filter(::eligible)
             if (list.isNotEmpty()) {
                 try {
                     return contest(list)
@@ -957,9 +1015,30 @@ class PlaybackService(
                 }
             }
         }
+        if (userRetry && from == null) {
+            val cooled = rawAttempts.filter { it !in failed && ranks.getValue(it).cooled }
+            if (cooled.isNotEmpty()) {
+                try { return contest(cooled) }
+                catch (cancelled: CancellationException) { throw cancelled }
+                catch (_: Exception) { }
+            }
+        }
+        val allAttempts = attempts(item, episode, hints, complete = true)
+        val late = allAttempts.filter { it !in rawAttempts && (from == null || it.source.key == from) && (userRetry || eligible(it)) }
+        if (late.isNotEmpty()) {
+            try { return contest(late) }
+            catch (cancelled: CancellationException) { throw cancelled }
+            catch (_: Exception) { }
+        }
+        // A confirmed in-player failure on the only catalogue line can be transient. Reconnect
+        // that active work once under the player's switch budget, without bypassing cooldown for other works.
+        if (retryFailureKind != null && previous != null && allAttempts.all { it.source.key == previous }) {
+            val remaining = allAttempts.filter { it !in failed }
+            if (remaining.isNotEmpty()) return contest(remaining)
+        }
         val again = (own + rest).filter { attempt ->
             val msg = failed[attempt]?.message ?: ""
-            TRANSIENT_RE.containsMatchIn(msg)
+            eligible(attempt) && TRANSIENT_RE.containsMatchIn(msg)
         }.take(3)
         if (again.isNotEmpty()) {
             try {
@@ -1022,8 +1101,14 @@ class PlaybackService(
                 }.also { if (!MediaHead.isMp4Head(it)) throw IllegalStateException("媒体不可用") }
             } finally { resp.close() }
             warmCache.registerSource(episode.url, source, false)
+            val duration = DurationReader.mp4(head)
+            val chapters = ChapterReader.mp4 { offset, count ->
+                if (offset >= head.size) ByteArray(0)
+                else head.copyOfRange(offset.toInt(), minOf(head.size, offset.toInt() + count))
+            }
             return@withTimeout Reached(
-                Playback(url = episode.url, format = "mp4"),
+                Playback(url = episode.url, format = "mp4", sourceKey = source.key, duration = duration.seconds,
+                    durationSource = duration.source, intro = chapters.intro, outro = chapters.outro),
                 CompletableDeferred(Unit),
                 shown = null,
                 received = { head.size.toLong() },
@@ -1058,6 +1143,9 @@ class PlaybackService(
                 continue
             }
 
+            val filtered = if (preserveTimeline) text else PlaylistFilter.filterPlaylist(text, finalUrl, source, rules).text
+            val duration = DurationReader.hls(filtered)
+            val chapters = ChapterReader.hls(filtered)
             val first = if (text.contains("#EXTINF:")) {
                 warmCache.firstSegment(text, finalUrl, source, preserveTimeline)
             } else null
@@ -1173,8 +1261,13 @@ class PlaybackService(
             val playback = Playback(
                 url = targetUrl,
                 format = "hls",
+                sourceKey = source.key,
                 quality = if (!preserveTimeline) label else null,
                 qualities = if (!preserveTimeline && several) qualities else null,
+                duration = duration.seconds,
+                durationSource = duration.source,
+                intro = chapters.intro,
+                outro = chapters.outro,
             )
             return@withTimeout Reached(playback, whole, shown ?: selectedQuality, margin = {
                 DeliverySpeed.playbackMargin(first.seconds, resp.contentLength.takeIf { it > 0L }, size.get(),
@@ -1197,63 +1290,86 @@ class PlaybackService(
         }
     }
 
-    private suspend fun candidates(item: MediaItem, hints: WorkHints): List<Candidate> {
+    private suspend fun candidates(item: MediaItem, hints: WorkHints, complete: Boolean): List<Candidate> {
         val key = workKey(item, hints)
-
-        val now = System.currentTimeMillis()
-        synchronized(lock) {
-            val cached = cache[key]
-            if (cached != null && cached.expires > now) return cached.value
+        var start = false
+        val lookup = synchronized(lock) {
+            cache[key]?.takeIf { it.expires > System.currentTimeMillis() }?.let { return it.value }
+            inflight[key] ?: CatalogueLookup().also { inflight[key] = it; start = true }
         }
-        var existing: CompletableDeferred<List<Candidate>>?
-        var created: CompletableDeferred<List<Candidate>>? = null
-        synchronized(lock) {
-            existing = inflight[key]
-            if (existing == null) {
-                created = CompletableDeferred()
-                inflight[key] = created!!
-            }
-        }
-        if (existing != null) return existing!!.await()
-        val deferred = created!!
-
-        fun keep(value: List<Candidate>): List<Candidate> {
-            synchronized(lock) {
-                if (cache.size >= 128 && !cache.containsKey(key)) {
-                    cache.keys.firstOrNull()?.let { cache.remove(it) }
-                }
-                cache[key] = CachedCandidates(value, System.currentTimeMillis() + if (value.isNotEmpty()) 5 * 60_000L else 20_000L)
-            }
-            return value
-        }
-
-        // The lookup belongs to the service. Cancelling a screen's await must
-        // not cancel another screen's shared lookup or poison source failures.
-        searchScope.launch {
+        if (start) searchScope.launch {
             try {
-                val result = searchCandidates(item, hints) { early -> deferred.complete(keep(early)) }
-                // Slow catalogue answers augment the early cache after admission.
-                deferred.complete(keep(result))
-            } catch (t: Throwable) {
-                deferred.completeExceptionally(t)
-            } finally {
+                val found = searchCandidates(item, hints) { early -> lookup.first.complete(early) }
                 synchronized(lock) {
-                    if (inflight[key] === deferred) inflight.remove(key)
+                    if (cache.size >= 128 && key !in cache) cache.remove(cache.keys.first())
+                    cache[key] = CachedCandidates(found, System.currentTimeMillis() + if (found.isEmpty()) 20_000L else 5 * 60_000L)
+                    inflight.remove(key)
                 }
+                lookup.first.complete(found)
+                lookup.complete.complete(found)
+            } catch (error: Throwable) {
+                synchronized(lock) { inflight.remove(key) }
+                lookup.first.completeExceptionally(error)
+                lookup.complete.completeExceptionally(error)
             }
         }
-        return deferred.await()
+        return if (complete) lookup.complete.await() else lookup.first.await()
+    }
+
+    suspend fun mp4Chapters(url: String): ChapterMarks {
+        val cancellation = MediaRequestCancellation()
+        val pending = probeScope.async {
+            ChapterReader.mp4 { offset, count ->
+                val range = mapOf("Range" to "bytes=$offset-${offset + count - 1}")
+                val response = mediaFetcher?.open(url, range) ?: PublicNetwork.openPublic(url, headers = range,
+                    connectTimeoutMs = 3000, readTimeoutMs = 3000, onConnection = cancellation::trackConnection)
+                cancellation.trackResponse(response)
+                try {
+                    if (response.statusCode == 200 && offset == 0L || response.statusCode == 206 &&
+                        response.contentRange?.startsWith("bytes $offset-") == true) {
+                        val buffer = ByteArray(count)
+                        var read = 0
+                        while (read < count) {
+                            val n = response.stream.read(buffer, read, count - read)
+                            if (n <= 0) break
+                            read += n
+                        }
+                        buffer.copyOf(read)
+                    } else ByteArray(0)
+                } finally { response.close() }
+            }
+        }
+        return try {
+            withTimeout(5000L) { pending.await() }
+        } finally {
+            if (!pending.isCompleted) {
+                pending.cancel()
+                probeScope.launch { cancellation.cancel() }
+            }
+        }
     }
 
     private suspend fun getCatalogueJson(url: String, timeoutMs: Int): Map<String, Any?> {
-        val text = if (catalogueFetcher != null) {
-            catalogueFetcher.getJson(url, timeoutMs)
-        } else {
-            withContext(Dispatchers.IO) {
-                PublicNetwork.getText(url, connectTimeoutMs = timeoutMs, readTimeoutMs = timeoutMs).first
+        // DNS and HttpURLConnection may block beyond their socket timeouts. Bound the real
+        // workers and let the caller's deadline cancel its wait, even during DNS.
+        val connection = MediaRequestCancellation()
+        val request = searchScope.async {
+            searchLimiter.withPermit {
+                val text = catalogueFetcher?.getJson(url, timeoutMs) ?: PublicNetwork.getText(
+                    url, connectTimeoutMs = timeoutMs, readTimeoutMs = timeoutMs,
+                    onConnection = connection::trackConnection,
+                ).first
+                Json.parseObject(text)
             }
         }
-        return Json.parseObject(text)
+        try {
+            return request.await()
+        } finally {
+            if (!request.isCompleted) {
+                request.cancel()
+                searchScope.launch { connection.cancel() }
+            }
+        }
     }
 
     private fun parseVod(raw: Any?): RawVod {
@@ -1286,23 +1402,22 @@ class PlaybackService(
         val enabled = rules.sources.filter { it.enabled }.sortedByDescending { it.priority }
 
         suspend fun ask(source: PlaySource): List<Candidate> {
-            searchLimiter.acquire()
-            val asked = System.currentTimeMillis()
+            val asked = catalogueClock()
+            if (synchronized(lock) { (failures[source.key]?.until ?: 0L) > asked }) {
+                throw IllegalStateException("片源冷却中")
+            }
             try {
-                val circuit = synchronized(lock) { failures[source.key] }
-                if (circuit != null && circuit.until > System.currentTimeMillis()) {
-                    throw IllegalStateException("片源冷却中")
-                }
                 val found = ArrayList<Candidate>()
                 val seen = HashSet<String>()
-                withTimeout(9000L) {
+                withTimeout(catalogueTimeoutMs.toLong()) {
                     searchLoop@ for (term in PlaybackMatchers.workTerms(item.title, hints.aliases ?: emptyList())) {
                         for (page in 1..2) {
                             val url = apiUrl(source.api, mapOf("ac" to "videolist", "wd" to term, "pg" to page.toString()))
-                            val payload = getCatalogueJson(url, 9000)
+                            val payload = getCatalogueJson(url, catalogueTimeoutMs)
                             val listRaw = payload["list"] as? List<*> ?: throw IllegalStateException("片源数据格式无效")
                             synchronized(lock) { successes++ }
-                            val matchingRows = listRaw.map { parseVod(it) }.filter { PlaybackMatchers.matchRecord(item, it, hints) != null }.take(4)
+                            val matchingRows = listRaw.asSequence().map(::parseVod)
+                                .filter { it.vodId !in source.excludedRecordIds && PlaybackMatchers.matchRecord(item, it, hints) != null }.take(4)
                             for (raw in matchingRows) {
                                 val id = raw.vodId ?: continue
                                 if (!seen.add(id)) continue
@@ -1310,7 +1425,7 @@ class PlaybackService(
                                     raw
                                 } else {
                                     val detailUrl = apiUrl(source.api, mapOf("ac" to "videolist", "ids" to id))
-                                    val detailPayload = getCatalogueJson(detailUrl, 9000)
+                                    val detailPayload = getCatalogueJson(detailUrl, catalogueTimeoutMs)
                                     Json.list(detailPayload["list"]).map { parseVod(it) }.firstOrNull { it.vodId == id }
                                 } ?: continue
                                 val match = PlaybackMatchers.matchRecord(item, exact, hints) ?: continue
@@ -1346,14 +1461,12 @@ class PlaybackService(
                     val unreachable = PublicNetwork.unreachableHere(t)
                     failures[source.key] = FailureState(
                         count = count,
-                        until = if (count >= 3) System.currentTimeMillis() + 30_000L else 0L,
-                        since = if (unreachable) 0L else before?.since ?: System.currentTimeMillis(),
+                        until = if (count >= 3) catalogueClock() + 30_000L else 0L,
+                        since = if (unreachable) 0L else before?.since ?: catalogueClock(),
                     )
                 }
-                onFailureLog(source.key, "search: ${t.message}", System.currentTimeMillis() - asked)
+                onFailureLog(source.key, "search: ${t.message}", catalogueClock() - asked)
                 throw t
-            } finally {
-                searchLimiter.release()
             }
         }
 
@@ -1433,7 +1546,7 @@ class PlaybackService(
         }
         val unanswered = silent.any { s ->
             val f = synchronized(lock) { failures[s.key] }
-            f != null && System.currentTimeMillis() - f.since < SOURCE_GONE_AFTER
+            f != null && catalogueClock() - f.since < SOURCE_GONE_AFTER
         }
         if (found.isEmpty() && unanswered) {
             throw IllegalStateException(Copy.Extra.UNAVAILABLE)

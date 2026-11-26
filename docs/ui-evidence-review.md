@@ -1,5 +1,7 @@
 # 前端验证材料、脚本与清理核验
 
+本文保留当时版本的审查结果。2026-11-27 的布局、播放与设备验证见[双端质量复核](cross-platform-quality-2026-11-27.md)。
+
 日期：2026-11-21。目的不是寻找能给出绿色输出的命令，而是确认它测到了哪个产品、什么状态以及是否真的执行了断言。当前[TV](frontend-audit-tv.md)与[Windows](frontend-audit-windows.md)分别给结论。
 
 ## 旧原型为何误导
@@ -50,7 +52,7 @@ fixture 保留为**隐藏的当前生产 renderer + 测试 IPC/数据/视频**�
 
 保留：206 个冻结 `design/` 文件及 SHA-256 基线、独有的失败前输出与截图、已发布 `release/`、用户安装与完整设备用户资料；不清理用户已有 `.github/`、CI/发布文档和未提交业务文件。构建候选、暂存播放器输出与尚未审核的 probe 在 `.tmp/`，不进入应用 ASAR/APK。
 
-防复发规则已写入 [AGENTS.md](../AGENTS.md)、[证据决策](../.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md) 与 [TV 回放工作流](../.agents/skills/tv-runtime-regression/SKILL.md)。使用独立新标签，读取 failures/unavailable 与实际执行的动作，不单凭 exit 0 或一张截图写全绿。
+防复发规则已写入 [AGENTS.md](../AGENTS.md)、[证据决策](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/testing/2026-11-21-runtime-ui-evidence.md) 与 [TV 回放工作流](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/skills/tv-runtime-regression/SKILL.md)。使用独立新标签，读取 failures/unavailable 与实际执行的动作，不单凭 exit 0 或一张截图写全绿。
 
 原始材料、包摘要和已执行的场景见[证据索引](evidence/runtime/frontend-audit/README.md)。
 

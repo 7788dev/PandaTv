@@ -1,7 +1,7 @@
 // 展示规则：数据怎么变成界面上的字。全部是纯函数，直接用，不要自己再写一份。
 // 返回 null 的意思是「这一项不显示」：不要渲染空元素，更不要补「暂无」。
 
-import { EPISODE_RANGE_SIZE, FINISHED_RATIO, RECENT_SEARCH_MAX, SKIP_EDGE_SECONDS, UPNEXT_SECONDS } from './constants'
+import { EPISODE_RANGE_SIZE, FINISHED_RATIO, SKIP_EDGE_SECONDS, UPNEXT_SECONDS } from './constants'
 import { fmt, t } from './copy'
 import type { HistoryEntry, MediaItem, Playback, Settings } from './types'
 
@@ -12,8 +12,7 @@ type Progress = Pick<HistoryEntry, 'position' | 'duration'>
 /** 多集内容（剧集、综艺、动漫…）。不是多集就是单片 */
 export const isSeries = (it: MediaItem): boolean => Boolean(it.episodes)
 
-/** 能播放的集数。单片算 1 集 */
-export const episodeCount = (it: MediaItem): number => it.episodes || 1
+
 
 /** 评分：固定一位小数 */
 export const scoreText = (it: MediaItem): string | null => (it.score ? it.score.toFixed(1) : null)
@@ -96,19 +95,6 @@ export const historyRecord = (id: string, episode: number, position: number, dur
     ? { id, episode: episode + 1, position: 0, duration: 0 }
     : { id, episode, position: Math.floor(position), duration }
 
-/** 把一条新记录放进历史：一部片子只留一条，新的在最前 */
-export const addHistory = (history: readonly HistoryEntry[], entry: HistoryEntry): HistoryEntry[] => [
-  entry,
-  ...history.filter((h) => h.id !== entry.id),
-]
-
-/** 把一个搜索词放进最近搜索：去重，新的在最前，最多 8 条 */
-export const addSearch = (searches: readonly string[], q: string): string[] =>
-  [q, ...searches.filter((s) => s !== q)].slice(0, RECENT_SEARCH_MAX)
-
-/** 收藏 / 取消收藏：新收藏的在最前 */
-export const toggleFavorite = (favorites: readonly string[], id: string): string[] =>
-  favorites.includes(id) ? favorites.filter((x) => x !== id) : [id, ...favorites]
 
 export interface HistoryGroup {
   label: string

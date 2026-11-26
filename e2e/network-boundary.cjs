@@ -8,7 +8,7 @@ const fixtureOrigin = process.env.PANDA_E2E_NETWORK_ORIGIN
 if (!fixtureOrigin) throw new Error('Missing explicit fixture network origin')
 process.env.PANDA_E2E_BOUNDARY_LOADED = 'true'
 const local = new URL(fixtureOrigin)
-const fixtures = new Set(['m.douban.com', 'movie.douban.com', 'www.douban.com', 'img1.doubanio.com', 'top.baidu.com'])
+const fixtures = new Set(['m.douban.com', 'movie.douban.com', 'www.douban.com', 'img1.doubanio.com', 'top.baidu.com', 'api.github.com'])
 const allowed = host => fixtures.has(host) || /^[abc]\.(?:catalog|media)\.qa\.example\.org$/.test(host)
 function wrap(original) {
   return function request(input, options, callback) {

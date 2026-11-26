@@ -1,0 +1,768 @@
+{
+  "date": "2026-11-26",
+  "app": "app.panda.tv",
+  "version": "1.0.14",
+  "versionCode": 15,
+  "platform": "MuMu / Android 15 / API 35",
+  "capturePixels": [
+    1920,
+    1080
+  ],
+  "apkSha256": "a51588e5e9d2649898287cd1838a291931538ed5dc5219a651b51bdff2cf7478",
+  "installedApkSha256": "a51588e5e9d2649898287cd1838a291931538ed5dc5219a651b51bdff2cf7478",
+  "checks": {
+    "gradle": [
+      "testDebugUnitTest (rerun)",
+      "lintRelease",
+      "assembleRelease"
+    ],
+    "unit": {
+      "tests": 145,
+      "skipped": 0,
+      "errors": 0,
+      "failures": 0
+    },
+    "lint": {
+      "errors": 0,
+      "warnings": 34
+    },
+    "probe": {
+      "suite": "app.panda.tv.playback.AuditProbeTest",
+      "tests": 6,
+      "durationSeconds": 35.574,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "observations": [
+        "catalogueCooldown afterRecovery=31.5s probesBeforeRecovery=3 newProbes=0 status16s=暂时无法连接，请重试 status31s=暂时无法连接，请重试",
+        "lateCatalogue earlyEpisodes=null earlySources=1 lateEpisodes=5 lateSources=2",
+        "coldHome updates=[[continue, hot-tv, rank, new-movie, variety, anime, doc]] returned=[continue, hot-tv, rank, new-movie, variety]",
+        "cancelSlowProbe cooled=true kind=PROBE anotherWorkError=暂时无法连接，请重试 anotherWorkOpens=0",
+        "coldHomeSingleFailure servedTV=1 error=Metadata HTTP 404",
+        "retry autoError=暂时无法连接，请重试 buttonError=暂时无法连接，请重试 newMediaRequests=0 explicitPick=only"
+      ]
+    }
+  },
+  "homeDownNavigation": {
+    "rowFormat": [
+      "downPresses",
+      "focusedText",
+      "visibleSections"
+    ],
+    "firstInstallSession": [
+      [
+        0,
+        [
+          "首页"
+        ],
+        [
+          "继续观看"
+        ]
+      ],
+      [
+        1,
+        [
+          "详情"
+        ],
+        [
+          "继续观看"
+        ]
+      ],
+      [
+        2,
+        [
+          "8.8",
+          "三体",
+          "第1集 · 剩余43分钟"
+        ],
+        [
+          "继续观看",
+          "热播剧集"
+        ]
+      ],
+      [
+        3,
+        [
+          "两京十五日",
+          "剧情 / 古装"
+        ],
+        [
+          "热播剧集"
+        ]
+      ],
+      [
+        4,
+        [
+          "两京十五日",
+          "剧情 / 古装"
+        ],
+        [
+          "热播剧集"
+        ]
+      ],
+      [
+        5,
+        [
+          "两京十五日",
+          "剧情 / 古装"
+        ],
+        [
+          "热播剧集"
+        ]
+      ]
+    ],
+    "sameAppAfterRestart": [
+      [
+        0,
+        [
+          "播放"
+        ],
+        [
+          "继续观看"
+        ]
+      ],
+      [
+        1,
+        [
+          "8.8",
+          "三体",
+          "剩余43分钟"
+        ],
+        [
+          "继续观看",
+          "热播剧集"
+        ]
+      ],
+      [
+        2,
+        [
+          "两京十五日",
+          "剧情 / 古装"
+        ],
+        [
+          "热播剧集",
+          "剧集榜",
+          "电影榜",
+          "动漫榜"
+        ]
+      ],
+      [
+        3,
+        [
+          "更多"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        4,
+        [
+          "1",
+          "两京十五日",
+          "剧情 · 2026"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        5,
+        [
+          "2",
+          "我的有罪之人",
+          "剧情 · 2026",
+          "8.6"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        6,
+        [
+          "3",
+          "无声的回响",
+          "剧情 · 2026"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        7,
+        [
+          "4",
+          "今天是太阳雨",
+          "剧情 · 2026",
+          "7.9"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        8,
+        [
+          "5",
+          "谷雨",
+          "剧情 · 2026",
+          "6.3"
+        ],
+        [
+          "剧集榜",
+          "电影榜",
+          "动漫榜",
+          "最新电影"
+        ]
+      ],
+      [
+        9,
+        [
+          "6.1",
+          "余命一年买男人",
+          "剧情 / 爱情"
+        ],
+        [
+          "最新电影",
+          "综艺"
+        ]
+      ],
+      [
+        10,
+        [
+          "8.7",
+          "后会友期",
+          "真人秀"
+        ],
+        [
+          "综艺",
+          "动漫"
+        ]
+      ],
+      [
+        11,
+        [
+          "7.7",
+          "凡人修仙传 年番4",
+          "动作 / 动画 / 奇幻"
+        ],
+        [
+          "动漫",
+          "纪录片"
+        ]
+      ],
+      [
+        12,
+        [
+          "生命奇观2",
+          "纪录片"
+        ],
+        [
+          "纪录片",
+          "纪录片",
+          "纪录片"
+        ]
+      ],
+      [
+        13,
+        [
+          "生命奇观2",
+          "纪录片"
+        ],
+        [
+          "纪录片",
+          "纪录片",
+          "纪录片"
+        ]
+      ]
+    ]
+  },
+  "playback": {
+    "title": "三体（2023，杨磊）",
+    "rowFormat": [
+      "secondsSinceSelect",
+      "UI",
+      "clock"
+    ],
+    "firstPress": [
+      [
+        0.37,
+        "admitting",
+        null
+      ],
+      [
+        22.09,
+        "other",
+        null
+      ]
+    ],
+    "secondPressAfterEpisodeListAppeared": [
+      [
+        0.29,
+        "player",
+        "00:00 / 00:00"
+      ],
+      [
+        4.14,
+        "player",
+        "00:00 / 43:42"
+      ],
+      [
+        5.34,
+        "player",
+        "00:01 / 43:42"
+      ]
+    ],
+    "deviceLogsForFirstSearch": [
+      {
+        "deviceTime": "21:53:21.203",
+        "source": "subo",
+        "ms": 3440,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:53:26.622",
+        "source": "bfzy",
+        "ms": 8859,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:53:27.533",
+        "source": "huya",
+        "ms": 9770,
+        "reason": "search: 上游服务暂不可用（403）"
+      },
+      {
+        "deviceTime": "21:53:30.363",
+        "source": "360zy",
+        "ms": 12598,
+        "reason": "search: Timed out waiting for 9000 ms"
+      },
+      {
+        "deviceTime": "21:53:34.713",
+        "source": "hongniu",
+        "ms": 16948,
+        "reason": "search: Timed out waiting for 9000 ms"
+      },
+      {
+        "deviceTime": "21:53:38.297",
+        "source": "lzi",
+        "ms": 20532,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:53:40.017",
+        "source": "jyzy",
+        "ms": 22252,
+        "reason": "search: 上游服务暂不可用（403）"
+      },
+      {
+        "deviceTime": "21:53:49.834",
+        "source": "dyttzy",
+        "ms": 32069,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:53:51.600",
+        "source": "huya",
+        "ms": 765,
+        "reason": "search: 上游服务暂不可用（403）"
+      },
+      {
+        "deviceTime": "21:53:52.390",
+        "source": "jyzy",
+        "ms": 1555,
+        "reason": "search: 上游服务暂不可用（403）"
+      },
+      {
+        "deviceTime": "21:54:00.780",
+        "source": "bfzy",
+        "ms": 9945,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:54:00.809",
+        "source": "subo",
+        "ms": 9974,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:54:08.855",
+        "source": "dyttzy",
+        "ms": 18020,
+        "reason": "search: 网络请求失败或超时"
+      },
+      {
+        "deviceTime": "21:54:08.855",
+        "source": "lzi",
+        "ms": 18020,
+        "reason": "search: 网络请求失败或超时"
+      }
+    ],
+    "screens": [
+      {
+        "capture": "15-player-second",
+        "focus": [
+          "暂停"
+        ],
+        "visibleText": [
+          "返回",
+          "三体",
+          "第1集",
+          "0.0",
+          "暂停",
+          "下一集",
+          "00:01 / 43:42",
+          "选集",
+          "线路: 红牛资源",
+          "1080P",
+          "倍速"
+        ]
+      },
+      {
+        "capture": "16a-after-key-navigation",
+        "focus": [
+          "重试"
+        ],
+        "visibleText": [
+          "播放失败，请重试",
+          "重试",
+          "返回"
+        ]
+      },
+      {
+        "capture": "16b-after-error-retry",
+        "focus": [
+          "重试"
+        ],
+        "visibleText": [
+          "暂时无法连接，请重试",
+          "重试",
+          "返回"
+        ]
+      },
+      {
+        "capture": "42a-final-feedback",
+        "focus": [
+          "重试"
+        ],
+        "visibleText": [
+          "播放失败，请重试",
+          "重试",
+          "返回"
+        ]
+      }
+    ],
+    "visiblePromotion": {
+      "title": "三体",
+      "episode": 1,
+      "source": "红牛资源",
+      "clock": "00:01 / 43:42",
+      "observation": "画面中出现博彩公司赞助文字和网址",
+      "evidence": "tv-screens.webp，末行左侧"
+    }
+  },
+  "lateSourceFixture": {
+    "earlyEpisodes": null,
+    "earlySources": 1,
+    "finalEpisodes": 5,
+    "finalSources": 2
+  },
+  "searchEraseThenBack": [
+    {
+      "capture": "06-results-before-edit",
+      "focus": [
+        "ST"
+      ],
+      "visibleText": [
+        "ST",
+        "全部",
+        "S/T"
+      ]
+    },
+    {
+      "capture": "08-before-deleting",
+      "focus": [
+        "⌫"
+      ],
+      "visibleText": [
+        "ST",
+        "最近搜索",
+        "ST",
+        "热搜",
+        "⌫"
+      ]
+    },
+    {
+      "capture": "09-empty-edit",
+      "focus": [
+        "⌫"
+      ],
+      "visibleText": [
+        "片名 / 首字母",
+        "最近搜索",
+        "ST",
+        "热搜",
+        "⌫"
+      ]
+    },
+    {
+      "capture": "10-back-from-empty-edit",
+      "focus": [
+        "片名 / 首字母"
+      ],
+      "visibleText": [
+        "片名 / 首字母",
+        "最近搜索",
+        "ST",
+        "热搜"
+      ]
+    }
+  ],
+  "searchHistoryClear": [
+    {
+      "capture": "24-search-discovery",
+      "focus": [
+        "片名 / 首字母"
+      ],
+      "visibleText": [
+        "片名 / 首字母",
+        "最近搜索",
+        "清空",
+        "三体",
+        "ST"
+      ]
+    },
+    {
+      "capture": "27-clear-search-confirm",
+      "focus": [
+        "取消"
+      ],
+      "visibleText": [
+        "清空",
+        "清空搜索记录",
+        "清空",
+        "清空搜索记录？",
+        "取消",
+        "清空"
+      ]
+    },
+    {
+      "capture": "28-cleared",
+      "focus": [
+        "清空搜索记录",
+        "清空"
+      ],
+      "visibleText": [
+        "清空",
+        "清空搜索记录",
+        "清空",
+        "已清空"
+      ]
+    },
+    {
+      "capture": "29-search-after-clear",
+      "focus": [
+        "设置"
+      ],
+      "visibleText": [
+        "片名 / 首字母",
+        "最近搜索",
+        "清空",
+        "三体",
+        "ST",
+        "已清空"
+      ]
+    },
+    {
+      "capture": "31-search-fresh",
+      "focus": [
+        "片名 / 首字母"
+      ],
+      "visibleText": [
+        "片名 / 首字母"
+      ]
+    }
+  ],
+  "detailEntry": [
+    {
+      "capture": "12-drama-detail",
+      "focus": [
+        "播放"
+      ],
+      "visibleText": [
+        "导演：杨磊",
+        "播放",
+        "收藏",
+        "选集"
+      ]
+    },
+    {
+      "capture": "14-detail-after-wait",
+      "focus": [
+        "播放"
+      ],
+      "visibleText": [
+        "导演：杨磊",
+        "播放",
+        "收藏",
+        "选集"
+      ]
+    },
+    {
+      "capture": "22-detail-scroll-up",
+      "focus": [
+        "返回"
+      ],
+      "visibleText": [
+        "返回",
+        "三体",
+        "8.8",
+        "2023 · 中国大陆 · 剧情 / 科幻 · 45分钟",
+        "导演：杨磊",
+        "继续播放 第1集",
+        "收藏",
+        "选集"
+      ]
+    },
+    {
+      "capture": "35-second-detail",
+      "focus": [
+        "播放"
+      ],
+      "visibleText": [
+        "导演：牟正洋",
+        "播放",
+        "收藏",
+        "选集"
+      ]
+    }
+  ],
+  "processRecreation": {
+    "control": {
+      "initial": [
+        "6901",
+        "7"
+      ],
+      "retained": [
+        "6901",
+        "7"
+      ],
+      "killed": true,
+      "recreated": [
+        "8040",
+        "7"
+      ]
+    },
+    "screens": [
+      {
+        "capture": "47-original-detail",
+        "focus": [
+          "返回"
+        ],
+        "visibleText": [
+          "八仙！",
+          "8.2",
+          "继续播放",
+          "收藏"
+        ]
+      },
+      {
+        "capture": "48-return-process-alive",
+        "focus": [
+          "返回"
+        ],
+        "visibleText": [
+          "八仙！",
+          "8.2",
+          "继续播放",
+          "收藏"
+        ]
+      },
+      {
+        "capture": "49-return-after-reclaim",
+        "focus": [
+          "播放"
+        ],
+        "visibleText": [
+          "首页",
+          "两京十五日",
+          "详情",
+          "继续观看",
+          "8.2",
+          "八仙！"
+        ]
+      }
+    ]
+  },
+  "settingsUpdate": [
+    {
+      "capture": "50-update-row",
+      "focus": [
+        "版本 1.0.14",
+        "检查更新"
+      ],
+      "visibleText": [
+        "版本 1.0.14",
+        "检查更新"
+      ]
+    },
+    {
+      "capture": "51-update-result",
+      "focus": [
+        "版本 1.0.14",
+        "检查更新"
+      ],
+      "visibleText": [
+        "版本 1.0.14",
+        "检查更新",
+        "更新服务未配置"
+      ]
+    }
+  ],
+  "secondTitlePlayback": {
+    "title": "八仙！",
+    "screens": [
+      {
+        "capture": "36-movie-play-attempt",
+        "visibleText": [
+          "返回",
+          "八仙！",
+          "正在准备播放",
+          "0.0",
+          "暂停",
+          "00:00 / 2:23:16",
+          "线路: 非凡资源",
+          "1080P",
+          "倍速"
+        ]
+      },
+      {
+        "capture": "42a-final-feedback",
+        "visibleText": [
+          "播放失败，请重试",
+          "重试",
+          "返回"
+        ]
+      }
+    ],
+    "clockOnReentryBeforeError": "00:03",
+    "cause": "undetermined"
+  }
+}

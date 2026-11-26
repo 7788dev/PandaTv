@@ -9,20 +9,38 @@ import app.panda.tv.model.Json
 import app.panda.tv.model.MediaItem
 import app.panda.tv.model.MediaType
 import app.panda.tv.model.Playback
+import app.panda.tv.model.Quality
 import app.panda.tv.model.Rules
 import app.panda.tv.model.Settings
+import app.panda.tv.playback.AlignmentConfig
+import app.panda.tv.playback.AlignmentRules
+import app.panda.tv.playback.BudgetConfig
+import app.panda.tv.playback.BufferConfig
+import app.panda.tv.playback.BufferRules
+import app.panda.tv.playback.BufferSample
 import app.panda.tv.playback.Candidate
 import app.panda.tv.playback.DeliveryScore
 import app.panda.tv.playback.DeliverySpeed
-import app.panda.tv.playback.SourceOrderScore
-import app.panda.tv.playback.EpisodeRange
+import app.panda.tv.playback.DurationHistory
+import app.panda.tv.playback.DurationInput
+import app.panda.tv.playback.FailureCounts
+import app.panda.tv.playback.FailureKind
+import app.panda.tv.playback.HealthConfig
+import app.panda.tv.playback.HealthEntry
+import app.panda.tv.playback.HealthRules
+import app.panda.tv.playback.HealthWeights
 import app.panda.tv.playback.PictureSize
 import app.panda.tv.playback.PlaySource
 import app.panda.tv.playback.PlaybackMatchers
 import app.panda.tv.playback.PlaylistFilter
 import app.panda.tv.playback.RawVod
+import app.panda.tv.playback.ScoredSample
+import app.panda.tv.playback.SourceOrderScore
 import app.panda.tv.playback.SourceRulesLoader
+import app.panda.tv.playback.SwitchBudgetRules
+import app.panda.tv.playback.SwitchEvent
 import app.panda.tv.playback.WorkHints
+import app.panda.tv.playback.EpisodeRange
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -471,5 +489,262 @@ class GoldenParityTest {
         assertEquals((expPic["width"] as Number).toInt(), gotPic!!.width)
         assertEquals((expPic["height"] as Number).toInt(), gotPic.height)
         assertEquals(0, PictureSize.clearHead(sealed.copyOf(10), key, iv).size)
+    }
+
+    private fun num(value: Any?): Double = (value as Number).toDouble()
+
+    private fun numOrNull(value: Any?): Double? = (value as? Number)?.toDouble()
+
+    private fun integer(value: Any?): Int = (value as Number).toInt()
+
+    private fun timestamp(value: Any?): Long = (value as Number).toLong()
+
+    @Test
+    fun `source health rules match desktop`() {
+        val h = Json.row(vectors["health"])
+        val configs = Json.row(h["configs"])
+        fun config(name: String): HealthConfig {
+            val c = Json.row(configs[name])
+            val w = Json.row(c["weights"])
+            return HealthConfig(
+                basisVersion = Json.text(c["basisVersion"]) ?: "",
+                decayVersion = Json.text(c["decayVersion"]) ?: "",
+                halfLifeDays = num(c["halfLifeDays"]),
+                baseline = num(c["baseline"]),
+                slowStartupSec = num(c["slowStartupSec"]),
+                playFloorSec = num(c["playFloorSec"]),
+                workDeltaMax = num(c["workDeltaMax"]),
+                weights = HealthWeights(
+                    availability = num(w["availability"]),
+                    stability = num(w["stability"]),
+                    speed = num(w["speed"]),
+                    quality = num(w["quality"]),
+                ),
+            )
+        }
+        fun entry(value: Any?): HealthEntry {
+            val r = Json.row(value)
+            val f = Json.row(r["failure"])
+            return HealthEntry(
+                sourceKey = Json.text(r["sourceKey"]) ?: "",
+                success = integer(r["success"]),
+                failure = FailureCounts(
+                    catalogue = integer(f["catalogue"]),
+                    probe = integer(f["probe"]),
+                    firstSegment = integer(f["firstSegment"]),
+                    stall = integer(f["stall"]),
+                    alignment = integer(f["alignment"]),
+                ),
+                startupMedian = numOrNull(r["startupMedian"]),
+                startupWorst = numOrNull(r["startupWorst"]),
+                playSeconds = num(r["playSeconds"]),
+                stallSeconds = num(r["stallSeconds"]),
+                shownQuality = Quality.fromWire(Json.text(r["shownQuality"])),
+                lastSuccessAt = (r["lastSuccessAt"] as? Number)?.toLong(),
+                lastFailureAt = (r["lastFailureAt"] as? Number)?.toLong(),
+                lastFailureKind = FailureKind.fromWire(Json.text(r["lastFailureKind"])),
+                score = num(r["score"]),
+                scoredAt = timestamp(r["scoredAt"]),
+                decayVersion = Json.text(r["decayVersion"]) ?: "",
+                cooldownUntil = (r["cooldownUntil"] as? Number)?.toLong(),
+                lastAlignmentDegrade = Json.text(r["lastAlignmentDegrade"]),
+            )
+        }
+        val at = timestamp(h["at"])
+        for (c in Json.list(h["cases"])) {
+            val row = Json.row(c)
+            val sample = entry(row["entry"])
+            val outputs = Json.row(row["outputs"])
+            for (name in listOf("standard", "shortHalfLife")) {
+                val cfg = config(name)
+                val expected = Json.row(outputs[name])
+                assertEquals("$name score", num(expected["score"]), HealthRules.scoreOf(sample, at, cfg), 1e-9)
+                val verdict = Json.row(expected["verdict"])
+                val got = HealthRules.verdictOf(sample, at, cfg)
+                assertEquals("$name cooled", verdict["cooled"] == true, got.cooled)
+                assertEquals("$name rank", num(verdict["rank"]), got.rank, 1e-9)
+            }
+        }
+    }
+
+    @Test
+    fun `buffer takeover rules match desktop`() {
+        val b = Json.row(vectors["buffer"])
+        val configs = Json.row(b["configs"])
+        fun config(name: String): BufferConfig {
+            val c = Json.row(configs[name])
+            return BufferConfig(
+                startupTargetSec = num(c["startupTargetSec"]),
+                startupWindowSec = num(c["startupWindowSec"]),
+                playingLowSec = num(c["playingLowSec"]),
+                playingRiseWindowSec = num(c["playingRiseWindowSec"]),
+                seekLowSec = num(c["seekLowSec"]),
+                stallPositionSec = num(c["stallPositionSec"]),
+            )
+        }
+        fun samples(value: Any?): List<BufferSample> = Json.list(value).map {
+            val r = Json.row(it)
+            BufferSample(timestamp(r["at"]), num(r["ahead"]), num(r["position"]), r["bufferedToEnd"] == true)
+        }
+
+        val thresholds = Json.row(b["thresholds"])
+        for (name in listOf("standard", "highWater")) {
+            val expected = Json.row(thresholds[name])
+            val cfg = config(name)
+            assertEquals("$name startup", num(expected["startup"]), BufferRules.thresholdOf("startup", cfg), 1e-9)
+            assertEquals("$name playing", num(expected["playing"]), BufferRules.thresholdOf("playing", cfg), 1e-9)
+            assertEquals("$name seek", num(expected["seek"]), BufferRules.thresholdOf("seek", cfg), 1e-9)
+        }
+
+        for (c in Json.list(b["cases"])) {
+            val row = Json.row(c)
+            val label = row["label"] as String
+            val got = BufferRules.shouldTakeOver(
+                row["scene"] as String,
+                samples(row["samples"]),
+                config(row["config"] as String),
+            )
+            val expected = Json.row(row["output"])
+            assertEquals("$label takeOver", expected["takeOver"] == true, got.takeOver)
+            assertEquals("$label reason", Json.text(expected["reason"]), got.reason)
+            assertEquals("$label threshold", num(expected["threshold"]), got.threshold, 1e-9)
+            assertEquals("$label ahead", num(expected["ahead"]), got.ahead, 1e-9)
+            val slope = numOrNull(expected["riseSlope"])
+            if (slope == null) assertNull(got.riseSlope) else assertEquals("$label slope", slope, got.riseSlope!!, 1e-9)
+        }
+    }
+
+    @Test
+    fun `switch budget rules match desktop`() {
+        val b = Json.row(vectors["budget"])
+        val configs = Json.row(b["configs"])
+        fun config(name: String): BudgetConfig {
+            val c = Json.row(configs[name])
+            return BudgetConfig(
+                maxSwitchesPerEpisode = integer(c["maxSwitchesPerEpisode"]),
+                minIntervalSec = num(c["minIntervalSec"]),
+                failedSourceCooldownSec = num(c["failedSourceCooldownSec"]),
+            )
+        }
+        val at = timestamp(b["at"])
+        for (c in Json.list(b["cases"])) {
+            val row = Json.row(c)
+            val label = row["label"] as String
+            val events = Json.list(row["events"]).map {
+                val r = Json.row(it)
+                SwitchEvent(timestamp(r["at"]), Json.text(r["mode"]) ?: "auto")
+            }
+            val got = SwitchBudgetRules.evaluateSwitch(events, at, config(row["config"] as String))
+            val expected = Json.row(row["output"])
+            assertEquals("$label allowed", expected["allowed"] == true, got.allowed)
+            assertEquals("$label reason", Json.text(expected["reason"]), got.reason)
+            assertEquals("$label attempts", integer(expected["attempts"]), got.attempts)
+        }
+
+        val mark = Json.row(b["mark"])
+        val single = app.panda.tv.playback.UnavailableMark(
+            Json.text(mark["sourceKey"]) ?: "",
+            timestamp(mark["until"]),
+        )
+        assertEquals(
+            mark["unavailable"] == true,
+            SwitchBudgetRules.isUnavailable(single, timestamp(mark["unavailableAt"])),
+        )
+        assertEquals(
+            mark["available"] == true,
+            SwitchBudgetRules.isUnavailable(single, timestamp(mark["availableAt"])),
+        )
+    }
+
+    @Test
+    fun `alignment rules match desktop`() {
+        val a = Json.row(vectors["alignment"])
+        val configs = Json.row(a["configs"])
+        fun config(name: String): AlignmentConfig {
+            val c = Json.row(configs[name])
+            return AlignmentConfig(
+                basisVersion = Json.text(c["basisVersion"]) ?: "",
+                ratioTolerance = num(c["ratioTolerance"]),
+                absoluteToleranceSec = num(c["absoluteToleranceSec"]),
+                historyConsistencyRatio = num(c["historyConsistencyRatio"]),
+                workSpreadFactor = num(c["workSpreadFactor"]),
+                windowSeconds = num(c["windowSeconds"]),
+                sampleLimit = integer(c["sampleLimit"]),
+                frameBudgetMs = timestamp(c["frameBudgetMs"]),
+                similarityThreshold = num(c["similarityThreshold"]),
+                offsetTtlDays = num(c["offsetTtlDays"]),
+                takeoverHeadroomFactor = num(c["takeoverHeadroomFactor"]),
+            )
+        }
+        fun input(value: Any?): DurationInput {
+            val r = Json.row(value)
+            return DurationInput(
+                fromSeconds = numOrNull(r["fromSeconds"]),
+                fromSource = Json.text(r["fromSource"]) ?: "missing",
+                toSeconds = numOrNull(r["toSeconds"]),
+                toSource = Json.text(r["toSource"]) ?: "missing",
+            )
+        }
+        fun history(value: Any?): DurationHistory {
+            val r = Json.row(value)
+            return DurationHistory(
+                sourceSamples = Json.list(r["sourceSamples"]).map { num(it) },
+                workRatios = Json.list(r["workRatios"]).map { num(it) },
+            )
+        }
+
+        for (c in Json.list(a["duration"])) {
+            val row = Json.row(c)
+            val label = row["label"] as String
+            val got = AlignmentRules.durationVerdict(
+                input(row["input"]),
+                history(row["history"]),
+                config(row["config"] as String),
+            )
+            val expected = Json.row(row["output"])
+            assertEquals("$label verdict", Json.text(expected["verdict"]), got.verdict)
+            assertEquals("$label measured", expected["measured"] == true, got.measured)
+            assertEquals("$label ratio", num(expected["ratioDeviation"]), got.ratioDeviation, 1e-9)
+            assertEquals("$label abs", num(expected["absDeviation"]), got.absDeviation, 1e-9)
+            assertEquals("$label basis", Json.text(expected["basisVersion"]), got.basisVersion)
+            assertEquals("$label reason", Json.text(expected["reason"]), got.reason)
+        }
+
+        for (c in Json.list(a["offsets"])) {
+            val row = Json.row(c)
+            val got = AlignmentRules.pickOffsets(input(row["input"]), config(row["config"] as String))
+            assertEquals(row["label"] as String, Json.list(row["output"]).map { num(it) }, got)
+        }
+
+        for (c in Json.list(a["similarity"])) {
+            val row = Json.row(c)
+            val left = Json.row(row["a"])
+            val right = Json.row(row["b"])
+            val got = AlignmentRules.similarity(
+                app.panda.tv.playback.FrameSample(left["valid"] == true, Json.text(left["hash"]) ?: ""),
+                app.panda.tv.playback.FrameSample(right["valid"] == true, Json.text(right["hash"]) ?: ""),
+            )
+            assertEquals(row["label"] as String, num(row["output"]), got, 1e-9)
+        }
+
+        for (c in Json.list(a["window"])) {
+            val row = Json.row(c)
+            val label = row["label"] as String
+            val anchors = Json.list(row["anchors"]).map { num(it) }
+            val samples = Json.list(row["samples"]).map {
+                val r = Json.row(it)
+                ScoredSample(num(r["offsetSeconds"]), num(r["similarity"]), r["valid"] == true)
+            }
+            val got = AlignmentRules.windowSearch(
+                anchors,
+                samples,
+                timestamp(row["elapsedMs"]),
+                config(row["config"] as String),
+            )
+            val expected = Json.row(row["output"])
+            assertEquals("$label offset", numOrNull(expected["offset"]), got.offset)
+            assertEquals("$label used", integer(expected["used"]), got.used)
+            assertEquals("$label reason", Json.text(expected["reason"]), got.reason)
+        }
     }
 }

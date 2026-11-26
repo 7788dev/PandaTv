@@ -831,6 +831,7 @@ class MediaCardView(ctx: Context, private val wide: Boolean) : LinearLayout(ctx)
     }
 
     fun bind(app: PandaTvApp, item: MediaItem, subtitleOverride: String? = null, progressPct: Int? = null) {
+        tag = item.id
         val url = if (wide) Rules.wideImage(item) else item.poster
         boundApp = app
         boundImageUrl = url

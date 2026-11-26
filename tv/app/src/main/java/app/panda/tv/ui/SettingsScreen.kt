@@ -1,6 +1,18 @@
 package app.panda.tv.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import app.panda.tv.R
+import app.panda.tv.data.TvUpdates
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.View
@@ -17,6 +29,8 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     override val chromeFocusKey = "settings"
     override val activeTab: String? = null
 
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var updateJob: Job? = null
     private val m = Theme.metrics(ctx)
     private val scroll = Theme.focusScrollView(ctx).apply {
         isFocusable = false
@@ -56,6 +70,8 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     override fun onShown() {
         syncValues()
     }
+
+    override fun onDestroy() { scope.cancel() }
 
     private fun buildContent() {
         val s = nav.app.userStore.get().settings
@@ -127,8 +143,29 @@ class SettingsScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             .getOrNull()?.takeIf { it.isNotBlank() }
         col.addView(sectionLabel(Copy.SettingsCopy.ABOUT))
         val versionLabel = verName?.let { Copy.fmt(Copy.App.VERSION, "v" to it) } ?: Copy.App.NAME
-        col.addView(rowShell(versionLabel, trailing = Theme.label(ctx, Copy.SettingsCopy.CHECK_UPDATE, sp = 14f, color = Theme.PAPER_70, bold = true)) {
-            nav.toast(Copy.Extra.UPDATE_UNAVAILABLE)
+        val updateLabel = Theme.label(ctx, Copy.SettingsCopy.CHECK_UPDATE, sp = 14f, color = Theme.PAPER_70, bold = true)
+        col.addView(rowShell(versionLabel, trailing = updateLabel) {
+            if (updateJob?.isActive != true && verName != null) {
+                updateLabel.setText(R.string.update_checking)
+                updateJob = scope.launch {
+                    try {
+                        val release = awaitScreenRequest(scope, 15_000L) { TvUpdates.latest() }
+                        if (release == null) {
+                            updateLabel.setText(R.string.update_no_release)
+                        } else if (TvUpdates.compareVersions(release.version, verName) <= 0) {
+                            updateLabel.setText(R.string.update_current)
+                        } else {
+                            val announcement = ctx.getString(R.string.update_available, release.version)
+                            updateLabel.text = announcement
+                            if (scroll.isShown) nav.confirm(announcement, ctx.getString(R.string.update_open_release)) {
+                                try { ctx.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(release.page))) }
+                                catch (_: ActivityNotFoundException) { nav.toast(ctx.getString(R.string.update_no_browser)) }
+                            }
+                        }
+                    } catch (cancelled: CancellationException) { throw cancelled }
+                    catch (_: Exception) { updateLabel.setText(R.string.update_failed) }
+                }
+            }
         })
 
         firstRow.post { firstRow.requestFocus() }

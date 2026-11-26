@@ -1,9 +1,12 @@
 package app.panda.tv.ui
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
+import android.provider.Settings
 import android.view.FocusFinder
 import android.view.Gravity
 import android.view.KeyEvent
@@ -13,7 +16,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import app.panda.tv.R
 import app.panda.tv.model.Copy
 import app.panda.tv.model.HistoryEntry
 import app.panda.tv.model.HomeFeed
@@ -28,9 +33,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
-class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
+class HomeScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null) : Screen(ctx, nav) {
     override val activeTab: String = "home"
 
     private val m = Theme.metrics(ctx)
@@ -72,8 +78,18 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     private val homeAdapter = HomeAdapter()
     private var feed: HomeFeed? = null
     private var continuePairs: List<Pair<MediaItem, HistoryEntry>> = emptyList()
-    private var heroIndex = 0
+    private var heroIndex = saved?.getInt("hero") ?: 0
+    private var heroId = saved?.getString("heroId")
+    private var restoreShelf = saved?.getString("shelf")
+    private var lastShelf: String? = null
+
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("shelf", restoreShelf ?: if (visible) homeAdapter.keyAt(homeList.selectedPosition) else lastShelf)
+        putInt("hero", heroIndex)
+        putString("heroId", heroId)
+    }
     private var loadJob: Job? = null
+    private var continueJob: Job? = null
     private var heroAutoJob: Job? = null
     private var visible = false
     private var destroyed = false
@@ -93,8 +109,10 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     override fun onHidden() {
+        if (visible) lastShelf = homeAdapter.keyAt(homeList.selectedPosition) ?: lastShelf
         visible = false
         heroAutoJob?.cancel()
+        continueJob?.cancel()
     }
 
     override fun onDestroy() {
@@ -105,6 +123,9 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         scope.cancel()
     }
 
+    private fun animationsEnabled(): Boolean = if (Build.VERSION.SDK_INT >= 26) ValueAnimator.areAnimatorsEnabled()
+        else Settings.Global.getFloat(ctx.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) > 0f
+
     private fun startHeroAutoCycle() {
         heroAutoJob?.cancel()
         heroAutoJob = scope.launch {
@@ -113,7 +134,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                 val holder = activeHeroHolder
                 val heroItems = feed?.hero ?: emptyList()
                 if (visible && holder != null && holder.itemView.isAttachedToWindow &&
-                    !holder.itemView.hasFocus() && homeList.scrollState == RecyclerView.SCROLL_STATE_IDLE &&
+                    holder.itemView.hasWindowFocus() && !holder.itemView.hasFocus() && homeList.scrollState == RecyclerView.SCROLL_STATE_IDLE &&
+                    animationsEnabled() &&
                     heroItems.size > 1
                 ) {
                     heroIndex = (heroIndex + 1) % heroItems.size
@@ -157,6 +179,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     private fun refreshContinue() {
+        continueJob?.cancel()
+        if (!visible) return
         val entries = Rules.continuing(nav.app.userStore.get().history).take(14)
         if (entries.isEmpty()) {
             if (continuePairs.isNotEmpty()) {
@@ -165,8 +189,9 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
             return
         }
-        scope.launch {
+        continueJob = scope.launch {
             val items = runCatching { nav.app.douban.byIds(entries.map { it.id }) }.getOrNull() ?: return@launch
+            ensureActive()
             if (destroyed) return@launch
             val map = items.associateBy { it.id }
             continuePairs = entries.mapNotNull { h -> map[h.id]?.let { enrichEpisodes(it) to h } }
@@ -182,6 +207,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
                     val avail = runCatching {
                         nav.app.playback.availability(series, nav.app.douban.workHints(series.id))
                     }.getOrNull()
+                    ensureActive()
                     if (avail?.episodes != null) updatedAny = true
                 }
                 if (!destroyed && updatedAny) {
@@ -205,14 +231,17 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             Theme.reveal(homeList)
         }
         syncBlocks()
-        if (firstMount && container.findFocus() == null) {
+        if (firstMount && savedInitialFocusAbsent() && container.findFocus() == null) {
             homeList.post {
+                if (!container.isShown || !savedInitialFocusAbsent()) return@post
                 homeList.selectedPosition = 0
                 val target = activeHeroHolder?.primaryButton ?: homeList
                 target.requestFocus()
             }
         }
     }
+
+    private fun savedInitialFocusAbsent() = pendingFocus == null && restoreShelf == null && lastShelf == null
 
     private fun syncBlocks() {
         val current = feed ?: return
@@ -237,6 +266,14 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             }
         }
         homeAdapter.submit(next)
+        restoreShelf?.let { key ->
+            val index = next.indexOfFirst { it.key == key }
+            if (index >= 0) {
+                lastShelf = key
+                restoreShelf = null
+                homeList.selectedPosition = index
+            }
+        }
     }
 
     private sealed interface HomeBlock {
@@ -270,84 +307,25 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
     }
 
     private inner class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private val blocks = ArrayList<HomeBlock>()
+        private var blocks: List<HomeBlock> = emptyList()
 
         init {
             setHasStableIds(true)
         }
 
+        fun keyAt(index: Int) = blocks.getOrNull(index)?.key
+
         fun submit(next: List<HomeBlock>) {
-            if (blocks.isEmpty()) {
-                blocks.addAll(next)
-                notifyDataSetChanged()
-                return
-            }
-            val oldKeys = blocks.map { it.key }
-            val newKeys = next.map { it.key }
-            if (oldKeys == newKeys) {
-                for (i in next.indices) {
-                    val prev = blocks[i]
-                    val cur = next[i]
-                    blocks[i] = cur
-                    if (!prev.sameContent(cur)) {
-                        notifyItemChanged(i, PAYLOAD_UPDATE)
-                    }
-                }
-                return
-            }
-            if (newKeys.size > oldKeys.size && newKeys.subList(0, oldKeys.size) == oldKeys) {
-                val oldSize = oldKeys.size
-                for (i in 0 until oldSize) {
-                    val prev = blocks[i]
-                    val cur = next[i]
-                    blocks[i] = cur
-                    if (!prev.sameContent(cur)) {
-                        notifyItemChanged(i, PAYLOAD_UPDATE)
-                    }
-                }
-                for (i in oldSize until next.size) {
-                    blocks.add(next[i])
-                }
-                notifyItemRangeInserted(oldSize, next.size - oldSize)
-                return
-            }
-            if (newKeys.size == oldKeys.size + 1) {
-                val insertedIdx = newKeys.indices.firstOrNull { idx ->
-                    val without = ArrayList(newKeys).also { it.removeAt(idx) }
-                    without == oldKeys
-                }
-                if (insertedIdx != null) {
-                    blocks.add(insertedIdx, next[insertedIdx])
-                    notifyItemInserted(insertedIdx)
-                    for (i in next.indices) {
-                        if (i != insertedIdx) {
-                            val prev = blocks[i]
-                            blocks[i] = next[i]
-                            if (!prev.sameContent(next[i])) notifyItemChanged(i, PAYLOAD_UPDATE)
-                        }
-                    }
-                    return
-                }
-            }
-            if (oldKeys.size == newKeys.size + 1) {
-                val removedIdx = oldKeys.indices.firstOrNull { idx ->
-                    val without = ArrayList(oldKeys).also { it.removeAt(idx) }
-                    without == newKeys
-                }
-                if (removedIdx != null) {
-                    blocks.removeAt(removedIdx)
-                    notifyItemRemoved(removedIdx)
-                    for (i in next.indices) {
-                        val prev = blocks[i]
-                        blocks[i] = next[i]
-                        if (!prev.sameContent(next[i])) notifyItemChanged(i, PAYLOAD_UPDATE)
-                    }
-                    return
-                }
-            }
-            blocks.clear()
-            blocks.addAll(next)
-            notifyDataSetChanged()
+            val previous = blocks
+            val changes = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                override fun getOldListSize() = previous.size
+                override fun getNewListSize() = next.size
+                override fun areItemsTheSame(old: Int, new: Int) = previous[old].key == next[new].key
+                override fun areContentsTheSame(old: Int, new: Int) = previous[old].sameContent(next[new])
+                override fun getChangePayload(old: Int, new: Int): Any = PAYLOAD_UPDATE
+            })
+            blocks = next
+            changes.dispatchUpdatesTo(this)
         }
 
         override fun getItemCount(): Int = blocks.size
@@ -403,8 +381,12 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         }
         val primaryButton = Theme.pillButton(ctx, Copy.Action.PLAY, primary = true, icon = TvIcon.PLAY, padH = 20, padV = 9, sp = 14f)
         private val detailBtn = Theme.pillButton(ctx, Copy.Action.DETAIL, padH = 18, padV = 9, sp = 14f)
-        private val prevBtn = Theme.pillButton(ctx, "", icon = TvIcon.CHEVRON_LEFT, padH = 11, padV = 9)
-        private val nextBtn = Theme.pillButton(ctx, "", icon = TvIcon.CHEVRON_RIGHT, padH = 11, padV = 9)
+        private val prevBtn = Theme.pillButton(ctx, "", icon = TvIcon.CHEVRON_LEFT, padH = 11, padV = 9).apply {
+            contentDescription = ctx.getString(R.string.hero_previous)
+        }
+        private val nextBtn = Theme.pillButton(ctx, "", icon = TvIcon.CHEVRON_RIGHT, padH = 11, padV = 9).apply {
+            contentDescription = ctx.getString(R.string.hero_next)
+        }
         private val counterTv = Theme.label(ctx, sp = 12f, color = Theme.PAPER_70).apply {
             setPadding(Theme.dp(ctx, 10), Theme.dp(ctx, 4), Theme.dp(ctx, 10), Theme.dp(ctx, 4))
             background = Theme.box(0x990E0D0B.toInt(), Theme.LINE, radiusDp = 999, ctx = ctx)
@@ -531,7 +513,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             val changed = items != currentItems
             currentItems = items
             if (items.isEmpty()) return
-            if (heroIndex >= items.size) heroIndex = 0
+            heroIndex = if (heroId == null) heroIndex.coerceIn(items.indices)
+                else items.indexOfFirst { it.id == heroId }.coerceAtLeast(0)
             val multiVis = if (items.size > 1) View.VISIBLE else View.GONE
             prevBtn.visibility = multiVis
             nextBtn.visibility = multiVis
@@ -544,6 +527,7 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
         fun renderCurrent(animate: Boolean) {
             if (currentItems.isEmpty()) return
             val item = currentItems[heroIndex.coerceIn(0, currentItems.lastIndex)]
+            heroId = item.id
             nav.app.images.load(backdrop, Rules.wideImage(item), 1280, 720)
             titleTv.text = item.title
             val s = Rules.scoreText(item)
@@ -624,6 +608,8 @@ class HomeScreen(ctx: Context, nav: Navigator) : Screen(ctx, nav) {
             if (moreBtn.visibility != View.VISIBLE) moreBtn.visibility = View.VISIBLE
             moreBtn.setOnClickListener { nav.openChannel(shelf.moreType) }
             cardsAdapter.setItems(shelf.items, emptyMap())
+            val index = shelf.items.indexOfFirst { it.id == pendingFocus }
+            if (index >= 0) rowGrid.selectedPosition = index
         }
 
         fun bindContinue(pairs: List<Pair<MediaItem, HistoryEntry>>) {

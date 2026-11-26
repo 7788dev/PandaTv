@@ -1,8 +1,8 @@
-import { app, BrowserWindow, dialog, ipcMain, screen, session, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, screen, session, shell, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import { DoubanDataSource } from './data/douban'
@@ -10,9 +10,12 @@ import { createTransport } from './data/transport'
 import { MediaProxy } from './playback/proxy'
 import { PlaybackService } from './playback/service'
 import { resolveSourceRules, SOURCE_RULES_FILE } from './playback/sources'
+import { loadRuleCalibration } from './health/config'
+import { SourceHealthStore } from './health/store'
+import { OffsetCache } from './playback/offset-cache'
 import { UserStore } from './state'
 import { invokeData, rpc, type Services } from './ipc'
-import { checkUpdate } from './updates'
+import { checkUpdate, RELEASE_PAGE } from './updates'
 
 if (process.env.PANDA_USER_DATA_DIR) app.setPath('userData', resolve(process.env.PANDA_USER_DATA_DIR))
 app.setName('Panda')
@@ -23,6 +26,7 @@ const devUrl = !app.isPackaged ? process.env.ELECTRON_RENDERER_URL : undefined
 let mainWindow: BrowserWindow | undefined
 let data: DoubanDataSource | undefined
 let proxy: MediaProxy | undefined
+let health: SourceHealthStore | undefined
 let closingNonce: string | undefined
 let closeTimer: ReturnType<typeof setTimeout> | undefined
 let boundsTimer: ReturnType<typeof setTimeout> | undefined
@@ -77,6 +81,7 @@ async function finishClose() {
   clearTimeout(closeTimer)
   saveBounds()
   await data?.flush()
+  await health?.close()
   mainWindow?.close()
 }
 async function loadRenderer(window: BrowserWindow) {
@@ -126,6 +131,13 @@ async function createWindow() {
     if (result.removedSegments || ['safety-limit', 'ad-block-too-long', 'encrypted-implicit-iv', 'unclosed-ad-break'].includes(result.reason)) console.info('[media]', source, JSON.stringify(result))
   } })
   await proxy.start()
+  const calibration = loadRuleCalibration(join(app.getAppPath(), 'resources/rule-calibration.json'))
+  health = calibration
+    ? new SourceHealthStore(join(app.getPath('userData'), 'source-health-v1.json'), calibration.health, calibration.budget)
+    : undefined
+  const offsets = calibration
+    ? new OffsetCache(join(app.getPath('userData'), 'align-offsets-v1.json'), calibration.alignment.offsetTtlDays, calibration.alignment.ratioTolerance)
+    : undefined
   const noticeTimes = new Map<string, number>()
   data = new DoubanDataSource({
     imageUrl: url => proxy!.registerImage(url),
@@ -148,7 +160,17 @@ async function createWindow() {
   const userPath = join(app.getPath('userData'), 'user-v1.json')
   const getUser = () => user ??= new UserStore(userPath)
   const services: Services = {
-    data, playback: new PlaybackService({ proxy, rules, onSourceFailure: (source, reason, ms) => console.info('[source]', source, reason, ms + 'ms') }), user: getUser,
+    data,
+    playback: new PlaybackService({ proxy, rules, health,
+      onSourceFailure: (source, reason, ms) => console.info('[source]', source, reason, ms + 'ms'),
+      onCatalogueUpdate: id => mainWindow?.webContents.send('panda:catalogue', id),
+    }),
+    health,
+    offsets,
+    alignment: calibration?.alignment,
+    buffer: calibration?.buffer,
+    budget: calibration?.budget,
+    user: getUser,
     changed: () => mainWindow?.webContents.send('panda:user', getUser().get()),
     recovery: () => UserStore.recovery(userPath),
     recover: restoreBackup => { user = UserStore.recover(userPath, restoreBackup); return user.get() }
@@ -184,6 +206,7 @@ async function createWindow() {
           mainWindow!.setFullScreen(args[0]); return
         case 'app.info': return { version: app.getVersion() }
         case 'app.checkUpdate': return checkUpdate(app.getVersion())
+        case 'app.openReleases': return shell.openExternal(RELEASE_PAGE)
         case 'user.exportRecovery': {
           const contents = UserStore.recoveryExport(userPath)
           const result = await dialog.showSaveDialog(mainWindow!, {
@@ -198,7 +221,7 @@ async function createWindow() {
         }
         default: return invokeData(method, args, services)
       }
-    }, method === 'data.playback' || method === 'data.retryPlayback' || method === 'data.playbackFrom' || method === 'data.availability')
+    }, method === 'data.playback' || method === 'data.retryPlayback' || method === 'data.playbackFrom' || method === 'playback.prepareSwitch' || method === 'data.availability')
   })
   ipcMain.on('panda:close-ready', (event, nonce: unknown) => {
     if (trusted(event) && typeof nonce === 'string' && nonce === closingNonce) void finishClose()

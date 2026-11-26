@@ -1,0 +1,82 @@
+{
+  "system": "MuMu Android 15 (API 35)",
+  "version": "1.0.14",
+  "apkSha256": "93C8565206A7DB599E8533B66ACB6756EA6E87C367720111173E7A7282CBB4EE",
+  "displayChecks": [
+    {
+      "viewport": [
+        1920,
+        1080
+      ],
+      "cases": [
+        {
+          "name": "carousel",
+          "passed": true,
+          "from": 1,
+          "to": 2,
+          "total": 5,
+          "stationarySeconds": 8.5
+        },
+        {
+          "name": "home-1",
+          "passed": true,
+          "frames": {
+            "totalFrames": 309,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          },
+          "heroReturnComplete": true
+        },
+        {
+          "name": "channel-expanded-1",
+          "passed": true,
+          "frames": {
+            "totalFrames": 169,
+            "jankyFrames": 0,
+            "jankPct": 0.0,
+            "p90Ms": 5,
+            "p95Ms": 5
+          }
+        }
+      ]
+    },
+    {
+      "viewport": [
+        1280,
+        720
+      ],
+      "cases": [
+        {
+          "name": "carousel",
+          "passed": true,
+          "from": 1,
+          "to": 2,
+          "total": 5,
+          "stationarySeconds": 8.5
+        }
+      ]
+    }
+  ],
+  "livePlayback": [
+    {
+      "episode": "第1集",
+      "from": 1,
+      "to": 2,
+      "duration": 2564
+    },
+    {
+      "episode": "第2集",
+      "from": 1,
+      "to": 2,
+      "duration": 2594
+    },
+    {
+      "paused": true
+    },
+    {
+      "detailResumeEpisode": 2
+    }
+  ]
+}

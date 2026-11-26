@@ -40,7 +40,13 @@ import app.panda.tv.model.Quality
 import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
 import app.panda.tv.playback.PandaMediaDataSource
+import app.panda.tv.playback.ChapterMarks
+import app.panda.tv.playback.BufferRules
+import app.panda.tv.playback.BufferSample
+import app.panda.tv.playback.FailureKind
 import app.panda.tv.playback.RemoteSeekTarget
+import app.panda.tv.playback.SwitchBudgetRules
+import app.panda.tv.playback.SwitchEvent
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,13 +59,25 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.concurrent.atomic.AtomicInteger
 
+internal fun playbackFailureKind(firstFrameRendered: Boolean): FailureKind =
+    if (firstFrameRendered) FailureKind.STALL else FailureKind.PROBE
+
 @OptIn(UnstableApi::class)
 class PlayerScreen(
     ctx: Context,
     nav: Navigator,
     initialItem: MediaItem,
     initialEpisode: Int,
+    restored: android.os.Bundle? = null,
 ) : Screen(ctx, nav) {
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("page", "player")
+        putString("id", itemId)
+        putInt("episode", episode)
+        putBoolean("play", playRequested)
+        if (playingEpisode == episode && startedPlayback) exoPlayer?.let { putDouble("position", it.currentPosition / 1000.0) }
+    }
+
     override val showTopBar: Boolean = false
 
     private val m = Theme.metrics(ctx)
@@ -111,6 +129,13 @@ class PlayerScreen(
     }
     private val titleTv = Theme.label(ctx, sp = 20f, color = Theme.PAPER_100, bold = true, maxLines = 1)
     private val epTv = Theme.label(ctx, sp = 13.5f, color = Theme.PAPER_70, maxLines = 1)
+
+    private val chaptersBtn = Theme.pillButton(ctx, "片头片尾", padH = 15, padV = 7, sp = 13.5f).apply { visibility = View.GONE }
+    private val chapterPrefs = ctx.getSharedPreferences("playback-chapters-v1", Context.MODE_PRIVATE)
+    private var manualIntro: Double? = null
+    private var manualOutroLength: Double? = null
+    private var introSkipped = false
+    private var outroSkipped = false
 
     private val bottomShade = LinearLayout(ctx).apply {
         orientation = LinearLayout.VERTICAL
@@ -204,22 +229,25 @@ class PlayerScreen(
     private var speed: Double = requestedSpeed
     private var speedCleanWindows = 0
     private var speedBufferingSample = PlaybackBufferingSample(0L, 0)
-    private var resumeAtSec: Double? = null
+    private var resumeAtSec: Double? = restored?.takeIf { it.containsKey("position") }?.getDouble("position")
     private var startedPlayback = false
     private var playingEpisode: Int? = null
     private var loadGeneration = 0L
     private var activeMediaId: String? = null
     private var screenShown = false
-    private var playRequested = true
+    private var playRequested = restored?.getBoolean("play", true) ?: true
     private var sourceStarted = false
     private var progressSample = PlaybackProgressSample(0L, android.os.SystemClock.elapsedRealtime())
+    private val bufferSamples = ArrayList<BufferSample>()
+    private var bufferScene = "playing"
+    private val switchEvents = ArrayList<SwitchEvent>()
     private var playingSince = 0L
     private var autoAttempts = 0
     private var autoAdvanced = false
     private var upNextCancelled = false
     private var preparedNext = false
     private var overlayVisible = true
-    private enum class Panel { EPISODES, LINES, QUALITY, SPEED }
+    private enum class Panel { EPISODES, LINES, QUALITY, SPEED, CHAPTERS }
 
     private var panelMode: Panel? = null
     private var lastControl: View? = null
@@ -438,6 +466,8 @@ class PlayerScreen(
             }
         })
         topShade.addView(heading, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+        chaptersBtn.setOnClickListener { openPanel(Panel.CHAPTERS, chaptersBtn) }
+        topShade.addView(chaptersBtn)
         root.addView(topShade, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.TOP))
 
         // Up Next card
@@ -627,6 +657,10 @@ class PlayerScreen(
                     newPosition.positionMs.coerceAtLeast(0L),
                     android.os.SystemClock.elapsedRealtime(),
                 )
+                if (reason == Player.DISCONTINUITY_REASON_SEEK) {
+                    bufferScene = "seek"
+                    bufferSamples.clear()
+                }
                 playingSince = if (player.isPlaying) android.os.SystemClock.elapsedRealtime() else 0L
             }
 
@@ -637,6 +671,7 @@ class PlayerScreen(
                 startedPlayback = true
                 startupWatchJob?.cancel()
                 startupBudget.finish()
+                syncButtons()
             }
 
             override fun onPlaybackStateChanged(playbackState: Int) {
@@ -751,7 +786,13 @@ class PlayerScreen(
         surfaceView.layoutParams = lp
     }
 
-    private fun loadAndStart(retry: Boolean, fromSource: String?) {
+    private fun loadAndStart(
+        retry: Boolean,
+        fromSource: String?,
+        retryFailureKind: FailureKind? = null,
+        userRetry: Boolean = false,
+        retainCurrent: Boolean = false,
+    ) {
         preparedNext = false
         seekCommitJob?.cancel()
         scrubbingOffJob?.cancel()
@@ -761,11 +802,14 @@ class PlayerScreen(
         saveHistory()
         val generation = ++loadGeneration
         val targetEpisode = episode
+        val switchingFrom = playbackData?.takeIf { playingEpisode == targetEpisode }
         val targetQuality = quality
         val targetResume = resumeAtSec
         speedBufferingSample = PlaybackBufferingSample(0L, 0)
+        bufferScene = "playing"
+        bufferSamples.clear()
         val keepPicture = playbackData != null && playingEpisode == targetEpisode && videoShutter.visibility == View.GONE
-        val keepPlaying = keepPicture && sourceStarted && !retry
+        val keepPlaying = keepPicture && sourceStarted && (!retry || retainCurrent)
         resumeAtSec = null
         loadJob?.cancel()
         startupWatchJob?.cancel()
@@ -819,7 +863,8 @@ class PlayerScreen(
                     val maxTries = if (retry || fromSource != null) 1 else 3
                     for (attempt in 0 until maxTries) {
                         try {
-                            candidate = playbackService.resolve(item, targetEpisode, targetQuality, retry = retry, hints = workHints, from = fromSource)
+                            candidate = playbackService.resolve(item, targetEpisode, targetQuality, retry = retry,
+                                hints = workHints, from = fromSource, retryFailureKind = retryFailureKind, switchingFrom = switchingFrom, userRetry = userRetry)
                             break
                         } catch (cancelled: CancellationException) {
                             throw cancelled
@@ -839,20 +884,52 @@ class PlayerScreen(
                 coroutineContext.ensureActive()
                 if (destroyed || generation != loadGeneration) return@launch
                 // During catalogue lookup the viewer can keep watching, pause or seek.
+                if (retainCurrent && keepPlaying && resolved.sourceKey == switchingFrom?.sourceKey && exoPlayer?.playerError == null) return@launch
                 val position = if (keepPlaying) exoPlayer?.currentPosition?.div(1000.0) ?: targetResume else targetResume
                 saveHistory()
                 sourceStarted = false
                 startedPlayback = false
                 playingSince = 0L
                 playbackData = resolved
+                val prefix = "$itemId:${resolved.sourceKey}:"
+                manualIntro = chapterPrefs.getFloat(prefix + "intro", 0f).takeIf { it > 0 }?.toDouble()
+                manualOutroLength = chapterPrefs.getFloat(prefix + "outro", 0f).takeIf { it > 0 }?.toDouble()
+                introSkipped = false
+                outroSkipped = false
                 startExoPlayer(item, resolved, targetEpisode, position, generation)
+                if (resolved.format == "mp4" && resolved.intro == null && resolved.outro == null) launch {
+                    val marks = runCatching { playbackService.mp4Chapters(resolved.url) }.getOrNull()
+                    coroutineContext.ensureActive()
+                    if (!destroyed && generation == loadGeneration && marks != null) {
+                        playbackData = resolved.copy(intro = marks.intro, outro = marks.outro)
+                    }
+                }
 
                 launch {
-                    val srcs = runCatching { playbackService.sources(item, targetEpisode, hints) }.getOrNull()
-                    coroutineContext.ensureActive()
-                    if (!destroyed && generation == loadGeneration && srcs != null) {
-                        playSources = srcs
+                    for (complete in listOf(false, true)) {
+                        val srcs = runCatching { playbackService.sources(item, targetEpisode, hints, complete) }.getOrNull()
+                        val available = if (complete) runCatching { playbackService.availability(item, hints, true) }.getOrNull() else null
+                        coroutineContext.ensureActive()
+                        if (destroyed || generation != loadGeneration) return@launch
+                        val oldSources = playSources
+                        val oldItem = mediaItem
+                        val panel = panelMode
+                        val focusedSource = oldSources?.list?.getOrNull(sideGrid.selectedPosition)?.key
+                        val focusedPosition = sideGrid.selectedPosition
+                        if (srcs != null) playSources = srcs
+                        if (available?.episodes != null) {
+                            mediaItem = item.copy(episodes = available.episodes, episodeTitles = available.episodeTitles ?: item.episodeTitles)
+                            mediaItem?.let(::updateHeader)
+                        }
                         syncButtons()
+                        if (panel == Panel.LINES && oldSources != playSources) {
+                            openPanel(panel, lineBtn)
+                            val position = playSources?.list?.indexOfFirst { it.key == focusedSource } ?: -1
+                            if (position >= 0) sideGrid.selectedPosition = position
+                        } else if (panel == Panel.EPISODES && oldItem != mediaItem) {
+                            openPanel(panel, episodesBtn)
+                            if (focusedPosition >= 0) sideGrid.selectedPosition = focusedPosition
+                        }
                     }
                 }
             } catch (cancelled: CancellationException) {
@@ -860,10 +937,10 @@ class PlayerScreen(
             } catch (t: Throwable) {
                 if (destroyed || generation != loadGeneration) return@launch
                 if (keepPlaying && sourceStarted && exoPlayer?.playerError == null) {
-                    showOsd(TvIcon.REFRESH, Copy.Extra.LINE_SWITCH_FAILED)
+                    if (!retainCurrent) showOsd(TvIcon.REFRESH, Copy.Extra.LINE_SWITCH_FAILED)
                     scheduleIdleHide()
                 } else if (keepPicture && autoAttempts in 1 until 2) {
-                    handlePlaybackFailure(t)
+                    handlePlaybackFailure(t, null)
                 } else {
                     showError(t)
                 }
@@ -921,12 +998,21 @@ class PlayerScreen(
     }
 
     private fun resetProgressWatch() {
+        bufferSamples.clear()
         progressSample = PlaybackProgressSample(exoPlayer?.currentPosition?.coerceAtLeast(0L) ?: 0L, android.os.SystemClock.elapsedRealtime())
         playingSince = 0L
     }
 
-    private fun handlePlaybackFailure(cause: Throwable) {
-        if (destroyed) return
+    private fun handlePlaybackFailure(
+        cause: Throwable,
+        kind: FailureKind? = playbackFailureKind(sourceStarted),
+        retainCurrent: Boolean = false,
+    ): Boolean {
+        if (destroyed || retainCurrent && loadJob?.isActive == true) return false
+        val budget = nav.app.ruleCalibration?.budget
+        val decision = budget?.let { SwitchBudgetRules.evaluateSwitch(switchEvents, System.currentTimeMillis(), it) }
+            ?: app.panda.tv.playback.SwitchDecision(autoAttempts < 2, if (autoAttempts < 2) null else "limit", autoAttempts)
+        if (retainCurrent && !decision.allowed) return false
         scrubbingOffJob?.cancel()
         scrubbing = false
         pendingRemoteSeekMs = null
@@ -934,13 +1020,16 @@ class PlayerScreen(
         saveHistory()
         val p = exoPlayer
         if (p != null && p.duration > 0L) resumeAtSec = p.currentPosition.coerceAtLeast(0L) / 1000.0
-        if (autoAttempts < 2) {
-            autoAttempts++
+        Log.i("PandaTV", "[recovery] episode=$episode source=${playbackData?.sourceKey} reason=${cause.message?.take(100)} allowed=${decision.allowed} budget=${decision.reason}")
+        if (decision.allowed) {
+            switchEvents.add(SwitchEvent(System.currentTimeMillis(), "auto"))
+            autoAttempts = decision.attempts + 1
             showOsd(TvIcon.REFRESH, Copy.Extra.RESTORING_SOURCE)
-            loadAndStart(retry = true, fromSource = null)
+            loadAndStart(retry = true, fromSource = null, retryFailureKind = if (retainCurrent) null else kind, retainCurrent = retainCurrent)
         } else {
             showError(IllegalStateException(Copy.Extra.PLAYER_RETRY, cause))
         }
+        return true
     }
 
     private fun showError(t: Throwable) {
@@ -963,7 +1052,8 @@ class PlayerScreen(
         val msg = Copy.errorText(t)
         val box = Theme.emptyOrErrorBox(ctx, msg, Copy.Action.RETRY, focusRetry = true) {
             autoAttempts = 0
-            loadAndStart(retry = true, fromSource = null)
+            switchEvents.clear()
+            loadAndStart(retry = true, fromSource = null, userRetry = true)
         }
         box.addView(Theme.pillButton(ctx, Copy.Action.BACK, icon = TvIcon.BACK).apply {
             layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
@@ -1000,7 +1090,36 @@ class PlayerScreen(
                 val nowMs = android.os.SystemClock.elapsedRealtime()
                 val monitoring = screenShown && sourceStarted && playRequested && p.playWhenReady && !userSeeking && !scrubbing &&
                     p.playbackState != Player.STATE_IDLE && p.playbackState != Player.STATE_ENDED
+                val previousPosition = progressSample.positionMs
                 progressSample = PlaybackProgressPolicy.observe(posMs, nowMs, progressSample, monitoring)
+                if (monitoring) {
+                    val bufferedAhead = (p.bufferedPosition - posMs).coerceAtLeast(0L) / 1000.0
+                    val bufferedToEnd = durMs > 0L && p.bufferedPosition >= durMs - 50L
+                    bufferSamples.add(BufferSample(nowMs, bufferedAhead, posMs / 1000.0, bufferedToEnd))
+                    bufferSamples.removeAll { nowMs - it.at > 30_000L }
+                    val config = nav.app.ruleCalibration?.buffer
+                    val verdict = config?.let { BufferRules.shouldTakeOver(bufferScene, bufferSamples, it) }
+                    if (bufferScene == "seek") bufferScene = "playing"
+                    if (config != null && verdict?.takeOver == true && PlaybackProgressPolicy.needsBufferRecovery(
+                            verdict.reason, p.playbackState == Player.STATE_BUFFERING, (playSources?.list?.size ?: 0) > 1,
+                            nowMs - progressSample.advancedAtMs, config.playingRiseWindowSec)) {
+                        val recovering = handlePlaybackFailure(IllegalStateException("${verdict.reason} buffer takeover"),
+                            retainCurrent = verdict.reason == "low-buffer")
+                        if (recovering) {
+                            progressSample = PlaybackProgressSample(posMs, nowMs)
+                            continue
+                        }
+                    }
+                }
+                if (monitoring && sourceStarted) {
+                    val sourceKey = playbackData?.sourceKey
+                    val stalling = p.playbackState == Player.STATE_BUFFERING || (p.isPlaying && posMs <= previousPosition)
+                    if (sourceKey != null) nav.app.sourceHealth?.updateLive(
+                        sourceKey,
+                        playSeconds = if (p.isPlaying && !stalling) 1.0 else 0.0,
+                        stallSeconds = if (stalling) 1.0 else 0.0,
+                    )
+                }
                 if (monitoring && p.isPlaying) {
                     if (playingSince == 0L) playingSince = nowMs
                     if (autoAttempts > 0 && nowMs - playingSince > 60_000L) {
@@ -1038,7 +1157,22 @@ class PlayerScreen(
                     if (startedPlayback && System.currentTimeMillis() - lastSavedAt >= Constants.HISTORY_SAVE_SECONDS * 1000L) {
                         saveHistory()
                     }
-                    val end = Rules.endPosition(playbackData, durSec, settings)
+                    val marks = ChapterMarks(playbackData?.intro, playbackData?.outro).withManual(manualIntro, manualOutroLength, durSec)
+                    val end = if (settings.skipIntro) marks.outro ?: durSec else durSec
+                    if (monitoring && settings.skipIntro) {
+                        val opening = marks.intro
+                        if (!introSkipped && opening != null && posSec >= opening.start && posSec < opening.end && opening.end < durSec) {
+                            introSkipped = true
+                            p.seekTo((opening.end * 1000).toLong())
+                            showOsd(TvIcon.FORWARD, "已跳过片头")
+                            continue
+                        }
+                        if (!outroSkipped && marks.outro != null && posSec >= end && end < durSec) {
+                            outroSkipped = true
+                            if (hasNextEpisode() && settings.autoNext && !upNextCancelled) advanceToNext() else p.seekTo(durMs)
+                            continue
+                        }
+                    }
                     val up = Rules.upNextSeconds(posSec, end, hasNextEpisode(), settings.autoNext, upNextCancelled)
                     if (up != null && panelMode == null) {
                         val wasGone = upNextBox.visibility != View.VISIBLE
@@ -1088,6 +1222,7 @@ class PlayerScreen(
             }
         }
 
+        chaptersBtn.visibility = if (pb?.sourceKey != null && sourceStarted && (exoPlayer?.duration ?: 0L) > 0) View.VISIBLE else View.GONE
         val srcs = playSources
         lineBtn.visibility = if (srcs != null && srcs.list.size > 1) View.VISIBLE else View.GONE
         val curName = srcs?.list?.firstOrNull { it.key == srcs.current }?.name
@@ -1263,6 +1398,9 @@ class PlayerScreen(
         resumeAtSec = 0.0
         playRequested = true
         autoAttempts = 0
+        switchEvents.clear()
+        bufferSamples.clear()
+        bufferScene = "playing"
         closePanel()
         loadAndStart(retry = false, fromSource = null)
     }
@@ -1322,6 +1460,21 @@ class PlayerScreen(
                 label = { qualities[it].label }
                 pick = { changeQuality(qualities[it]) }
             }
+            Panel.CHAPTERS -> {
+                val player = exoPlayer ?: return
+                val duration = player.duration / 1000.0
+                val position = player.currentPosition / 1000.0
+                val source = playbackData?.sourceKey ?: return
+                if (duration <= 0.0) return
+                val at = Rules.clock(position)
+                val labels = mutableListOf("片头结束于 $at", "片尾开始于 $at")
+                if (manualIntro != null || manualOutroLength != null) labels.add("清除手动标记")
+                title = "设置片头片尾 · 本作品当前线路"
+                count = labels.size
+                selected = -1
+                label = { labels[it] }
+                pick = { index -> saveChapterMark("$itemId:$source:", index, position, duration) }
+            }
             Panel.SPEED -> {
                 count = Constants.SPEEDS.size
                 selected = Constants.SPEEDS.indexOf(requestedSpeed)
@@ -1367,6 +1520,33 @@ class PlayerScreen(
         sideGrid.requestFocus()
         sideGrid.post {
             if (!destroyed && panelMode == mode && !sideGrid.hasFocus()) sideGrid.requestFocus()
+        }
+    }
+
+    private fun saveChapterMark(prefix: String, index: Int, position: Double, duration: Double) {
+        if (index == 2) {
+            chapterPrefs.edit().remove(prefix + "intro").remove(prefix + "outro").apply()
+            manualIntro = null
+            manualOutroLength = null
+            nav.toast("手动标记已清除")
+            return
+        }
+        if (position <= 0.0 || position >= duration ||
+            (index == 0 && position >= duration - (manualOutroLength ?: 0.0)) ||
+            (index == 1 && position <= (manualIntro ?: 0.0))) {
+            nav.toast("请在有效的片头或片尾位置设置")
+            return
+        }
+        if (index == 0) {
+            chapterPrefs.edit().putFloat(prefix + "intro", position.toFloat()).apply()
+            manualIntro = position
+            introSkipped = true
+            nav.toast("已记住片头结束时间 " + Rules.clock(position))
+        } else {
+            chapterPrefs.edit().putFloat(prefix + "outro", (duration - position).toFloat()).apply()
+            manualOutroLength = duration - position
+            outroSkipped = true
+            nav.toast("已记住片尾时长 " + Rules.clock(duration - position))
         }
     }
 

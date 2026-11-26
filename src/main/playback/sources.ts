@@ -3,7 +3,7 @@ import bundled from '../../../resources/play-sources.json'
 import { validatePublicUrl } from './network'
 
 /** `adPaths`: path prefixes the source reserves for ads. `fingerprints`: segment durations of captured ad blocks. */
-export interface PlaySource { key: string; name: string; api: string; enabled: boolean; priority: number; adPaths: string[]; fingerprints: number[][] }
+export interface PlaySource { key: string; name: string; api: string; enabled: boolean; priority: number; adPaths: string[]; fingerprints: number[][]; excludedRecordIds?: string[] }
 /** `foreignBlockMaxSeconds`: longest out-of-directory block treated as an insert; 0 turns that evidence off. */
 export interface SourceRules { version: number; verifiedAt: string; maxDropRatio: number; foreignBlockMaxSeconds: number; sources: PlaySource[] }
 
@@ -16,6 +16,8 @@ export function validateSourceRules(raw: unknown): SourceRules {
   for (const source of data.sources) {
     if (!/^[a-z0-9-]{1,32}$/.test(source.key) || keys.has(source.key) || typeof source.name !== 'string' || source.name.length > 40 || typeof source.enabled !== 'boolean' || !Number.isFinite(source.priority)) throw new Error('播放源身份无效')
     keys.add(source.key); validatePublicUrl(source.api)
+    if (source.excludedRecordIds !== undefined && (!Array.isArray(source.excludedRecordIds) || source.excludedRecordIds.length > 2048 ||
+      source.excludedRecordIds.some(id => typeof id !== 'string' || !/^[A-Za-z0-9_-]{1,64}$/.test(id)))) throw new Error('片源排除记录无效')
     // A prefix must name whole directory levels; "/" or a bare word would match programme segments.
     if (!Array.isArray(source.adPaths) || source.adPaths.some(path => typeof path !== 'string' || !/^\/(?:[A-Za-z0-9_-]+\/){2,6}$/.test(path))) throw new Error('广告路径规则无效')
     if (!Array.isArray(source.fingerprints) || source.fingerprints.some(fp => !Array.isArray(fp) || fp.length < 4 || fp.length > 16 || fp.some(n => !Number.isFinite(n) || n <= 0 || n > 20))) throw new Error('广告时长指纹无效')

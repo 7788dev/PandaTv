@@ -91,7 +91,7 @@
 
 13 份清单里仍有短块留在原位（其中 11 份已删掉有证据的广告块），这些短块全部位于正片自己的目录内（dyttzy/ffzy/lzi 部分清单的正片本身被切成几十到几百个 discontinuity 块），没有证据不删。
 
-对起播、拖动、切集的影响用真实播放验证：[ads.spec.ts](../e2e/ads.spec.ts) 对 bfzy（隐式 IV 加密 + path）、360zy（foreign）、dyttzy（fingerprint、轮换域名）、lzi（marker）各起播一部，断言主进程输出过滤诊断、下发清单不含上游地址与广告路径、时长与清单一致，拖到第一个切点前 4 秒连续播过切点、再远跳、再回到开头均继续解码且无播放器错误，4/4 通过，证据见 `evidence/runtime/ad-removal-*.{json,png}`。离线回归在 [playback.test.ts](../tests/playback.test.ts)：19 份真实清单逐份断言删除段数与证据类型，7 份无证据清单逐字节不变，另有证据边界与保护条件用例。新增广告帧 7 张（`evidence/ad-frame-v2-*.jpg`，[提取脚本](evidence/capture-ad-frames-v2.mjs)）均人工实看为博彩广告。
+对起播、拖动、切集的影响用真实播放验证：[ads.spec.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/e2e/ads.spec.ts) 对 bfzy（隐式 IV 加密 + path）、360zy（foreign）、dyttzy（fingerprint、轮换域名）、lzi（marker）各起播一部，断言主进程输出过滤诊断、下发清单不含上游地址与广告路径、时长与清单一致，拖到第一个切点前 4 秒连续播过切点、再远跳、再回到开头均继续解码且无播放器错误，4/4 通过，证据见 `evidence/runtime/ad-removal-*.{json,png}`。离线回归在 [playback.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/playback.test.ts)：19 份真实清单逐份断言删除段数与证据类型，7 份无证据清单逐字节不变，另有证据边界与保护条件用例。新增广告帧 7 张（`evidence/ad-frame-v2-*.jpg`，[提取脚本](evidence/capture-ad-frames-v2.mjs)）均人工实看为博彩广告。
 
 更新机制：规则随发行包更新；用户数据目录下的 `play-sources.json` 通过同一套校验且 `version` 不低于内置版本时取代内置规则，否则回退内置并在主进程日志说明原因。不从网络拉取规则，因为规则决定访问哪些主机、删除哪些分片。
 
@@ -99,7 +99,7 @@
 
 ## 片源身份匹配复审（2026-11-16）
 
-在安装版上实测时，搜索《凡人修仙传》得到的第一条动画《凡人修仙传 年番4》65 秒内没有起播。原因不在播放器，而在“豆瓣条目 → 片源记录”的身份匹配。逐项事实与处理（实现见 [service.ts](../src/main/playback/service.ts)，决策与备选方案见[决策记录](../.agents/notes/implemented/architecture/2026-11-16-source-identity.md)）：
+在安装版上实测时，搜索《凡人修仙传》得到的第一条动画《凡人修仙传 年番4》65 秒内没有起播。原因不在播放器，而在“豆瓣条目 → 片源记录”的身份匹配。逐项事实与处理（实现见 [service.ts](../src/main/playback/service.ts)，决策与备选方案见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-source-identity.md)）：
 
 | 问题 | 证据 | 处理 |
 | --- | --- | --- |
@@ -110,7 +110,7 @@
 | 豆瓣标题末尾带零宽字符 | “斗破苍穹剧场版 双帝之战”“凡人修仙传：外海风云”末尾各有一个不可见字符 | 比对与检索前去掉零宽/方向控制字符 |
 | 豆瓣与片源的年份差一年 | 《生命奇观》豆瓣 2023，两个源均为 2024 | 名称与分类完全一致、年份只差一年视为弱匹配；别名（含港台译名，去掉“(港)”“(台)”标注）加年份、分类一致同为弱匹配。弱匹配只在没有任何精确匹配时采用 |
 | 累计记录里夹着少量附加项 | 《斗罗大陆》的累计记录在 6 个源里有 5 个带“第240集上/下”“90分钟结局”“导演剪辑版”等两三项；原先要求整条线路逐项带编号，分年条目因此只剩电影天堂一个源，其媒体主机一次不可达就整季“片源暂时无法连接” | 取区间时跳过无编号的附加项、不用重复出现的编号，带编号条目不足九成的线路仍不用；“第40集完结”读作第 40 集。改后同一条目有 5 个源可用 |
-| 单个源一次不答复被当成“没有片源” | 《生命奇观》《斗破苍穹：双帝之战》只有金鹰资源收录；该源一次超时或返回 404 页面，结果即为“未找到可用片源”并缓存 20 秒 | 没有结果且有源失败时，1 秒后只追问失败的源一次；仍有源“刚开始失败”（未满 2 分钟）时提示“暂时无法连接，请重试”且不缓存；持续失败超过 2 分钟的源不再影响结论。见[决策记录](../.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
+| 单个源一次不答复被当成“没有片源” | 《生命奇观》《斗破苍穹：双帝之战》只有金鹰资源收录；该源一次超时或返回 404 页面，结果即为“未找到可用片源”并缓存 20 秒 | 没有结果且有源失败时，1 秒后只追问失败的源一次；仍有源“刚开始失败”（未满 2 分钟）时提示“暂时无法连接，请重试”且不缓存；持续失败超过 2 分钟的源不再影响结论。见[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
 
 实测（`npm run probe:sources`，结果在 [source-coverage.json](evidence/source-coverage.json)，2026-11-16 16:37）：每个条目走真实豆瓣详情 → 片源匹配 → 解析第 1 集并读到首段媒体数据才算通过。
 
@@ -124,22 +124,22 @@
 | 凡人修仙传、斗破苍穹、斗罗大陆、完美世界、吞噬星空、仙逆的豆瓣条目 | 44/48 | 豆瓣标为 2026–2030 年、各源尚无记录的 4 个条目 |
 | 其中带集数区间别名的分年条目 | 32/33 | 《仙逆 年番4》(2027) |
 
-改动前，带区间别名的分年条目全部找不到片源。改后各分年条目的可播集数与豆瓣区间一致（《凡人修仙传 年番4》为第 177–200 集共 24 集，外海风云 28 集，魔道争锋 25 集）。热门未通过的条目逐条查过各源的检索结果，均为确未收录（《夫妻一场》在片源里是另一部 2024 年的同名剧，不匹配是正确的）。同一脚本当天先后跑了五轮，轮与轮之间有 1–7 个条目因某个源当时不答复而变化，这正是下面两行处理的问题。离线回归见 [source-alias.test.ts](../tests/source-alias.test.ts)、[source-match.test.ts](../tests/source-match.test.ts)、[source-requery.test.ts](../tests/source-requery.test.ts)；安装版上的真实动画起播见 [install.txt](evidence/install.txt)。
+改动前，带区间别名的分年条目全部找不到片源。改后各分年条目的可播集数与豆瓣区间一致（《凡人修仙传 年番4》为第 177–200 集共 24 集，外海风云 28 集，魔道争锋 25 集）。热门未通过的条目逐条查过各源的检索结果，均为确未收录（《夫妻一场》在片源里是另一部 2024 年的同名剧，不匹配是正确的）。同一脚本当天先后跑了五轮，轮与轮之间有 1–7 个条目因某个源当时不答复而变化，这正是下面两行处理的问题。离线回归见 [source-alias.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/source-alias.test.ts)、[source-match.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/source-match.test.ts)、[source-requery.test.ts](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/tests/source-requery.test.ts)；安装版上的真实动画起播见 [install.txt](evidence/install.txt)。
 
 仍然存在的边界：没有区间别名的条目只能按标题匹配，累计记录会把整部连载的集数都列在该条目下（《吞噬星空 第1季》豆瓣 26 集，片源列 249 集；《斗罗大陆Ⅱ绝世唐门 年番1》豆瓣 52 集，片源列 179 集；前若干集对应正确）；按别名找到的分篇记录编号可能与豆瓣条目不一致，所以只在没有更强证据时使用；被拆成上下两段的一集在该线路上没有对应项。只有一个源收录的作品在该源故障期间无法播放，界面提示重试。
 
 ## 片源与起播复审（2026-11-17）
 
-起因：要求“随便点一个都能播”，且实际使用环境在国内，而开发机网络与国内使用环境不同。测量方法、各源数据和四轮起播结果在 [cn-sources.md](evidence/cn-sources.md)，设计取舍在[决策记录](../.agents/notes/implemented/architecture/2026-11-17-source-contest.md)。
+起因：要求“随便点一个都能播”，且实际使用环境在国内，而开发机网络与国内使用环境不同。测量方法、各源数据和四轮起播结果在 [cn-sources.md](evidence/cn-sources.md)，设计取舍在[决策记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-17-source-contest.md)。
 
 | 发现 | 证据 | 处理 |
 | --- | --- | --- |
 | 候选源里“金鹰系”（速播、虎牙、红牛、光速、新浪、豪华、极速）是同一批编码，快慢相差数倍 | 北京实测起播中位 0.6–2.7 秒 | 只加最快的三家；极速仍停用 |
 | 360zy 在国内解析到 `127.0.0.2`，飘零接口关闭 | 系统解析与公共解析一致；接口答复 `closed` | 360zy 保留（本机网络下最快）并识别为“此网络不可达”；飘零停用 |
 | 清单声明的分辨率与实际不符；同一个源不同作品画面不同 | 首片 SPS 与清单 RESOLUTION 对比；《奥德赛》864x326 对 1920x1080 | 从首片读实际画面再选源，标签用实际画面 |
-| 红牛的分片在 65 端口 | `hnts.ymuuy.com:65` | 端口规则与浏览器一致，见[端口记录](../.agents/notes/implemented/architecture/2026-11-16-media-ports.md) |
+| 红牛的分片在 65 端口 | `hnts.ymuuy.com:65` | 端口规则与浏览器一致，见[端口记录](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-media-ports.md) |
 | 完结剧最后一项写作“第30集已完结”，整条线路被判为无法按集号对齐 | 新增三家与金鹰在完结剧上缺席 | 集号解析接受“已完结 / 完结 / 大结局” |
 | 一个目录拖满 9 秒时所有起播都等它 | 北京 14:17 一轮搜索中位 2.9 秒、最慢 11.7 秒 | 找到后最多再等 1.2 秒；改后同一时段中位 1.3 秒 |
-| 没有片源的作品被报成“暂时无法连接” | 《骑有此理 第四季》九个源都没有收录 | “没答复”只按本次搜索算，见[片源结论](../.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
+| 没有片源的作品被报成“暂时无法连接” | 《骑有此理 第四季》九个源都没有收录 | “没答复”只按本次搜索算，见[片源结论](https://github.com/7788dev/PandaTv/blob/4220d6dff973a55f42508a49a9c0c3d43d3b296a/.agents/notes/implemented/architecture/2026-11-16-source-verdict.md) |
 
 新增三家源的清单在审计里都只有一段、没有插播，因此没有为它们添加任何去广告规则。

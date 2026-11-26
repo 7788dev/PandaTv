@@ -32,7 +32,24 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Screen(ctx, nav) {
+class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: android.os.Bundle? = null) : Screen(ctx, nav) {
+    private var synopsisExpanded = saved?.getBoolean("expanded") ?: false
+    private var restoreScrollY = saved?.getInt("scrollY")
+    private var detailScroll: android.widget.ScrollView? = null
+
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("page", "detail")
+        putString("id", this@DetailScreen.id)
+        putInt("scrollY", restoreScrollY ?: detailScroll?.scrollY ?: 0)
+        putBoolean("expanded", synopsisExpanded)
+    }
+
+    override fun onRouteFocusRestored() {
+        val y = restoreScrollY ?: return
+        restoreScrollY = null
+        detailScroll?.scrollTo(0, y)
+    }
+
     override val showTopBar: Boolean = false
 
     private val m = Theme.metrics(ctx)
@@ -149,18 +166,22 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         showAvailabilityLoading()
         availabilityJob = scope.launch {
             try {
-                val avail = nav.app.playback.availability(item, nav.app.douban.workHints(item.id))
-                coroutineContext.ensureActive()
-                if (destroyed || detailItem?.id != item.id) return@launch
-                availability = avail
-                val merged = (detailItem ?: item).copy(
-                    episodes = avail.episodes ?: item.episodes,
-                    episodeTitles = avail.episodeTitles ?: item.episodeTitles,
-                )
-                detailItem = merged
-                refreshStateViews(merged)
-                renderEpisodes(merged)
-                if (container.findFocus() == null) playBtn?.requestFocus()
+                val hints = nav.app.douban.workHints(item.id)
+                for (complete in listOf(false, true)) {
+                    val avail = nav.app.playback.availability(item, hints, complete)
+                    coroutineContext.ensureActive()
+                    if (destroyed || detailItem?.id != item.id) return@launch
+                    if (complete && availability == avail) continue
+                    availability = avail
+                    val merged = (detailItem ?: item).copy(
+                        episodes = avail.episodes ?: item.episodes,
+                        episodeTitles = avail.episodeTitles ?: item.episodeTitles,
+                    )
+                    detailItem = merged
+                    refreshStateViews(merged)
+                    renderEpisodes(merged)
+                    if (container.isShown && container.findFocus() == null) playBtn?.requestFocus()
+                }
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (error: Throwable) {
@@ -220,6 +241,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             clipToPadding = false
             descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
         }
+        detailScroll = scroll
         Theme.configureScrollView(ctx, scroll)
         val page = LinearLayout(ctx).apply {
             orientation = LinearLayout.VERTICAL
@@ -338,8 +360,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 }
             })
         item.synopsis?.let { syn ->
-            var expanded = false
-            val synTv = Theme.label(ctx, syn, sp = 13.5f, color = Theme.PAPER_70, maxLines = 3).apply {
+            val synTv = Theme.label(ctx, syn, sp = 13.5f, color = Theme.PAPER_70, maxLines = if (synopsisExpanded) 30 else 3).apply {
                 setLineSpacing(Theme.dp(ctx, 4).toFloat(), 1f)
                 layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     topMargin = Theme.dp(ctx, 12)
@@ -347,14 +368,14 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             }
             infoCol.addView(synTv)
             if (syn.length > 90) {
-                val toggle = Theme.pillButton(ctx, Copy.Action.EXPAND, padH = 12, padV = 4, sp = 12f).apply {
+                val toggle = Theme.pillButton(ctx, if (synopsisExpanded) Copy.Action.COLLAPSE else Copy.Action.EXPAND, padH = 12, padV = 4, sp = 12f).apply {
                     layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                         topMargin = Theme.dp(ctx, 8)
                     }
                     setOnClickListener { v ->
-                        expanded = !expanded
-                        synTv.maxLines = if (expanded) 30 else 3
-                        ((v as LinearLayout).getChildAt(0) as? TextView)?.text = if (expanded) Copy.Action.COLLAPSE else Copy.Action.EXPAND
+                        synopsisExpanded = !synopsisExpanded
+                        synTv.maxLines = if (synopsisExpanded) 30 else 3
+                        ((v as LinearLayout).getChildAt(0) as? TextView)?.text = if (synopsisExpanded) Copy.Action.COLLAPSE else Copy.Action.EXPAND
                     }
                 }
                 infoCol.addView(toggle)
@@ -379,6 +400,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 nav.openPlayer(cur.id, h?.episode ?: 1)
             }
         }
+        pBtn.tag = "detail-play"
         playBtn = pBtn
         val fBtn = Theme.pillButton(ctx, Copy.Action.FAVORITE, icon = TvIcon.HEART, padH = 18, padV = 10, sp = 14.5f).apply {
             setOnClickListener {
@@ -389,10 +411,11 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 }
             }
         }
+        fBtn.tag = "detail-favorite"
         favBtn = fBtn
         btnRow.addView(pBtn)
         btnRow.addView(fBtn)
-        infoCol.addView(btnRow)
+        infoCol.addView(btnRow, infoCol.indexOfChild(scoreRow) + 1)
         split.addView(infoCol)
         heroContent.addView(split)
         heroContent.addOnLayoutChangeListener { _, _, t, _, b, _, _, _, _ ->
@@ -433,7 +456,12 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         scroll.addView(page)
         container.addView(scroll, FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))
         refreshStateViews(item)
-        pBtn.post { pBtn.requestFocus() }
+        pBtn.post {
+            if (pBtn.isShown && pendingFocus == null) {
+                pBtn.requestFocus()
+                scroll.scrollTo(0, 0)
+            }
+        }
     }
 
     private fun refreshStateViews(item: MediaItem) {
@@ -459,13 +487,15 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
             sec.visibility = View.GONE
             return
         }
+        val focusedEpisode = sec.findFocus()?.tag as? Int ?: pendingFocus?.toIntOrNull()
+        val focusedRange = sec.findFocus()?.tag as? app.panda.tv.model.EpisodeRange
         sec.removeAllViews()
         sec.visibility = View.VISIBLE
         sec.addView(Theme.sectionHeader(ctx, Copy.Detail.EPISODES, m.pageH, Theme.dp(ctx, 8)))
 
         val currentEp = nav.app.userStore.get().history.firstOrNull { it.id == item.id }?.episode
         val ranges = Rules.episodeRanges(count)
-        var activeRange = Rules.rangeOf(ranges, currentEp) ?: ranges.first()
+        var activeRange = Rules.rangeOf(ranges, focusedEpisode ?: focusedRange?.from ?: currentEp) ?: ranges.first()
 
         val epGrid = Theme.horizontalGrid(ctx).apply {
             setItemSpacing(Theme.dp(ctx, 12))
@@ -498,6 +528,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                     val r = ranges[position]
                     val tv = holder.itemView as TextView
                     val sel = r == activeRange
+                    tv.tag = r
                     tv.text = r.label
                     tv.isSelected = sel
                     tv.setTextColor(
@@ -513,6 +544,10 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                         notifyDataSetChanged()
                     }
                 }
+            }
+            if (focusedRange != null) {
+                tabRow.selectedPosition = ranges.indexOf(activeRange)
+                tabRow.post { if (tabRow.isShown) tabRow.requestFocus() }
             }
             sec.addView(
                 Theme.framedHorizontalRow(
@@ -534,8 +569,12 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
                 padBottomPx = Theme.dp(ctx, 6),
             )
         )
-        if (currentEp != null && currentEp in activeRange.from..activeRange.to) {
-            epGrid.post { epGrid.scrollToPosition(currentEp - activeRange.from) }
+        val selected = focusedEpisode ?: currentEp
+        if (selected != null && selected in activeRange.from..activeRange.to) {
+            epGrid.post {
+                epGrid.selectedPosition = selected - activeRange.from
+                if (focusedEpisode != null && epGrid.isShown) epGrid.requestFocus()
+            }
         }
     }
 
@@ -694,6 +733,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String) : Scree
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val ep = from + position
             val tv = holder.itemView as TextView
+            tv.tag = ep
             val title = item.episodeTitles?.getOrNull(ep - 1)
             tv.text = if (hasTitles && !title.isNullOrEmpty()) "$ep · $title" else "$ep"
             val active = ep == currentEp

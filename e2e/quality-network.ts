@@ -19,8 +19,10 @@ export async function qualityNetwork() {
   const media = resolve('.tmp/quality-fixtures/media')
   if (!statSync(join(media, '720/playback.mp4')).isFile()) throw new Error('Run scripts/generate-fixture-hls.py before fixture E2E')
   const calls: NetworkCall[] = []
-  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false }
+  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false, shortPlaylist: '', segmentDelayMs: 0, extendedCatalogue: '', chapters: false }
   const held = new Set<() => void>()
+  const probeGates = new Map<string, Promise<void>>()
+  const catalogueGates = new Map<Source, Promise<void>>()
   const json = (res: ServerResponse, value: unknown, status = 200) => { const body = Buffer.from(JSON.stringify(value)); res.writeHead(status, { 'content-type': 'application/json', 'content-length': body.length }); res.end(body) }
   const server = createServer(async (req, res) => {
     const host = String(req.headers.host).split(':')[0]
@@ -28,13 +30,23 @@ export async function qualityNetwork() {
     const record: NetworkCall = { host, path: url.pathname, q: url.searchParams.get('q') ?? url.searchParams.get('wd') ?? undefined,
       start: url.searchParams.get('start') ?? undefined, range: req.headers.range, status: 200 }
     calls.push(record)
+    if (host === 'api.github.com' && url.pathname === '/repos/7788dev/PandaTv/releases') {
+      json(res, [{ draft: false, prerelease: false, assets: [
+        { name: 'Panda-TV-8.0.0.apk', state: 'uploaded', size: 100 },
+        { name: 'Panda-1.2.0-Setup.exe', state: 'uploaded', size: 100 },
+      ] }])
+      return
+    }
     if (host.includes('.catalog.qa.')) {
       const source = host[0] as Source
+      await catalogueGates.get(source)
+      if (res.destroyed) return
       const title = url.searchParams.get('wd') || '回归影片'
       const tv = title.includes('剧集')
       const format = tv ? 'm3u8' : 'mp4'
       const titled = title.includes('第二季')
-      const episodes = (tv ? [1, 2, 3] : [1]).map(n => `${titled ? ['序章', '转折', '回家'][n - 1] : `第${n}集`}$https://${source}.media.qa.example.org/episode-${n}.${format}`)
+      const numbers = !tv ? [1] : state.extendedCatalogue === source ? [1, 2, 3, 4, 5] : [1, 2, 3]
+      const episodes = numbers.map(n => `${titled ? ['序章', '转折', '回家'][n - 1] : `第${n}集`}$https://${source}.media.qa.example.org/episode-${n}.${format}`)
       if (tv && !titled) episodes.unshift(`彩蛋$https://${source}.media.qa.example.org/bonus.mp4`, episodes[0])
       const remake = { vod_id: 2, vod_name: title, vod_year: '2023', vod_area: '美国', type_name: '欧美剧', vod_play_from: format,
         vod_play_url: Array.from({ length: 8 }, (_, i) => `第${i + 1}集$https://${source}.media.qa.example.org/episode-9.${format}`).join('#') }
@@ -44,6 +56,7 @@ export async function qualityNetwork() {
     }
     if (host.includes('.media.qa.')) {
       const source = host[0] as Source, behaviour = state.sources[source]
+      if (req.headers.range === 'bytes=0-16383') await probeGates.get(source)
       if (behaviour === 'offline') { record.status = 503; json(res, { error: 'Injected media failure' }, 503); return }
       if (behaviour === 'json') { json(res, { error: 'Successful HTTP response without media' }); return }
       if (behaviour === 'empty') { res.writeHead(200, { 'content-type': 'video/mp4', 'content-length': 0 }); res.end(); return }
@@ -53,11 +66,24 @@ export async function qualityNetwork() {
         res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl' }); res.end(body); return
       }
       const relative = url.pathname.endsWith('.mp4') ? `${quality}/playback.mp4` : url.pathname.replace(/^\//, '')
+      if (state.segmentDelayMs && /segment-(?!000)\d+\.ts$/.test(relative)) {
+        await new Promise(resolve => setTimeout(resolve, state.segmentDelayMs))
+        if (res.destroyed) return
+      }
       const file = join(media, relative)
       if (!file.startsWith(media + '\\') && !file.startsWith(media + '/')) throw new Error('Invalid media fixture path')
       let body: Buffer
       try { body = readFileSync(file) } catch { record.status = 404; json(res, { error: 'Missing transport fixture' }, 404); return }
-      if (relative.endsWith('.m3u8')) { res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl' }); res.end(body); return }
+      if (relative.endsWith('.m3u8')) {
+        if (state.chapters) body = Buffer.from(body.toString().replace('#EXTINF:', [
+          '#EXT-X-PROGRAM-DATE-TIME:2026-01-01T00:00:00Z',
+          '#EXT-X-DATERANGE:ID="op",CLASS="opening",START-DATE="2026-01-01T00:00:00Z",DURATION=4',
+          '#EXT-X-DATERANGE:ID="ed",CLASS="credits",START-DATE="2026-01-01T00:00:08Z"',
+          '#EXTINF:',
+        ].join('\n')))
+        if (source === state.shortPlaylist) body = Buffer.from('#EXTM3U\n#EXT-X-TARGETDURATION:2\n#EXTINF:2,\nsegment-000.ts\n#EXT-X-ENDLIST\n')
+        res.writeHead(200, { 'content-type': 'application/vnd.apple.mpegurl' }); res.end(body); return
+      }
       const range = /^bytes=(\d+)-(\d*)$/.exec(req.headers.range ?? '')
       const start = range ? Number(range[1]) : 0, end = range?.[2] ? Math.min(Number(range[2]), body.length - 1) : body.length - 1
       if (start >= body.length) { record.status = 416; res.writeHead(416, { 'content-range': `bytes */${body.length}` }); res.end(); return }
@@ -110,6 +136,16 @@ export async function qualityNetwork() {
   await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve))
   const port = (server.address() as { port: number }).port
   return { origin: `http://127.0.0.1:${port}`, state, calls,
+    holdCatalogue: (source: Source) => {
+      let release!: () => void
+      catalogueGates.set(source, new Promise<void>(resolve => { release = resolve }))
+      return () => { catalogueGates.delete(source); release() }
+    },
+    holdProbe: (source: string) => {
+      let release!: () => void
+      probeGates.set(source, new Promise<void>(resolve => { release = resolve }))
+      return () => { probeGates.delete(source); release() }
+    },
     releasePlayback: () => { state.holdPlayback = false; for (const release of [...held]) release() },
     close: async () => { for (const release of [...held]) release(); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())) } }
 }

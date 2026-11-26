@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "note": "Provisional calibration. Replace after offline sample calibration; code must never hard-code these values.",
+  "health": {
+    "basisVersion": "provisional-2026-11",
+    "decayVersion": "1",
+    "halfLifeDays": 30,
+    "baseline": 0.5,
+    "slowStartupSec": 8,
+    "playFloorSec": 60,
+    "workDeltaMax": 0.2,
+    "weights": {
+      "availability": 0.4,
+      "stability": 0.3,
+      "speed": 0.2,
+      "quality": 0.1
+    }
+  },
+  "buffer": {
+    "startupTargetSec": 4,
+    "startupWindowSec": 3,
+    "playingLowSec": 6,
+    "playingRiseWindowSec": 5,
+    "seekLowSec": 3,
+    "stallPositionSec": 20
+  },
+  "budget": {
+    "maxSwitchesPerEpisode": 3,
+    "minIntervalSec": 30,
+    "failedSourceCooldownSec": 300
+  },
+  "alignment": {
+    "basisVersion": "provisional-2026-11",
+    "ratioTolerance": 0.01,
+    "absoluteToleranceSec": 5,
+    "historyConsistencyRatio": 0.05,
+    "workSpreadFactor": 4,
+    "windowSeconds": 3,
+    "sampleLimit": 5,
+    "frameBudgetMs": 1200,
+    "similarityThreshold": 0.9,
+    "offsetTtlDays": 7,
+    "takeoverHeadroomFactor": 1.5
+  }
+}

@@ -121,13 +121,24 @@ data class TimeRange(
     val end: Double,
 )
 
+data class HealthHint(
+    val score: Double,
+    val cooled: Boolean,
+    val lastFailure: String? = null,
+)
+
 data class Playback(
     val url: String,
     val format: String, // "hls" | "mp4"
+    val sourceKey: String? = null,
     val quality: Quality? = null,
     val qualities: List<Quality>? = null,
     val intro: TimeRange? = null,
     val outro: Double? = null,
+    val duration: Double? = null,
+    val durationSource: String? = null,
+    val manifestFingerprint: String? = null,
+    val healthHint: HealthHint? = null,
 )
 
 data class HistoryEntry(

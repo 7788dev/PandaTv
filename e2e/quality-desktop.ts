@@ -18,6 +18,7 @@ export async function fixtureDesktop(label: string) {
   env.PANDA_E2E_NETWORK_ORIGIN = network.origin
   delete env.NODE_OPTIONS
   delete env.ELECTRON_RENDERER_URL
+  delete env.PANDA_UPDATE_URL
   const wrapper = join(dir, 'application')
   mkdirSync(wrapper)
   symlinkSync(resolve('resources'), join(wrapper, 'resources'), 'junction')
@@ -100,9 +101,21 @@ export async function choose(page: Page, label: string, value: string) {
   await clickPlayerControl(page, label)
   await page.getByRole('menuitemradio', { name: value, exact: true }).click()
 }
-export async function screenshot(page: Page, path: string) {
+export async function screenshot(page: Page, path: string, app?: ElectronApplication) {
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(250)
+  if (app) {
+    // Capture the whole window surface at its native scale. A CSS viewport
+    // screenshot can crop the right and bottom edges when Electron is zoomed.
+    const png = await app.evaluate(async ({ BrowserWindow }) => {
+      const view = BrowserWindow.getAllWindows()[0].webContents
+      const image = await view.capturePage(undefined, { stayHidden: true })
+      if (image.isEmpty()) throw new Error('Empty Electron window capture')
+      return image.toPNG().toString('base64')
+    })
+    writeFileSync(path, Buffer.from(png, 'base64'))
+    return
+  }
   try {
     await page.screenshot({ path, timeout: 10000 })
   } catch {

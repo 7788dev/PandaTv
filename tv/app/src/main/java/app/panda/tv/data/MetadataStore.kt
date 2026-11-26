@@ -2,10 +2,13 @@ package app.panda.tv.data
 
 import app.panda.tv.model.Json
 import app.panda.tv.model.MediaType
+import app.panda.tv.storage.writeAtomic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.util.UUID
+
+private const val CACHE_PREFIX = "{\"version\":1,\"records\":["
+private val RECORD_BUDGET = 4 * 1024 * 1024 - (CACHE_PREFIX + "]}").toByteArray(Charsets.UTF_8).size
 
 data class CatalogRecord(
     val item: app.panda.tv.model.MediaItem,
@@ -21,6 +24,7 @@ class MetadataStore(
     private val onWarning: (DataWarning) -> Unit = {},
 ) {
     private val lock = Any()
+    private val writeLock = Any()
     private val entries = LinkedHashMap<String, CatalogRecord>(128, 0.75f, true)
     @Volatile
     private var loaded = false
@@ -87,63 +91,60 @@ class MetadataStore(
 
     suspend fun flush() {
         val dir = cacheDir ?: return
-        ensureLoaded()
-        val snapshot = synchronized(lock) { entries.values.toList() }
         withContext(Dispatchers.IO) {
-            try {
-                val records = snapshot.toMutableList()
-                fun encodeList(): String {
-                    val root = linkedMapOf<String, Any?>(
-                        "version" to 1,
-                        "records" to records.map { rec ->
-                            val it = rec.item
-                            linkedMapOf<String, Any?>(
-                                "kind" to rec.kind,
-                                "updatedAt" to rec.updatedAt,
-                                "totalEpisodes" to rec.totalEpisodes,
-                                "tags" to rec.tags,
-                                "aliases" to rec.aliases,
-                                "item" to linkedMapOf<String, Any?>(
-                                    "id" to it.id,
-                                    "title" to it.title,
-                                    "type" to it.type.wire,
-                                    "genres" to it.genres,
-                                    "poster" to it.poster,
-                                    "backdrop" to it.backdrop,
-                                    "year" to it.year,
-                                    "region" to it.region,
-                                    "score" to it.score,
-                                    "originalTitle" to it.originalTitle,
-                                    "synopsis" to it.synopsis,
-                                    "runtime" to it.runtime,
-                                    "directors" to it.directors,
-                                    "cast" to it.cast?.map { p ->
-                                        linkedMapOf("name" to p.name, "role" to p.role)
-                                    },
-                                ),
-                            )
-                        },
-                    )
-                    return Json.stringify(root)
+            ensureLoaded()
+            synchronized(writeLock) {
+                try {
+                    // Take the snapshot after acquiring the writer, so an older
+                    // flush cannot replace a newer file when two writes overlap.
+                    val snapshot = synchronized(lock) { entries.values.toList() }
+                    val encoded = ArrayList<String>()
+                    var remaining = RECORD_BUDGET
+                    for (record in snapshot.asReversed()) {
+                        val json = encodeRecord(record)
+                        val bytes = json.toByteArray(Charsets.UTF_8).size
+                        if (bytes > RECORD_BUDGET) continue
+                        val cost = bytes + if (encoded.isEmpty()) 0 else 1
+                        if (cost > remaining) break
+                        remaining -= cost
+                        encoded.add(json)
+                    }
+                    val body = encoded.asReversed().joinToString(",", CACHE_PREFIX, "]}")
+                    writeAtomic(File(dir, "metadata-v1.json"), body.toByteArray(Charsets.UTF_8))
+                } catch (_: Exception) {
+                    onWarning(DataWarning("STORAGE", "metadata:save", "Metadata cache could not be saved", System.currentTimeMillis()))
                 }
-
-                var body = encodeList()
-                while (body.toByteArray(Charsets.UTF_8).size > 4 * 1024 * 1024 && records.isNotEmpty()) {
-                    records.removeAt(0)
-                    body = encodeList()
-                }
-                dir.mkdirs()
-                val target = File(dir, "metadata-v1.json")
-                val tmp = File(dir, "metadata-v1.json.${UUID.randomUUID()}.tmp")
-                tmp.writeText(body, Charsets.UTF_8)
-                if (!tmp.renameTo(target)) {
-                    target.writeText(body, Charsets.UTF_8)
-                    tmp.delete()
-                }
-            } catch (_: Exception) {
-                onWarning(DataWarning("STORAGE", "metadata:save", "Metadata cache could not be saved", System.currentTimeMillis()))
             }
         }
+    }
+
+    private fun encodeRecord(rec: CatalogRecord): String {
+        val it = rec.item
+        return Json.stringify(linkedMapOf(
+            "kind" to rec.kind,
+            "updatedAt" to rec.updatedAt,
+            "totalEpisodes" to rec.totalEpisodes,
+            "tags" to rec.tags,
+            "aliases" to rec.aliases,
+            "item" to linkedMapOf<String, Any?>(
+                "id" to it.id,
+                "title" to it.title,
+                "type" to it.type.wire,
+                "genres" to it.genres,
+                "poster" to it.poster,
+                "backdrop" to it.backdrop,
+                "year" to it.year,
+                "region" to it.region,
+                "score" to it.score,
+                "originalTitle" to it.originalTitle,
+                "synopsis" to it.synopsis,
+                "runtime" to it.runtime,
+                "directors" to it.directors,
+                "cast" to it.cast?.map { p ->
+                    linkedMapOf("name" to p.name, "role" to p.role)
+                },
+            ),
+        ))
     }
 
     private fun loadLocked() {

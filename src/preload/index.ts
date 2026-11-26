@@ -20,11 +20,20 @@ const bridge: PandaBridge = {
     suggest: q => call('data.suggest', q), hotSearches: () => call('data.hotSearches'),
     titleHints: q => call('data.titleHints', q),
     playback: (id, episode, quality) => call('data.playback', id, episode, quality),
-    retryPlayback: (id, episode, quality) => call('data.retryPlayback', id, episode, quality),
+    retryPlayback: (id, episode, quality, failure) => call('data.retryPlayback', id, episode, quality, failure),
     availability: id => call('data.availability', id),
     sources: (id, episode) => call('data.sources', id, episode),
+    playbackRules: () => call('playback.rules'),
+    prepareSwitch: (id, episode, options) => call('playback.prepareSwitch', id, episode, options),
+    acceptSwitch: (id, episode, selectionId) => call('playback.acceptSwitch', id, episode, selectionId),
     playbackFrom: (id, episode, source, quality) => call('data.playbackFrom', id, episode, source, quality),
-    onHome: callback => subscribe('panda:home', callback)
+    align: input => call('playback.align', input),
+    onHome: callback => subscribe('panda:home', callback),
+    onCatalogueUpdate: callback => subscribe('panda:catalogue', callback)
+  },
+  sources: {
+    health: workId => call('sources.health', workId),
+    observe: (sourceKey, playSeconds, stallSeconds) => call('sources.observe', sourceKey, playSeconds, stallSeconds),
   },
   user: {
     get: () => call('user.get'), dispatch: action => call('user.dispatch', action), subscribe: callback => subscribe('panda:user', callback),
@@ -32,7 +41,7 @@ const bridge: PandaBridge = {
   },
   window: { minimize: () => call('window.minimize'), maximize: () => call('window.maximize'), close: () => call('window.close'), fullscreen: value => call('window.fullscreen', value), getState: () => call('window.state'), subscribe: callback => subscribe('panda:window', callback) },
   app: {
-    info: () => call('app.info'), checkUpdate: () => call('app.checkUpdate'),
+    info: () => call('app.info'), checkUpdate: () => call('app.checkUpdate'), openReleases: () => call('app.openReleases'),
     subscribe: callback => subscribe('panda:notice', callback),
     onBeforeClose: callback => { beforeClose.add(callback); return () => { beforeClose.delete(callback) } }
   }

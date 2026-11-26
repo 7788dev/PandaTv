@@ -9,6 +9,15 @@
     --cols-wide: 4;
   }
 
+  @media (max-width: 900px) {
+    :root {
+      --gutter: 24px;
+      --winctl-w: 96px;
+      --cols-poster: 4;
+      --cols-wide: 3;
+    }
+  }
+
   @media (min-width: 1360px) {
     :root {
       --cols-poster: 7;
@@ -239,7 +248,7 @@
   .shelf {
     --card-w: calc((100vw - 2 * var(--gutter) - (var(--cols-poster) - 1) * var(--gap)) / var(--cols-poster));
     --media-h: calc(var(--card-w) * 1.5);
-    --nav-size: 36px;
+    --nav-size: min(36px, var(--gutter));
   }
 
   .shelf__body {
@@ -258,6 +267,7 @@
     overflow: auto hidden;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     scroll-padding-inline: var(--gutter);
     scrollbar-width: none;
   }

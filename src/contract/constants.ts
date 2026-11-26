@@ -21,21 +21,10 @@ export const DEFAULT_SETTINGS: Settings = {
   muted: false,
 }
 
-/** 本机状态在 localStorage 里的键名 */
-export const STORAGE_KEY = 'panda:user:v1'
-
 // ───────────────────────── 列表 ─────────────────────────
 
 /** 选集超过这个数就分段显示（1-50 / 51-100 …） */
 export const EPISODE_RANGE_SIZE = 50
-/** 相关推荐最多几部 */
-export const RELATED_MAX = 14
-/** 搜索联想最多几条 */
-export const SUGGEST_MAX = 8
-/** 最近搜索最多保留几条 */
-export const RECENT_SEARCH_MAX = 8
-/** 热搜显示几条 */
-export const HOT_SEARCH_MAX = 10
 
 // ───────────────────────── 页面 ─────────────────────────
 

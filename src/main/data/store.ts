@@ -6,6 +6,9 @@ import type { DataWarning } from './http';
 import type { MediaType } from '../../contract/types';
 
 const TYPES = new Set<MediaType>(['tv', 'movie', 'variety', 'anime', 'doc']);
+const MAX_CACHE_BYTES = 12 * 1024 * 1024;
+const CACHE_PREFIX = '{"version":1,"records":[';
+const RECORD_BUDGET = MAX_CACHE_BYTES - Buffer.byteLength(CACHE_PREFIX + ']}');
 
 export interface CatalogRecord extends Normalized { updatedAt: number }
 
@@ -49,10 +52,19 @@ export class MetadataStore {
     if (!this.directory) return;
     await this.ready;
     const directory = this.directory;
-    const records = [...this.entries.values()];
-    let body = JSON.stringify({ version: 1, records });
-    while (Buffer.byteLength(body) > 12 * 1024 * 1024 && records.length) { records.shift(); body = JSON.stringify({ version: 1, records }); }
     this.writeChain = this.writeChain.then(async () => {
+      const encoded: string[] = [];
+      let remaining = RECORD_BUDGET;
+      for (const record of [...this.entries.values()].reverse()) {
+        const json = JSON.stringify(record);
+        const bytes = Buffer.byteLength(json);
+        if (bytes > RECORD_BUDGET) continue;
+        const cost = bytes + (encoded.length ? 1 : 0);
+        if (cost > remaining) break;
+        remaining -= cost;
+        encoded.push(json);
+      }
+      const body = CACHE_PREFIX + encoded.reverse().join(',') + ']}';
       await mkdir(directory, { recursive: true });
       const path = join(directory, 'metadata-v1.json');
       const temporary = `${path}.${process.pid}.tmp`;
@@ -66,7 +78,7 @@ export class MetadataStore {
     if (!this.directory) return;
     try {
       const path = join(this.directory, 'metadata-v1.json');
-      if ((await stat(path)).size > 12 * 1024 * 1024) throw new Error('oversized');
+      if ((await stat(path)).size > MAX_CACHE_BYTES) throw new Error('oversized');
       const content = row(JSON.parse(await readFile(path, 'utf8')));
       if (content.version !== 1 || !Array.isArray(content.records)) throw new Error('invalid cache');
       for (const raw of content.records.slice(-2500)) {

@@ -25,7 +25,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class ChannelScreen(ctx: Context, nav: Navigator, val type: MediaType, restoredPage: ChannelPageState? = null) : Screen(ctx, nav) {
+class ChannelScreen(ctx: Context, nav: Navigator, val type: MediaType, restoredPage: ChannelPageState? = null, saved: android.os.Bundle? = null) : Screen(ctx, nav) {
     override val activeTab: String = type.wire
 
     private val m = Theme.metrics(ctx)
@@ -88,7 +88,17 @@ class ChannelScreen(ctx: Context, nav: Navigator, val type: MediaType, restoredP
     private val pageFooter = PosterPageFooter(ctx, grid) { loadMore(retry = true) }
 
     private val filters: ChannelFilters = nav.app.douban.filters(type)
-    private var query = restoredPage?.query ?: ChannelQuery(sort = "hot")
+    private var query = restoredPage?.query ?: ChannelQuery(saved?.getString("sort") ?: "hot",
+        saved?.getString("genre"), saved?.getString("region"), saved?.getString("year"))
+    private var restorePosition = saved?.getInt("position", -1) ?: -1
+
+    override fun saveRoute() = super.saveRoute().apply {
+        putString("sort", query.sort)
+        putString("genre", query.genre)
+        putString("region", query.region)
+        putString("year", query.year)
+        putInt("position", grid.selectedPosition)
+    }
     private var openDimension: String? = null
     private val items = ArrayList<MediaItem>()
     private var nextCursor: String? = null
@@ -397,6 +407,13 @@ class ChannelScreen(ctx: Context, nav: Navigator, val type: MediaType, restoredP
                 } else {
                     pageFooter.show()
                     if (added.isNotEmpty()) gridAdapter.notifyItemRangeInserted(startPos, added.size)
+                }
+                if (restorePosition >= 0) {
+                    if (restorePosition >= items.size && nextCursor != null && page.next != cursor) loadPage(initial = false)
+                    else {
+                        if (items.isNotEmpty()) grid.selectedPosition = restorePosition.coerceIn(items.indices)
+                        restorePosition = -1
+                    }
                 }
             } catch (cancelled: CancellationException) {
                 throw cancelled
