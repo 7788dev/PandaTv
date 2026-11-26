@@ -46,6 +46,7 @@ def parse_nodes(xml_text: str) -> list[dict]:
         bounds = parse_bounds(node.attrib.get("bounds") or "")
         nodes.append({
             "text": (node.attrib.get("text") or "").strip(),
+            "description": (node.attrib.get("content-desc") or "").strip(),
             "class": node.attrib.get("class") or "",
             "focused": node.attrib.get("focused") == "true",
             "focusable": node.attrib.get("focusable") == "true",

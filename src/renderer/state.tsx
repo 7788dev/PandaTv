@@ -80,6 +80,14 @@ export function useRemote<T>(loader: () => Promise<T>, dependencies: DependencyL
   return { data, loading: loading || !requestSettled, error: requestSettled ? error : null, reload }
 }
 
+export function useCatalogueRevision(id: string) {
+  const [revision, setRevision] = useState(0)
+  useEffect(() => window.panda.data.onCatalogueUpdate(updated => {
+    if (updated === id) setRevision(value => value + 1)
+  }), [id])
+  return revision
+}
+
 export function errorText(error: unknown) {
   if (!navigator.onLine || (error instanceof Error && /offline|network.*unavailable/i.test(error.message))) return t.state.offline
   if (error instanceof Error && error.message && !/https?:|\bat\s|stack|IPC|invoke|Error:|ENOTFOUND|ECONN|fetch failed/i.test(error.message)) return error.message

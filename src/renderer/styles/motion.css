@@ -81,7 +81,9 @@
     *::after {
       scroll-behavior: auto !important;
       transition-duration: 0.01ms !important;
+      transition-delay: 0s !important;
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
     }
 
@@ -89,5 +91,7 @@
     .hero__thumb[data-active] .hero__timer {
       animation: none !important;
     }
+
+    .hero__autoplay { display: none; }
   }
 }

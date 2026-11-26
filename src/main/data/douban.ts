@@ -224,10 +224,10 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
       while (revealed < HOME_SHELVES.length && HOME_SHELVES[revealed].every(part => part in lists)) revealed++;
       if (!saved && answered && revealed > before) this.options.onHome?.(shown());
     })])) as Record<HomePart, Promise<void>>;
-    // The featured titles come from these two lists: without them there is no page to show.
+    // Either primary feed can supply the hero while the other shelves arrive.
     const topOfPage = Promise.all([parts.tv, parts.movies]).then(() => {
       const error = errors.get('tv') ?? errors.get('movies');
-      if (!error) { answered = true; return; }
+      if (!error || lists.tv?.length || lists.movies?.length) { answered = true; return; }
       // Asking again starts a new read; this one is not waited for.
       abandoned = true;
       if (this.homeFlight === flight) this.homeFlight = undefined;
@@ -295,11 +295,14 @@ export class DoubanDataSource implements Omit<DataSource, 'playback'> {
       await this.store.ready;
       const lists = {} as HomeLists;
       for (const name of HOME_LISTS) {
-        const ids = list(row(saved.lists)[name]).filter((id): id is string => typeof id === 'string').slice(0, 14);
+        const source = row(saved.lists)[name];
+        if (!Array.isArray(source)) return;
+        const ids = source.filter((id): id is string => typeof id === 'string').slice(0, 14);
         const items = ids.flatMap(id => this.store.get(id)?.item ?? []);
-        if (!items.length || items.length * 2 < ids.length) return;
+        if (items.length * 2 < ids.length) return;
         lists[name] = items;
       }
+      if (!HOME_LISTS.some(name => lists[name].length)) return;
       // A time ahead of the clock says nothing about age: read anew behind it.
       this.homeLists = { at: at > Date.now() ? 0 : at, lists };
     } catch { /* No saved page: the first read answers. */ }

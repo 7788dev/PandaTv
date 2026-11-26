@@ -43,6 +43,7 @@ jobs:
         run: node scripts/ci-release.mjs prepare
       - run: npm ci
       - run: npm run typecheck
+      - run: npm run check:rules
       - run: npm test
       - run: npm run test:release
       - name: Build installer without implicit publishing

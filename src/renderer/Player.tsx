@@ -14,7 +14,7 @@ import { evaluateSwitch } from '../shared/rules/switch-budget'
 import { shouldTakeOver } from '../shared/rules/buffer'
 import type { BufferSample, BufferScene, SwitchEvent } from '../shared/rules/types'
 import { dataAttr, EpisodeCells, Icon, IconButton, SelectMenu } from './components'
-import { errorText, useNotify, useRemote, useUser } from './state'
+import { errorText, useCatalogueRevision, useNotify, useRemote, useUser } from './state'
 import { back, go } from './router'
 import { bufferedRanges, playbackBuffer, playbackHistory, playbackProgress, qualityLevelIndex, resolutionQuality } from './player-model'
 import { createFrameRateState, sampleFrameRate } from './playback-adaptation'
@@ -22,8 +22,6 @@ import { playbackPreferences as sessionPreferences } from './playback-preference
 import { StartupWatchdog } from './startup-watchdog'
 import { scorePlaybackOffsets, videoFrameSample, waitForSeek } from './playback-alignment'
 
-/** The quality the player will ask for; whoever prepares an episode ahead must ask for the same. */
-export const wantedQuality = (settings: { quality: Quality }) => sessionPreferences.wantedQuality(settings)
 /** A source that has shown nothing this long after it was chosen is replaced. */
 const START_MS = 15_000
 /** A picture that stands still this long while nothing arrives is replaced the same way. */
@@ -40,21 +38,22 @@ const PREPARE_NEXT_SECONDS = 90
 const clamp = (value: number, min = 0, max = 1) => Math.min(max, Math.max(min, value))
 type ClockState = { position: number; duration: number; buffered: { start: number; end: number }[] }
 
-export function Player({ id, episode: requested }: { id: string; episode: number }) {
+export default function Player({ id, episode: requested }: { id: string; episode: number }) {
   const { state } = useUser()
   const historyEpisode = useRef(state.history.find(entry => entry.id === id)?.episode ?? 1)
   const item = useRemote(() => window.panda.data.subject(id), [id])
-  const availability = useRemote(() => window.panda.data.availability(id), [id])
+  const catalogueRevision = useCatalogueRevision(id)
+  const availability = useRemote(() => window.panda.data.availability(id), [id, catalogueRevision], true)
   const episode = requested || historyEpisode.current
   if (!item.data) return <main className="player" aria-busy="true" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} onClick={() => back('/detail/' + id)} /></header>
     <div className="player__center"><span className="spinner" role="status" aria-label={extra.loading} /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
   </main>
   const media: MediaItem = { ...item.data, ...availability.data, ...(item.data.type === 'variety' ? { unit: '期' as const } : {}) }
-  return <PlayerMedia key={id + ':' + episode} item={media} episode={episode} />
+  return <PlayerMedia key={id + ':' + episode} item={media} episode={episode} catalogueRevision={catalogueRevision} />
 }
 
-function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
+function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; episode: number; catalogueRevision: number }) {
   const { state, dispatch } = useUser()
 
   const notify = useNotify()
@@ -139,8 +138,9 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
   const [osd, setOsd] = useState<{ name: IconName; text: string } | null>(null)
   const [levels, setLevels] = useState<{ quality: Quality; index: number; bitrate: number }[]>([])
   const [actualQuality, setActualQuality] = useState<Quality | undefined>()
-  const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted })
-  latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted }
+  const hasAlternative = (lines?.list.length ?? 0) > 1
+  const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, hasAlternative })
+  latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, hasAlternative }
   const bridgingActiveLine = Boolean(bridgeActive.current && sourceHealthy.current && activeSource.current && started.current && video.current)
   const hasNext = Boolean(item.episodes && episode < item.episodes)
   const error = (resolvingAgain || bridgingActiveLine ? null : playback.error) || problem
@@ -535,11 +535,14 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         // The next episode's source is chosen before this one ends, so it starts without a wait.
         if (!prepared.current && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS && current.item.episodes && episode < current.item.episodes) {
           prepared.current = true
-          void window.panda.data.playback(item.id, episode + 1, wantedQuality(current.settings)).catch(() => {})
+          void window.panda.data.playback(item.id, episode + 1, sessionPreferences.wantedQuality(current.settings)).catch(() => {})
         }
         if (!v.paused && current.settings.skipIntro && source.intro && v.currentTime >= source.intro.start && v.currentTime < source.intro.end) v.currentTime = Math.min(source.intro.end, v.duration)
         if (started.current && Date.now() - savingAt.current >= HISTORY_SAVE_SECONDS * 1000) void save()
-        if (source.outro !== undefined && current.settings.skipIntro && v.currentTime >= source.outro && source.outro < v.duration) advance()
+        if (!v.paused && !v.seeking && current.settings.skipIntro && source.outro !== undefined && v.currentTime >= source.outro && v.currentTime < v.duration) {
+          if (current.settings.autoNext && !current.cancelled && current.item.episodes && episode < current.item.episodes) next()
+          else v.currentTime = v.duration
+        }
       })
       on('ended', advance)
       on('error', () => { if (!hls.current) fail() })
@@ -607,8 +610,8 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
         const now = Date.now()
         const elapsed = Math.min(5, Math.max(0, (now - lastHealthAt) / 1000))
         lastHealthAt = now
-        if (sourceStarted && !v.paused && !v.ended) {
-          if (buffering || Math.abs(v.currentTime - lastHealthPosition) < 0.05) healthStallSeconds += elapsed
+        if (sourceStarted && !v.paused && !v.ended && !v.seeking) {
+          if (Math.abs(v.currentTime - lastHealthPosition) < 0.05) healthStallSeconds += elapsed
           else healthPlaySeconds += elapsed
         }
         lastHealthPosition = v.currentTime
@@ -619,24 +622,27 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
           void window.panda.sources.observe(source.sourceKey, play, stall).catch(() => {})
         }
         if (v.paused || v.ended || v.seeking || latest.current.problem) {
+          bufferSamples.current = []
           lastPosition = v.currentTime; alive(); return
         }
+        const advanced = playbackProgress(lastPosition, v.currentTime, v.seeking)
+        if (advanced !== undefined) { lastPosition = advanced; alive() }
         const rules = playbackRules.current
         if (rules) {
           const sample = { at: now, position: v.currentTime, ...playbackBuffer(v.buffered, v.currentTime, v.duration) }
           bufferSamples.current = [...bufferSamples.current.filter(value => now - value.at <= 30_000), sample]
           const scene = sourceStarted ? bufferScene.current : 'startup'
           bufferScene.current = 'playing'
-          if (shouldTakeOver(scene, bufferSamples.current, rules.buffer).takeOver) {
+          const verdict = shouldTakeOver(scene, bufferSamples.current, rules.buffer)
+          // A short HLS buffer can keep decoding at full speed. Give a waiting
+          // playhead time to refill before spending an automatic switch.
+          const waitingForRefill = buffering && latest.current.hasAlternative &&
+            now - progressAt >= rules.buffer.playingRiseWindowSec * 1000
+          if (verdict.reason === 'stalled' || (verdict.reason === 'low-buffer' && waitingForRefill)) {
             alive(); fail(); return
           }
         }
-        if (!sourceStarted) return
-        const advanced = playbackProgress(lastPosition, v.currentTime, v.seeking)
-        if (advanced !== undefined) { lastPosition = advanced; alive() }
-        else {
-          if (now - progressAt > (rules?.buffer.stallPositionSec ?? STALL_MS / 1000) * 1000) { alive(); fail() }
-        }
+        if (sourceStarted && now - progressAt > (rules?.buffer.stallPositionSec ?? STALL_MS / 1000) * 1000) { alive(); fail() }
       }, 1000)
       const frameMonitor = setInterval(() => {
         if (!active || v.paused || v.ended || v.seeking || v.readyState < 2) { frameState = createFrameRateState(); return }
@@ -701,7 +707,7 @@ function PlayerMedia({ item, episode }: { item: MediaItem; episode: number }) {
     // Asked once the episode has a source, so the answer says which one that is.
     void window.panda.data.sources(item.id, episode).then(value => { if (active) setLines(value) }, () => {})
     return () => { active = false }
-  }, [currentMedia])
+  }, [currentMedia, catalogueRevision])
 
   const ratio = (event: PointerEvent<HTMLElement>) => {
     const bounds = event.currentTarget.getBoundingClientRect()

@@ -8,9 +8,9 @@ import logo from './brand/logo-mark.svg?url'
 import type { Detail } from '../shared/api'
 import { extra } from '../copy.extra'
 import { Cast, ContinueCard, dataAttr, EmptyState, EpisodeCells, ErrorState, FavoriteButton, Icon, MediaCard, MediaImage, MetaRow, PosterBox, SelectMenu, Shelf, SkeletonCard, SkeletonGrid, Spinner, Tabs } from './components'
-import { errorText, useConfirm, useNotify, useRemote, useUser } from './state'
+import { errorText, useCatalogueRevision, useConfirm, useNotify, useRemote, useUser } from './state'
 import { go, useRoute } from './router'
-import { wantedQuality } from './Player'
+import { playbackPreferences } from './playback-preferences'
 import { pageMemory, pageMemoryKey } from './page-memory'
 import { usePagedLibrary } from './library'
 
@@ -20,23 +20,21 @@ const DWELL_MS = 1200
 export const mediaTypes: MediaType[] = ['tv', 'movie', 'variety', 'anime', 'doc']
 
 function Hero({ items }: { items: MediaItem[] }) {
-  const [index, setIndex] = useState(0)
+  const [selectedId, setSelectedId] = useState<string>()
   const [paused, setPaused] = useState(false)
-  const root = useRef<HTMLElement>(null)
-  useEffect(() => setIndex(0), [items])
-  const item = items[index] ?? items[0]
+  const index = Math.max(0, items.findIndex(entry => entry.id === selectedId))
+  const item = items[index]
   if (!item) return null
-  return <section className="hero" ref={root} data-paused={dataAttr(paused)} onPointerEnter={() => setPaused(true)} onPointerLeave={() => { if (!root.current?.contains(document.activeElement)) setPaused(false) }}
-    onFocus={event => { if (event.target.matches(':focus-visible')) setPaused(true) }} onBlur={() => { if (!root.current?.matches(':hover')) setPaused(false) }}>
+  return <section className="hero" data-paused={dataAttr(paused)}>
     {items.map((entry, i) => <div className="hero__slide" key={entry.id} data-active={dataAttr(index === i)}><MediaImage src={entry.backdrop ?? entry.poster} className="hero__img" eager ambient={!entry.backdrop} /></div>)}
     <div className="hero__shade" />
     <div className="hero__body" key={item.id}>
-      {item.kicker && <div className="hero__kicker">{item.kicker}</div>}<h1 className="hero__title">{item.title}</h1><MetaRow item={item} className="hero__meta" />
+      {item.kicker && <div className="hero__kicker">{item.kicker}</div>}<h1 className="hero__title" title={item.title}>{item.title}</h1><MetaRow item={item} className="hero__meta" />
       {(item.tagline || item.synopsis) && <p className="hero__tagline">{item.tagline || item.synopsis}</p>}
       <div className="hero__actions"><a className="btn btn--primary btn--lg" href={`#/play/${item.id}`}><Icon name="play" />{t.action.play}</a><a className="btn btn--glass btn--lg" href={`#/detail/${item.id}`}>{t.action.detail}</a></div>
     </div>
-    {items.length > 1 && <div className="hero__pager"><button type="button" className="icon-btn hero__autoplay" aria-label={paused ? extra.carouselPlay : extra.carouselPause} aria-pressed={paused} onClick={() => setPaused(value => !value)}><Icon name={paused ? 'play' : 'pause'} /></button>{items.map((entry, i) => <button className="hero__thumb" key={entry.id} aria-label={entry.title} data-active={dataAttr(index === i)} onClick={() => setIndex(i)}>
-      <MediaImage src={entry.backdrop ?? entry.poster} eager /><i className="hero__timer" onAnimationEnd={event => { if (event.animationName === 'hero-timer') setIndex(value => (value + 1) % items.length) }} />
+    {items.length > 1 && <div className="hero__pager"><button type="button" className="icon-btn hero__autoplay" aria-label={paused ? extra.carouselPlay : extra.carouselPause} onClick={() => setPaused(value => !value)}><Icon name={paused ? 'play' : 'pause'} /></button>{items.map((entry, i) => <button className="hero__thumb" key={entry.id} aria-label={entry.title} aria-current={index === i || undefined} data-active={dataAttr(index === i)} onClick={() => setSelectedId(entry.id)}>
+      <MediaImage src={entry.backdrop ?? entry.poster} eager /><i className="hero__timer" onAnimationEnd={event => { if (index === i && !paused && event.animationName === 'hero-timer') setSelectedId(items[(i + 1) % items.length].id) }} />
     </button>)}</div>}
   </section>
 }
@@ -67,7 +65,8 @@ export function HomePage() {
   if (result.error) return <main className="page"><ErrorState error={result.error} retry={result.reload} /></main>
   if (!result.data) return <main className="page page--bleed" aria-busy="true"><div className="hero skel" /><section className="section"><SkeletonGrid count={7} /></section></main>
   const data = newer ?? result.data
-  if (!data.hero.length && !data.shelves.length) return <main className="page"><EmptyState text={t.channel.empty} /></main>
+  const hasShelf = data.shelves.some(shelf => shelf.kind !== 'continue' || continuing(state.history).length > 0)
+  if (!data.hero.length && !hasShelf) return <main className="page"><EmptyState text={t.channel.empty} /></main>
   return <main className={`page${data.hero.length ? ' page--bleed' : ''}`}>
     <Hero items={hero} />
     {data.shelves.map(shelf => {
@@ -190,27 +189,29 @@ function Synopsis({ text }: { text: string }) {
 function EpisodeSection({ item, current }: { item: MediaItem; current?: number }) {
   const ranges = episodeRanges(item.episodes ?? 0)
   const initial = rangeOf(ranges, current)
-  const [selected, setSelected] = useState(initial?.label)
-  const range = ranges.find(value => value.label === selected) ?? initial
+  const [selected, setSelected] = useState<number>()
+  const range = ranges.find(value => value.from === selected) ?? initial
   if (!range) return null
-  return <section className="section"><header className="section__head"><h2 className="section__title">{t.detail.episodes}</h2>{ranges.length > 1 && <Tabs variant="plain" value={range.label} items={ranges.map(entry => ({ value: entry.label, label: entry.label }))} onChange={setSelected} />}</header><div className="section__body"><div className={`${item.episodeTitles?.length ? 'eplist eplist--cols' : 'eps'} fade-in`} key={range.label}><EpisodeCells item={item} current={current} from={range.from} to={range.to} /></div></div></section>
+  return <section className="section"><header className="section__head"><h2 className="section__title">{t.detail.episodes}</h2>{ranges.length > 1 && <Tabs variant="plain" value={String(range.from)} items={ranges.map(entry => ({ value: String(entry.from), label: entry.label }))} onChange={value => setSelected(Number(value))} />}</header><div className="section__body"><div className={`${item.episodeTitles?.length ? 'eplist eplist--cols' : 'eps'} fade-in`} key={range.from}><EpisodeCells item={item} current={current} from={range.from} to={range.to} /></div></div></section>
 }
 
 export function DetailPage({ id }: { id: string }) {
   const result = useRemote(() => window.panda.data.subject(id), [id])
   const enriched = useRemote(() => window.panda.data.detail(id), [id])
   const related = useRemote(() => window.panda.data.related(id), [id])
-  const availability = useRemote(() => window.panda.data.availability(id), [id])
+  const catalogueRevision = useCatalogueRevision(id)
+  const availability = useRemote(() => window.panda.data.availability(id), [id, catalogueRevision], true)
   const { state } = useUser()
   const historyEpisode = state.history.find(entry => entry.id === id)?.episode ?? 1
   const historyQuality = state.settings.quality
+  const hasAvailability = Boolean(availability.data)
   // Someone who stays on the page is likely to press play: the source for the episode they
   // would get is chosen meanwhile, so the picture comes at once. A failure here is not theirs to see.
   useEffect(() => {
-    if (!availability.data) return
-    const timer = setTimeout(() => void window.panda.data.playback(id, historyEpisode, wantedQuality({ quality: historyQuality })).catch(() => {}), DWELL_MS)
+    if (!hasAvailability) return
+    const timer = setTimeout(() => void window.panda.data.playback(id, historyEpisode, playbackPreferences.wantedQuality({ quality: historyQuality })).catch(() => {}), DWELL_MS)
     return () => clearTimeout(timer)
-  }, [id, availability.data, historyEpisode, historyQuality])
+  }, [id, hasAvailability, historyEpisode, historyQuality])
   if (result.error) return <main className="page"><ErrorState error={result.error} retry={result.reload} /></main>
   if (!result.data) return <main className="page"><SkeletonGrid count={7} /></main>
   const item: Detail = { ...(enriched.data ?? result.data), episodes: availability.data?.episodes, episodeTitles: availability.data?.episodeTitles }
@@ -223,7 +224,7 @@ export function DetailPage({ id }: { id: string }) {
       {item.synopsis && <Synopsis text={item.synopsis} />}
       {(item.directors?.length || item.cast?.length) ? <dl className="credits">{item.directors?.length ? <div><dt>{t.detail.director}</dt><dd>{item.directors.join(' / ')}</dd></div> : null}{item.cast?.length ? <div><dt>{t.detail.starring}</dt><dd>{item.cast.map(person => person.name).join(' / ')}</dd></div> : null}</dl> : null}
     </div></div>
-    {availability.loading && item.type !== 'movie' ? <section className="section"><Spinner /></section> : availability.error && item.type !== 'movie' ? <section className="section"><ErrorState error={availability.error} retry={availability.reload} /></section> : <EpisodeSection item={item} current={history?.episode} />}
+    {availability.loading && !availability.data && item.type !== 'movie' ? <section className="section"><Spinner /></section> : availability.error && item.type !== 'movie' ? <section className="section"><ErrorState error={availability.error} retry={availability.reload} /></section> : <EpisodeSection item={item} current={history?.episode} />}
     <Cast people={item.people?.length ? item.people : item.cast} />
     {Boolean(enriched.error) && <section className="section"><ErrorState error={enriched.error} retry={enriched.reload} /></section>}
     {related.error ? <section className="section"><ErrorState error={related.error} retry={related.reload} /></section> : related.data?.length ? <Shelf title={t.detail.related}>{related.data.map(entry => <MediaCard key={entry.id} item={entry} />)}</Shelf> : null}
@@ -338,6 +339,7 @@ export function SettingsPage() {
   const notify = useNotify()
   const info = useRemote(() => window.panda.app.info(), [])
   const [checking, setChecking] = useState(false)
+  const [update, setUpdate] = useState<{ message: string; showReleases?: boolean }>()
   const change = (patch: Partial<Settings>) => void dispatch({ type: 'settings', patch }).catch(error => notify(errorText(error)))
   const clear = async (what: 'history' | 'search') => {
     if (!await confirm({ title: what === 'history' ? t.me.clearHistoryTitle : t.settings.clearSearchesTitle, confirm: t.action.clear, danger: true })) return
@@ -345,8 +347,12 @@ export function SettingsPage() {
   }
   const check = async () => {
     setChecking(true)
-    try { const result = await window.panda.app.checkUpdate(); notify(result.status === 'current' ? t.settings.upToDate : fmt(extra.updateAvailable, { v: result.version })) }
-    catch (error) { notify(errorText(error)) }
+    setUpdate(undefined)
+    try {
+      const result = await window.panda.app.checkUpdate()
+      if (result.status === 'available') setUpdate({ message: fmt(extra.updateAvailable, { v: result.version }), showReleases: result.canOpenReleases })
+      else setUpdate({ message: result.status === 'current' ? t.settings.upToDate : extra.updateUnpublished })
+    } catch (error) { setUpdate({ message: errorText(error) }) }
     finally { setChecking(false) }
   }
   return <main className="page"><header className="page__head"><h1 className="page__title">{t.settings.title}</h1></header><div className="settings__body">
@@ -356,6 +362,8 @@ export function SettingsPage() {
       <div className="setrow"><span className="setrow__label">{t.settings.speed}</span><SelectMenu label={t.settings.speed} items={SPEEDS.map(value => ({ value, label: speedLabel(value) }))} value={state.settings.speed} onChange={speed => change({ speed })}><span>{speedLabel(state.settings.speed)}</span><Icon name="chevron-down" size="sm" /></SelectMenu></div>
     </section>
     <section className="setgroup"><h2 className="setgroup__label">{t.settings.data}</h2><div className="setrow"><span className="setrow__label">{t.settings.clearHistory}</span><button className="btn btn--sm" onClick={() => void clear('history')}>{t.action.clear}</button></div><div className="setrow"><span className="setrow__label">{t.settings.clearSearches}</span><button className="btn btn--sm" onClick={() => void clear('search')}>{t.action.clear}</button></div></section>
-    <section className="setgroup"><h2 className="setgroup__label">{t.settings.about}</h2><div className="about"><img className="about__mark" src={logo} alt="" /><div><div className="about__name">{t.app.name}</div>{info.data && <div className="about__version">{fmt(t.app.version, { v: info.data.version })}</div>}</div><button className="btn btn--sm" disabled={checking} onClick={() => void check()}>{checking ? extra.updateChecking : t.settings.checkUpdate}</button></div>{Boolean(info.error) && <ErrorState error={info.error} retry={info.reload} />}</section>
+    <section className="setgroup"><h2 className="setgroup__label">{t.settings.about}</h2><div className="about"><img className="about__mark" src={logo} alt="" /><div><div className="about__name">{t.app.name}</div>{info.data && <div className="about__version">{fmt(t.app.version, { v: info.data.version })}</div>}</div><button className="btn btn--sm" disabled={checking} onClick={() => void check()}>{checking ? extra.updateChecking : t.settings.checkUpdate}</button></div>
+      <div role="status">{update && <div className="setrow"><span className="setrow__label">{update.message}</span>{update.showReleases && <button className="btn btn--sm" onClick={() => void window.panda.app.openReleases().catch(error => notify(errorText(error)))}>{extra.openReleases}</button>}</div>}</div>
+      {Boolean(info.error) && <ErrorState error={info.error} retry={info.reload} />}</section>
   </div></main>
 }

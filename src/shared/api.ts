@@ -23,7 +23,7 @@ export type StateAction =
   | { type: 'search:add'; query: string }
   | { type: 'search:clear' }
   | { type: 'settings'; patch: Partial<Settings> }
-export type UpdateResult = { status: 'current' | 'available'; version: string }
+export type UpdateResult = { status: 'current' | 'available'; version: string; canOpenReleases?: boolean } | { status: 'unpublished' }
 export type AppNotice = { code: string; message: string }
 export type LibraryFailure = { id: string; code: string }
 export type LibraryPage = Page<MediaItem> & { failures: LibraryFailure[]; pending: string[] }
@@ -54,6 +54,7 @@ export interface PandaBridge {
     playbackFrom(id: string, episode: number, source: string, quality?: Quality): Promise<Playback>
     /** A home feed read after the one `home()` answered with, when it differs. */
     onHome(listener: (feed: HomeFeed) => void): () => void
+    onCatalogueUpdate(listener: (id: string) => void): () => void
   }
   sources: {
     /** Read-only source health snapshot; no addresses, cookies or samples. */
@@ -79,6 +80,7 @@ export interface PandaBridge {
   app: {
     info(): Promise<{ version: string }>
     checkUpdate(): Promise<UpdateResult>
+    openReleases(): Promise<void>
     subscribe(listener: (notice: AppNotice) => void): () => void
     onBeforeClose(listener: () => void | Promise<void>): () => void
   }

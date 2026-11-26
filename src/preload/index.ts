@@ -28,7 +28,8 @@ const bridge: PandaBridge = {
     acceptSwitch: (id, episode, selectionId) => call('playback.acceptSwitch', id, episode, selectionId),
     playbackFrom: (id, episode, source, quality) => call('data.playbackFrom', id, episode, source, quality),
     align: input => call('playback.align', input),
-    onHome: callback => subscribe('panda:home', callback)
+    onHome: callback => subscribe('panda:home', callback),
+    onCatalogueUpdate: callback => subscribe('panda:catalogue', callback)
   },
   sources: {
     health: workId => call('sources.health', workId),
@@ -40,7 +41,7 @@ const bridge: PandaBridge = {
   },
   window: { minimize: () => call('window.minimize'), maximize: () => call('window.maximize'), close: () => call('window.close'), fullscreen: value => call('window.fullscreen', value), getState: () => call('window.state'), subscribe: callback => subscribe('panda:window', callback) },
   app: {
-    info: () => call('app.info'), checkUpdate: () => call('app.checkUpdate'),
+    info: () => call('app.info'), checkUpdate: () => call('app.checkUpdate'), openReleases: () => call('app.openReleases'),
     subscribe: callback => subscribe('panda:notice', callback),
     onBeforeClose: callback => { beforeClose.add(callback); return () => { beforeClose.delete(callback) } }
   }

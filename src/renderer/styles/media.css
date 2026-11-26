@@ -380,13 +380,20 @@
   /* ── 首页主推 ── */
   .hero {
     position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-content: end;
+    align-items: end;
+    gap: var(--sp-6);
     height: clamp(480px, 68vh, 760px);
-    overflow: hidden;
+    padding: var(--bar-h) var(--gutter) calc(var(--hero-overlap) + var(--sp-12));
+    overflow: clip;
   }
 
   .hero__slide {
     position: absolute;
     inset: 0;
+    overflow: clip;
     opacity: 0;
     transition: opacity var(--dur-5) var(--ease-in-out);
   }
@@ -443,10 +450,9 @@
   }
 
   .hero__body {
-    position: absolute;
-    bottom: calc(var(--hero-overlap) + var(--sp-12));
-    left: var(--gutter);
-    width: min(620px, 48vw);
+    position: relative;
+    max-width: 620px;
+    min-width: 0;
   }
 
   .hero__body > * {
@@ -489,6 +495,12 @@
   }
 
   .hero__title {
+    display: -webkit-box;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     font-family: var(--font-serif);
     font-size: var(--fs-display-1);
     font-weight: var(--fw-bold);
@@ -524,9 +536,7 @@
 
   /* 右下角的缩略图翻页器：当前项底部有一条走动的计时线 */
   .hero__pager {
-    position: absolute;
-    right: var(--gutter);
-    bottom: calc(var(--hero-overlap) + var(--sp-12));
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -588,7 +598,7 @@
     animation: hero-timer var(--hero-interval) linear forwards;
   }
 
-  .hero[data-paused] .hero__timer {
+  .hero:is([data-paused], :hover, :focus-within) .hero__thumb[data-active] .hero__timer {
     animation-play-state: paused;
   }
 

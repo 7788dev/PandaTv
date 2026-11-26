@@ -12,6 +12,7 @@ import { adultShelf } from '../adult'
 import { REGIONS, REGION_GROUPS } from '../data/taxonomy'
 import { compareDelivery, compareSourceOrder, playbackMargin, PLAYBACK_HEADROOM, type DeliveryScore, type SourceOrderScore } from './delivery'
 import { compareHealthRank } from '../health/rank'
+import { hlsChapters, mp4Chapters } from './chapters'
 import type { SourceHealthStore } from '../health/store'
 
 interface RawVod { vod_id?: string | number; vod_name?: string; vod_year?: string | number; type_name?: string; vod_area?: string; vod_play_from?: string; vod_play_url?: string }
@@ -34,6 +35,7 @@ export interface WorkHints {
   totalEpisodes?: number
 }
 interface Cached<T> { value: T; expires: number }
+interface Catalogue { items: Candidate[]; complete?: Promise<Candidate[]> }
 /** An episode reached on a source: see `probe`. */
 interface Reached { playback: Playback; whole: Promise<void>; shown?: Quality; margin(): number | undefined; /** Bytes of the first segment so far. */ received(): number }
 /** How long a source has to answer with the first bytes of an episode. */
@@ -75,7 +77,18 @@ const SOURCE_GONE_AFTER = 2 * 60000
 const CATALOGUE_CONCURRENCY = 12
 const SEARCH_GRACE_MS = 1_200
 
-interface ServiceOptions { proxy: MediaProxy; rules?: SourceRules; requeryDelayMs?: number; /** How long the catalogues that have not answered are waited for once the work is found. */ searchGraceMs?: number; /** Overrides FIRST_SEGMENT_GRACE_MS. */ firstSegmentGraceMs?: number; /** Overrides BETTER_PICTURE_MS. */ betterPictureMs?: number; /** Overrides TURN_MS. */ turnMs?: number; /** Told why a source's catalogue could not be read; for the main-process log only. */ onSourceFailure?: (source: string, reason: string, ms: number) => void; /** Cross-session source health; absent means no archive. */ health?: SourceHealthStore }
+interface ServiceOptions {
+  proxy: MediaProxy
+  rules?: SourceRules
+  requeryDelayMs?: number
+  searchGraceMs?: number
+  firstSegmentGraceMs?: number
+  betterPictureMs?: number
+  turnMs?: number
+  onSourceFailure?: (source: string, reason: string, ms: number) => void
+  onCatalogueUpdate?: (id: string) => void
+  health?: SourceHealthStore
+}
 
 const LANGUAGE = /(?:国语版?|普通话版?|粤语版?|英语版?|日语版?|韩语版?|泰语版?|中字|双语|高清|完整版|未删减版)$/
 const CJK_DIGIT: Record<string, number> = { 零: 0, 一: 1, 二: 2, 两: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 }
@@ -360,8 +373,8 @@ const reason = (error: unknown) => error instanceof Error ? [error.message, (err
 
 export class PlaybackService {
   private readonly rules: SourceRules
-  private readonly cache = new Map<string, Cached<Candidate[]>>()
-  private readonly inflight = new Map<string, Promise<Candidate[]>>()
+  private readonly cache = new Map<string, Cached<Catalogue>>()
+  private readonly inflight = new Map<string, Promise<Catalogue>>()
   // Every catalogue is asked at once: with fewer slots than sources the slowest ones queue behind the rest.
   private readonly limiter = new WorkLimiter(CATALOGUE_CONCURRENCY)
   private readonly resolved = new Map<string, Cached<Promise<Playback>>>()
@@ -420,7 +433,7 @@ export class PlaybackService {
 
   async availability(item: MediaItem, hints: WorkHints = {}): Promise<Availability> {
     const single = hints.single ?? item.type === 'movie'
-    const candidates = await this.candidates(item, hints)
+    const { items: candidates } = await this.candidates(item, hints)
     const line = this.primary(candidates)
     if (!line) throw new Error(extra.sourceUnavailable)
     const plan = numbering(line)
@@ -520,11 +533,18 @@ export class PlaybackService {
   /** Every line that lists the episode, in the order the sources rank. */
   private async attempts(item: MediaItem, episode: number, hints: WorkHints) {
     const single = hints.single ?? item.type === 'movie'
-    const candidates = await this.candidates(item, hints)
+    const catalogue = await this.candidates(item, hints)
+    let attempts = this.episodeAttempts(catalogue.items, episode, single)
+    if (!attempts.length && catalogue.complete) attempts = this.episodeAttempts(await catalogue.complete, episode, single)
+    if (!attempts.length) throw new Error(extra.noEpisode)
+    return attempts
+  }
+
+  private episodeAttempts(candidates: Candidate[], episode: number, single: boolean) {
     const primary = this.primary(candidates)
     const plan = primary && numbering(primary)
     const wanted = plan?.byNumber.get(episode)
-    const attempts = candidates.flatMap(c => c.lines.flatMap(line => {
+    return candidates.flatMap(c => c.lines.flatMap(line => {
       const other = numbering(line)
       // A film is its first entry on any line. Otherwise numbered lines agree by number, and a
       // positional line is only interchangeable where it lists the same issue (see sameIssue).
@@ -533,8 +553,6 @@ export class PlaybackService {
         : line === primary ? wanted : other.numeric || !wanted?.title ? undefined : other.byNumber.get(episode)?.title === wanted.title ? other.byNumber.get(episode) : sameIssue(wanted, primary!, line)
       return target ? [{ ...c, line, target }] : []
     }))
-    if (!attempts.length) throw new Error(extra.noEpisode)
-    return attempts
   }
 
   private async choose(item: MediaItem, episode: number, quality: Quality | undefined, retry: boolean, hints: WorkHints, from: string | undefined, retryFailure: 'probe' | 'stall' | undefined, isCurrent: () => boolean): Promise<Playback> {
@@ -768,7 +786,7 @@ export class PlaybackService {
           if (!isMp4Head(head)) throw new Error('媒体不可用')
         } finally { response.destroy() }
         const reading = mp4Duration(head)
-        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4', sourceKey: source.key, duration: reading.seconds ?? undefined, durationSource: reading.source }, whole: Promise.resolve(), margin: () => undefined, received: () => head.length }
+        return { playback: { url: this.options.proxy.registerMedia(episode.url, source), format: 'mp4', sourceKey: source.key, duration: reading.seconds ?? undefined, durationSource: reading.source, ...mp4Chapters(head, reading.seconds) }, whole: Promise.resolve(), margin: () => undefined, received: () => head.length }
       }
       let current = episode.url; let selected: Quality | undefined; let qualities: Quality[] | undefined; let preserveTimeline = false
       for (let depth = 0; depth < 4; depth++) {
@@ -844,7 +862,7 @@ export class PlaybackService {
         const durationFields = reading.seconds !== null
           ? { duration: reading.seconds, durationSource: reading.source, ...(reading.fingerprint ? { manifestFingerprint: reading.fingerprint } : {}) }
           : { durationSource: 'missing' as const }
-        return { playback: { url: this.options.proxy.registerMedia(target, source, preserveTimeline), format: 'hls', sourceKey: source.key, ...durationFields, ...(!preserveTimeline && label ? { quality: label } : {}), ...(!preserveTimeline && several ? { qualities } : {}) }, whole, shown: shown ?? selected, margin: () => playbackMargin(first.seconds, declared > 0 ? declared : undefined, size, (measuredUntil ?? Date.now()) - segmentStarted, complete), received: () => size }
+        return { playback: { url: this.options.proxy.registerMedia(target, source, preserveTimeline), format: 'hls', sourceKey: source.key, ...durationFields, ...hlsChapters(filtered), ...(!preserveTimeline && label ? { quality: label } : {}), ...(!preserveTimeline && several ? { qualities } : {}) }, whole, shown: shown ?? selected, margin: () => playbackMargin(first.seconds, declared > 0 ? declared : undefined, size, (measuredUntil ?? Date.now()) - segmentStarted, complete), received: () => size }
       }
       throw new Error('播放清单嵌套过深')
     } catch (error) { own.abort(); throw error }
@@ -860,16 +878,22 @@ export class PlaybackService {
     return key
   }
 
-  private async candidates(item: MediaItem, hints: WorkHints): Promise<Candidate[]> {
+  private async candidates(item: MediaItem, hints: WorkHints): Promise<Catalogue> {
     const key = this.workKey(item, hints)
     const cached = this.cache.get(key)
     if (cached && cached.expires > Date.now()) return cached.value
     const active = this.inflight.get(key); if (active) return active
-    const keep = (value: Candidate[]) => {
+    const task = this.searchCandidates(item, hints).then(catalogue => {
       if (this.cache.size >= 128 && !this.cache.has(key)) this.cache.delete(this.cache.keys().next().value!)
-      this.cache.set(key, { value, expires: Date.now() + (value.length ? 5 * 60000 : 20000) }); return value
-    }
-    const task = this.searchCandidates(item, hints, keep).then(keep).finally(() => this.inflight.delete(key))
+      this.cache.set(key, { value: catalogue, expires: Date.now() + (catalogue.items.length ? 5 * 60000 : 20000) })
+      void catalogue.complete?.then(full => {
+        catalogue.complete = undefined
+        if (catalogue.items === full || this.cache.get(key)?.value !== catalogue) return
+        catalogue.items = full
+        this.options.onCatalogueUpdate?.(item.id)
+      })
+      return catalogue
+    }).finally(() => this.inflight.delete(key))
     this.inflight.set(key, task); return task
   }
 
@@ -877,9 +901,9 @@ export class PlaybackService {
    * The records of the work in every catalogue. Catalogues answer in a few hundred milliseconds
    * as a rule, and now and then one takes its whole nine seconds (measured from Beijing,
    * 2026-11-17 14:17: one of nine did so for a third of the titles). Once the work has been
-   * found, the rest get SEARCH_GRACE_MS more; what they answer after that goes to `late`.
+   * found, the first result is available after the grace period; remaining replies complete the same catalogue.
    */
-  private async searchCandidates(item: MediaItem, hints: WorkHints, late: (value: Candidate[]) => void = () => {}): Promise<Candidate[]> {
+  private async searchCandidates(item: MediaItem, hints: WorkHints): Promise<Catalogue> {
     let successes = 0
     const enabled = this.rules.sources.filter(s => s.enabled).sort((a, b) => b.priority - a.priority)
     const ask = (source: (typeof enabled)[number]) => this.limiter.run(async () => {
@@ -948,8 +972,12 @@ export class PlaybackService {
       void everyone.then(() => { clearTimeout(timer); resolve(undefined) })
     })
     if (head) {
-      void everyone.then(results => { const full = flat(results); if (full.length > head.length) late(rank(full)) })
-      return rank(head)
+      const items = rank(head)
+      const complete = everyone.then(results => {
+        const full = flat(results)
+        return full.length > head.length ? rank(full) : items
+      })
+      return { items, complete }
     }
     const results = await everyone
     let found = flat(results)
@@ -971,7 +999,7 @@ export class PlaybackService {
     // Thrown rather than returned, so the next request asks again instead of reading a cache.
     const unanswered = silent.some(source => { const failure = this.failures.get(source.key); return failure && Date.now() - failure.since < SOURCE_GONE_AFTER })
     if (!found.length && unanswered) throw new Error(extra.unavailable)
-    return rank(found)
+    return { items: rank(found) }
   }
 }
 

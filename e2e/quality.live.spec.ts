@@ -42,6 +42,10 @@ test('real metadata initials filters paging and detail navigation', async () => 
   const report: Record<string, unknown> = { at: new Date().toISOString(), runtime: process.env.PANDA_E2E_EXECUTABLE ? 'production packaged executable with real network' : 'current production build with real network' }
   await page.locator('.hero__title').waitFor({ timeout: 45000 })
   await screenshot(page, join(dir, 'home-live.png'))
+  await resize(app, 1080, 640, 1.5)
+  await expect.poll(() => page.evaluate(() => innerWidth)).toBe(720)
+  await screenshot(page, join(dir, 'home-compact-live.png'), app)
+  await resize(app, 1440, 900)
   await page.keyboard.press('Control+k')
   await page.getByRole('combobox').fill('ST')
   await page.keyboard.press('Enter')
@@ -57,8 +61,7 @@ test('real metadata initials filters paging and detail navigation', async () => 
   const first = await page.locator('.grid .card').count()
   const viewport = page.locator('.scroll__viewport')
   await viewport.evaluate(el => { el.scrollTop = el.scrollHeight })
-  const more = page.getByRole('button', { name: '加载更多', exact: true })
-  if (await more.count()) { await more.click(); await expect.poll(() => page.locator('.grid .card').count(), { timeout: 45000 }).toBeGreaterThan(first) }
+  await expect.poll(() => page.locator('.grid .card').count(), { timeout: 45000 }).toBeGreaterThan(first)
   report.channel = { first, after: await page.locator('.grid .card').count() }
   await resize(app, 1080, 640)
   await screenshot(page, join(dir, 'channel-small-live.png'))

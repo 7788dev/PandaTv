@@ -22,7 +22,10 @@ def main():
     parser.add_argument("--repeat", type=int, default=2)
     parser.add_argument("--output", type=Path, help="Write to an isolated evidence directory")
     parser.add_argument("--hold", action="store_true", help="Also exercise sustained D-pad input (requires input keyevent --duration)")
+    parser.add_argument("--carousel", action="store_true", help="Check manual hero navigation with system animations disabled")
     args = parser.parse_args()
+    if args.repeat < 0 or (args.repeat == 0 and not args.carousel):
+        parser.error("Choose at least one navigation repeat or --carousel")
     h.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = h.ADB
     d = u2.connect(args.serial)
@@ -60,6 +63,41 @@ def main():
         report["cases"].append({"name": name, "passed": True, "elapsedMs": round((time.monotonic() - started) * 1000), "frames": stats, **details})
         print(f"PASS {name}: {stats}", flush=True)
 
+    def carousel():
+        def counter(tree):
+            label = next(value for value in h.texts(tree) if re.fullmatch(r"\d+ / \d+", value))
+            return tuple(map(int, label.split(" / ")))
+
+        setting = ("global", "animator_duration_scale")
+        previous = h.run_adb("shell", "settings", "get", *setting).strip()
+        try:
+            h.run_adb("shell", "settings", "put", *setting, "0")
+            h.focus_top_bar(d)
+            h.key("dpad_down", wait=.4)
+            h.move_focus_to_text(d, "播放", max_steps=8)
+            h.key("dpad_right")
+            h.key("dpad_right")
+            assert h.find_focused(h.dump_nodes(d))["description"] == "上一部推荐"
+            h.key("dpad_right")
+            before = capture("carousel-next")
+            assert h.find_focused(before)["description"] == "下一部推荐"
+            start, count = counter(before)
+            h.key("dpad_center")
+            after = capture("carousel-selected")
+            assert counter(after) == (start % count + 1, count)
+            assert h.find_focused(after)["description"] == "下一部推荐"
+            h.key("dpad_up")
+            assert "首页" in h.find_focused(h.dump_nodes(d))["childTexts"]
+            time.sleep(8.5)
+            assert counter(capture("carousel-reduced-motion")) == counter(after)
+            report["cases"].append({"name": "carousel", "passed": True, "from": start, "to": counter(after)[0],
+                                    "total": count, "stationarySeconds": 8.5})
+        finally:
+            if previous == "null":
+                h.run_adb("shell", "settings", "delete", *setting)
+            else:
+                h.run_adb("shell", "settings", "put", *setting, previous)
+
     def home_scroll():
         def trace(phase):
             ns = h.dump_nodes(d)
@@ -90,12 +128,14 @@ def main():
         raise AssertionError("Home hero was not reachable")
 
     def grid_scroll():
+        chip = h.find_focused(h.dump_nodes(d))
+        assert chip and chip["childTexts"] == ["全部"], f"Genre drawer did not focus its current option: {chip}"
+
         def grid_focus():
             focus = h.find_focused(h.dump_nodes(d))
-            assert focus and focus["cy"] > 250 and focus["childTexts"], f"Focus did not remain on a card: {focus}"
+            assert focus and focus["cy"] > chip["bounds"][3] and focus["childTexts"], f"Focus did not remain on a card: {focus}"
             return {"labels": focus["childTexts"], "bounds": focus["bounds"]}
 
-        h.move_focus_to_text(d, "剧情", max_steps=8)
         h.key("dpad_down", wait=.35)
         initial = grid_focus()
         inputs = []
@@ -128,6 +168,8 @@ def main():
         h.run_adb("shell", "am", "force-stop", PACKAGE)
         h.run_adb("shell", "am", "start", "-W", "-n", PACKAGE + "/.ui.MainActivity")
         h.wait_for(d, lambda ns: "播放" in h.texts(ns), timeout=35)
+        if args.carousel:
+            carousel()
         for repeat in range(args.repeat):
             h.focus_top_bar(d)
             h.move_focus_to_text(d, "首页", max_steps=15)

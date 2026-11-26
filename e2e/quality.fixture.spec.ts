@@ -13,6 +13,117 @@ test.afterEach(async ({}, info) => {
   try { expect(desktop.errors).toEqual([]) } finally { await desktop.close() }
 })
 
+test('home carousel keeps the selected film and an explicit pause through feed refreshes', async () => {
+  const { app, page, dir } = desktop
+  await page.locator('.hero__thumb').nth(2).waitFor()
+  const feed = await page.evaluate(() => window.panda.data.home())
+  const selected = feed.hero[1]!
+  const thumb = page.getByRole('button', { name: selected.title, exact: true })
+  await thumb.click()
+  await page.locator('.hero__autoplay').click()
+  await page.mouse.move(1, 1)
+  await page.getByRole('combobox').focus()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('button', { name: extra.carouselPlay })).toBeVisible({ timeout: 2500 })
+  await app.evaluate(({ BrowserWindow }, data) => BrowserWindow.getAllWindows()[0].webContents.send('panda:home', data),
+    { ...feed, hero: [...feed.hero].reverse() })
+  await expect(page.locator('.hero__thumb').first()).toHaveAttribute('aria-label', feed.hero.at(-1)!.title)
+  await expect(page.locator('.hero__title')).toHaveText(selected.title)
+  await expect(thumb).toHaveAttribute('aria-current', 'true')
+  await expect(page.locator('.hero__thumb[data-active] .hero__timer')).toHaveCSS('animation-play-state', 'paused')
+
+  await resize(app, 1080, 640, 1.5)
+  await expect.poll(() => page.evaluate(() => innerWidth)).toBe(720)
+  const geometry = await page.locator('.hero').evaluate(el => {
+    const body = el.querySelector('.hero__body')!.getBoundingClientRect()
+    const pager = el.querySelector('.hero__pager')!.getBoundingClientRect()
+    return { overlap: body.right > pager.left && body.bottom > pager.top && body.top < pager.bottom,
+      left: pager.left, right: pager.right, viewport: innerWidth }
+  })
+  const layout = await page.locator('body,#root,.app,.scroll__viewport,.page,.hero,.hero__body,.hero__pager,.nav,.search').evaluateAll(elements =>
+    elements.map(el => ({ element: el.className || el.tagName, rect: el.getBoundingClientRect().toJSON(), scrollLeft: el.scrollLeft, scrollWidth: el.scrollWidth, grid: getComputedStyle(el).gridTemplateColumns })))
+  writeFileSync(join(dir, 'home-layout.json'), JSON.stringify(layout, null, 2))
+  expect(geometry.overlap).toBe(false)
+  expect(geometry.left).toBeGreaterThanOrEqual(0)
+  expect(geometry.right).toBeLessThanOrEqual(geometry.viewport + 1)
+  await expect.poll(() => page.locator('.scroll__viewport').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1)
+  await screenshot(page, join(dir, 'home-compact.png'), app)
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await expect(page.locator('.hero__autoplay')).toBeHidden()
+  await expect(page.locator('.hero__thumb[data-active] .hero__timer')).toHaveCSS('animation-name', 'none')
+  await page.getByRole('button', { name: feed.hero[0]!.title, exact: true }).click()
+  await expect(page.locator('.hero__title')).toHaveText(feed.hero[0]!.title)
+})
+
+test('settings checks the published Windows installer through the production bridge', async () => {
+  const { page } = desktop
+  await page.locator('a[href="#/settings"]').click()
+  await page.getByRole('button', { name: t.settings.checkUpdate }).click()
+  await expect(page.getByText('发现新版本 1.2.0')).toBeVisible({ timeout: 5000 })
+})
+
+test('an advancing HLS playhead with a short buffer keeps its original source', async () => {
+  const { page, network } = desktop
+  // Each segment supplies two seconds of moving AV. Keep the forward buffer small.
+  network.state.segmentDelayMs = 1700
+  await openFixturePlayer(page)
+  const original = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentSrc)
+  await playing(page, 8, 18000)
+  expect(await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentSrc)).toBe(original)
+  await expect(page.locator('.player[data-error]')).toHaveCount(0)
+})
+
+test('chapter metadata crosses the bridge and only skips the HLS credits when enabled', async () => {
+  const { page, network } = desktop
+  network.state.chapters = true
+  await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { skipIntro: true, autoNext: false } }))
+  await openFixturePlayer(page)
+  const playback = await page.evaluate(() => window.panda.data.playback('db-2001', 1))
+  expect(playback.intro).toEqual({ start: 0, end: 4 })
+  expect(playback.outro).toBe(8)
+  await expect.poll(() => page.locator('video').evaluate(v => (v as HTMLVideoElement).ended), { timeout: 10000 }).toBe(true)
+  expect(await page.evaluate(() => location.hash)).toContain('/play/db-2001')
+  await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { skipIntro: false } }))
+  await clickPlayerLocator(page, page.locator('.player__bar').getByRole('button', { name: t.player.play, exact: true }))
+  await playing(page, 8.5, 18000)
+  expect(await page.locator('video').evaluate(v => (v as HTMLVideoElement).ended)).toBe(false)
+})
+
+test('a late catalogue extends the open detail without moving focus or rejecting a pending episode', async () => {
+  const { page, network } = desktop
+  network.state.extendedCatalogue = 'c'
+  const release = network.holdCatalogue('c')
+  try {
+    await page.evaluate(() => { location.hash = '#/detail/db-2001' })
+    const third = page.locator('a.ep[href="#/play/db-2001/3"]')
+    await third.focus()
+    const fifth = page.locator('a.ep[href="#/play/db-2001/5"]')
+    await expect(fifth).toHaveCount(0)
+    // The viewer can arrive with a saved episode not listed in the first reply.
+    const pending = page.evaluate(() => window.panda.data.sources('db-2001', 5).then(value => value.list.map(line => line.key), () => []))
+    release()
+    expect(await pending).toEqual(['c'])
+    await expect(fifth).toBeVisible()
+    await expect(third).toBeFocused()
+  } finally { release() }
+})
+
+test('the player adds late lines and episodes while the current video keeps playing', async () => {
+  const { page, network } = desktop
+  network.state.extendedCatalogue = 'c'
+  const a = network.holdCatalogue('a'), c = network.holdCatalogue('c')
+  try {
+    await openFixturePlayer(page)
+    await expect(page.getByRole('button', { name: extra.line, exact: true })).toHaveCount(0)
+    const original = await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentSrc)
+    a(); c()
+    await expect(page.getByRole('button', { name: extra.line, exact: true })).toHaveCount(1)
+    await clickPlayerControl(page, '选集')
+    await expect(page.locator('a.ep[href="#/play/db-2001/5"]')).toBeVisible()
+    expect(await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentSrc)).toBe(original)
+  } finally { a(); c() }
+})
+
 test('actual settings, channel layout and modal controls remain readable at supported window sizes and zoom', async () => {
   const { app, page, dir } = desktop
   await page.locator('a[href="#/settings"]').click()
@@ -31,7 +142,7 @@ test('actual settings, channel layout and modal controls remain readable at supp
     expect(state.titleSize).toBeGreaterThanOrEqual(28)
     expect(state.controls.every(control => control.rect.x >= 0 && control.rect.x + control.rect.width <= state.viewport[0] + 1 && control.hittable)).toBe(true)
     measurements.push({ width, height, zoom, ...state })
-    await screenshot(page, join(dir, `settings-${width}-${zoom}.png`))
+    await screenshot(page, join(dir, `settings-${width}-${zoom}.png`), app)
   }
   await resize(app, 1080, 640)
   await page.getByRole('switch', { name: '自动播放下一集' }).click()

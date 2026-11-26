@@ -1,12 +1,24 @@
 import { expect, it, vi } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { DoubanHttp, DataError } from '../src/main/data/http'
+import { DoubanDataSource } from '../src/main/data/douban'
 import { WorkLimiter, isPublicAddress, validatePublicUrl } from '../src/main/playback/network'
 import { filterPlaylist } from '../src/main/playback/filter'
 import { loadSourceRules } from '../src/main/playback/sources'
 import { initialQuery, suggestedSubjectIds, titleSearchScore, type InitialsDictionary } from '../src/shared/title-search'
 
 const endpoint = 'https://m.douban.com/rexxar/api/v2/movie/41'
+it('keeps the first usable TV shelf when the new-movie collection is missing on a cold start', async () => {
+  const item = { id: '41', title: '浮生', type: 'tv', genres: ['剧情'], cover_url: 'https://img1.doubanio.com/view/41.jpg' }
+  const source = new DoubanDataSource({ imageUrl: url => url, homeRetryMs: [], fetch: async input => {
+    if (String(input).includes('/movie_latest/')) return new Response('{}', { status: 404 })
+    return Response.json({ total: 1, count: 1, items: [item], subject_collection_items: [item] })
+  } })
+  const feed = await source.home()
+  expect(feed.hero.map(item => item.id)).toContain('db-41')
+  expect(feed.shelves.some(shelf => shelf.id === 'hot-tv')).toBe(true)
+  expect(feed.shelves.some(shelf => shelf.id === 'new-movie')).toBe(false)
+})
 const rows = (value: unknown) => {
   const data = value as { items?: unknown }
   if (!Array.isArray(data.items)) throw new DataError('INVALID_RESPONSE', 'Missing array')

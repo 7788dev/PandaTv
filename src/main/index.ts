@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen, session, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, screen, session, shell, type IpcMainEvent, type IpcMainInvokeEvent } from 'electron'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { randomUUID } from 'node:crypto'
@@ -15,7 +15,7 @@ import { SourceHealthStore } from './health/store'
 import { OffsetCache } from './playback/offset-cache'
 import { UserStore } from './state'
 import { invokeData, rpc, type Services } from './ipc'
-import { checkUpdate } from './updates'
+import { checkUpdate, RELEASE_PAGE } from './updates'
 
 if (process.env.PANDA_USER_DATA_DIR) app.setPath('userData', resolve(process.env.PANDA_USER_DATA_DIR))
 app.setName('Panda')
@@ -161,7 +161,10 @@ async function createWindow() {
   const getUser = () => user ??= new UserStore(userPath)
   const services: Services = {
     data,
-    playback: new PlaybackService({ proxy, rules, health, onSourceFailure: (source, reason, ms) => console.info('[source]', source, reason, ms + 'ms') }),
+    playback: new PlaybackService({ proxy, rules, health,
+      onSourceFailure: (source, reason, ms) => console.info('[source]', source, reason, ms + 'ms'),
+      onCatalogueUpdate: id => mainWindow?.webContents.send('panda:catalogue', id),
+    }),
     health,
     offsets,
     alignment: calibration?.alignment,
@@ -203,6 +206,7 @@ async function createWindow() {
           mainWindow!.setFullScreen(args[0]); return
         case 'app.info': return { version: app.getVersion() }
         case 'app.checkUpdate': return checkUpdate(app.getVersion())
+        case 'app.openReleases': return shell.openExternal(RELEASE_PAGE)
         case 'user.exportRecovery': {
           const contents = UserStore.recoveryExport(userPath)
           const result = await dialog.showSaveDialog(mainWindow!, {
