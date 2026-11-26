@@ -598,7 +598,7 @@
     animation: hero-timer var(--hero-interval) linear forwards;
   }
 
-  .hero:is([data-paused], :hover, :focus-within) .hero__thumb[data-active] .hero__timer {
+  .hero:is([data-paused], :hover, :has(:focus-visible)) .hero__thumb[data-active] .hero__timer {
     animation-play-state: paused;
   }
 
