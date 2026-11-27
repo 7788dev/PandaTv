@@ -1,170 +1,4 @@
 import SwiftUI
-import ImageIO
-
-private actor Thumbnails {
-    static let shared = Thumbnails()
-    private let cache = NSCache<NSString, UIImage>()
-    init() { cache.totalCostLimit = 36 * 1024 * 1024 }
-
-    func image(_ url: URL, maxPixels: Int) async throws -> UIImage? {
-        let key = "\(maxPixels):\(url.absoluteString)" as NSString
-        if let cached = cache.object(forKey: key) { return cached }
-        var variants = [url]
-        if maxPixels > 640, url.path.hasPrefix("/view/photo/m/public/"),
-           var large = URLComponents(url: url, resolvingAgainstBaseURL: false) {
-            large.path = large.path.replacingOccurrences(of: "/photo/m/", with: "/photo/l/")
-            if let candidate = large.url { variants.insert(candidate, at: 0) }
-        }
-        let options: [CFString: Any] = [kCGImageSourceCreateThumbnailFromImageAlways: true,
-            kCGImageSourceCreateThumbnailWithTransform: true, kCGImageSourceThumbnailMaxPixelSize: maxPixels,
-            kCGImageSourceShouldCacheImmediately: true]
-        for candidate in variants {
-            try Task.checkCancellation()
-            guard let data = try? await Network.read(candidate, referer: "https://movie.douban.com/"),
-                  let source = CGImageSourceCreateWithData(data as CFData, nil),
-                  let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { continue }
-            let result = UIImage(cgImage: thumbnail)
-            cache.setObject(result, forKey: key, cost: thumbnail.bytesPerRow * thumbnail.height)
-            return result
-        }
-        return nil
-    }
-}
-
-struct Artwork: View {
-    let url: URL?
-    var wide = false
-    @State private var image: UIImage?
-
-    var body: some View {
-        ZStack {
-            Color(UIColor.secondarySystemFill)
-            if let image = image {
-                GeometryReader { box in
-                    Image(uiImage: image).resizable().scaledToFill()
-                        .frame(width: box.size.width, height: box.size.height).clipped()
-                }
-            } else {
-                Image(systemName: "film").font(.title2).foregroundColor(Color(UIColor.tertiaryLabel))
-            }
-        }
-        .aspectRatio(wide ? 1.95 : 2.0 / 3.0, contentMode: .fit)
-        .clipShape(RoundedRectangle(cornerRadius: wide ? 14 : 8, style: .continuous))
-        .accessibilityHidden(true)
-        .task(id: url) {
-            image = nil
-            if let url = url, let result = try? await Thumbnails.shared.image(url, maxPixels: wide ? 1200 : 440), !Task.isCancelled {
-                image = result
-            }
-        }
-    }
-}
-
-private struct Poster: View {
-    let subject: Subject
-    let select: (Subject) -> Void
-    var body: some View {
-        Button { select(subject) } label: {
-            VStack(alignment: .leading, spacing: 6) {
-                Artwork(url: subject.poster)
-                Text(subject.title).font(.subheadline.weight(.semibold)).lineLimit(2)
-                if !subject.year.isEmpty { Text(subject.year).font(.caption).foregroundColor(.secondary) }
-            }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
-        }.buttonStyle(.plain).accessibilityIdentifier("title-\(subject.id)")
-    }
-}
-
-struct PosterGrid: View {
-    let items: [Subject]
-    let select: (Subject) -> Void
-    var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 118, maximum: 200), spacing: 16, alignment: .top)], alignment: .leading, spacing: 20) {
-            ForEach(items) { Poster(subject: $0, select: select) }
-        }
-    }
-}
-
-struct NoticeView: View {
-    let symbol, message: String
-    var retry: (() -> Void)?
-    var body: some View {
-        VStack(spacing: 12) {
-            Image(systemName: symbol).font(.largeTitle).foregroundColor(.secondary).accessibilityHidden(true)
-            Text(message).font(.body).foregroundColor(.secondary).multilineTextAlignment(.center)
-            if let retry = retry { Button("重试", action: retry).buttonStyle(.bordered) }
-        }
-        .frame(maxWidth: .infinity).padding(.vertical, 32)
-    }
-}
-
-struct HomePage: View {
-    let select: (Subject) -> Void
-    @EnvironmentObject private var library: Library
-
-    var body: some View {
-        ScrollView {
-            LazyVStack(alignment: .leading, spacing: 28) {
-                if let entry = library.history.first(where: { !$0.finished }) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("继续观看").font(.title2.bold()).accessibilityAddTraits(.isHeader)
-                        Button { select(entry.subject) } label: {
-                            Label("\(entry.subject.title) · \(entry.detail)", systemImage: "play.circle.fill")
-                                .font(.headline).frame(minHeight: 44, alignment: .leading)
-                        }
-                    }
-                }
-                HomeShelf(name: "热播剧集", collection: "tv_hot", featured: true, select: select)
-                HomeShelf(name: "近期电影", collection: "movie_latest", select: select)
-            }.padding([.horizontal, .bottom], 20)
-        }
-    }
-}
-
-private struct HomeShelf: View {
-    let name, collection: String
-    var featured = false
-    let select: (Subject) -> Void
-    @State private var items: [Subject] = []
-    @State private var failed = false
-    @State private var attempt = 0
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            if featured, let first = items.first {
-                Button { select(first) } label: {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Artwork(url: first.backdrop ?? first.poster, wide: true)
-                        Text(first.title).font(.title.bold()).fixedSize(horizontal: false, vertical: true)
-                        if !first.subtitle.isEmpty { Text(first.subtitle).font(.subheadline).foregroundColor(.secondary) }
-                    }.frame(maxWidth: .infinity, alignment: .leading)
-                }.buttonStyle(.plain).accessibilityIdentifier("featured")
-                Divider().padding(.vertical, 4)
-            }
-            Text(name).font(.title2.bold()).accessibilityAddTraits(.isHeader)
-            if failed {
-                NoticeView(symbol: "wifi.exclamationmark", message: "暂时无法载入\(name)") { attempt += 1 }
-            } else if items.isEmpty {
-                ProgressView().frame(maxWidth: .infinity).padding().accessibilityLabel("正在载入\(name)")
-            } else {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(alignment: .top, spacing: 14) {
-                        ForEach(featured && items.count > 1 ? Array(items.dropFirst()) : items) { subject in
-                            Poster(subject: subject, select: select).frame(width: 126)
-                        }
-                    }.padding(.bottom, 2)
-                }
-            }
-        }.task(id: attempt) {
-            failed = false
-            do {
-                let result = try await Catalog.collection(collection)
-                try Task.checkCancellation()
-                items = result
-                failed = result.isEmpty
-            } catch { if !Task.isCancelled { failed = true } }
-        }
-    }
-}
 
 private struct Filters: Hashable {
     var sort = "热度", genre = "全部类型", region = "全部地区", year = "全部年份"
@@ -173,17 +7,38 @@ private struct Filters: Hashable {
     }
 }
 
-private struct FilterMenu: View {
-    let name: String
-    let options: [String]
-    @Binding var selection: String
+private struct FilterSheet: View {
+    let channel: Channel
+    @State var draft: Filters
+    let apply: (Filters) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    private var genres: [String] {
+        switch channel {
+        case .tv, .movie: return ["剧情","喜剧","悬疑","爱情","动作","科幻","历史","冒险","家庭"]
+        case .anime: return ["冒险","奇幻","科幻","战斗","校园","运动","治愈"]
+        case .variety: return ["真人秀","脱口秀","音乐","喜剧","旅行","竞技","文化","美食"]
+        case .doc: return ["自然","人文","历史","科学","美食","艺术","社会","传记"]
+        }
+    }
     var body: some View {
-        Menu {
-            Picker(name, selection: $selection) { ForEach(options, id: \.self) { Text($0).tag($0) } }
-        } label: {
-            HStack(spacing: 4) { Text(selection); Image(systemName: "chevron.down").font(.caption2) }
-                .frame(minHeight: 44)
-        }.accessibilityLabel("\(name)，\(selection)")
+        NavigationView {
+            Form {
+                Section {
+                    picker("类型", ["全部类型"] + genres, $draft.genre)
+                    picker("地区", ["全部地区","中国大陆","中国香港","中国台湾","美国","日本","韩国","英国","法国"], $draft.region)
+                    picker("年份", ["全部年份"] + (2010...max(2010, Calendar.current.component(.year, from: Date()))).reversed().map(String.init), $draft.year)
+                }
+                if !draft.tags.isEmpty {
+                    Button("重置筛选") { draft = Filters(sort: draft.sort) }
+                }
+            }
+            .navigationTitle("筛选\(channel.rawValue)").navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(leading: Button("取消") { dismiss() }, trailing: Button("完成") { apply(draft); dismiss() }.font(.headline))
+        }.navigationViewStyle(.stack)
+    }
+    private func picker(_ title: String, _ options: [String], _ value: Binding<String>) -> some View {
+        Picker(title, selection: value) { ForEach(options, id: \.self) { Text($0).tag($0) } }
     }
 }
 
@@ -196,19 +51,23 @@ struct ChannelPage: View {
     @State private var more = 0
     @State private var busy = true
     @State private var failed = false
+    @State private var sheet = false
     private struct Request: Hashable { let filters: Filters; let page: Int }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 20) {
-                        FilterMenu(name: "排序", options: ["热度","最新","评分"], selection: $filters.sort)
-                        FilterMenu(name: "类型", options: ["全部类型","剧情","喜剧","悬疑","爱情","动作","科幻","历史","冒险"], selection: $filters.genre)
-                        FilterMenu(name: "地区", options: ["全部地区","中国大陆","中国香港","中国台湾","美国","日本","韩国","英国","法国"], selection: $filters.region)
-                        FilterMenu(name: "年份", options: ["全部年份"] + (2010...max(2010, Calendar.current.component(.year, from: Date()))).reversed().map { String($0) }, selection: $filters.year)
-                    }
+                HStack(spacing: 12) {
+                    Picker("排序", selection: $filters.sort) {
+                        ForEach(["热度", "最新", "评分"], id: \.self) { Text($0).tag($0) }
+                    }.pickerStyle(.segmented).frame(maxWidth: 308)
+                    Spacer(minLength: 0)
+                    Button { sheet = true } label: {
+                        Label(filters.tags.isEmpty ? "筛选" : "筛选 · \(filters.tags.count)", systemImage: "line.3.horizontal.decrease.circle")
+                            .frame(minHeight: 44)
+                    }.accessibilityIdentifier("channel-filters")
                 }
+                if !filters.tags.isEmpty { Text(filters.tags.joined(separator: " · ")).font(.subheadline).foregroundColor(.secondary) }
                 PosterGrid(items: items, select: select)
                 if busy { ProgressView().frame(maxWidth: .infinity).padding() }
                 else if failed {
@@ -218,8 +77,9 @@ struct ChannelPage: View {
                 } else if items.isEmpty {
                     NoticeView(symbol: "film", message: "这个筛选条件下没有作品")
                 }
-            }.padding([.horizontal, .bottom], 20)
+            }.padding(.horizontal).padding(.horizontal, 6).padding(.bottom, 24)
         }
+        .sheet(isPresented: $sheet) { FilterSheet(channel: channel, draft: filters) { filters = $0 } }
         .onChange(of: filters) { _ in more = 0; offsets = [:]; items = [] }
         .task(id: Request(filters: filters, page: more)) {
             let current = filters
@@ -253,6 +113,8 @@ struct SearchPage: View {
     @State private var busy = false
     @State private var failed = false
     @State private var retry = 0
+    @State private var popular: [Subject] = []
+    @EnvironmentObject private var library: Library
 
     var body: some View {
         ScrollView {
@@ -266,14 +128,36 @@ struct SearchPage: View {
                         }
                     }
                 }
-                if busy { ProgressView().frame(maxWidth: .infinity).padding() }
+                if input.text.isEmpty {
+                    if !library.queries.isEmpty {
+                        HStack {
+                            MediaHeading(title: "最近搜索")
+                            Spacer()
+                            Button("清除") { library.clearQueries() }.font(.subheadline).frame(minHeight: 44)
+                        }
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) { ForEach(library.queries, id: \.self) { query in
+                                Button { input.choose(query) } label: { Label(query, systemImage: "clock.arrow.circlepath") }
+                                    .buttonStyle(.bordered).buttonBorderShape(.capsule).frame(minHeight: 44)
+                            } }
+                        }
+                    }
+                    if !popular.isEmpty {
+                        MediaHeading(title: "热门作品").padding(.top, 6)
+                        PosterGrid(items: popular, select: select)
+                    } else { NoticeView(symbol: "magnifyingglass", message: "搜索片名或拼音首字母") }
+                } else if busy { ProgressView().frame(maxWidth: .infinity).padding() }
                 else if failed { NoticeView(symbol: "wifi.exclamationmark", message: "搜索暂时不可用") { retry += 1 } }
-                else if !results.isEmpty { PosterGrid(items: results, select: select) }
-                else {
-                    NoticeView(symbol: "magnifyingglass", message: input.text.isEmpty ? "输入片名或拼音首字母" : "没有找到相关作品")
+                else if !results.isEmpty {
+                    MediaHeading(title: "搜索结果")
+                    PosterGrid(items: results) { subject in library.rememberQuery(input.text); select(subject) }
                 }
-            }.padding([.horizontal, .bottom], 20)
+                else {
+                    NoticeView(symbol: "magnifyingglass", message: "没有找到相关作品")
+                }
+            }.padding([.horizontal, .bottom], 22)
         }
+        .task { if popular.isEmpty { popular = (try? await Catalog.collection("movie_real_time_hotest")) ?? [] } }
         .task(id: "\(retry):\(input.text)") {
             let query = String(input.text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(100))
             results = []; hints = []; failed = false; busy = !query.isEmpty
@@ -295,6 +179,7 @@ struct SearchPage: View {
 struct LibraryPage: View {
     let history: Bool
     let select: (Subject) -> Void
+    let browse: (Destination) -> Void
     @EnvironmentObject private var library: Library
     var body: some View {
         if history && !library.history.isEmpty {
@@ -306,6 +191,7 @@ struct LibraryPage: View {
                             VStack(alignment: .leading, spacing: 5) {
                                 Text(entry.subject.title).font(.headline)
                                 Text(entry.detail).font(.subheadline).foregroundColor(.secondary)
+                                if entry.fraction > 0 && !entry.finished { ProgressView(value: entry.fraction).frame(maxWidth: 150) }
                             }
                             Spacer()
                             Image(systemName: "chevron.right").font(.caption.weight(.semibold)).foregroundColor(Color(UIColor.tertiaryLabel))
@@ -318,7 +204,12 @@ struct LibraryPage: View {
         } else if !history && !library.favorites.isEmpty {
             ScrollView { PosterGrid(items: library.favorites, select: select).padding(.horizontal, 20) }
         } else {
-            NoticeView(symbol: history ? "clock" : "bookmark", message: history ? "还没有观看记录" : "收藏的作品会出现在这里")
+            VStack(spacing: 16) {
+                Image(systemName: history ? "clock" : "bookmark").font(.system(size: 32, weight: .medium))
+                    .foregroundColor(.secondary).frame(width: 76, height: 76).background(Color(UIColor.secondarySystemBackground), in: Circle())
+                Text(history ? "还没有观看记录" : "还没有收藏的作品").font(.title3.bold())
+                Button("浏览片库") { browse(.home) }.buttonStyle(.bordered).buttonBorderShape(.capsule).controlSize(.large)
+            }.frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }

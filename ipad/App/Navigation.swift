@@ -10,7 +10,28 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options: UIScene.ConnectionOptions) {
         guard let scene = scene as? UIWindowScene else { return }
         let window = UIWindow(windowScene: scene)
-        window.rootViewController = PandaSplitView()
+        let client = PandaSplitView()
+        #if DEBUG && targetEnvironment(simulator)
+        if ProcessInfo.processInfo.environment["PANDA_TEST_COMPACT"] == "1" {
+            // Exercise the actual split controller at a Slide Over width without SpringBoard gestures.
+            let host = UIViewController()
+            host.view.backgroundColor = .secondarySystemBackground
+            host.addChild(client)
+            host.view.addSubview(client.view)
+            client.view.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                client.view.topAnchor.constraint(equalTo: host.view.safeAreaLayoutGuide.topAnchor),
+                client.view.bottomAnchor.constraint(equalTo: host.view.safeAreaLayoutGuide.bottomAnchor),
+                client.view.centerXAnchor.constraint(equalTo: host.view.centerXAnchor),
+                client.view.widthAnchor.constraint(equalToConstant: 375)
+            ])
+            host.setOverrideTraitCollection(UITraitCollection(horizontalSizeClass: .compact), forChild: client)
+            client.didMove(toParent: host)
+            window.rootViewController = host
+        } else { window.rootViewController = client }
+        #else
+        window.rootViewController = client
+        #endif
         self.window = window
         window.makeKeyAndVisible()
     }
@@ -88,6 +109,11 @@ final class Sidebar: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let item = data.itemIdentifier(for: indexPath) { select?(item) }
     }
+
+    func highlight(_ item: Destination) {
+        guard isViewLoaded, let index = data.indexPath(for: item) else { return }
+        collectionView.selectItem(at: index, animated: false, scrollPosition: [])
+    }
 }
 
 final class SearchInput: NSObject, ObservableObject, UISearchResultsUpdating {
@@ -117,6 +143,9 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
     init() {
         super.init(style: .doubleColumn)
         delegate = self
+        minimumPrimaryColumnWidth = 212
+        maximumPrimaryColumnWidth = 270
+        preferredPrimaryColumnWidthFraction = 0.225
         let primary = UINavigationController(rootViewController: sidebar)
         primary.navigationBar.prefersLargeTitles = true
         detailNavigation.navigationBar.prefersLargeTitles = true
@@ -139,23 +168,32 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
     }
 
     private func open(_ destination: Destination, reveal: Bool) {
-        let select: (Subject) -> Void = { [weak self] in self?.showSubject($0) }
+        let select: (Subject) -> Void = { [weak self] in self?.showSubject($0, autoplay: false) }
+        let resume: (Subject) -> Void = { [weak self] in self?.showSubject($0, autoplay: true) }
+        let browse: (Destination) -> Void = { [weak self] in self?.open($0, reveal: true) }
+        sidebar.highlight(destination)
         let host: UIViewController
         switch destination {
         case .home:
-            host = UIHostingController(rootView: HomePage(select: select).environmentObject(library))
+            host = UIHostingController(rootView: HomePage(select: select, resume: resume, browse: browse).environmentObject(library))
         case .channel(let channel):
-            host = UIHostingController(rootView: ChannelPage(channel: channel, select: select))
+            host = UIHostingController(rootView: ChannelPage(channel: channel, select: select).environmentObject(library))
         case .search:
             let input = SearchInput()
-            host = UIHostingController(rootView: SearchPage(input: input, select: select))
+            host = UIHostingController(rootView: SearchPage(input: input, select: select).environmentObject(library))
             host.navigationItem.searchController = input.controller
             host.navigationItem.hidesSearchBarWhenScrolling = false
             host.definesPresentationContext = true
         case .favorites, .history:
-            host = UIHostingController(rootView: LibraryPage(history: destination == .history, select: select).environmentObject(library))
+            host = UIHostingController(rootView: LibraryPage(history: destination == .history, select: select, browse: browse).environmentObject(library))
         }
-        host.title = destination.title
+        host.title = destination == .home ? "现在观看" : destination.title
+        if destination != .search {
+            let search = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(openSearch))
+            search.accessibilityLabel = "搜索"
+            search.accessibilityIdentifier = "open-search"
+            host.navigationItem.rightBarButtonItem = search
+        }
         host.navigationItem.backButtonDisplayMode = .minimal
         host.navigationItem.leftBarButtonItem = displayModeButtonItem
         host.navigationItem.leftItemsSupplementBackButton = true
@@ -163,10 +201,15 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
         if reveal { show(.secondary) }
     }
 
-    private func showSubject(_ subject: Subject) {
-        let page = SubjectPage(initial: subject).environmentObject(library)
+    @objc private func openSearch() { open(.search, reveal: true) }
+
+    private func showSubject(_ subject: Subject, autoplay: Bool) {
+        weak var detail: UIViewController?
+        let page = SubjectPage(initial: subject, autoplay: autoplay) { show in
+            detail?.navigationItem.title = show ? subject.title : nil
+        }.environmentObject(library)
         let controller = UIHostingController(rootView: page)
-        controller.title = subject.title
+        detail = controller
         controller.navigationItem.largeTitleDisplayMode = .never
         detailNavigation.pushViewController(controller, animated: true)
     }

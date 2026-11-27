@@ -55,7 +55,8 @@ struct Subject: Identifiable, Codable, Hashable {
     let channel: Channel
     let year, region, synopsis: String
     let genres, aliases, creators, cast: [String]
-    let poster, backdrop: URL?
+    let poster: URL?
+    var backdrop: URL?
     let rating: Double?
     let expectedEpisodes: Int?
 
@@ -118,6 +119,9 @@ enum Network {
             parts.scheme = "http"
             parts.host = "127.0.0.1"
             parts.port = port
+            if let mode = ProcessInfo.processInfo.environment["PANDA_TEST_SCENARIO"] {
+                parts.queryItems = (parts.queryItems ?? []) + [URLQueryItem(name: "scenario", value: mode)]
+            }
             return parts.url ?? url
         }
         #endif
@@ -146,6 +150,10 @@ enum Network {
 }
 
 enum Catalog {
+    struct Credit: Identifiable {
+        let id, name, role: String
+        let photo: URL?
+    }
     private static let base = URL(string: "https://m.douban.com/rexxar/api/v2/")!
 
     private static func rows(_ path: String, _ query: [String: String], key: String) async throws -> ([JSONRow], Int?) {
@@ -164,6 +172,30 @@ enum Catalog {
               let row = try await Network.json(base.appendingPathComponent("\(kind)/\(id)")) as? JSONRow,
               let subject = Subject(row, kind: kind), subject.id == id else { throw CatalogError.response }
         return subject
+    }
+
+    static func still(_ subject: Subject) async throws -> URL? {
+        let (photos, _) = try await rows("\(subject.kind)/\(subject.id)/photos", ["count":"8"], key: "photos")
+        return photos.compactMap { row -> URL? in
+            guard let image = row["image"] as? JSONRow, image["is_animated"] as? Bool != true,
+                  let large = image["large"] as? JSONRow, let w = large["width"] as? Double,
+                  let h = large["height"] as? Double, w >= 640, h > 0, (1.35...2.7).contains(w / h) else { return nil }
+            return Network.artworkURL(large["url"] as? String)
+        }.first
+    }
+
+    static func credits(_ subject: Subject) async throws -> [Credit] {
+        let (people, _) = try await rows("\(subject.kind)/\(subject.id)/credits", [:], key: "items")
+        var seen = Set<String>()
+        return people.prefix(12).compactMap { row in
+            guard let name = string(row["name"]) else { return nil }
+            let id = catalogID(row["id"]) ?? name
+            guard seen.insert(id).inserted else { return nil }
+            let avatar = row["avatar"] as? JSONRow
+            let photo = Network.artworkURL(avatar?["normal"] as? String ?? avatar?["large"] as? String)
+            return Credit(id: id, name: name, role: string(row["simple_character"]) ?? string(row["category"]) ?? "",
+                          photo: photo?.path.hasPrefix("/view/") == true ? photo : nil)
+        }
     }
 
     static func channel(_ channel: Channel, kind: String, tags: [String], sort: String, start: Int) async throws -> (items: [Subject], next: Int?) {

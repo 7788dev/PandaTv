@@ -8,6 +8,14 @@ final class PandaUITests: XCTestCase {
         add(attachment)
     }
 
+    private func captureControls(_ name: String, _ app: XCUIApplication) {
+        capture(name)
+        let tree = XCTAttachment(string: app.debugDescription)
+        tree.name = name + "-accessibility"
+        tree.lifetime = .keepAlways
+        add(tree)
+    }
+
     private func rotateToPortrait(_ app: XCUIApplication) {
         XCUIDevice.shared.orientation = .portrait
         let settled = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
@@ -22,6 +30,7 @@ final class PandaUITests: XCTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         let app = XCUIApplication()
         app.launchEnvironment["PANDA_TEST_PORT"] = "18765"
+        app.launchEnvironment["PANDA_TEST_LIBRARY"] = UUID().uuidString
         app.launch()
         let featured = app.buttons["featured"]
         XCTAssertTrue(featured.waitForExistence(timeout: 25))
@@ -45,7 +54,29 @@ final class PandaUITests: XCTestCase {
         let elapsed = expectation(description: "decode several seconds of HLS")
         DispatchQueue.main.asyncAfter(deadline: .now() + 6) { elapsed.fulfill() }
         wait(for: [elapsed], timeout: 9)
-        capture("iPad-system-player")
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.31, dy: 0.5)).tap()
+        captureControls("iPad-system-player", app)
+        app.buttons["volume-button"].tap()
+        let gain = app.sliders["volume-slider"]
+        XCTAssertTrue(gain.waitForExistence(timeout: 5))
+        gain.adjust(toNormalizedSliderPosition: 0.35)
+        let mute = app.buttons["mute"]
+        mute.tap()
+        XCTAssertTrue(mute.label.contains("取消静音"))
+        mute.tap()
+        XCTAssertEqual(mute.label, "静音")
+        captureControls("iPad-player-volume", app)
+        app.buttons["close-volume"].tap()
+        app.buttons["player-options"].tap()
+        captureControls("iPad-player-options", app)
+        app.buttons["播放线路"].tap()
+        let mirror = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "线路 2")).firstMatch
+        XCTAssertTrue(mirror.waitForExistence(timeout: 5))
+        mirror.tap()
+        let alternative = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (try? String(contentsOf: URL(string: "http://127.0.0.1:18765/test/alternative")!)) == "yes"
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [alternative], timeout: 15), .completed)
         close.tap()
         XCUIDevice.shared.orientation = .landscapeLeft
         app.terminate()
@@ -68,6 +99,7 @@ final class PandaUITests: XCTestCase {
         XCTAssertTrue(hint.waitForExistence(timeout: 12))
         hint.tap()
         XCTAssertTrue(app.buttons["title-26647087"].waitForExistence(timeout: 12))
+        capture("iPad-search-results")
     }
 
     func testLiveHomeAppearance() throws {
