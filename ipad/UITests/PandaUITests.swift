@@ -118,6 +118,7 @@ final class PandaUITests: PandaScreenTest {
         app.launch()
         let resume = app.buttons["resume-26647087"]
         XCTAssertTrue(resume.waitForExistence(timeout: 12))
+        captureControls("首页-继续观看卡片", app)
         resume.tap()
         XCTAssertTrue(close.waitForExistence(timeout: 18))
         close.tap()

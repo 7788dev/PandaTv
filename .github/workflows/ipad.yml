@@ -36,6 +36,14 @@ jobs:
           xcodegen generate --spec ipad/project.yml
       - name: Build and verify the unsigned arm64 IPA
         run: bash ipad/ci/package.sh "$RUNNER_TEMP/ipad-dist"
+      - name: Upload verified device IPA
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Panda-iPad-unsigned
+          path: ${{ runner.temp }}/ipad-dist/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
       - name: Start iPad simulator
         run: |
           runtime=com.apple.CoreSimulator.SimRuntime.iOS-18-5
@@ -59,25 +67,25 @@ jobs:
           trap 'kill "$server" 2>/dev/null || true' EXIT
           xcrun simctl bootstatus "$IPAD_SIMULATOR" -b
           xcrun simctl ui "$IPAD_SIMULATOR" appearance light
+          settings=(-project ipad/Panda.xcodeproj -scheme Panda -configuration Debug -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" -derivedDataPath "$RUNNER_TEMP/ipad-sim-build")
+          xcodebuild build-for-testing "${settings[@]}"
+          xcodebuild test-without-building "${settings[@]}" -parallel-testing-enabled NO \
+            -only-testing:PandaUITests/TransportAuditTests -resultBundlePath "$RUNNER_TEMP/ipad-transport.xcresult"
           standard=0
-          xcodebuild test -project ipad/Panda.xcodeproj -scheme Panda -configuration Debug \
-            -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" \
-            -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/ipad-sim-build" \
-            -skip-testing:PandaUITests/AdaptiveAppearanceTests \
+          xcodebuild test-without-building "${settings[@]}" -parallel-testing-enabled NO \
+            -skip-testing:PandaUITests/AdaptiveAppearanceTests -skip-testing:PandaUITests/TransportAuditTests \
             -resultBundlePath "$RUNNER_TEMP/ipad-tests.xcresult" || standard=$?
           xcrun simctl ui "$IPAD_SIMULATOR" appearance dark
           xcrun simctl ui "$IPAD_SIMULATOR" content_size accessibility-large
           accessible=0
-          xcodebuild test-without-building -project ipad/Panda.xcodeproj -scheme Panda -configuration Debug \
-            -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" \
-            -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/ipad-sim-build" \
+          xcodebuild test-without-building "${settings[@]}" -parallel-testing-enabled NO \
             -only-testing:PandaUITests/AdaptiveAppearanceTests \
             -resultBundlePath "$RUNNER_TEMP/ipad-accessible.xcresult" || accessible=$?
           (( standard == 0 && accessible == 0 ))
       - name: Export iPad screenshots
         if: always() && !cancelled()
         run: |
-          for suite in tests accessible; do
+          for suite in transport tests accessible; do
             if [[ -d "$RUNNER_TEMP/ipad-$suite.xcresult" ]]; then
               mkdir -p "$RUNNER_TEMP/ipad-screens/$suite"
               xcrun xcresulttool export attachments --path "$RUNNER_TEMP/ipad-$suite.xcresult" --output-path "$RUNNER_TEMP/ipad-screens/$suite"
@@ -93,10 +101,3 @@ jobs:
             ${{ runner.temp }}/ipad-network.log
           if-no-files-found: ignore
           retention-days: 7
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: Panda-iPad-unsigned
-          path: ${{ runner.temp }}/ipad-dist/
-          if-no-files-found: error
-          compression-level: 0
-          retention-days: 30
