@@ -63,3 +63,8 @@ tv/build/
 tv/app/build/
 tv/.keystore/
 
+# Generated iPad project and local Xcode state
+ipad/Panda.xcodeproj/
+ipad/DerivedData/
+*.xcuserstate
+

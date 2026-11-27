@@ -2,7 +2,7 @@
 
 # Panda
 
-Panda 是一款面向 Windows 桌面和 Android TV 的影视客户端。可以按类型、地区和年份挑片，也可以用片名或拼音首字母搜索。收藏和观看进度保存在当前设备，下次打开作品就能接着看。
+Panda 是一款面向 Windows、Android TV 和 iPad 的影视客户端。可以按类型、地区和年份挑片，也可以用片名或拼音首字母搜索。收藏和观看进度保存在当前设备，下次打开作品就能接着看。
 
 [**下载最新版本**](https://github.com/7788dev/PandaTv/releases/latest) · [界面预览](#界面预览) · [从源码运行](#从源码运行)
 
@@ -18,6 +18,8 @@ Panda 是一款面向 Windows 桌面和 Android TV 的影视客户端。可以�
 | Android TV 5.1 及以上（API 22+） | `Panda-TV-<版本>.apk` | 将 APK 传到电视或电视盒子，用文件管理器打开安装。 |
 
 如需校验文件，可将安装包的 SHA-256 与同一发布页的 `SHA256SUMS.txt` 比对。
+
+**iPadOS 15.0 及以上**可在 [iPad 构建记录](https://github.com/7788dev/PandaTv/actions/workflows/ipad.yml)中打开最近一次成功的运行，下载 `Panda-iPad-unsigned` 并解压，得到真机 IPA 和对应的 SHA-256。iPad 客户端使用系统侧边栏、原生触控导航和 AVKit 播放器，支持横竖屏和分屏。
 
 ## 界面预览
 

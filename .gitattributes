@@ -1,2 +1,3 @@
 # Playback assertions compare captured manifest lines byte for byte.
 docs/evidence/manifest-*.m3u8 text eol=lf
+ipad/ci/*.sh text eol=lf

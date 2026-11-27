@@ -1,0 +1,59 @@
+name: Panda
+options:
+  deploymentTarget:
+    iOS: "15.0"
+  developmentLanguage: zh-Hans
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "2"
+    SUPPORTS_MACCATALYST: NO
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Panda:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - path: ../resources/play-sources.json
+        buildPhase: resources
+      - path: ../resources/search-titles.tsv
+        buildPhase: resources
+      - path: ../resources/app-icon.png
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.panda.ipad
+        INFOPLIST_FILE: Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES: YES
+  PandaTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: Panda
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.panda.ipad.tests
+        GENERATE_INFOPLIST_FILE: YES
+  PandaUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: Panda
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: app.panda.ipad.uitests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  Panda:
+    build:
+      targets:
+        Panda: all
+    test:
+      language: zh-Hans
+      region: CN
+      targets: [PandaTests, PandaUITests]

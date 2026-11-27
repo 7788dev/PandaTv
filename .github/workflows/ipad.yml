@@ -1,0 +1,86 @@
+name: iPad IPA
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'ipad/**'
+      - 'resources/app-icon.png'
+      - 'resources/play-sources.json'
+      - 'resources/search-titles.tsv'
+      - 'scripts/generate-fixture-hls.py'
+      - '.github/workflows/ipad.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ipad-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ipad:
+    name: iPad device package and simulator
+    runs-on: macos-15
+    timeout-minutes: 35
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Generate Xcode project
+        run: |
+          command -v xcodegen || brew install xcodegen
+          xcodegen generate --spec ipad/project.yml
+      - name: Build and verify the unsigned arm64 IPA
+        run: bash ipad/ci/package.sh "$RUNNER_TEMP/ipad-dist"
+      - name: Start iPad simulator
+        run: |
+          runtime=com.apple.CoreSimulator.SimRuntime.iOS-18-5
+          device_type=$(xcrun simctl list devicetypes -j | jq -r '.devicetypes[] | select(.name=="iPad (7th generation)") | .identifier')
+          if [[ -n "$device_type" ]] && device=$(xcrun simctl create 'Panda iPad 7' "$device_type" "$runtime"); then
+            echo "Testing iPad (7th generation) on iPadOS 18.5"
+          else
+            device=$(xcrun simctl list devices available -j | jq -er --arg os "$runtime" '[.devices[$os][] | select(.name | startswith("iPad ("))][0].udid')
+          fi
+          echo "IPAD_SIMULATOR=$device" >> "$GITHUB_ENV"
+          xcrun simctl boot "$device"
+      - name: Prepare the offline HLS fixture
+        run: |
+          python3 -m venv "$RUNNER_TEMP/fixture-tools"
+          "$RUNNER_TEMP/fixture-tools/bin/pip" -q install imageio-ffmpeg==0.6.0
+          "$RUNNER_TEMP/fixture-tools/bin/python" scripts/generate-fixture-hls.py --duration 90 --output "$RUNNER_TEMP/ipad-media"
+      - name: Run native iPad navigation and playback tests
+        run: |
+          python3 ipad/ci/fixture-server.py "$RUNNER_TEMP/ipad-media" > "$RUNNER_TEMP/ipad-network.log" 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          xcrun simctl bootstatus "$IPAD_SIMULATOR" -b
+          xcodebuild test -project ipad/Panda.xcodeproj -scheme Panda -configuration Debug \
+            -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" \
+            -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/ipad-sim-build" \
+            -resultBundlePath "$RUNNER_TEMP/ipad-tests.xcresult"
+      - name: Export iPad screenshots
+        if: always() && !cancelled()
+        run: |
+          if [[ -d "$RUNNER_TEMP/ipad-tests.xcresult" ]]; then
+            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/ipad-tests.xcresult" --output-path "$RUNNER_TEMP/ipad-screens"
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always() && !cancelled()
+        with:
+          name: ipad-simulator-evidence
+          path: |
+            ${{ runner.temp }}/ipad-screens/
+            ${{ runner.temp }}/ipad-network.log
+          if-no-files-found: ignore
+          retention-days: 7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Panda-iPad-unsigned
+          path: ${{ runner.temp }}/ipad-dist/
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 30
