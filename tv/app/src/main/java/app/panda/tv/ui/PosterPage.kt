@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import androidx.leanback.widget.VerticalGridView
 import app.panda.tv.model.Copy
 
-/** The footer has a fixed slot below the collection, so its state never covers a card. */
+/** Pagination messages appear in their own row below the collection. */
 internal class PosterPageFooter(
     ctx: Context,
     private var grid: VerticalGridView,
@@ -69,7 +69,7 @@ internal class PosterPageFooter(
     fun show(text: String? = null, retryable: Boolean = false) {
         message.text = text.orEmpty()
         retry.visibility = if (retryable) VISIBLE else GONE
-        visibility = if (text != null) VISIBLE else INVISIBLE
+        visibility = if (text != null) VISIBLE else GONE
     }
 
     fun showMore(action: (() -> Unit)?) { onMore = action; more.visibility = if (action == null) GONE else VISIBLE }

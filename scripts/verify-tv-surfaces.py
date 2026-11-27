@@ -21,7 +21,8 @@ def main():
     parser.add_argument("--serial", required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--apk", type=Path, required=True)
-    parser.add_argument("--case", choices=["bezel", "channel_memory", "detail_return", "channel_eviction", "channel_eviction_aux_click", "library_root_memory", "confirmation", "keypad_back"], action="append")
+    parser.add_argument("--case", choices=["bezel", "channel_memory", "channel_grid_viewport", "detail_return", "channel_eviction",
+                                           "channel_eviction_aux_click", "library_root_memory", "confirmation", "keypad_back"], action="append")
     args = parser.parse_args()
     helper.SERIAL = args.serial
     os.environ["ADBUTILS_ADB_PATH"] = helper.ADB
@@ -108,6 +109,33 @@ def main():
         key("enter")
         tree = snap("channel-return")
         assert any(node["selected"] and "最新" in node["childTexts"] for node in tree), "Returning to a root tab reset its sort"
+
+    def channel_grid_viewport():
+        def poster_grid(tree):
+            return next((node for node in tree if node["class"] == "android.widget.GridView" and node["bounds"][0] == 0), None)
+
+        viewports = report["channelGridViewports"] = {}
+        for tab in ("电影", "剧集", "动漫"):
+            helper.focus_top_bar(device)
+            move(tab)
+            key("enter")
+            grid, tree = helper.wait_for(device, poster_grid, timeout=35)
+            for _ in range(4):
+                if focused(tree)["bounds"][1] >= grid["bounds"][1]:
+                    break
+                key("dpad_down")
+                tree = nodes()
+            first_card = focused(tree)
+            assert first_card["clickable"] and first_card["bounds"][1] >= grid["bounds"][1], f"{tab}: D-pad Down did not reach a card"
+            key("dpad_down", .5)
+            tree = snap(f"channel-grid-{tab}")
+            current = focused(tree)
+            assert current["childTexts"] and current["childTexts"] != first_card["childTexts"], f"{tab}: D-pad Down did not select another card"
+            safe_box(current["bounds"], f"{tab} poster focus")
+            viewports[tab] = {"gridBottom": poster_grid(tree)["bounds"][3], "windowBottom": tree[0]["bounds"][3],
+                              "focusedCard": current["childTexts"]}
+        assert all(value["gridBottom"] == value["windowBottom"] for value in viewports.values()), \
+            f"An unused footer shortened a channel grid: {viewports}"
 
     def detail_return():
         helper.focus_top_bar(device)
@@ -258,7 +286,8 @@ def main():
         helper.run_adb("pull", STATE, str(backup))
         before = helper.run_adb("shell", "sha256sum", STATE).split()[0]
         try:
-            for case in (bezel, channel_memory, detail_return, channel_eviction, channel_eviction_aux_click, library_root_memory, confirmation, keypad_back):
+            for case in (bezel, channel_memory, channel_grid_viewport, detail_return, channel_eviction,
+                         channel_eviction_aux_click, library_root_memory, confirmation, keypad_back):
                 if args.case and case.__name__ not in args.case:
                     continue
                 try:

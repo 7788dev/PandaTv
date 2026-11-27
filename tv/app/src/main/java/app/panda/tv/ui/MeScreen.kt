@@ -262,7 +262,7 @@ class MeScreen(ctx: Context, nav: Navigator, initialTab: String? = null) : Scree
             } else bodyBox.addView(Theme.loadingBox(ctx))
         }
         syncFooter()
-        if (entries.isEmpty()) pageFooter.visibility = View.INVISIBLE
+        if (entries.isEmpty()) pageFooter.visibility = View.GONE
     }
 
     private fun loadPage(retryId: String? = null) {
