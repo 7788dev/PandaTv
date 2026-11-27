@@ -55,6 +55,25 @@ final class PandaUITests: XCTestCase {
         XCTAssertTrue(search.waitForExistence(timeout: 10))
         search.tap()
         search.typeText("ST")
+        let hint = app.buttons["三体"].firstMatch
+        XCTAssertTrue(hint.waitForExistence(timeout: 12))
+        hint.tap()
         XCTAssertTrue(app.buttons["title-26647087"].waitForExistence(timeout: 12))
+    }
+
+    func testLiveHomeAppearance() throws {
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let app = XCUIApplication()
+        app.launch()
+        guard app.buttons["featured"].waitForExistence(timeout: 18) else {
+            throw XCTSkip("Live catalogue is unavailable from this runner")
+        }
+        // Artwork arrives independently after the title. Capture the production screen once it settles.
+        let settle = expectation(description: "load visible artwork")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { settle.fulfill() }
+        wait(for: [settle], timeout: 8)
+        capture("iPad-live-home-landscape")
+        XCUIDevice.shared.orientation = .portrait
+        capture("iPad-live-home-portrait")
     }
 }

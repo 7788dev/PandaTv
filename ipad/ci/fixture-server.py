@@ -4,7 +4,7 @@ import sys
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 MEDIA = Path(sys.argv[1]).resolve()
 played = False
@@ -32,7 +32,8 @@ class Boundary(SimpleHTTPRequestHandler):
             if "/subject_collection/" in path:
                 value = {"subject_collection_items": [subject]}
             elif path.endswith("/search/movie"):
-                value = {"items": [{"target_type": "tv", "target": subject}]}
+                query = parse_qs(urlsplit(self.path).query).get("q", [""])[0]
+                value = {"items": [{"target_type": "tv", "target": subject}] if query == "三体" else []}
             elif path.endswith("/tv/26647087"):
                 value = subject
             elif path.endswith("/recommend"):

@@ -30,7 +30,7 @@ final class PlaybackSession: ObservableObject {
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback)
         try? AVAudioSession.sharedInstance().setActive(true)
         clock = player.addPeriodicTimeObserver(forInterval: CMTime(seconds: 5, preferredTimescale: 600), queue: .main) { [weak self] _ in
-            self?.save()
+            Task { @MainActor in self?.save() }
         }
         choose(0)
     }
@@ -52,15 +52,17 @@ final class PlaybackSession: ObservableObject {
         let center = NotificationCenter.default
         notifications = [
             center.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: item, queue: .main) { [weak self] _ in
-                guard let self = self, self.player.currentItem === item else { return }
-                self.finished = true
-                self.save()
+                Task { @MainActor in
+                    guard let self = self, self.player.currentItem === item else { return }
+                    self.finished = true
+                    self.save()
+                }
             },
             center.addObserver(forName: .AVPlayerItemFailedToPlayToEndTime, object: item, queue: .main) { [weak self] _ in
-                self?.fallback(item)
+                Task { @MainActor in self?.fallback(item) }
             },
             center.addObserver(forName: .AVPlayerItemPlaybackStalled, object: item, queue: .main) { [weak self] _ in
-                self?.watch(item, duringStartup: false)
+                Task { @MainActor in self?.watch(item, duringStartup: false) }
             }
         ]
         watch(item, duringStartup: true)
@@ -173,27 +175,24 @@ struct PlayerPage: View {
             }
             .navigationTitle(request.subject.kind == "movie" ? request.subject.title : "\(request.subject.title) · \(request.episode.title)")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("完成") { dismiss() }.accessibilityIdentifier("close-player")
-                }
-                if request.episode.streams.count > 1 {
-                    ToolbarItem(placement: .primaryAction) {
-                        Menu {
-                            ForEach(Array(request.episode.streams.enumerated()), id: \.offset) { index, stream in
-                                Button { session.choose(index) } label: {
-                                    if index == session.selected { Label(stream.source, systemImage: "checkmark") }
-                                    else { Text(stream.source) }
-                                }
-                            }
-                        } label: { Label("播放线路", systemImage: "list.bullet") }
-                    }
-                }
-            }
+            .navigationBarItems(leading: Button("完成") { dismiss() }.accessibilityIdentifier("close-player"), trailing: sourceMenu)
         }
         .navigationViewStyle(.stack).preferredColorScheme(.dark)
         .onAppear { session.start() }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in session.save() }
         .onDisappear { session.stop() }
+    }
+
+    @ViewBuilder private var sourceMenu: some View {
+        if request.episode.streams.count > 1 {
+            Menu {
+                ForEach(Array(request.episode.streams.enumerated()), id: \.offset) { index, stream in
+                    Button { session.choose(index) } label: {
+                        if index == session.selected { Label(stream.source, systemImage: "checkmark") }
+                        else { Text(stream.source) }
+                    }
+                }
+            } label: { Label("播放线路", systemImage: "list.bullet") }
+        }
     }
 }

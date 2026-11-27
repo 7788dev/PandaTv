@@ -274,7 +274,7 @@ struct SearchPage: View {
                 let terms = await TitleIndex.shared.hints(query)
                 try Task.checkCancellation()
                 hints = terms
-                let titles = try await Catalog.search(terms.first ?? query)
+                let titles = try await Catalog.search(query)
                 try Task.checkCancellation()
                 results = titles
             } catch { if !Task.isCancelled { failed = true } }
