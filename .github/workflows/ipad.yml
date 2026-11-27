@@ -51,7 +51,7 @@ jobs:
         run: |
           python3 -m venv "$RUNNER_TEMP/fixture-tools"
           "$RUNNER_TEMP/fixture-tools/bin/pip" -q install imageio-ffmpeg==0.6.0
-          "$RUNNER_TEMP/fixture-tools/bin/python" scripts/generate-fixture-hls.py --duration 90 --output "$RUNNER_TEMP/ipad-media"
+          "$RUNNER_TEMP/fixture-tools/bin/python" scripts/generate-fixture-hls.py --quality 480 --duration 90 --output "$RUNNER_TEMP/ipad-media"
       - name: Run native iPad navigation and playback tests
         run: |
           python3 ipad/ci/fixture-server.py "$RUNNER_TEMP/ipad-media" > "$RUNNER_TEMP/ipad-network.log" 2>&1 &

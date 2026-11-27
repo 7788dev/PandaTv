@@ -2,10 +2,19 @@ import XCTest
 
 final class PandaUITests: XCTestCase {
     private func capture(_ name: String) {
-        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
+        let attachment = XCTAttachment(screenshot: XCUIApplication().screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    private func rotateToPortrait(_ app: XCUIApplication) {
+        XCUIDevice.shared.orientation = .portrait
+        let settled = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            let frame = app.frame
+            return frame.height > frame.width && !app.cells["nav-首页"].isHittable
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [settled], timeout: 12), .completed)
     }
 
     func testBrowsePlayRotateAndRestore() throws {
@@ -21,7 +30,7 @@ final class PandaUITests: XCTestCase {
         let favorite = app.buttons["favorite"]
         XCTAssertTrue(favorite.waitForExistence(timeout: 10))
         if !favorite.label.contains("已收藏") { favorite.tap() }
-        XCUIDevice.shared.orientation = .portrait
+        rotateToPortrait(app)
         let episode = app.buttons["episode-2"]
         XCTAssertTrue(episode.waitForExistence(timeout: 15))
         capture("iPad-portrait-detail")
@@ -73,7 +82,7 @@ final class PandaUITests: XCTestCase {
         DispatchQueue.main.asyncAfter(deadline: .now() + 4) { settle.fulfill() }
         wait(for: [settle], timeout: 8)
         capture("iPad-live-home-landscape")
-        XCUIDevice.shared.orientation = .portrait
+        rotateToPortrait(app)
         capture("iPad-live-home-portrait")
     }
 }

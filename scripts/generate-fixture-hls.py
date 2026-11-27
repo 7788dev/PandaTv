@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--output", type=Path, default=ROOT / ".tmp/quality-fixtures/media")
     parser.add_argument("--ffmpeg", type=Path)
     parser.add_argument("--duration", type=int, default=120)
+    parser.add_argument("--quality", choices=("480", "720", "1080"), help="Generate one rendition instead of all three")
     parser.add_argument("--write-headers", action="store_true")
     args = parser.parse_args()
     if args.duration < 90:
@@ -33,6 +34,8 @@ def main():
               "input": "FFmpeg testsrc2 and sine; no prototype or downloaded media", "outputs": []}
     heads = []
     for quality, width, height in (("480", 854, 480), ("720", 1280, 720), ("1080", 1920, 1080)):
+        if args.quality and quality != args.quality:
+            continue
         folder = output / quality
         folder.mkdir(parents=True, exist_ok=True)
         video = folder / "playback.mp4"

@@ -9,16 +9,25 @@ private actor Thumbnails {
     func image(_ url: URL, maxPixels: Int) async throws -> UIImage? {
         let key = "\(maxPixels):\(url.absoluteString)" as NSString
         if let cached = cache.object(forKey: key) { return cached }
-        let data = try await Network.read(url, referer: "https://movie.douban.com/")
-        try Task.checkCancellation()
+        var variants = [url]
+        if maxPixels > 640, url.path.hasPrefix("/view/photo/m/public/"),
+           var large = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+            large.path = large.path.replacingOccurrences(of: "/photo/m/", with: "/photo/l/")
+            if let candidate = large.url { variants.insert(candidate, at: 0) }
+        }
         let options: [CFString: Any] = [kCGImageSourceCreateThumbnailFromImageAlways: true,
             kCGImageSourceCreateThumbnailWithTransform: true, kCGImageSourceThumbnailMaxPixelSize: maxPixels,
             kCGImageSourceShouldCacheImmediately: true]
-        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
-              let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { return nil }
-        let result = UIImage(cgImage: thumbnail)
-        cache.setObject(result, forKey: key, cost: thumbnail.bytesPerRow * thumbnail.height)
-        return result
+        for candidate in variants {
+            try Task.checkCancellation()
+            guard let data = try? await Network.read(candidate, referer: "https://movie.douban.com/"),
+                  let source = CGImageSourceCreateWithData(data as CFData, nil),
+                  let thumbnail = CGImageSourceCreateThumbnailAtIndex(source, 0, options as CFDictionary) else { continue }
+            let result = UIImage(cgImage: thumbnail)
+            cache.setObject(result, forKey: key, cost: thumbnail.bytesPerRow * thumbnail.height)
+            return result
+        }
+        return nil
     }
 }
 

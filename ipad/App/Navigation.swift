@@ -112,12 +112,11 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
     private let sidebar = Sidebar()
     private let detailNavigation = UINavigationController()
     private let library = Library()
+    private var pinnedSidebar: Bool?
 
     init() {
         super.init(style: .doubleColumn)
         delegate = self
-        preferredDisplayMode = .oneBesideSecondary
-        preferredSplitBehavior = .tile
         let primary = UINavigationController(rootViewController: sidebar)
         primary.navigationBar.prefersLargeTitles = true
         detailNavigation.navigationBar.prefersLargeTitles = true
@@ -127,6 +126,17 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
         open(.home, reveal: false)
     }
     required init?(coder: NSCoder) { fatalError("Use init()") }
+
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        guard view.bounds.width > 0 else { return }
+        // Leave room for a full poster grid beside the system sidebar.
+        let pin = view.bounds.width >= 900
+        guard pin != pinnedSidebar else { return }
+        pinnedSidebar = pin
+        preferredSplitBehavior = pin ? .tile : .overlay
+        preferredDisplayMode = pin ? .oneBesideSecondary : .secondaryOnly
+    }
 
     private func open(_ destination: Destination, reveal: Bool) {
         let select: (Subject) -> Void = { [weak self] in self?.showSubject($0) }
