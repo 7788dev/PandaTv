@@ -17,7 +17,7 @@ final class TransportAuditTests: PandaScreenTest {
 
     private func node(_ id: String, in snapshot: XCUIElementSnapshot) -> XCUIElementSnapshot? {
         if snapshot.identifier == id && !snapshot.frame.isEmpty { return snapshot }
-        for child in snapshot.children {
+        for child in snapshot.children.reversed() {
             if let match = node(id, in: child) { return match }
         }
         return nil
@@ -42,9 +42,29 @@ final class TransportAuditTests: PandaScreenTest {
         return item
     }
 
+    private func videoPixelsVisible() -> Bool {
+        guard let image = XCUIScreen.main.screenshot().image.cgImage else { return false }
+        let side = 32
+        var rgba = [UInt8](repeating: 0, count: side * side * 4)
+        rgba.withUnsafeMutableBytes { bytes in
+            let context = CGContext(data: bytes.baseAddress, width: side, height: side, bitsPerComponent: 8,
+                bytesPerRow: side * 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+            context?.draw(image, in: CGRect(x: 0, y: 0, width: CGFloat(side), height: CGFloat(side)))
+        }
+        let colored = stride(from: 0, to: rgba.count, by: 4).filter { i in
+            let rgb = [Int(rgba[i]), Int(rgba[i + 1]), Int(rgba[i + 2])]
+            return rgb.max()! - rgb.min()! > 65
+        }
+        return colored.count > side * side / 8
+    }
+
     func testPauseSeekSkipSpeedAndEpisodeSelection() throws {
         let app = try openPlayer()
-        let playingLabel = try tapNative("Play/Pause", app).label
+        let playingLabel = try control("Play/Pause", app).label
+        for _ in 0..<3 {
+            if try control("Play/Pause", app).label != playingLabel { break }
+            try tapNative("Play/Pause", app)
+        }
         XCTAssertNotEqual(try control("Play/Pause", app).label, playingLabel)
         let initial = try control("Current position", app).value as? String
         try tapNative("Skip Forward", app)
@@ -84,14 +104,26 @@ final class TransportAuditTests: PandaScreenTest {
     func testNativeFullscreenRoutePickerAndPictureInPicture() throws {
         let app = try openPlayer()
         try tapNative("Fullscreen Button", app)
+        let visible = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in self.videoPixelsVisible() }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [visible], timeout: 10), .completed, "AVKit fullscreen must keep the decoded HLS picture")
+        let start = try control("Current position", app).value as? String
+        var advanced = false
+        for _ in 0..<4 {
+            RunLoop.current.run(until: Date().addingTimeInterval(0.7))
+            if let position = try control("Current position", app).value as? String, position != start { advanced = true; break }
+        }
+        XCTAssertTrue(advanced, "Fullscreen playback must continue advancing")
         captureControls("播放-系统全屏", app)
         let close = app.buttons["close-player"]
         if !close.isHittable {
             try tapNative("Close Button", app)
         }
         XCTAssertTrue(close.waitForExistence(timeout: 6))
+        _ = try control("AirPlay", app)
+        capture("播放-隔空播放入口")
         try tapNative("AirPlay", app)
-        captureControls("播放-隔空播放设备面板", app)
+        RunLoop.current.run(until: Date().addingTimeInterval(1.2))
+        captureControls("播放-隔空播放系统响应", app)
         // A hosted simulator has no external receiver. Reopen the title for the independent PiP control.
         app.terminate()
         let pipApp = try openPlayer()

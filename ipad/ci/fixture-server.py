@@ -1,7 +1,7 @@
 """Serve only the network boundaries used by the iPad simulator integration test."""
 import json
 import sys
-import time
+from threading import Event
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -11,6 +11,8 @@ MEDIA = Path(sys.argv[1]).resolve()
 played = False
 alternative = False
 recovered = False
+release_loading = Event()
+release_loading.set()
 subject = {
     "id": "26647087", "type": "tv", "title": "三体", "year": "2023",
     "card_subtitle": "2023 / 中国大陆 / 剧情 科幻 / 杨磊",
@@ -37,8 +39,12 @@ class Boundary(SimpleHTTPRequestHandler):
         path, query = split.path, parse_qs(split.query)
         scenario = query.get("scenario", [""])[0]
         if scenario == "delayed" and ("/subject_collection/" in path or path.endswith("/recommend")):
-            time.sleep(4)
-        if path in ("/test/played", "/test/alternative", "/test/recover", "/test/reset"):
+            release_loading.wait(timeout=16)
+        if path in ("/test/played", "/test/alternative", "/test/recover", "/test/reset", "/test/hold", "/test/release"):
+            if path == "/test/hold":
+                release_loading.clear()
+            if path == "/test/release":
+                release_loading.set()
             if path == "/test/recover":
                 recovered = True
             if path == "/test/reset":

@@ -8,6 +8,19 @@ struct PlaybackRequest: Identifiable {
     let resume: Double
 }
 
+/// AVKit can cover the presenting view for fullscreen, AirPlay or PiP. Only dismissing the
+/// outer playback presentation ends the session; a view disappearance is not a stop command.
+@MainActor final class PlaybackPresentation: ObservableObject {
+    @Published var request: PlaybackRequest?
+    private(set) var session: PlaybackSession?
+    func open(_ request: PlaybackRequest, library: Library) {
+        session?.stop()
+        session = PlaybackSession(request: request, library: library)
+        self.request = request
+    }
+    func dismissed() { session?.stop(); session = nil }
+}
+
 private struct DetailHeaderGone: PreferenceKey {
     static let defaultValue = false
     static func reduce(value: inout Bool, nextValue: () -> Bool) { value = nextValue() }
@@ -61,7 +74,7 @@ struct SubjectPage: View {
     @State private var autoOpened = false
     @State private var expanded = false
     @State private var group = 0
-    @State private var active: PlaybackRequest?
+    @StateObject private var presentation = PlaybackPresentation()
     private var subject: Subject { availability.detail ?? initial }
     private var episodes: [PlayEpisode] { availability.episodes }
     private var reading: Bool { availability.reading }
@@ -154,7 +167,9 @@ struct SubjectPage: View {
         }
         .task { if initial.backdrop == nil { still = try? await Catalog.still(initial) } }
         .task { if credits.isEmpty { credits = (try? await Catalog.credits(initial)) ?? [] } }
-        .fullScreenCover(item: $active) { request in PlayerPage(request: request, library: library, availability: availability) }
+        .fullScreenCover(item: $presentation.request, onDismiss: presentation.dismissed) { request in
+            if let session = presentation.session { PlayerPage(request: request, availability: availability, session: session) }
+        }
     }
 
     private var information: some View {
@@ -232,7 +247,7 @@ struct SubjectPage: View {
     private func play(_ episode: PlayEpisode) {
         autoOpened = true
         let resume = last.flatMap { !$0.finished && $0.episode == episode.number ? $0.seconds : nil } ?? 0
-        active = PlaybackRequest(subject: savedSubject, episode: episode, episodes: episodes, resume: resume)
+        presentation.open(PlaybackRequest(subject: savedSubject, episode: episode, episodes: episodes, resume: resume), library: library)
     }
 
     private func synopsisNeedsExpansion(width: CGFloat) -> Bool {

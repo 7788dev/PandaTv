@@ -4,14 +4,9 @@ import SwiftUI
 struct PlayerPage: View {
     let request: PlaybackRequest
     @ObservedObject var availability: TitleAvailability
-    @StateObject private var session: PlaybackSession
+    @ObservedObject var session: PlaybackSession
     @Environment(\.dismiss) private var dismiss
 
-    @MainActor init(request: PlaybackRequest, library: Library, availability: TitleAvailability) {
-        self.request = request
-        self.availability = availability
-        _session = StateObject(wrappedValue: PlaybackSession(request: request, library: library))
-    }
     var body: some View {
         PlayerNavigation(session: session, subject: request.subject,
                          episodes: availability.episodes.isEmpty ? request.episodes : availability.episodes,
@@ -20,7 +15,6 @@ struct PlayerPage: View {
             .onAppear { session.start() }
             .onReceive(availability.$episodes) { session.updateStreams($0) }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in session.save() }
-            .onDisappear { session.stop() }
     }
 }
 
@@ -47,7 +41,7 @@ private struct PlayerNavigation: UIViewControllerRepresentable {
     }
 }
 
-private final class PlayerController: UIViewController, UIPopoverPresentationControllerDelegate {
+private final class PlayerController: UIViewController, UIPopoverPresentationControllerDelegate, AVPlayerViewControllerDelegate {
     private let session: PlaybackSession
     private let subject: Subject
     private let close: () -> Void
@@ -74,6 +68,7 @@ private final class PlayerController: UIViewController, UIPopoverPresentationCon
         options.accessibilityIdentifier = "player-options"; options.accessibilityLabel = "播放选项"
         navigationItem.leftBarButtonItem = done
         screen.player = session.player
+        screen.delegate = self
         screen.videoGravity = .resizeAspect
         embed(screen)
     }
@@ -155,6 +150,25 @@ private final class PlayerController: UIViewController, UIPopoverPresentationCon
         present(panel, animated: true)
     }
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle { .none }
+
+    func playerViewController(_ playerViewController: AVPlayerViewController, willBeginFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        preservePlayback(during: coordinator)
+    }
+    func playerViewController(_ playerViewController: AVPlayerViewController, willEndFullScreenPresentationWithAnimationCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        preservePlayback(during: coordinator)
+    }
+    private func preservePlayback(during coordinator: UIViewControllerTransitionCoordinator) {
+        let player = session.player
+        guard let item = player.currentItem, player.timeControlStatus != .paused else { return }
+        let rate = player.rate
+        coordinator.animate(alongsideTransition: nil) { transition in
+            guard !transition.isCancelled, player.currentItem === item, player.timeControlStatus == .paused else { return }
+            let end = item.duration.seconds
+            if !end.isFinite || player.currentTime().seconds < end - 0.5 {
+                if rate > 0 { player.rate = rate } else { player.play() }
+            }
+        }
+    }
 }
 
 private func volumeSymbol(_ value: Double) -> String {

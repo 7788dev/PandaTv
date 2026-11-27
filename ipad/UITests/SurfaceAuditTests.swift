@@ -16,15 +16,22 @@ final class SurfaceAuditTests: PandaScreenTest {
         XCTAssertTrue(app.staticTexts["流浪地球"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.buttons["play"].waitForExistence(timeout: 10))
     }
-    func testLoadingStatesResolveIntoContent() {
+    func testLoadingStatesResolveIntoContent() throws {
+        let hold = URL(string: "http://127.0.0.1:18765/test/hold")!
+        let release = URL(string: "http://127.0.0.1:18765/test/release")!
+        _ = try String(contentsOf: hold)
+        defer { _ = try? String(contentsOf: release) }
         let app = fixture("delayed")
         let loading = app.descendants(matching: .any)["home-loading"].firstMatch
         XCTAssertTrue(loading.waitForExistence(timeout: 8))
         capture("载入-首页")
+        _ = try String(contentsOf: release)
         XCTAssertTrue(app.buttons["featured"].firstMatch.waitForExistence(timeout: 12))
+        _ = try String(contentsOf: hold)
         app.cells["nav-电影"].tap()
         XCTAssertTrue(app.descendants(matching: .any)["channel-loading"].firstMatch.waitForExistence(timeout: 8))
         capture("载入-频道")
+        _ = try String(contentsOf: release)
         XCTAssertTrue(app.buttons["title-26266893"].waitForExistence(timeout: 12))
     }
     func testChannelsFiltersPagingAndMovieDetail() {

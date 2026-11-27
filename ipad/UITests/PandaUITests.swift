@@ -207,6 +207,18 @@ final class PandaUITests: PandaScreenTest {
             RunLoop.current.run(until: Date().addingTimeInterval(0.9))
         }
         guard advanced else { throw XCTSkip("Live providers did not deliver advancing media on this runner") }
+        // Sample the programme after its opening as well as the initial stream.
+        if !app.sliders["Current position"].exists {
+            app.coordinate(withNormalizedOffset: CGVector(dx: 0.26, dy: 0.55)).tap()
+        }
+        if let position = try? app.sliders["Current position"].firstMatch.snapshot() {
+            let track = position.frame
+            let origin = app.coordinate(withNormalizedOffset: .zero)
+            let from = origin.withOffset(CGVector(dx: track.minX + 3, dy: track.midY))
+            let to = origin.withOffset(CGVector(dx: track.minX + track.width * 0.12, dy: track.midY))
+            from.press(forDuration: 0.2, thenDragTo: to)
+            RunLoop.current.run(until: Date().addingTimeInterval(4))
+        }
         captureControls("iPad-live-player", app)
         app.buttons["close-player"].tap()
     }

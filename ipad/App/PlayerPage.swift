@@ -174,6 +174,7 @@ final class PlaybackSession: ObservableObject {
         notifications.removeAll()
     }
     func stop() {
+        guard started else { return }
         save()
         detachItem()
         if let clock = clock { player.removeTimeObserver(clock); self.clock = nil }
