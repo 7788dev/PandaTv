@@ -183,6 +183,7 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
             host = UIHostingController(rootView: SearchPage(input: input, select: select).environmentObject(library))
             host.navigationItem.searchController = input.controller
             host.navigationItem.hidesSearchBarWhenScrolling = false
+            if #available(iOS 16.0, *) { host.navigationItem.preferredSearchBarPlacement = .stacked }
             host.definesPresentationContext = true
         case .favorites, .history:
             host = UIHostingController(rootView: LibraryPage(history: destination == .history, select: select, browse: browse).environmentObject(library))

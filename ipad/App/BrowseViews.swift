@@ -54,6 +54,7 @@ struct ChannelPage: View {
     @State private var busy = true
     @State private var failed = false
     @State private var sheet = false
+    @State private var loadedFilters: Filters?
     @Environment(\.sizeCategory) private var textSize
     private struct Request: Hashable { let filters: Filters; let page: Int }
 
@@ -72,7 +73,7 @@ struct ChannelPage: View {
                 }
                 if !filters.tags.isEmpty { Text(filters.tags.joined(separator: " · ")).font(.subheadline).foregroundColor(.secondary) }
                 PosterGrid(items: items, select: select)
-                if busy { ProgressView().frame(maxWidth: .infinity).padding() }
+                if busy { ProgressView().accessibilityLabel("正在载入片单").accessibilityIdentifier("channel-loading").frame(maxWidth: .infinity).padding() }
                 else if failed {
                     NoticeView(symbol: "wifi.exclamationmark", message: "暂时无法载入片单") { more += 1 }
                 } else if !offsets.isEmpty {
@@ -80,13 +81,17 @@ struct ChannelPage: View {
                         .controlSize(.large).frame(maxWidth: .infinity).accessibilityIdentifier("more-titles")
                 } else if items.isEmpty {
                     NoticeView(symbol: "film", message: "这个筛选条件下没有作品")
+                    if !filters.tags.isEmpty {
+                        Button("清除筛选") { filters = Filters(sort: filters.sort) }
+                            .buttonStyle(.bordered).buttonBorderShape(.capsule).controlSize(.large).frame(maxWidth: .infinity)
+                    }
                 }
             }.padding(.horizontal).padding(.horizontal, 6).padding(.bottom, 24)
         }
         .sheet(isPresented: $sheet) { FilterSheet(channel: channel, draft: filters) { filters = $0 } }
-        .onChange(of: filters) { _ in more = 0; offsets = [:]; items = [] }
         .task(id: Request(filters: filters, page: more)) {
             let current = filters
+            if loadedFilters != current { items = []; offsets = [:]; loadedFilters = current }
             let starts = offsets.isEmpty ? Dictionary(uniqueKeysWithValues: channel.kinds.map { ($0, 0) }) : offsets
             busy = true; failed = false
             // Commit each combined page together so retrying cannot skip a failed lane.
@@ -124,20 +129,22 @@ struct SearchPage: View {
     @State private var retry = 0
     @State private var popular: [Subject] = []
     @EnvironmentObject private var library: Library
+    private var query: String { String(input.text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(100)) }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 if !hints.isEmpty {
+                    MediaHeading(title: "相关片名")
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(hints, id: \.self) { hint in
-                                Button(hint) { input.choose(hint) }.buttonStyle(.bordered).frame(minHeight: 44)
+                                Button(hint) { input.choose(hint) }.buttonStyle(.bordered).buttonBorderShape(.capsule).frame(minHeight: 44)
                             }
                         }
                     }
                 }
-                if input.text.isEmpty {
+                if query.isEmpty {
                     if !library.queries.isEmpty {
                         HStack {
                             MediaHeading(title: "最近搜索")
@@ -155,20 +162,20 @@ struct SearchPage: View {
                         MediaHeading(title: "热门作品").padding(.top, 6)
                         PosterGrid(items: popular, select: select)
                     } else { NoticeView(symbol: "magnifyingglass", message: "搜索片名或拼音首字母") }
-                } else if busy { ProgressView().frame(maxWidth: .infinity).padding() }
+                } else if busy { ProgressView().accessibilityLabel("正在搜索").frame(maxWidth: .infinity).padding() }
                 else if failed { NoticeView(symbol: "wifi.exclamationmark", message: "搜索暂时不可用") { retry += 1 } }
                 else if !results.isEmpty {
                     MediaHeading(title: "搜索结果")
                     PosterGrid(items: results) { subject in library.rememberQuery(input.text); select(subject) }
                 }
-                else {
+                else if hints.isEmpty {
                     NoticeView(symbol: "magnifyingglass", message: "没有找到相关作品")
                 }
             }.padding([.horizontal, .bottom], 22)
         }
         .task { if popular.isEmpty { popular = (try? await Catalog.collection("movie_real_time_hotest")) ?? [] } }
         .task(id: "\(retry):\(input.text)") {
-            let query = String(input.text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(100))
+            let query = self.query
             results = []; hints = []; failed = false; busy = !query.isEmpty
             guard !query.isEmpty else { return }
             do {
@@ -176,7 +183,8 @@ struct SearchPage: View {
                 let terms = await TitleIndex.shared.hints(query)
                 try Task.checkCancellation()
                 hints = terms
-                let titles = try await Catalog.search(query)
+                var titles = try await Catalog.search(query)
+                if titles.isEmpty && !terms.isEmpty { titles = await Catalog.initialsResults(terms) }
                 try Task.checkCancellation()
                 results = titles
             } catch { if !Task.isCancelled { failed = true } }

@@ -1,6 +1,7 @@
 """Serve only the network boundaries used by the iPad simulator integration test."""
 import json
 import sys
+import time
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -19,7 +20,12 @@ subject = {
     "directors": [{"name": "杨磊"}], "actors": [{"name": "张鲁一"}, {"name": "于和伟"}],
 }
 movie = {**subject, "id": "26266893", "type": "movie", "title": "流浪地球", "year": "2019",
-         "card_subtitle": "2019 / 中国大陆 / 科幻 / 郭帆", "episodes_count": 0}
+         "card_subtitle": "2019 / 中国大陆 / 科幻 / 郭帆", "episodes_count": 0,
+         "intro": "太阳逐渐衰老，人类决定在地球表面建造行星发动机，让地球离开太阳系。"
+                  "人们迁入地下城生活，地表的运载车穿行在冰封的城市之间。刘启和韩朵朵第一次走出地下城时，"
+                  "地球正在接近木星。突如其来的引力变化让多座发动机停机，一支救援队穿过冰原运送火石，"
+                  "试图让地球重新启动。与此同时，在领航员空间站值守的刘培强发现，地面救援与空间站的选择息息相关。"
+                  "远离故乡的旅程刚刚开始，每个人都要为共同的家园作出选择。"}
 channels = {"综艺": ("123401", "声入人心", "真人秀"), "动画": ("123402", "中国奇谭", "动画"),
             "纪录片": ("123403", "航拍中国", "纪录片")}
 
@@ -30,6 +36,8 @@ class Boundary(SimpleHTTPRequestHandler):
         split = urlsplit(self.path)
         path, query = split.path, parse_qs(split.query)
         scenario = query.get("scenario", [""])[0]
+        if scenario == "delayed" and ("/subject_collection/" in path or path.endswith("/recommend")):
+            time.sleep(4)
         if path in ("/test/played", "/test/alternative", "/test/recover", "/test/reset"):
             if path == "/test/recover":
                 recovered = True
@@ -69,7 +77,12 @@ class Boundary(SimpleHTTPRequestHandler):
                         item.update(id=item_id, title=name, genres=[genre], card_subtitle=f"2023 / 中国大陆 / {genre}")
                 if query.get("start") != ["0"]:
                     item["id"] = "88" + item["id"]
-                value = {"items": [] if "美国" in tags else [item], "total": 0 if "美国" in tags else 2}
+                if scenario == "scroll":
+                    start = int(query.get("start", ["0"])[0])
+                    batch = [{**item, "id": str(30000000+i), "title": f"{item['title']} {i+1}"} for i in range(start, start+24)]
+                    value = {"items": batch, "total": 72}
+                else:
+                    value = {"items": [] if "美国" in tags else [item], "total": 0 if "美国" in tags else 2}
             elif "/provide/vod" in path:
                 film = query.get("wd") == [movie["title"]]
                 url = "https://media.example.org/480/" + ("missing.m3u8" if scenario == "bad-media" else "index.m3u8")

@@ -8,12 +8,19 @@ struct HomePage: View {
     @State private var shelves: [String: [Subject]] = [:]
     @State private var loading = true
     @State private var attempt = 0
+    @State private var featuredID: String?
     private let collections = ["tv_hot", "movie_latest", "tv_animation"]
     private var features: [Subject] {
         if shelves["tv_hot"] == nil && loading { return [] }
         let tv = shelves["tv_hot"] ?? [], films = shelves["movie_latest"] ?? []
         let pictures = Catalog.unique(Array(tv.prefix(3)) + Array(films.prefix(2))).filter { $0.backdrop != nil }
         return Array((pictures.isEmpty ? tv + films : pictures).prefix(4))
+    }
+    private var featuredSelection: Binding<String> {
+        Binding(get: {
+            if let id = featuredID, features.contains(where: { $0.id == id }) { return id }
+            return features.first?.id ?? ""
+        }, set: { featuredID = $0 })
     }
 
     var body: some View {
@@ -24,9 +31,10 @@ struct HomePage: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 25) {
                     if !features.isEmpty {
-                        TabView {
+                        TabView(selection: featuredSelection) {
                             ForEach(Array(features.enumerated()), id: \.element.id) { index, subject in
                                 FeatureCard(subject: subject, index: index, multiple: features.count > 1, select: select, play: resume)
+                                    .tag(subject.id)
                             }
                         }
                         .environment(\.colorScheme, .dark)
@@ -36,7 +44,8 @@ struct HomePage: View {
                         .padding(.horizontal, margin)
                     } else if loading {
                         RoundedRectangle(cornerRadius: 20, style: .continuous).fill(Color(UIColor.secondarySystemBackground))
-                            .frame(height: height).overlay(ProgressView()).padding(.horizontal, margin)
+                            .frame(height: height).overlay(ProgressView().accessibilityLabel("正在载入推荐").accessibilityIdentifier("home-loading"))
+                            .padding(.horizontal, margin)
                     } else {
                         NoticeView(symbol: "wifi.exclamationmark", message: "暂时无法载入推荐") { attempt += 1 }
                     }
@@ -102,7 +111,7 @@ private struct FeatureCard: View {
         ZStack(alignment: .bottomLeading) {
             Button { select(subject) } label: {
                 CinematicArt(still: subject.backdrop, poster: subject.poster).contentShape(Rectangle())
-            }.buttonStyle(.plain).accessibilityLabel("查看\(subject.title)详情")
+            }.buttonStyle(.plain).accessibilityLabel("查看\(subject.title)详情").accessibilityValue(subject.subtitle)
                 .accessibilityIdentifier(index == 0 ? "featured" : "featured-\(index)")
             HStack(alignment: .bottom, spacing: 14) {
                 VStack(alignment: .leading, spacing: 6) {

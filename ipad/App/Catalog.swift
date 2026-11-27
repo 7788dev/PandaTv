@@ -236,6 +236,17 @@ enum Catalog {
         var seen = Set<String>()
         return subjects.filter { seen.insert($0.id).inserted }
     }
+
+    static func initialsResults(_ suggestedTerms: [String]) async -> [Subject] {
+        await withTaskGroup(of: (Int, [Subject]).self) { group in
+            for (index, term) in suggestedTerms.prefix(3).enumerated() {
+                group.addTask { (index, (try? await search(term)) ?? []) }
+            }
+            var batches: [(Int, [Subject])] = []
+            for await batch in group { batches.append(batch) }
+            return unique(batches.sorted { $0.0 < $1.0 }.flatMap(\.1))
+        }
+    }
 }
 
 actor TitleIndex {

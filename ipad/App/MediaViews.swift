@@ -33,26 +33,35 @@ private actor Thumbnails {
 
 struct PhotoFill: View {
     let url: URL?
+    var fallback: URL?
     var pixels = 440
     var symbol = "film"
     @State private var image: UIImage?
+    @State private var displayed: URL?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         GeometryReader { box in
             ZStack {
                 Color(UIColor.tertiarySystemFill)
                 if let image = image {
-                    Image(uiImage: image).resizable().scaledToFill()
+                    Image(uiImage: image).resizable().scaledToFill().transition(.opacity)
                 } else if !symbol.isEmpty {
                     Image(systemName: symbol).font(.title2).foregroundColor(Color(UIColor.tertiaryLabel))
                 }
             }.frame(width: box.size.width, height: box.size.height).clipped()
         }.accessibilityHidden(true)
         .task(id: url) {
-            image = nil
-            guard let url = url, let decoded = try? await Thumbnails.shared.image(url, maxPixels: pixels),
-                  !Task.isCancelled else { return }
-            image = decoded
+            if image != nil && displayed == url { return }
+            image = nil; displayed = nil
+            for candidate in [url, fallback].compactMap({ $0 }) {
+                guard !Task.isCancelled else { return }
+                if let decoded = try? await Thumbnails.shared.image(candidate, maxPixels: pixels), !Task.isCancelled {
+                    displayed = url
+                    withAnimation(reduceMotion ? nil : .easeOut(duration: 0.18)) { image = decoded }
+                    return
+                }
+            }
         }
     }
 }
@@ -155,7 +164,7 @@ struct CinematicArt: View {
             ZStack(alignment: .trailing) {
                 Color(white: 0.12)
                 if let still = still {
-                    PhotoFill(url: still, pixels: 1480, symbol: "")
+                    PhotoFill(url: still, fallback: poster, pixels: 1480, symbol: "")
                 } else if let poster = poster {
                     PhotoFill(url: poster, pixels: 640, symbol: "").blur(radius: 35).opacity(0.52)
                     PhotoFill(url: poster, pixels: 640, symbol: "")
@@ -175,15 +184,17 @@ struct CinematicArt: View {
 struct ContinueCard: View {
     let entry: WatchEntry
     let resume: () -> Void
+    @Environment(\.sizeCategory) private var textSize
     var body: some View {
         Button(action: resume) {
             HStack(spacing: 14) {
-                PhotoFill(url: entry.subject.backdrop ?? entry.subject.poster, pixels: 360)
-                    .frame(width: 102, height: 72)
-                    .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                if !textSize.isAccessibilityCategory {
+                    PhotoFill(url: entry.subject.backdrop ?? entry.subject.poster, pixels: 360)
+                        .frame(width: 102, height: 72).clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                }
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(entry.subject.title).font(.headline).lineLimit(1)
-                    Text(entry.detail).font(.caption).monospacedDigit().foregroundColor(.secondary).lineLimit(1)
+                    Text(entry.subject.title).font(.headline).lineLimit(textSize.isAccessibilityCategory ? nil : 1)
+                    Text(entry.detail).font(.caption).monospacedDigit().foregroundColor(.secondary).lineLimit(textSize.isAccessibilityCategory ? nil : 1)
                     if entry.fraction > 0 {
                         ProgressView(value: entry.fraction).progressViewStyle(.linear).frame(maxWidth: 200).padding(.top, 2)
                     }

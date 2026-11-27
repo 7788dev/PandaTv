@@ -31,5 +31,27 @@ final class PandaTests: XCTestCase {
         let restored = Library(defaults: defaults)
         XCTAssertTrue(restored.isFavorite(subject))
         XCTAssertEqual(restored.history.first?.detail, "第 3 集 · 1:03")
+        XCTAssertTrue(restored.queries.isEmpty)
+        restored.rememberQuery("三体"); restored.rememberQuery("ST"); restored.rememberQuery("st")
+        XCTAssertEqual(Library(defaults: defaults).queries, ["st", "三体"])
+    }
+
+    @MainActor func testPlayerGainAndLateArrivingMirrors() throws {
+        let subject = try XCTUnwrap(Subject(row))
+        let stream = Stream(url: URL(string: "https://a.example.org/v.m3u8")!, source: "A", priority: 1, weak: false)
+        let mirror = Stream(url: URL(string: "https://b.example.org/v.m3u8")!, source: "B", priority: 2, weak: false)
+        let episode = PlayEpisode(number: 1, title: "第 1 集", streams: [stream])
+        let request = PlaybackRequest(subject: subject, episode: episode, episodes: [episode], resume: 0)
+        let previous = UserDefaults.standard.object(forKey: "panda.ipad.playback.volume")
+        defer { UserDefaults.standard.set(previous, forKey: "panda.ipad.playback.volume") }
+        let session = PlaybackSession(request: request, library: Library())
+        session.setVolume(0.35)
+        XCTAssertEqual(session.player.volume, 0.35, accuracy: 0.001)
+        session.toggleMute()
+        XCTAssertEqual(session.player.volume, 0)
+        session.toggleMute()
+        XCTAssertEqual(session.player.volume, 0.35, accuracy: 0.001)
+        session.updateStreams([PlayEpisode(number: 1, title: episode.title, streams: [mirror, stream])])
+        XCTAssertEqual(session.episode.streams[session.selected].url, stream.url)
     }
 }

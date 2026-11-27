@@ -41,6 +41,14 @@ Panda 是一款面向 Windows、Android TV 和 iPad 的影视客户端。可以�
 | --- | --- |
 | [![电视端电影频道按行展示海报，焦点停在第一张海报《奥德赛》上](docs/screenshots/tv-movies.webp)](docs/screenshots/tv-movies.webp) | [![电视端播放《三体》时展开的控制栏，包含进度条、播放、下一集、选集和倍速](docs/screenshots/tv-player.webp)](docs/screenshots/tv-player.webp) |
 
+### iPad
+
+横屏时可从侧边栏浏览片库，竖屏和窄分屏会为内容留出完整宽度。首页的播放键可直接开播，也可以点剧照查看简介、选集和演职人员。截图来自第七代 iPad 模拟器中的联网客户端。
+
+| 横屏首页 | 竖屏详情 |
+| --- | --- |
+| [![横屏侧边栏、推荐剧照和热播剧集](docs/screenshots/ipad-home.webp)](docs/screenshots/ipad-home.webp) | [![竖屏作品详情中的播放、选集、简介和演职员表](docs/screenshots/ipad-detail.webp)](docs/screenshots/ipad-detail.webp) |
+
 ## 从源码运行
 
 **Windows 桌面** 使用 Node.js 24 和 npm。首次检出后，在仓库根目录安装依赖并启动开发版。

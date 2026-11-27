@@ -1,6 +1,32 @@
 import XCTest
 
 final class SurfaceAuditTests: PandaScreenTest {
+    func testSwipeFeaturedAndOpenTheSelectedWork() {
+        let app = fixture()
+        let first = app.buttons["featured"].firstMatch
+        XCTAssertTrue(first.waitForExistence(timeout: 12))
+        let second = app.buttons["featured-1"].firstMatch
+        first.swipeLeft()
+        let shown = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in second.exists && second.isHittable }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [shown], timeout: 10), .completed)
+        capture("首页-分页推荐")
+        rotateToPortrait(app)
+        XCTAssertTrue(second.isHittable)
+        second.tap()
+        XCTAssertTrue(app.staticTexts["流浪地球"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["play"].waitForExistence(timeout: 10))
+    }
+    func testLoadingStatesResolveIntoContent() {
+        let app = fixture("delayed")
+        let loading = app.descendants(matching: .any)["home-loading"].firstMatch
+        XCTAssertTrue(loading.waitForExistence(timeout: 8))
+        capture("载入-首页")
+        XCTAssertTrue(app.buttons["featured"].firstMatch.waitForExistence(timeout: 12))
+        app.cells["nav-电影"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["channel-loading"].firstMatch.waitForExistence(timeout: 8))
+        capture("载入-频道")
+        XCTAssertTrue(app.buttons["title-26266893"].waitForExistence(timeout: 12))
+    }
     func testChannelsFiltersPagingAndMovieDetail() {
         let app = fixture()
         let channels = [("剧集","26647087"), ("综艺","123401"), ("动漫","123402"), ("纪录片","123403"), ("电影","26266893")]
@@ -17,6 +43,10 @@ final class SurfaceAuditTests: PandaScreenTest {
         XCTAssertTrue(app.buttons["title-8826266893"].waitForExistence(timeout: 10))
         app.buttons["channel-filters"].tap()
         captureControls("频道-筛选表单", app)
+        app.buttons["filter-类型"].tap()
+        app.buttons["科幻"].tap()
+        app.buttons["filter-年份"].tap()
+        app.buttons[String(Calendar.current.component(.year, from: Date()))].firstMatch.tap()
         app.buttons["filter-地区"].tap()
         app.buttons["美国"].tap()
         app.buttons["apply-filters"].tap()
@@ -30,6 +60,29 @@ final class SurfaceAuditTests: PandaScreenTest {
         XCTAssertTrue(app.buttons["play"].waitForExistence(timeout: 12))
         XCTAssertFalse(app.buttons["episode-2"].exists)
         capture("详情-电影")
+        let expand = app.buttons["展开简介"]
+        moveTo(expand, in: app)
+        XCTAssertTrue(expand.isHittable)
+        expand.tap()
+        XCTAssertTrue(app.buttons["收起简介"].exists)
+        capture("详情-完整简介")
+        app.buttons["收起简介"].tap()
+    }
+
+    func testSystemScrollingPerformance() {
+        let app = fixture("scroll")
+        app.cells["nav-电影"].tap()
+        let poster = app.buttons["title-30000000"]
+        XCTAssertTrue(poster.waitForExistence(timeout: 12))
+        let scroll = app.scrollViews.containing(.button, identifier: "title-30000000").firstMatch
+        XCTAssertTrue(scroll.exists)
+        let options = XCTMeasureOptions()
+        options.iterationCount = 2
+        measure(metrics: [XCTOSSignpostMetric.scrollingAndDecelerationMetric], options: options) {
+            scroll.swipeUp(velocity: .fast)
+            scroll.swipeDown(velocity: .fast)
+        }
+        XCTAssertTrue(poster.isHittable)
     }
 
     func testLibrarySearchAndEpisodeGroups() {
@@ -111,6 +164,20 @@ final class SurfaceAuditTests: PandaScreenTest {
 }
 
 final class AdaptiveAppearanceTests: PandaScreenTest {
+    func testDarkSidebarChannelAndFilterSheet() {
+        let app = fixture()
+        XCTAssertTrue(app.buttons["featured"].firstMatch.waitForExistence(timeout: 12))
+        capture("适配-深色大字横屏")
+        let movies = app.cells["nav-电影"]
+        if !movies.isHittable { app.collectionViews.firstMatch.swipeUp() }
+        movies.tap()
+        target(app.buttons["channel-filters"], "大字号筛选")
+        app.buttons["channel-filters"].tap()
+        XCTAssertTrue(app.buttons["apply-filters"].waitForExistence(timeout: 8))
+        capture("适配-深色筛选表单")
+        app.buttons["cancel-filters"].tap()
+        XCTAssertTrue(app.buttons["title-26266893"].waitForExistence(timeout: 10))
+    }
     // The workflow runs these screens after switching the actual simulator to dark appearance
     // and an accessibility Dynamic Type category. A 375-point host exercises the compact layout.
     func testCompactLargeTextAndPlayer() {

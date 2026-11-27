@@ -2,6 +2,8 @@ import XCTest
 
 class PandaScreenTest: XCTestCase {
     func capture(_ name: String) {
+        // XCUIScreen captures the complete framebuffer, including an in-flight system sheet.
+        RunLoop.current.run(until: Date().addingTimeInterval(0.5))
         let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
@@ -89,6 +91,8 @@ final class PandaUITests: PandaScreenTest {
         let gain = app.sliders["volume-slider"]
         XCTAssertTrue(gain.waitForExistence(timeout: 5))
         gain.adjust(toNormalizedSliderPosition: 0.35)
+        let level = Int((gain.value as? String ?? "").filter(\.isNumber)) ?? -1
+        XCTAssertTrue((25...45).contains(level), "volume after adjustment: \(String(describing: gain.value))")
         let mute = app.buttons["mute"]
         mute.tap()
         XCTAssertTrue(mute.label.contains("取消静音"))
@@ -96,6 +100,8 @@ final class PandaUITests: PandaScreenTest {
         XCTAssertEqual(mute.label, "静音")
         captureControls("iPad-player-volume", app)
         app.buttons["close-volume"].tap()
+        let gone = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !app.buttons["close-volume"].exists }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [gone], timeout: 5), .completed)
         app.buttons["player-options"].tap()
         captureControls("iPad-player-options", app)
         app.buttons["播放线路"].tap()
@@ -120,6 +126,7 @@ final class PandaUITests: PandaScreenTest {
         history.tap()
         let recorded = app.buttons.containing(NSPredicate(format: "label CONTAINS %@ AND label CONTAINS %@", "三体", "第 2 集")).firstMatch
         XCTAssertTrue(recorded.waitForExistence(timeout: 12))
+        captureControls("资料库-观看历史", app)
         recorded.tap()
         XCTAssertTrue(app.buttons["play"].waitForExistence(timeout: 15))
         XCTAssertTrue(app.buttons["play"].label.contains("继续播放"))
@@ -134,6 +141,13 @@ final class PandaUITests: PandaScreenTest {
         hint.tap()
         XCTAssertTrue(app.buttons["title-26647087"].waitForExistence(timeout: 12))
         capture("iPad-search-results")
+        app.cells["nav-观看历史"].tap()
+        recorded.swipeLeft()
+        let remove = app.buttons["删除"].firstMatch
+        XCTAssertTrue(remove.waitForExistence(timeout: 6))
+        capture("资料库-划动删除")
+        remove.tap()
+        XCTAssertTrue(app.buttons["浏览片库"].waitForExistence(timeout: 6))
     }
 
     func testLiveHomeAppearance() throws {
@@ -166,5 +180,33 @@ final class PandaUITests: PandaScreenTest {
         if poster.waitForExistence(timeout: 22) { capture("iPad-live-channel") }
         app.cells["nav-搜索"].tap()
         if poster.waitForExistence(timeout: 16) { capture("iPad-live-search") }
+    }
+
+    func testLiveProviderPlayback() throws {
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let app = XCUIApplication()
+        app.launch()
+        let featured = app.buttons["featured"].firstMatch
+        guard featured.waitForExistence(timeout: 18) else { throw XCTSkip("Live catalogue unavailable") }
+        featured.tap()
+        let play = app.buttons["play"]
+        guard play.waitForExistence(timeout: 28) else { throw XCTSkip("No available provider from this runner") }
+        play.tap()
+        XCTAssertTrue(app.buttons["close-player"].waitForExistence(timeout: 10))
+        let deadline = Date().addingTimeInterval(40)
+        var advanced = false
+        while Date() < deadline && !app.buttons["retry"].exists {
+            let position = app.sliders["Current position"].firstMatch
+            if position.exists, let value = position.value as? String,
+               let number = value.range(of: #"[0-9]+"#, options: .regularExpression),
+               (Int(value[number]) ?? 0) >= 3 { advanced = true; break }
+            if !app.buttons["Play/Pause"].exists {
+                app.coordinate(withNormalizedOffset: CGVector(dx: 0.26, dy: 0.55)).tap()
+            }
+            RunLoop.current.run(until: Date().addingTimeInterval(0.9))
+        }
+        guard advanced else { throw XCTSkip("Live providers did not deliver advancing media on this runner") }
+        captureControls("iPad-live-player", app)
+        app.buttons["close-player"].tap()
     }
 }

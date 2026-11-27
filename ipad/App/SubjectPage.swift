@@ -54,6 +54,7 @@ struct SubjectPage: View {
     let navigationTitleVisible: (Bool) -> Void
     @EnvironmentObject private var library: Library
     @Environment(\.sizeCategory) private var textSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @StateObject private var availability = TitleAvailability()
     @State private var still: URL?
     @State private var credits: [Catalog.Credit] = []
@@ -107,7 +108,9 @@ struct SubjectPage: View {
                             MediaHeading(title: "简介")
                             Text(subject.synopsis).font(.body).lineSpacing(4).lineLimit(expanded ? nil : 3).textSelection(.enabled)
                             if synopsisNeedsExpansion(width: min(1050, bounds.size.width) - 2 * margin) {
-                                Button(expanded ? "收起简介" : "展开简介") { expanded.toggle() }
+                                Button(expanded ? "收起简介" : "展开简介") {
+                                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { expanded.toggle() }
+                                }
                                     .font(.subheadline.weight(.semibold)).frame(minHeight: 44)
                             }
                         }
@@ -204,14 +207,14 @@ struct SubjectPage: View {
                     } label: { Label(rangeTitle(selectedGroup), systemImage: "list.bullet").frame(minHeight: 44) }
                 }
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 94), spacing: 9)], spacing: 9) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: textSize.isAccessibilityCategory ? 156 : 94), spacing: 9)], spacing: 9) {
                 ForEach(episodes.filter { ($0.number - 1) / 20 == selectedGroup }) { ep in
                     let watched = ep.number == last?.episode
                     Button { play(ep) } label: {
                         HStack(spacing: 5) {
                             if watched { Image(systemName: last?.finished == true ? "checkmark" : "play.fill").font(.caption2) }
                             Text(ep.title).font(.subheadline.weight(watched ? .semibold : .medium)).monospacedDigit().lineLimit(2)
-                        }.padding(.horizontal, 5).frame(maxWidth: .infinity, minHeight: 46)
+                        }.padding(.horizontal, 5).frame(maxWidth: .infinity, minHeight: textSize.isAccessibilityCategory ? 58 : 46)
                         .foregroundColor(watched ? .accentColor : .primary)
                         .background(watched ? Color.accentColor.opacity(0.12) : Color(UIColor.secondarySystemBackground),
                                     in: RoundedRectangle(cornerRadius: 10, style: .continuous))

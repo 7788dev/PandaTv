@@ -71,8 +71,8 @@ final class PlaybackSession: ObservableObject {
         choose(0)
     }
 
-    func switchLine(_ index: Int) {
-        guard index != selected || failed else { return }
+    func switchLine(_ url: URL) {
+        guard let index = episode.streams.firstIndex(where: { $0.url == url }), index != selected || failed else { return }
         choose(index, play: !recordable || player.timeControlStatus != .paused)
     }
 
@@ -182,119 +182,5 @@ final class PlaybackSession: ObservableObject {
         recordable = false
         started = false
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-    }
-}
-
-private struct SystemPlayer: UIViewControllerRepresentable {
-    let player: AVPlayer
-    func makeUIViewController(context: Context) -> AVPlayerViewController {
-        let controller = AVPlayerViewController()
-        controller.player = player
-        controller.videoGravity = .resizeAspect
-        return controller
-    }
-    func updateUIViewController(_ controller: AVPlayerViewController, context: Context) {}
-}
-
-struct PlayerPage: View {
-    let request: PlaybackRequest
-    @ObservedObject var availability: TitleAvailability
-    @StateObject private var session: PlaybackSession
-    @Environment(\.dismiss) private var dismiss
-    @State private var volumePanel = false
-
-    @MainActor init(request: PlaybackRequest, library: Library, availability: TitleAvailability) {
-        self.request = request
-        self.availability = availability
-        _session = StateObject(wrappedValue: PlaybackSession(request: request, library: library))
-    }
-    var body: some View {
-        NavigationView {
-            ZStack {
-                Color.black.ignoresSafeArea()
-                if session.failed {
-                    NoticeView(symbol: "exclamationmark.circle", message: "这一集的线路暂时无法播放") { session.retry() }
-                } else {
-                    SystemPlayer(player: session.player)
-                }
-            }
-            .navigationTitle(request.subject.kind == "movie" ? request.subject.title : "\(request.subject.title) · \(session.episode.title)")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: Button("完成") { dismiss() }.frame(minHeight: 44).accessibilityIdentifier("close-player"), trailing: playerTools)
-        }
-        .navigationViewStyle(.stack).tint(.white).preferredColorScheme(.dark)
-        .onAppear { session.start() }
-        .onReceive(availability.$episodes) { session.updateStreams($0) }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in session.save() }
-        .onDisappear { session.stop() }
-    }
-
-    private var speaker: String {
-        if session.volume == 0 { return "speaker.slash.fill" }
-        return session.volume < 0.45 ? "speaker.wave.1.fill" : "speaker.wave.2.fill"
-    }
-    private var playerTools: some View {
-        HStack(spacing: 4) {
-            Button { volumePanel = true } label: { Image(systemName: speaker).frame(width: 44, height: 44) }
-                .accessibilityLabel("播放音量").accessibilityIdentifier("volume-button")
-                .popover(isPresented: $volumePanel) {
-                    VStack(spacing: 14) {
-                        HStack {
-                            Text("播放音量").font(.headline)
-                            Spacer()
-                            Text("\(Int((session.volume * 100).rounded()))%").font(.subheadline).monospacedDigit().foregroundColor(.secondary)
-                        }
-                        HStack(spacing: 10) {
-                            Button { session.toggleMute() } label: { Image(systemName: speaker).frame(width: 44, height: 44) }
-                                .accessibilityLabel(session.volume > 0 ? "静音" : "取消静音").accessibilityIdentifier("mute")
-                            Slider(value: Binding(get: { session.volume }, set: session.setVolume), in: 0...1)
-                                .frame(minHeight: 44).accessibilityLabel("播放音量").accessibilityIdentifier("volume-slider")
-                        }
-                        Button("完成") { volumePanel = false }.frame(minHeight: 44).accessibilityIdentifier("close-volume")
-                    }.padding(20).frame(idealWidth: 290, maxWidth: 330)
-                }
-            if episodes.count > 1 || session.episode.streams.count > 1 {
-                Menu {
-                    if let next = episodes.first(where: { $0.number > session.episode.number }) {
-                        Button { session.changeEpisode(next) } label: { Label("下一集", systemImage: "forward.end.fill") }
-                    }
-                    if episodes.count > 1 {
-                        Menu("选集") {
-                            ForEach(episodeGroups, id: \.self) { group in
-                                if episodeGroups.count > 1 {
-                                    Menu("\(group * 20 + 1)–\(min((group + 1) * 20, episodes.last?.number ?? 1)) 集") { episodeChoices(group) }
-                                } else { episodeChoices(group) }
-                            }
-                        }
-                    }
-                    if session.episode.streams.count > 1 {
-                        Menu("播放线路") {
-                            ForEach(Array(session.episode.streams.enumerated()), id: \.offset) { index, stream in
-                                Button { session.switchLine(index) } label: {
-                                    let name = sourceLabel(index, stream)
-                                    if index == session.selected { Label(name, systemImage: "checkmark") } else { Text(name) }
-                                }
-                            }
-                        }
-                    }
-                } label: { Image(systemName: "ellipsis.circle").frame(width: 44, height: 44) }
-                .accessibilityLabel("播放选项").accessibilityIdentifier("player-options")
-            }
-        }
-    }
-    private var episodes: [PlayEpisode] { availability.episodes.isEmpty ? request.episodes : availability.episodes }
-    private var episodeGroups: [Int] { Array(Set(episodes.map { ($0.number - 1) / 20 })).sorted() }
-    private func episodeChoices(_ group: Int) -> some View {
-        ForEach(episodes.filter { ($0.number - 1) / 20 == group }) { ep in
-            Button { session.changeEpisode(ep) } label: {
-                if ep.number == session.episode.number { Label(ep.title, systemImage: "checkmark") } else { Text(ep.title) }
-            }
-        }
-    }
-    private func sourceLabel(_ index: Int, _ stream: Stream) -> String {
-        let streams = session.episode.streams
-        guard streams.filter({ $0.source == stream.source }).count > 1 else { return stream.source }
-        let position = streams.prefix(index + 1).filter { $0.source == stream.source }.count
-        return "\(stream.source) · 线路 \(position)"
     }
 }
