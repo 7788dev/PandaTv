@@ -2,7 +2,7 @@ import XCTest
 
 final class PandaUITests: XCTestCase {
     private func capture(_ name: String) {
-        let attachment = XCTAttachment(screenshot: XCUIApplication().screenshot())
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
