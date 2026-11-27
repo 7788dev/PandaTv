@@ -1,14 +1,14 @@
 import XCTest
 
-final class PandaUITests: XCTestCase {
-    private func capture(_ name: String) {
+class PandaScreenTest: XCTestCase {
+    func capture(_ name: String) {
         let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
     }
 
-    private func captureControls(_ name: String, _ app: XCUIApplication) {
+    func captureControls(_ name: String, _ app: XCUIApplication) {
         capture(name)
         let tree = XCTAttachment(string: app.debugDescription)
         tree.name = name + "-accessibility"
@@ -16,15 +16,44 @@ final class PandaUITests: XCTestCase {
         add(tree)
     }
 
-    private func rotateToPortrait(_ app: XCUIApplication) {
+    func rotateToPortrait(_ app: XCUIApplication) {
         XCUIDevice.shared.orientation = .portrait
         let settled = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
             let frame = app.frame
-            return frame.height > frame.width && !app.cells["nav-首页"].isHittable
+            let sidebar = app.cells["nav-首页"]
+            return frame.height > frame.width && (!sidebar.exists || !sidebar.isHittable)
         }, object: nil)
         XCTAssertEqual(XCTWaiter.wait(for: [settled], timeout: 12), .completed)
     }
 
+    func fixture(_ scenario: String? = nil, compact: Bool = false) -> XCUIApplication {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = compact ? .portrait : .landscapeLeft
+        let app = XCUIApplication()
+        app.launchEnvironment["PANDA_TEST_PORT"] = "18765"
+        app.launchEnvironment["PANDA_TEST_LIBRARY"] = UUID().uuidString
+        app.launchEnvironment["PANDA_TEST_SCENARIO"] = scenario
+        if compact { app.launchEnvironment["PANDA_TEST_COMPACT"] = "1" }
+        app.launch()
+        return app
+    }
+
+    func target(_ element: XCUIElement, _ name: String) {
+        XCTAssertTrue(element.waitForExistence(timeout: 10), name)
+        let frame = element.frame
+        XCTAssertGreaterThanOrEqual(frame.height, 43.5, "\(name) touch height \(frame)")
+        XCTAssertGreaterThanOrEqual(frame.width, 43.5, "\(name) touch width \(frame)")
+    }
+
+    func moveTo(_ element: XCUIElement, in app: XCUIApplication) {
+        for _ in 0..<5 {
+            if element.exists && element.isHittable { return }
+            app.swipeUp()
+        }
+    }
+}
+
+final class PandaUITests: PandaScreenTest {
     func testBrowsePlayRotateAndRestore() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .landscapeLeft
@@ -81,6 +110,11 @@ final class PandaUITests: XCTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         app.terminate()
         app.launch()
+        let resume = app.buttons["resume-26647087"]
+        XCTAssertTrue(resume.waitForExistence(timeout: 12))
+        resume.tap()
+        XCTAssertTrue(close.waitForExistence(timeout: 18))
+        close.tap()
         let history = app.cells["nav-观看历史"]
         XCTAssertTrue(history.waitForExistence(timeout: 12))
         history.tap()
@@ -116,5 +150,21 @@ final class PandaUITests: XCTestCase {
         capture("iPad-live-home-landscape")
         rotateToPortrait(app)
         capture("iPad-live-home-portrait")
+        app.buttons["featured"].firstMatch.tap()
+        XCTAssertTrue(app.buttons["favorite"].waitForExistence(timeout: 12))
+        let images = expectation(description: "load production detail artwork")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) { images.fulfill() }
+        wait(for: [images], timeout: 8)
+        capture("iPad-live-detail")
+        app.swipeUp()
+        capture("iPad-live-detail-credits")
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let movies = app.cells["nav-电影"]
+        XCTAssertTrue(movies.waitForExistence(timeout: 12))
+        movies.tap()
+        let poster = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "title-")).firstMatch
+        if poster.waitForExistence(timeout: 22) { capture("iPad-live-channel") }
+        app.cells["nav-搜索"].tap()
+        if poster.waitForExistence(timeout: 16) { capture("iPad-live-search") }
     }
 }

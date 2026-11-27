@@ -14,12 +14,13 @@ final class PlaybackSession: ObservableObject {
     private var position: Double
     private var recordable = false
     private var finished = false
-    private var tried = Set<Int>()
+    private var tried = Set<URL>()
     private var status: NSKeyValueObservation?
     private var clock: Any?
     private var notifications: [NSObjectProtocol] = []
     private var watchdog: Task<Void, Never>?
     private var started = false
+    private var playWhenReady = true
 
     init(request: PlaybackRequest, library: Library) {
         self.request = request
@@ -27,9 +28,10 @@ final class PlaybackSession: ObservableObject {
         position = request.resume
         episode = request.episode
         let saved = UserDefaults.standard.object(forKey: "panda.ipad.playback.volume") as? Double ?? 1
-        volume = min(1, max(0, saved))
-        previousVolume = volume > 0 ? volume : 1
-        player.volume = Float(volume)
+        let gain = min(1, max(0, saved))
+        volume = gain
+        previousVolume = gain > 0 ? gain : 1
+        player.volume = Float(gain)
     }
 
     func setVolume(_ level: Double) {
@@ -40,6 +42,14 @@ final class PlaybackSession: ObservableObject {
         UserDefaults.standard.set(volume, forKey: "panda.ipad.playback.volume")
     }
     func toggleMute() { setVolume(volume > 0 ? 0 : previousVolume) }
+    func updateStreams(_ episodes: [PlayEpisode]) {
+        guard var updated = episodes.first(where: { $0.number == episode.number }), updated.streams != episode.streams else { return }
+        let current = episode.streams[selected]
+        if !updated.streams.contains(where: { $0.url == current.url }) { updated.streams.append(current) }
+        episode = updated
+        selected = updated.streams.firstIndex { $0.url == current.url } ?? 0
+        if failed, let index = updated.streams.firstIndex(where: { !tried.contains($0.url) }) { choose(index) }
+    }
     func changeEpisode(_ next: PlayEpisode) {
         guard next.number != episode.number, !next.streams.isEmpty else { return }
         save()
@@ -61,15 +71,21 @@ final class PlaybackSession: ObservableObject {
         choose(0)
     }
 
-    func choose(_ index: Int) {
+    func switchLine(_ index: Int) {
+        guard index != selected || failed else { return }
+        choose(index, play: !recordable || player.timeControlStatus != .paused)
+    }
+
+    private func choose(_ index: Int, play: Bool = true) {
         guard episode.streams.indices.contains(index) else { return }
         save()
         detachItem()
         selected = index
-        tried.insert(index)
+        tried.insert(episode.streams[index].url)
         recordable = false
         finished = false
         failed = false
+        playWhenReady = play
         let item = AVPlayerItem(url: Network.transportURL(episode.streams[index].url))
         player.replaceCurrentItem(with: item)
         status = item.observe(\.status, options: [.initial, .new]) { [weak self] item, _ in
@@ -105,7 +121,7 @@ final class PlaybackSession: ObservableObject {
             let begin = { [weak self] in
                 guard let self = self, self.player.currentItem === item else { return }
                 self.recordable = true
-                self.player.play()
+                if self.playWhenReady { self.player.play() }
             }
             if start >= 1 {
                 player.seek(to: CMTime(seconds: start, preferredTimescale: 600), toleranceBefore: .zero, toleranceAfter: .zero) { ok in
@@ -130,7 +146,7 @@ final class PlaybackSession: ObservableObject {
 
     private func fallback(_ item: AVPlayerItem) {
         guard player.currentItem === item else { return }
-        if let index = episode.streams.indices.first(where: { !tried.contains($0) }) { choose(index) }
+        if let index = episode.streams.firstIndex(where: { !tried.contains($0.url) }) { choose(index) }
         else {
             save()
             detachItem()
@@ -182,12 +198,14 @@ private struct SystemPlayer: UIViewControllerRepresentable {
 
 struct PlayerPage: View {
     let request: PlaybackRequest
+    @ObservedObject var availability: TitleAvailability
     @StateObject private var session: PlaybackSession
     @Environment(\.dismiss) private var dismiss
     @State private var volumePanel = false
 
-    @MainActor init(request: PlaybackRequest, library: Library) {
+    @MainActor init(request: PlaybackRequest, library: Library, availability: TitleAvailability) {
         self.request = request
+        self.availability = availability
         _session = StateObject(wrappedValue: PlaybackSession(request: request, library: library))
     }
     var body: some View {
@@ -204,8 +222,9 @@ struct PlayerPage: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(leading: Button("完成") { dismiss() }.frame(minHeight: 44).accessibilityIdentifier("close-player"), trailing: playerTools)
         }
-        .navigationViewStyle(.stack).preferredColorScheme(.dark)
+        .navigationViewStyle(.stack).tint(.white).preferredColorScheme(.dark)
         .onAppear { session.start() }
+        .onReceive(availability.$episodes) { session.updateStreams($0) }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in session.save() }
         .onDisappear { session.stop() }
     }
@@ -234,16 +253,16 @@ struct PlayerPage: View {
                         Button("完成") { volumePanel = false }.frame(minHeight: 44).accessibilityIdentifier("close-volume")
                     }.padding(20).frame(idealWidth: 290, maxWidth: 330)
                 }
-            if request.episodes.count > 1 || session.episode.streams.count > 1 {
+            if episodes.count > 1 || session.episode.streams.count > 1 {
                 Menu {
-                    if let next = request.episodes.first(where: { $0.number > session.episode.number }) {
+                    if let next = episodes.first(where: { $0.number > session.episode.number }) {
                         Button { session.changeEpisode(next) } label: { Label("下一集", systemImage: "forward.end.fill") }
                     }
-                    if request.episodes.count > 1 {
+                    if episodes.count > 1 {
                         Menu("选集") {
                             ForEach(episodeGroups, id: \.self) { group in
                                 if episodeGroups.count > 1 {
-                                    Menu("\(group * 20 + 1)–\(min((group + 1) * 20, request.episodes.last?.number ?? 1)) 集") { episodeChoices(group) }
+                                    Menu("\(group * 20 + 1)–\(min((group + 1) * 20, episodes.last?.number ?? 1)) 集") { episodeChoices(group) }
                                 } else { episodeChoices(group) }
                             }
                         }
@@ -251,7 +270,7 @@ struct PlayerPage: View {
                     if session.episode.streams.count > 1 {
                         Menu("播放线路") {
                             ForEach(Array(session.episode.streams.enumerated()), id: \.offset) { index, stream in
-                                Button { session.choose(index) } label: {
+                                Button { session.switchLine(index) } label: {
                                     let name = sourceLabel(index, stream)
                                     if index == session.selected { Label(name, systemImage: "checkmark") } else { Text(name) }
                                 }
@@ -263,9 +282,10 @@ struct PlayerPage: View {
             }
         }
     }
-    private var episodeGroups: [Int] { Array(Set(request.episodes.map { ($0.number - 1) / 20 })).sorted() }
+    private var episodes: [PlayEpisode] { availability.episodes.isEmpty ? request.episodes : availability.episodes }
+    private var episodeGroups: [Int] { Array(Set(episodes.map { ($0.number - 1) / 20 })).sorted() }
     private func episodeChoices(_ group: Int) -> some View {
-        ForEach(request.episodes.filter { ($0.number - 1) / 20 == group }) { ep in
+        ForEach(episodes.filter { ($0.number - 1) / 20 == group }) { ep in
             Button { session.changeEpisode(ep) } label: {
                 if ep.number == session.episode.number { Label(ep.title, systemImage: "checkmark") } else { Text(ep.title) }
             }

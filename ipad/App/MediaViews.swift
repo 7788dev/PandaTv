@@ -124,8 +124,10 @@ struct Poster: View {
 struct PosterGrid: View {
     let items: [Subject]
     let select: (Subject) -> Void
+    @Environment(\.sizeCategory) private var textSize
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 122, maximum: 200), spacing: 16, alignment: .top)], alignment: .leading, spacing: 22) {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: textSize.isAccessibilityCategory ? 170 : 122, maximum: 232),
+                                    spacing: 16, alignment: .top)], alignment: .leading, spacing: 22) {
             ForEach(items) { Poster(subject: $0, select: select) }
         }
     }
@@ -138,7 +140,9 @@ struct NoticeView: View {
         VStack(spacing: 13) {
             Image(systemName: symbol).font(.largeTitle).foregroundColor(.secondary).accessibilityHidden(true)
             Text(message).font(.body).foregroundColor(.secondary).multilineTextAlignment(.center)
-            if let retry = retry { Button("重试", action: retry).buttonStyle(.bordered) }
+            if let retry = retry {
+                Button("重试", action: retry).buttonStyle(.bordered).buttonBorderShape(.capsule).controlSize(.large).accessibilityIdentifier("retry")
+            }
         }.frame(maxWidth: .infinity).padding(.vertical, 32)
     }
 }

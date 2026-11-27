@@ -22,7 +22,7 @@ jobs:
   ipad:
     name: iPad device package and simulator
     runs-on: macos-15
-    timeout-minutes: 35
+    timeout-minutes: 45
     env:
       DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
       HOMEBREW_NO_AUTO_UPDATE: '1'
@@ -58,16 +58,31 @@ jobs:
           server=$!
           trap 'kill "$server" 2>/dev/null || true' EXIT
           xcrun simctl bootstatus "$IPAD_SIMULATOR" -b
+          xcrun simctl ui "$IPAD_SIMULATOR" appearance light
+          standard=0
           xcodebuild test -project ipad/Panda.xcodeproj -scheme Panda -configuration Debug \
             -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" \
             -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/ipad-sim-build" \
-            -resultBundlePath "$RUNNER_TEMP/ipad-tests.xcresult"
+            -skip-testing:PandaUITests/AdaptiveAppearanceTests \
+            -resultBundlePath "$RUNNER_TEMP/ipad-tests.xcresult" || standard=$?
+          xcrun simctl ui "$IPAD_SIMULATOR" appearance dark
+          xcrun simctl ui "$IPAD_SIMULATOR" content_size accessibility-large
+          accessible=0
+          xcodebuild test-without-building -project ipad/Panda.xcodeproj -scheme Panda -configuration Debug \
+            -destination "platform=iOS Simulator,id=$IPAD_SIMULATOR" \
+            -parallel-testing-enabled NO -derivedDataPath "$RUNNER_TEMP/ipad-sim-build" \
+            -only-testing:PandaUITests/AdaptiveAppearanceTests \
+            -resultBundlePath "$RUNNER_TEMP/ipad-accessible.xcresult" || accessible=$?
+          (( standard == 0 && accessible == 0 ))
       - name: Export iPad screenshots
         if: always() && !cancelled()
         run: |
-          if [[ -d "$RUNNER_TEMP/ipad-tests.xcresult" ]]; then
-            xcrun xcresulttool export attachments --path "$RUNNER_TEMP/ipad-tests.xcresult" --output-path "$RUNNER_TEMP/ipad-screens"
-          fi
+          for suite in tests accessible; do
+            if [[ -d "$RUNNER_TEMP/ipad-$suite.xcresult" ]]; then
+              mkdir -p "$RUNNER_TEMP/ipad-screens/$suite"
+              xcrun xcresulttool export attachments --path "$RUNNER_TEMP/ipad-$suite.xcresult" --output-path "$RUNNER_TEMP/ipad-screens/$suite"
+            fi
+          done
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always() && !cancelled()
         with:

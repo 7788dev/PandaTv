@@ -13,24 +13,57 @@ private struct DetailHeaderGone: PreferenceKey {
     static func reduce(value: inout Bool, nextValue: () -> Bool) { value = nextValue() }
 }
 
+/// The title and its presented player share discovery until the last catalogue answers.
+@MainActor final class TitleAvailability: ObservableObject {
+    @Published private(set) var detail: Subject?
+    @Published private(set) var episodes: [PlayEpisode] = []
+    @Published private(set) var reading = true
+    @Published private(set) var revision = 0
+    private var work: Task<Void, Never>?
+    func start(_ initial: Subject, retry: Bool = false) {
+        guard work == nil || retry else { return }
+        work?.cancel()
+        reading = true
+        work = Task { [weak self] in
+            let item = (try? await Catalog.detail(id: initial.id, kind: initial.kind)) ?? initial
+            guard !Task.isCancelled else { return }
+            self?.detail = item
+            var lines: [Sources.Line] = []
+            await withTaskGroup(of: [Sources.Line].self) { tasks in
+                for source in (try? Sources.configured()) ?? [] {
+                    tasks.addTask { (try? await Sources.find(item, source: source)) ?? [] }
+                }
+                for await result in tasks {
+                    guard !Task.isCancelled else { tasks.cancelAll(); return }
+                    if !result.isEmpty {
+                        lines += result
+                        self?.episodes = Sources.episodes(lines)
+                        self?.revision += 1
+                    }
+                }
+            }
+            if !Task.isCancelled { self?.reading = false; self?.revision += 1 }
+        }
+    }
+    deinit { work?.cancel() }
+}
+
 struct SubjectPage: View {
     let initial: Subject
     let autoplay: Bool
     let navigationTitleVisible: (Bool) -> Void
     @EnvironmentObject private var library: Library
     @Environment(\.sizeCategory) private var textSize
-    @State private var fetched: Subject?
+    @StateObject private var availability = TitleAvailability()
     @State private var still: URL?
     @State private var credits: [Catalog.Credit] = []
-    @State private var episodes: [PlayEpisode] = []
-    @State private var reading = true
-    @State private var complete = false
     @State private var autoOpened = false
-    @State private var retry = 0
     @State private var expanded = false
     @State private var group = 0
     @State private var active: PlaybackRequest?
-    private var subject: Subject { fetched ?? initial }
+    private var subject: Subject { availability.detail ?? initial }
+    private var episodes: [PlayEpisode] { availability.episodes }
+    private var reading: Bool { availability.reading }
     private var last: WatchEntry? { library.history.first { $0.id == initial.id } }
     private var next: PlayEpisode? {
         if let last = last, let previous = episodes.first(where: { $0.number == last.episode }) {
@@ -67,19 +100,19 @@ struct SubjectPage: View {
                     })
                     if episodes.count > 1 { episodePicker }
                     if !reading && episodes.isEmpty {
-                        NoticeView(symbol: "video.slash", message: "暂时没有可播放的线路") { complete = false; retry += 1 }
+                        NoticeView(symbol: "video.slash", message: "暂时没有可播放的线路") { availability.start(initial, retry: true) }
                     }
                     if !subject.synopsis.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
                             MediaHeading(title: "简介")
                             Text(subject.synopsis).font(.body).lineSpacing(4).lineLimit(expanded ? nil : 3).textSelection(.enabled)
-                            if subject.synopsis.count > 76 {
+                            if synopsisNeedsExpansion(width: min(1050, bounds.size.width) - 2 * margin) {
                                 Button(expanded ? "收起简介" : "展开简介") { expanded.toggle() }
                                     .font(.subheadline.weight(.semibold)).frame(minHeight: 44)
                             }
                         }
                     }
-                    if !credits.isEmpty {
+                    if credits.contains(where: { $0.photo != nil }) {
                         VStack(alignment: .leading, spacing: 14) {
                             MediaHeading(title: "演职人员")
                             ScrollView(.horizontal, showsIndicators: false) {
@@ -107,10 +140,18 @@ struct SubjectPage: View {
             }.coordinateSpace(name: "subject")
         }
         .onPreferenceChange(DetailHeaderGone.self, perform: navigationTitleVisible)
-        .task(id: retry) { if !complete { await load() } }
+        .onAppear {
+            if let entry = last { group = max(0, (entry.episode - 1) / 20) }
+            availability.start(initial)
+        }
+        .onChange(of: availability.revision) { _ in
+            guard autoplay && !autoOpened, let ep = next else { return }
+            if last == nil || (last?.finished == false && last?.episode == ep.number) ||
+                (last?.finished == true && !reading) { play(ep) }
+        }
         .task { if initial.backdrop == nil { still = try? await Catalog.still(initial) } }
         .task { if credits.isEmpty { credits = (try? await Catalog.credits(initial)) ?? [] } }
-        .fullScreenCover(item: $active) { request in PlayerPage(request: request, library: library) }
+        .fullScreenCover(item: $active) { request in PlayerPage(request: request, library: library, availability: availability) }
     }
 
     private var information: some View {
@@ -191,28 +232,12 @@ struct SubjectPage: View {
         active = PlaybackRequest(subject: savedSubject, episode: episode, episodes: episodes, resume: resume)
     }
 
-    @MainActor private func load() async {
-        reading = true
-        let work = (try? await Catalog.detail(id: initial.id, kind: initial.kind)) ?? initial
-        guard !Task.isCancelled else { return }
-        fetched = work
-        if let entry = last { group = max(0, (entry.episode - 1) / 20) }
-        var lines: [Sources.Line] = []
-        await withTaskGroup(of: [Sources.Line].self) { tasks in
-            for source in (try? Sources.configured()) ?? [] {
-                tasks.addTask { (try? await Sources.find(work, source: source)) ?? [] }
-            }
-            for await result in tasks {
-                guard !Task.isCancelled else { tasks.cancelAll(); return }
-                if !result.isEmpty {
-                    lines += result
-                    episodes = Sources.episodes(lines)
-                }
-                if autoplay && !autoOpened, let ep = next, last == nil || (last?.finished == false && last?.episode == ep.number) { play(ep) }
-            }
-        }
-        guard !Task.isCancelled else { return }
-        reading = false; complete = true
-        if autoplay && !autoOpened, last?.finished == true, let ep = next { play(ep) }
+    private func synopsisNeedsExpansion(width: CGFloat) -> Bool {
+        let font = UIFont.preferredFont(forTextStyle: .body)
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 4
+        let height = (subject.synopsis as NSString).boundingRect(with: CGSize(width: max(1, width), height: .greatestFiniteMagnitude),
+            options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: [.font: font, .paragraphStyle: style], context: nil).height
+        return height > ceil(font.lineHeight * 3 + 9)
     }
 }

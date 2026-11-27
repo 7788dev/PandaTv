@@ -30,15 +30,17 @@ private struct FilterSheet: View {
                     picker("年份", ["全部年份"] + (2010...max(2010, Calendar.current.component(.year, from: Date()))).reversed().map(String.init), $draft.year)
                 }
                 if !draft.tags.isEmpty {
-                    Button("重置筛选") { draft = Filters(sort: draft.sort) }
+                    Button("重置筛选") { draft = Filters(sort: draft.sort) }.accessibilityIdentifier("reset-filters")
                 }
             }
             .navigationTitle("筛选\(channel.rawValue)").navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(leading: Button("取消") { dismiss() }, trailing: Button("完成") { apply(draft); dismiss() }.font(.headline))
+            .navigationBarItems(leading: Button("取消") { dismiss() }.accessibilityIdentifier("cancel-filters"),
+                                trailing: Button("完成") { apply(draft); dismiss() }.font(.headline).accessibilityIdentifier("apply-filters"))
         }.navigationViewStyle(.stack)
     }
     private func picker(_ title: String, _ options: [String], _ value: Binding<String>) -> some View {
         Picker(title, selection: value) { ForEach(options, id: \.self) { Text($0).tag($0) } }
+            .pickerStyle(.menu).accessibilityIdentifier("filter-\(title)")
     }
 }
 
@@ -52,15 +54,16 @@ struct ChannelPage: View {
     @State private var busy = true
     @State private var failed = false
     @State private var sheet = false
+    @Environment(\.sizeCategory) private var textSize
     private struct Request: Hashable { let filters: Filters; let page: Int }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
-                    Picker("排序", selection: $filters.sort) {
-                        ForEach(["热度", "最新", "评分"], id: \.self) { Text($0).tag($0) }
-                    }.pickerStyle(.segmented).frame(maxWidth: 308)
+                    if textSize.isAccessibilityCategory {
+                        Menu { sorts } label: { Label(filters.sort, systemImage: "arrow.up.arrow.down").frame(minHeight: 44) }
+                    } else { sorts.pickerStyle(.segmented).frame(maxWidth: 308) }
                     Spacer(minLength: 0)
                     Button { sheet = true } label: {
                         Label(filters.tags.isEmpty ? "筛选" : "筛选 · \(filters.tags.count)", systemImage: "line.3.horizontal.decrease.circle")
@@ -73,7 +76,8 @@ struct ChannelPage: View {
                 else if failed {
                     NoticeView(symbol: "wifi.exclamationmark", message: "暂时无法载入片单") { more += 1 }
                 } else if !offsets.isEmpty {
-                    Button("载入更多") { more += 1 }.buttonStyle(.bordered).frame(maxWidth: .infinity)
+                    Button("载入更多") { more += 1 }.buttonStyle(.bordered).buttonBorderShape(.capsule)
+                        .controlSize(.large).frame(maxWidth: .infinity).accessibilityIdentifier("more-titles")
                 } else if items.isEmpty {
                     NoticeView(symbol: "film", message: "这个筛选条件下没有作品")
                 }
@@ -101,6 +105,11 @@ struct ChannelPage: View {
                 offsets = next
             } catch { if !Task.isCancelled { failed = true } }
             if !Task.isCancelled { busy = false }
+        }
+    }
+    private var sorts: some View {
+        Picker("排序", selection: $filters.sort) {
+            ForEach(["热度", "最新", "评分"], id: \.self) { Text($0).tag($0) }
         }
     }
 }

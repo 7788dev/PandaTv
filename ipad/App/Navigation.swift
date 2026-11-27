@@ -201,7 +201,17 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
         if reveal { show(.secondary) }
     }
 
-    @objc private func openSearch() { open(.search, reveal: true) }
+    @objc private func openSearch() {
+        open(.search, reveal: true)
+        DispatchQueue.main.async { [weak self] in
+            guard let search = self?.detailNavigation.topViewController?.navigationItem.searchController else { return }
+            search.isActive = true
+            search.searchBar.becomeFirstResponder()
+        }
+    }
+    override var keyCommands: [UIKeyCommand]? {
+        [UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(openSearch))]
+    }
 
     private func showSubject(_ subject: Subject, autoplay: Bool) {
         weak var detail: UIViewController?
