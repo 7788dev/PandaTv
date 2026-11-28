@@ -108,8 +108,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
                         val full = nav.app.douban.detail(id)
                         coroutineContext.ensureActive()
                         if (destroyed) return@launch
-                        val current = detailItem ?: item
-                        val merged = full.copy(episodes = current.episodes, episodeTitles = current.episodeTitles)
+                        val merged = availability?.applyTo(full) ?: full
                         detailItem = merged
                         refreshStateViews(merged)
                         castTv?.apply {
@@ -173,10 +172,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
                     if (destroyed || detailItem?.id != item.id) return@launch
                     if (complete && availability == avail) continue
                     availability = avail
-                    val merged = (detailItem ?: item).copy(
-                        episodes = avail.episodes ?: item.episodes,
-                        episodeTitles = avail.episodeTitles ?: item.episodeTitles,
-                    )
+                    val merged = avail.applyTo(detailItem ?: item)
                     detailItem = merged
                     refreshStateViews(merged)
                     renderEpisodes(merged)
@@ -395,9 +391,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
                 rightMargin = Theme.dp(ctx, 14)
             }
             setOnClickListener {
-                val cur = detailItem ?: item
-                val h = nav.app.userStore.get().history.firstOrNull { it.id == cur.id }
-                nav.openPlayer(cur.id, h?.episode ?: 1)
+                nav.openPlayer(item.id)
             }
         }
         pBtn.tag = "detail-play"
@@ -494,7 +488,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
         sec.addView(Theme.sectionHeader(ctx, Copy.Detail.EPISODES, m.pageH, Theme.dp(ctx, 8)))
 
         val currentEp = nav.app.userStore.get().history.firstOrNull { it.id == item.id }?.episode
-        val ranges = Rules.episodeRanges(count)
+        val ranges = Rules.episodeRanges(count, item.episodeNumbers)
         var activeRange = Rules.rangeOf(ranges, focusedEpisode ?: focusedRange?.from ?: currentEp) ?: ranges.first()
 
         val epGrid = Theme.horizontalGrid(ctx).apply {
@@ -570,9 +564,10 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
             )
         )
         val selected = focusedEpisode ?: currentEp
-        if (selected != null && selected in activeRange.from..activeRange.to) {
+        val selectedIndex = epAdapter.numbers.indexOf(selected)
+        if (selectedIndex >= 0) {
             epGrid.post {
-                epGrid.selectedPosition = selected - activeRange.from
+                epGrid.selectedPosition = selectedIndex
                 if (focusedEpisode != null && epGrid.isShown) epGrid.requestFocus()
             }
         }
@@ -700,17 +695,16 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
         private val currentEp: Int?,
         private val onPick: (Int) -> Unit,
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        private var from = 1
-        private var to = 1
+        var numbers: List<Int> = emptyList()
+            private set
         private val hasTitles = !item.episodeTitles.isNullOrEmpty()
 
         fun setRange(f: Int, t: Int) {
-            from = f
-            to = t
+            numbers = Rules.playableEpisodes(item, f, t)
             notifyDataSetChanged()
         }
 
-        override fun getItemCount(): Int = (to - from + 1).coerceAtLeast(0)
+        override fun getItemCount(): Int = numbers.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val tv = TextView(ctx).apply {
@@ -731,7 +725,7 @@ class DetailScreen(ctx: Context, nav: Navigator, private val id: String, saved: 
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            val ep = from + position
+            val ep = numbers[position]
             val tv = holder.itemView as TextView
             tv.tag = ep
             val title = item.episodeTitles?.getOrNull(ep - 1)

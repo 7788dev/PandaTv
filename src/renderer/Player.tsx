@@ -5,7 +5,7 @@ import Hls from 'hls.js'
 import type { MediaItem, Playback, Quality, Speed } from '../contract/types'
 import type { IconName } from './icons/names'
 import { HISTORY_SAVE_SECONDS, OSD_MS, PLAYER_IDLE_MS, QUALITIES, SEEK_STEP_SECONDS, SPEEDS, UNMUTE_VOLUME, VOLUME_STEP } from '../contract/constants'
-import { clock, endPosition, episodeHeading, resumePosition, showSkipIntro, speedButtonLabel, speedLabel, startPosition, upNextSeconds, volumeIcon } from '../contract/rules'
+import { clock, endPosition, episodeHeading, episodeToPlay, nextEpisode, resumePosition, showSkipIntro, speedButtonLabel, speedLabel, startPosition, upNextSeconds, volumeIcon } from '../contract/rules'
 import { fmt, t } from '../contract/copy'
 import { extra } from '../copy.extra'
 import type { PlaySources } from '../shared/api'
@@ -40,12 +40,16 @@ type ClockState = { position: number; duration: number; buffered: { start: numbe
 
 export default function Player({ id, episode: requested }: { id: string; episode: number }) {
   const { state } = useUser()
-  const historyEpisode = useRef(state.history.find(entry => entry.id === id)?.episode ?? 1)
+  const historyEpisode = useRef(Math.min(state.history.find(entry => entry.id === id)?.episode ?? 1, 10000))
   const item = useRemote(() => window.panda.data.subject(id), [id])
   const catalogueRevision = useCatalogueRevision(id)
-  const availability = useRemote(() => window.panda.data.availability(id), [id, catalogueRevision], true)
-  const episode = requested || historyEpisode.current
-  if (!item.data) return <main className="player" aria-busy="true" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
+  const availability = useRemote(() => window.panda.data.availability(id, requested ? undefined : historyEpisode.current), [id, catalogueRevision, requested], true)
+  const [initial, setInitial] = useState<number>()
+  useEffect(() => {
+    if (!requested && initial === undefined && availability.data) setInitial(episodeToPlay(availability.data, historyEpisode.current))
+  }, [requested, initial, availability.data])
+  const episode = requested || initial || (availability.error ? historyEpisode.current : undefined)
+  if (!item.data || !episode) return <main className="player" aria-busy="true" data-error={dataAttr(item.error)} data-waiting={dataAttr(!item.error)}>
     <header className="player__top"><IconButton name="arrow-left" className="icon-btn--lg" label={t.action.back} onClick={() => back('/detail/' + id)} /></header>
     <div className="player__center"><span className="spinner" role="status" aria-label={extra.loading} /><div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{errorText(item.error)}</p><button className="btn" onClick={item.reload}>{t.action.retry}</button></div></div>
   </main>
@@ -75,7 +79,7 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
   const initialHistory = useRef(state.history.find(entry => entry.id === item.id))
   const retryPosition = useRef<number | null>(null)
   const intended = useRef(0)
-  const prepared = useRef(false)
+  const prepared = useRef<number | undefined>(undefined)
   const started = useRef(false)
   const savingAt = useRef(0)
   const switchEvents = useRef<SwitchEvent[]>([])
@@ -142,7 +146,8 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
   const latest = useRef({ item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, hasAlternative })
   latest.current = { item, settings: state.settings, panelOpen, dragPosition, problem, cancelled, volume, muted, hasAlternative }
   const bridgingActiveLine = Boolean(bridgeActive.current && sourceHealthy.current && activeSource.current && started.current && video.current)
-  const hasNext = Boolean(item.episodes && episode < item.episodes)
+  const upcoming = nextEpisode(item, episode)
+  const hasNext = upcoming !== undefined
   const error = (resolvingAgain || bridgingActiveLine ? null : playback.error) || problem
   const busy = (!bridgingActiveLine && playback.loading) || waiting || (resolvingAgain && !bridgingActiveLine)
   const position = dragPosition ?? time.position
@@ -168,7 +173,7 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
   }
   const save = async (v = video.current) => {
     if (!v || !started.current) return
-    const entry = playbackHistory(item.id, episode, v.currentTime, v.duration, Boolean(latest.current.item.episodes && episode < latest.current.item.episodes))
+    const entry = playbackHistory(item.id, episode, v.currentTime, v.duration, nextEpisode(latest.current.item, episode))
     if (!entry) return
     savingAt.current = Date.now()
     try { await dispatch({ type: 'history:record', entry }) }
@@ -223,10 +228,11 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
     wake()
   }
   const next = () => {
-    if (!latest.current.item.episodes || episode >= latest.current.item.episodes || autoAdvanced.current) return
+    const target = nextEpisode(latest.current.item, episode)
+    if (target === undefined || autoAdvanced.current) return
     autoAdvanced.current = true
     void save()
-    go('/play/' + item.id + '/' + (episode + 1), { replace: true })
+    go('/play/' + item.id + '/' + target, { replace: true })
   }
   // Where the next source takes over: where this one got to, or where it was meant to start
   // when it never showed a picture.
@@ -533,14 +539,15 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
         refresh()
         const current = latest.current
         // The next episode's source is chosen before this one ends, so it starts without a wait.
-        if (!prepared.current && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS && current.item.episodes && episode < current.item.episodes) {
-          prepared.current = true
-          void window.panda.data.playback(item.id, episode + 1, sessionPreferences.wantedQuality(current.settings)).catch(() => {})
+        const following = nextEpisode(current.item, episode)
+        if (following !== undefined && prepared.current !== following && v.duration > 0 && v.duration - v.currentTime <= PREPARE_NEXT_SECONDS) {
+          prepared.current = following
+          void window.panda.data.playback(item.id, following, sessionPreferences.wantedQuality(current.settings)).catch(() => {})
         }
         if (!v.paused && current.settings.skipIntro && source.intro && v.currentTime >= source.intro.start && v.currentTime < source.intro.end) v.currentTime = Math.min(source.intro.end, v.duration)
         if (started.current && Date.now() - savingAt.current >= HISTORY_SAVE_SECONDS * 1000) void save()
         if (!v.paused && !v.seeking && current.settings.skipIntro && source.outro !== undefined && v.currentTime >= source.outro && v.currentTime < v.duration) {
-          if (current.settings.autoNext && !current.cancelled && current.item.episodes && episode < current.item.episodes) next()
+          if (current.settings.autoNext && !current.cancelled && following !== undefined) next()
           else v.currentTime = v.duration
         }
       })
@@ -721,7 +728,7 @@ function PlayerMedia({ item, episode, catalogueRevision }: { item: MediaItem; ep
     <div className="player__center"><button className="player__bigplay" aria-label={t.player.play} tabIndex={-1} onClick={play} disabled={!ready}><Icon name="play" /></button>{busy && !error && <span className="spinner" role="status" aria-label={extra.loading} />}<div className="player__error empty" role="alert"><Icon name="alert" size="xl" /><p className="empty__text">{error ? errorText(error) : t.player.error}</p><button className="btn" onClick={() => retry()}>{t.action.retry}</button></div></div>
     <div className="osd" role="status" data-open={dataAttr(osd)}>{osd && <><Icon name={osd.name} /><span>{osd.text}</span></>}</div>
     <button className="btn btn--glass player__skip" data-open={dataAttr(showSkipIntro(time.position, currentMedia ?? {}, state.settings) && upNext === null && !panelOpen)} onClick={() => { if (currentMedia?.intro) seekTo(currentMedia.intro.end) }}>{t.player.skipIntro}</button>
-    <div className="upnext" data-open={dataAttr(upNext !== null && !panelOpen)}><div className="upnext__label">{upNext !== null && fmt(t.player.upNext, { n: upNext })}</div><div className="upnext__title">{episodeHeading(item, episode + 1)}</div><div className="upnext__actions"><button className="btn btn--primary btn--sm" onClick={next}>{t.player.playNow}</button><button className="btn btn--ghost btn--sm" onClick={() => setCancelled(true)}>{t.action.cancel}</button></div></div>
+    <div className="upnext" data-open={dataAttr(upNext !== null && !panelOpen)}><div className="upnext__label">{upNext !== null && fmt(t.player.upNext, { n: upNext })}</div><div className="upnext__title">{upcoming !== undefined && episodeHeading(item, upcoming)}</div><div className="upnext__actions"><button className="btn btn--primary btn--sm" onClick={next}>{t.player.playNow}</button><button className="btn btn--ghost btn--sm" onClick={() => setCancelled(true)}>{t.action.cancel}</button></div></div>
     <div className="player__bottom" inert={idle && !error && !busy}>
       <div className="seek" role="slider" tabIndex={ready ? 0 : -1} aria-label={t.player.seek} aria-disabled={!ready} aria-valuemin={0} aria-valuemax={time.duration} aria-valuenow={Math.floor(position)} aria-valuetext={clock(position)} data-dragging={dataAttr(dragPosition !== null)}
         style={{ '--p': (time.duration ? 100 * position / time.duration : 0) + '%', '--h': hover * 100 + '%' } as CSSProperties}

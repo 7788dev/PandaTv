@@ -16,6 +16,19 @@ object Rules {
 
     fun episodeCount(it: MediaItem): Int = it.episodes ?: 1
 
+    fun playableEpisodes(item: MediaItem, from: Int = 1, to: Int = episodeCount(item)): List<Int> =
+        item.episodeNumbers?.filter { it in from..to } ?: (from..to).toList()
+
+    fun nextEpisode(item: MediaItem, current: Int): Int? {
+        item.episodeNumbers?.let { return it.firstOrNull { number -> number > current } }
+        return (current + 1).takeIf { it <= episodeCount(item) }
+    }
+
+    fun episodeToPlay(item: MediaItem, preferred: Int): Int {
+        item.episodeNumbers?.let { numbers -> return numbers.firstOrNull { it >= preferred } ?: numbers.lastOrNull() ?: 1 }
+        return min(preferred, episodeCount(item))
+    }
+
     fun scoreText(it: MediaItem): String? {
         val s = it.score ?: return null
         if (s <= 0.0 || !s.isFinite()) return null
@@ -90,7 +103,7 @@ object Rules {
 
     fun playLabel(it: MediaItem, h: HistoryEntry?): String {
         if (h == null) return Copy.Action.PLAY
-        if (isSeries(it)) return Copy.fmt(Copy.Action.RESUME_EPISODE, "n" to h.episode, "unit" to (it.unit ?: "集"))
+        if (isSeries(it)) return Copy.fmt(Copy.Action.RESUME_EPISODE, "n" to episodeToPlay(it, h.episode), "unit" to (it.unit ?: "集"))
         return if (isFinished(h)) Copy.Action.PLAY else Copy.Action.RESUME
     }
 
@@ -102,10 +115,10 @@ object Rules {
         episode: Int,
         position: Double,
         duration: Double,
-        hasNext: Boolean,
+        next: Int?,
     ): HistoryEntry {
-        return if (hasNext && isFinished(position, duration)) {
-            HistoryEntry(id, episode + 1, 0.0, 0.0, 0L)
+        return if (next != null && isFinished(position, duration)) {
+            HistoryEntry(id, next, 0.0, 0.0, 0L)
         } else {
             HistoryEntry(id, episode, floor(position), duration, 0L)
         }
@@ -128,12 +141,14 @@ object Rules {
         ).filter { it.items.isNotEmpty() }
     }
 
-    fun episodeRanges(count: Int): List<EpisodeRange> {
+    fun episodeRanges(count: Int, numbers: List<Int>? = null): List<EpisodeRange> {
         val ranges = ArrayList<EpisodeRange>()
         var from = 1
         while (from <= count) {
             val to = min(count, from + Constants.EPISODE_RANGE_SIZE - 1)
-            ranges.add(EpisodeRange(from, to, Copy.fmt(Copy.Status.RANGE, "a" to from, "b" to to)))
+            if (numbers == null || numbers.any { it in from..to }) {
+                ranges.add(EpisodeRange(from, to, Copy.fmt(Copy.Status.RANGE, "a" to from, "b" to to)))
+            }
             from += Constants.EPISODE_RANGE_SIZE
         }
         return ranges

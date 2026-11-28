@@ -12,6 +12,22 @@ type Progress = Pick<HistoryEntry, 'position' | 'duration'>
 /** 多集内容（剧集、综艺、动漫…）。不是多集就是单片 */
 export const isSeries = (it: MediaItem): boolean => Boolean(it.episodes)
 
+type EpisodeList = Pick<MediaItem, 'episodes' | 'episodeNumbers'>
+
+export function playableEpisodes(item: EpisodeList, from = 1, to = item.episodes ?? 1): number[] {
+  return item.episodeNumbers?.filter(number => number >= from && number <= to)
+    ?? Array.from({ length: Math.max(0, to - from + 1) }, (_, index) => from + index)
+}
+
+export function nextEpisode(item: EpisodeList, current: number): number | undefined {
+  if (item.episodeNumbers) return item.episodeNumbers.find(number => number > current)
+  return current < (item.episodes ?? 1) ? current + 1 : undefined
+}
+
+export function episodeToPlay(item: EpisodeList, preferred: number): number {
+  if (item.episodeNumbers) return item.episodeNumbers.find(number => number >= preferred) ?? item.episodeNumbers.at(-1) ?? 1
+  return Math.min(preferred, item.episodes ?? 1)
+}
 
 
 /** 评分：固定一位小数 */
@@ -78,7 +94,7 @@ export const progressText = (it: MediaItem, h: HistoryEntry): string => {
 /** 详情页主按钮上的字：播放 / 继续播放 / 继续播放 第12集 */
 export const playLabel = (it: MediaItem, h: HistoryEntry | undefined): string => {
   if (!h) return t.action.play
-  if (isSeries(it)) return fmt(t.action.resumeEpisode, { n: h.episode, unit: it.unit ?? '集' })
+  if (isSeries(it)) return fmt(t.action.resumeEpisode, { n: episodeToPlay(it, h.episode), unit: it.unit ?? '集' })
   return isFinished(h) ? t.action.play : t.action.resume
 }
 
@@ -90,10 +106,12 @@ export const resumePosition = (h: HistoryEntry | undefined, episode: number): nu
  * 保存进度时该写进历史的内容。
  * 看完一集且还有下一集：记成「下一集从头」，这样「继续观看」会指向下一集。
  */
-export const historyRecord = (id: string, episode: number, position: number, duration: number, hasNext: boolean): Omit<HistoryEntry, 'at'> =>
-  hasNext && isFinished({ position, duration })
-    ? { id, episode: episode + 1, position: 0, duration: 0 }
+export function historyRecord(id: string, episode: number, position: number, duration: number, next: number | boolean | undefined): Omit<HistoryEntry, 'at'> {
+  const following = typeof next === 'boolean' ? (next ? episode + 1 : undefined) : next
+  return following !== undefined && isFinished({ position, duration })
+    ? { id, episode: following, position: 0, duration: 0 }
     : { id, episode, position: Math.floor(position), duration }
+}
 
 
 export interface HistoryGroup {
@@ -122,10 +140,11 @@ export interface EpisodeRange {
 }
 
 /** 选集分段：50 集一段。只有一段时不显示分段标签 */
-export const episodeRanges = (count: number): EpisodeRange[] => {
+export const episodeRanges = (count: number, numbers?: number[]): EpisodeRange[] => {
   const ranges: EpisodeRange[] = []
   for (let from = 1; from <= count; from += EPISODE_RANGE_SIZE) {
     const to = Math.min(count, from + EPISODE_RANGE_SIZE - 1)
+    if (numbers && !numbers.some(number => number >= from && number <= to)) continue
     ranges.push({ from, to, label: fmt(t.status.range, { a: from, b: to }) })
   }
   return ranges

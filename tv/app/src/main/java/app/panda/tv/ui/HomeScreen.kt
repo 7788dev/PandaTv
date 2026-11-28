@@ -174,8 +174,7 @@ class HomeScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null)
 
     private fun enrichEpisodes(item: MediaItem): MediaItem {
         if (item.episodes != null) return item
-        val known = nav.app.playback.knownEpisodes(item.id) ?: return item
-        return item.copy(episodes = known)
+        return nav.app.playback.knownAvailability(item.id)?.applyTo(item) ?: item
     }
 
     private fun refreshContinue() {
@@ -539,8 +538,7 @@ class HomeScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null)
             synTv.text = item.synopsis ?: ""
             counterTv.text = "${heroIndex + 1} / ${currentItems.size}"
             primaryButton.setOnClickListener {
-                val h = nav.app.userStore.get().history.firstOrNull { it.id == item.id }
-                nav.openPlayer(item.id, h?.episode ?: 1)
+                nav.openPlayer(item.id)
             }
             detailBtn.setOnClickListener { nav.openDetail(item.id) }
             if (animate) {
@@ -651,7 +649,7 @@ class HomeScreen(ctx: Context, nav: Navigator, saved: android.os.Bundle? = null)
             val pct = h?.let { Rules.progressPercent(it) }
             holder.card.bind(nav.app, item, sub, pct)
             holder.card.setOnClickListener {
-                if (h != null) nav.openPlayer(item.id, h.episode) else nav.openDetail(item.id)
+                if (h != null) nav.openPlayer(item.id) else nav.openDetail(item.id)
             }
         }
 

@@ -329,6 +329,20 @@
         "duration": 2700
       }
     ],
+    "sparseEpisodes": {
+      "numbers": [
+        1,
+        3,
+        103
+      ],
+      "ranges": [
+        1,
+        101
+      ],
+      "resume": 3,
+      "next": 103,
+      "recorded": 3
+    },
     "episodeRanges": [
       [
         {

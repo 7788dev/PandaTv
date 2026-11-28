@@ -69,6 +69,7 @@ data class MediaItem(
     val directors: List<String>? = null,
     val cast: List<Person>? = null,
     val people: List<Credit>? = null,
+    val episodeNumbers: List<Int>? = null,
 )
 
 data class RankBoard(
@@ -168,7 +169,10 @@ data class UserState(
 data class Availability(
     val episodes: Int? = null,
     val episodeTitles: List<String>? = null,
-)
+    val episodeNumbers: List<Int>? = null,
+) {
+    fun applyTo(item: MediaItem) = item.copy(episodes = episodes, episodeTitles = episodeTitles, episodeNumbers = episodeNumbers)
+}
 
 data class SourceOption(
     val key: String,

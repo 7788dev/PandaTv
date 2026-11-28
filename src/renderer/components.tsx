@@ -3,7 +3,7 @@ import { Menu } from '@base-ui/react/menu'
 import { Tooltip } from '@base-ui/react/tooltip'
 import type { IconName } from './icons/names'
 import type { HistoryEntry, MediaItem } from '../contract/types'
-import { avatarText, cardSub, episodeLabel, episodeState, metaParts, progressPercent, progressText, scoreText, statusText, wideImage } from '../contract/rules'
+import { avatarText, cardSub, episodeLabel, episodeState, metaParts, playableEpisodes, progressPercent, progressText, scoreText, statusText, wideImage } from '../contract/rules'
 import { POPUP_OFFSET_PX, SHELF_EDGE_PX, TOOLTIP_DELAY_MS } from '../contract/constants'
 import { t } from '../contract/copy'
 import sprite from './icons/sprite.svg?url'
@@ -113,7 +113,7 @@ export function ContinueCard({ item, history }: { item: MediaItem; history: Hist
     } catch (error) { notify(errorText(error)); setRemoving(false) }
   }
   return <div className="card card--wide" data-id={item.id}>
-    <a className="card__link" href={`#/play/${item.id}/${history.episode}`}>
+    <a className="card__link" href={`#/play/${item.id}`}>
       <div className="card__media"><MediaImage src={wideImage(item)} className="card__img" fallback={<span className="card__fallback">{item.title}</span>} />
         {history.duration > 0 && <span className="card__progress"><i style={{ '--p': `${progressPercent(history)}%` } as CSSProperties} /></span>}
       </div>
@@ -219,8 +219,7 @@ export function SelectMenu<T extends string | number>({ items, value, onChange, 
 }
 
 export function EpisodeCells({ item, current, from = 1, to = item.episodes ?? 1, replace = false }: { item: MediaItem; current?: number; from?: number; to?: number; replace?: boolean }) {
-  return Array.from({ length: Math.max(0, to - from + 1) }, (_, index) => {
-    const number = from + index
+  return playableEpisodes(item, from, to).map(number => {
     const state = episodeState(number, current)
     const path = `/play/${item.id}/${number}`
     return <a className={item.episodeTitles?.length ? 'eplist__item' : 'ep'} href={`#${path}`} key={number} aria-label={episodeLabel(item, number)} aria-current={state === 'current' ? 'true' : undefined}

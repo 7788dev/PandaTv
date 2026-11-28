@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import type { HistoryEntry, MediaItem, Playback, Settings } from '../src/contract/types';
 import {
-  clock, episodeHeading, episodeLabel, episodeRanges, historyRecord,
+  clock, episodeHeading, episodeLabel, episodeRanges, episodeToPlay, historyRecord, nextEpisode, playableEpisodes,
   isFinished, metaParts, playLabel, progressPercent, progressText,
   resumePosition, scoreText, statusText, upNextSeconds,
 } from '../src/contract/rules';
@@ -377,7 +377,12 @@ const vectors = {
     progressText: [progressText(baseItem, sampleHistory), progressText(filmItem, finishedHistory)],
     playLabel: [playLabel(baseItem, undefined), playLabel(baseItem, sampleHistory), playLabel(filmItem, finishedHistory)],
     resumePosition: [resumePosition(sampleHistory, 5), resumePosition(sampleHistory, 6), resumePosition(finishedHistory, 1)],
-    historyRecord: [historyRecord('db-1', 5, 2600.8, 2700, true), historyRecord('db-1', 5, 120.9, 2700, true), historyRecord('db-1', 30, 2650, 2700, false)],
+    historyRecord: [historyRecord('db-1', 5, 2600.8, 2700, 6), historyRecord('db-1', 5, 120.9, 2700, 6), historyRecord('db-1', 30, 2650, 2700, undefined)],
+    sparseEpisodes: (() => {
+      const item = { episodes: 103, episodeNumbers: [1, 3, 103] };
+      return { numbers: playableEpisodes(item), ranges: episodeRanges(103, item.episodeNumbers).map(r => r.from),
+        resume: episodeToPlay(item, 2), next: nextEpisode(item, 3), recorded: historyRecord('db-1', 1, 100, 100, nextEpisode(item, 1)).episode };
+    })(),
     episodeRanges: [episodeRanges(50), episodeRanges(125)],
     clock: [clock(0), clock(307), clock(3723), clock(-5)],
     upNextSeconds: [

@@ -2,7 +2,7 @@ import type { DataSource, HistoryEntry, HomeFeed, MediaItem, Page, Person, Playb
 import type { AlignInput, AlignmentResult, SourceHealthSnapshot } from './rules/types'
 import type { ResolvedAlignmentConfig, ResolvedBudgetConfig, ResolvedBufferConfig } from './rules/config'
 
-export type Availability = { episodes?: number; episodeTitles?: string[] }
+export type Availability = Pick<MediaItem, 'episodes' | 'episodeNumbers' | 'episodeTitles'>
 /** One of the people on a title's page. With an `id` their works can be listed; `photo` is absent when there is none. */
 export type Credit = Person & { id?: string; photo?: string }
 /**
@@ -41,7 +41,7 @@ export interface PandaBridge {
     person(id: string): Promise<PersonInfo>
     /** Everything the person worked on, best rated first, a page at a time. */
     personWorks(id: string, cursor?: string): Promise<Page<MediaItem>>
-    availability(id: string): Promise<Availability>
+    availability(id: string, preferredEpisode?: number): Promise<Availability>
     retryPlayback(id: string, episode: number, quality?: Quality, failure?: 'probe' | 'stall'): Promise<Playback>
     /** Which sources carry the episode; the player offers them when there is more than one. */
     sources(id: string, episode: number): Promise<PlaySources>

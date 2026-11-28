@@ -15,6 +15,7 @@ import android.widget.TextView
 import app.panda.tv.PandaTvApp
 import app.panda.tv.model.Copy
 import app.panda.tv.model.MediaType
+import app.panda.tv.model.Rules
 import app.panda.tv.model.StateAction
 import app.panda.tv.model.UserState
 import kotlinx.coroutines.CancellationException
@@ -58,7 +59,7 @@ class MainActivity : Activity(), Navigator {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var playerCheckJob: Job? = null
     private var playerCheckOverlay: View? = null
-    private var playerCheckTarget: Pair<String, Int>? = null
+    private var playerCheckTarget: Pair<String, Int?>? = null
     private var playerCheckGeneration = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -407,9 +408,9 @@ class MainActivity : Activity(), Navigator {
         pushScreen(PersonScreen(this, this, id, nameHint, photoHint))
     }
 
-    override fun openPlayer(id: String, episode: Int) = openPlayer(id, episode, null)
+    override fun openPlayer(id: String, episode: Int?) = openPlayer(id, episode, null)
 
-    private fun openPlayer(id: String, episode: Int, restored: Bundle?) {
+    private fun openPlayer(id: String, episode: Int?, restored: Bundle?) {
         if (app.userStore.recovery().needed) { openRecovery(); return }
         if (playerCheckTarget == (id to episode)) return
         val origin = stack.lastOrNull() ?: return
@@ -437,11 +438,15 @@ class MainActivity : Activity(), Navigator {
         playerCheckJob = scope.launch {
             try {
                 val metadata = awaitScreenRequest(scope, timeoutMs = 22_000L) { app.douban.subject(id) }
-                val item = app.playback.prepareItem(metadata, episode, app.douban.workHints(id))
+                val preferred = episode ?: app.userStore.get().history.firstOrNull { it.id == id }?.episode?.coerceIn(1, 10000) ?: 1
+                val resume = episode == null || restored != null
+                val item = app.playback.prepareItem(metadata, preferred, app.douban.workHints(id), resume = resume)
+                val target = if (resume) Rules.episodeToPlay(item, preferred) else preferred
                 coroutineContext.ensureActive()
                 if (generation != playerCheckGeneration || stack.lastOrNull() !== origin) return@launch
                 clearPlayerCheck()
-                pushScreen(PlayerScreen(this@MainActivity, this@MainActivity, item, episode, restored).apply { pendingFocus = restored?.getString("focus") })
+                val playerState = restored?.takeIf { target == preferred }
+                pushScreen(PlayerScreen(this@MainActivity, this@MainActivity, item, target, playerState).apply { pendingFocus = playerState?.getString("focus") })
             } catch (timeout: TimeoutCancellationException) {
                 if (generation == playerCheckGeneration) toast(Copy.Extra.TIMEOUT)
             } catch (cancelled: CancellationException) {

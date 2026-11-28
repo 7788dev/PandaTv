@@ -130,6 +130,45 @@ test('the player adds late lines and episodes while the current video keeps play
   } finally { a(); c() }
 })
 
+test('sparse episode numbers drive the detail, drawer, history and automatic next episode', async () => {
+  const { page, network } = desktop
+  network.state.episodeNumbers = [1, 3]
+  await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { autoNext: false, skipIntro: false } }))
+  await page.evaluate(() => { location.hash = '#/detail/db-2001' })
+  await expect(page.locator('a.ep')).toHaveText(['1', '3'])
+  await page.locator('a.ep').first().click()
+  await playing(page)
+  await clickPlayerControl(page, '选集')
+  await expect(page.locator('.player__panel a.ep')).toHaveText(['1', '3'])
+  await page.keyboard.press('Escape')
+  const finish = () => page.locator('video').evaluate(element => {
+    const video = element as HTMLVideoElement
+    video.currentTime = video.duration - 0.6
+  })
+  await finish()
+  await expect.poll(() => page.locator('video').evaluate(v => (v as HTMLVideoElement).ended)).toBe(true)
+  await clickPlayerControl(page, '返回')
+  await expect.poll(() => page.evaluate(() => window.panda.user.get().then(s => s.history[0]?.episode))).toBe(3)
+  await page.evaluate(() => window.panda.user.dispatch({ type: 'settings', patch: { autoNext: true } }))
+  await page.locator('a.ep').first().click()
+  await playing(page)
+  await finish()
+  await expect.poll(() => page.evaluate(() => location.hash)).toBe('#/play/db-2001/3')
+  await playing(page)
+  expect(network.calls.some(call => call.path === '/episode-2.m3u8')).toBe(false)
+})
+
+test('a saved missing episode resumes at the next playable number without copying its position', async () => {
+  const { page, network } = desktop
+  network.state.episodeNumbers = [3, 103]
+  await page.evaluate(() => window.panda.user.dispatch({ type: 'history:record',
+    entry: { id: 'db-2001', episode: 2, position: 61, duration: 120, at: Date.now() } }))
+  await openFixturePlayer(page)
+  await expect(page.locator('.player__top')).toContainText('第3集')
+  expect(await page.locator('video').evaluate(v => (v as HTMLVideoElement).currentTime)).toBeLessThan(15)
+  expect(network.calls.some(call => call.path === '/episode-3.m3u8')).toBe(true)
+})
+
 test('actual settings, channel layout and modal controls remain readable at supported window sizes and zoom', async () => {
   const { app, page, dir } = desktop
   await page.locator('a[href="#/settings"]').click()

@@ -148,6 +148,13 @@ class GoldenParityTest {
         }
         assertEquals(epRanges[0], Rules.episodeRanges(50))
         assertEquals(epRanges[1], Rules.episodeRanges(125))
+        val sparse = Json.row(r["sparseEpisodes"])
+        val item = base.copy(episodes = 103, episodeNumbers = listOf(1, 3, 103))
+        assertEquals(Json.list(sparse["numbers"]).map { (it as Number).toInt() }, Rules.playableEpisodes(item))
+        assertEquals(Json.list(sparse["ranges"]).map { (it as Number).toInt() }, Rules.episodeRanges(103, item.episodeNumbers).map { it.from })
+        assertEquals((sparse["resume"] as Number).toInt(), Rules.episodeToPlay(item, 2))
+        assertEquals((sparse["next"] as Number).toInt(), Rules.nextEpisode(item, 3))
+        assertEquals((sparse["recorded"] as Number).toInt(), Rules.historyRecord(item.id, 1, 100.0, 100.0, Rules.nextEpisode(item, 1)).episode)
     }
 
     @Test

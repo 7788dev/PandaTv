@@ -245,7 +245,7 @@ class PlayerScreen(
     private var autoAttempts = 0
     private var autoAdvanced = false
     private var upNextCancelled = false
-    private var preparedNext = false
+    private var preparedNext: Int? = null
     private var overlayVisible = true
     private enum class Panel { EPISODES, LINES, QUALITY, SPEED, CHAPTERS }
 
@@ -313,7 +313,7 @@ class PlayerScreen(
         osdJob?.cancel()
         startupWatchJob?.cancel()
         preloadJob?.cancel()
-        preparedNext = false
+        preparedNext = null
         scrubbingOffJob?.cancel()
         seekCommitJob?.cancel()
         speedMeasureJob?.cancel()
@@ -793,7 +793,7 @@ class PlayerScreen(
         userRetry: Boolean = false,
         retainCurrent: Boolean = false,
     ) {
-        preparedNext = false
+        preparedNext = null
         seekCommitJob?.cancel()
         scrubbingOffJob?.cancel()
         scrubbing = false
@@ -838,7 +838,7 @@ class PlayerScreen(
             hideUpNext(restoreFocus = false)
             osdJob?.cancel()
             osdBox.visibility = View.GONE
-            preparedNext = false
+            preparedNext = null
             autoAdvanced = false
             upNextCancelled = false
         }
@@ -915,10 +915,10 @@ class PlayerScreen(
                         val oldItem = mediaItem
                         val panel = panelMode
                         val focusedSource = oldSources?.list?.getOrNull(sideGrid.selectedPosition)?.key
-                        val focusedPosition = sideGrid.selectedPosition
+                        val focusedEpisode = if (panel == Panel.EPISODES && oldItem != null) Rules.playableEpisodes(oldItem).getOrNull(sideGrid.selectedPosition) else null
                         if (srcs != null) playSources = srcs
                         if (available?.episodes != null) {
-                            mediaItem = item.copy(episodes = available.episodes, episodeTitles = available.episodeTitles ?: item.episodeTitles)
+                            mediaItem = available.applyTo(item)
                             mediaItem?.let(::updateHeader)
                         }
                         syncButtons()
@@ -928,7 +928,8 @@ class PlayerScreen(
                             if (position >= 0) sideGrid.selectedPosition = position
                         } else if (panel == Panel.EPISODES && oldItem != mediaItem) {
                             openPanel(panel, episodesBtn)
-                            if (focusedPosition >= 0) sideGrid.selectedPosition = focusedPosition
+                            val position = mediaItem?.let { Rules.playableEpisodes(it).indexOf(focusedEpisode) } ?: -1
+                            if (position >= 0) sideGrid.selectedPosition = position
                         }
                     }
                 }
@@ -1142,10 +1143,12 @@ class PlayerScreen(
                     if (timeTv.text != clock) timeTv.text = clock
 
                     val settings = nav.app.userStore.get().settings
-                    if (!preparedNext && durSec - posSec <= 90.0 && hasNextEpisode()) {
-                        preparedNext = true
+                    val following = nextEpisode()
+                    if (following != null && preparedNext != following && durSec - posSec <= 90.0) {
+                        preparedNext = following
+                        preloadJob?.cancel()
                         mediaItem?.let { item ->
-                            val targetEpisode = episode + 1
+                            val targetEpisode = following
                             val targetQuality = quality
                             preloadJob = scope.launch {
                                 runCatching {
@@ -1178,7 +1181,7 @@ class PlayerScreen(
                         val wasGone = upNextBox.visibility != View.VISIBLE
                         upNextBox.visibility = View.VISIBLE
                         upNextLabelTv.text = Copy.fmt(Copy.Player.UP_NEXT, "n" to up)
-                        upNextTitleTv.text = mediaItem?.let { Rules.episodeHeading(it, episode + 1) } ?: ""
+                        upNextTitleTv.text = if (following == null) "" else mediaItem?.let { Rules.episodeHeading(it, following) }.orEmpty()
                         if (wasGone && !overlayVisible) {
                             upNextPlayBtn.post { if (!destroyed && !overlayVisible && panelMode == null && upNextPlayBtn.isShown) upNextPlayBtn.requestFocus() }
                         }
@@ -1380,15 +1383,15 @@ class PlayerScreen(
         loadAndStart(retry = false, fromSource = playSources?.current)
     }
 
-    private fun hasNextEpisode(): Boolean {
-        val total = mediaItem?.episodes ?: 0
-        return total > 0 && episode < total
-    }
+    private fun nextEpisode(): Int? = mediaItem?.let { Rules.nextEpisode(it, episode) }
+
+    private fun hasNextEpisode(): Boolean = nextEpisode() != null
 
     private fun advanceToNext() {
-        if (!hasNextEpisode() || autoAdvanced) return
+        val target = nextEpisode() ?: return
+        if (autoAdvanced) return
         autoAdvanced = true
-        selectEpisode(episode + 1)
+        selectEpisode(target)
     }
 
     private fun selectEpisode(targetEpisode: Int) {
@@ -1412,7 +1415,7 @@ class PlayerScreen(
         val recordedEpisode = playingEpisode ?: return
         val posSec = p.currentPosition.coerceAtLeast(0L) / 1000.0
         val durSec = p.duration / 1000.0
-        val entry = Rules.historyRecord(item.id, recordedEpisode, posSec, durSec, recordedEpisode < (item.episodes ?: 0))
+        val entry = Rules.historyRecord(item.id, recordedEpisode, posSec, durSec, Rules.nextEpisode(item, recordedEpisode))
             .copy(at = System.currentTimeMillis())
         lastSavedAt = System.currentTimeMillis()
         nav.saveUser(StateAction.RecordHistory(entry))
@@ -1427,15 +1430,16 @@ class PlayerScreen(
         when (mode) {
             Panel.EPISODES -> {
                 val item = mediaItem ?: return
-                count = item.episodes ?: return
-                selected = (episode - 1).coerceAtLeast(0).coerceAtMost(count - 1)
+                val numbers = Rules.playableEpisodes(item)
+                count = numbers.size
+                selected = numbers.indexOf(episode)
                 title = Copy.Player.EPISODES
                 label = { index ->
-                    val ep = index + 1
+                    val ep = numbers[index]
                     val name = Rules.episodeLabel(item, ep)
-                    item.episodeTitles?.getOrNull(index)?.takeIf { it.isNotBlank() }?.let { "$name · $it" } ?: name
+                    item.episodeTitles?.getOrNull(ep - 1)?.takeIf { it.isNotBlank() }?.let { "$name · $it" } ?: name
                 }
-                pick = { if (it != selected) selectEpisode(it + 1) }
+                pick = { if (it != selected) selectEpisode(numbers[it]) }
             }
             Panel.LINES -> {
                 val sources = playSources ?: return

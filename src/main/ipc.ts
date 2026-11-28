@@ -156,7 +156,7 @@ export async function invokeData(method: string, args: unknown[], services: Serv
     case 'data.hotSearches': return data.hotSearches()
     case 'data.availability': {
       const item = await data.subject(id(args[0]))
-      return playback.availability(item, hints(data, item.id))
+      return playback.availability(item, hints(data, item.id), args[1] === undefined ? undefined : number(args[1]))
     }
     case 'data.playback':
     case 'data.retryPlayback':

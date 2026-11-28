@@ -4,6 +4,7 @@ import app.panda.tv.model.Copy
 import app.panda.tv.model.Json
 import app.panda.tv.model.MediaItem
 import app.panda.tv.model.MediaType
+import app.panda.tv.model.Rules
 import app.panda.tv.playback.CatalogueFetcher
 import app.panda.tv.playback.PlaybackService
 import app.panda.tv.playback.SourceRulesLoader
@@ -50,7 +51,7 @@ class PlaybackSearchTest {
     fun `confirmed empty catalogues reject admission without fabricating episodes`() = runBlocking {
         val playback = service { _, _ -> "{\"list\":[],\"pagecount\":1}" }
         assertEquals(Copy.Extra.SOURCE_UNAVAILABLE, errorOf { playback.prepareItem(item, 1) }.message)
-        assertEquals(null, playback.knownEpisodes(item.id))
+        assertEquals(null, playback.knownAvailability(item.id))
     }
 
     @Test
@@ -58,6 +59,38 @@ class PlaybackSearchTest {
         val playback = service { _, _ -> found("1") }
         assertEquals(item.id, playback.prepareItem(item, 1).id)
         assertEquals(Copy.Extra.NO_EPISODE, errorOf { playback.prepareItem(item, 2) }.message)
+    }
+
+    @Test
+    fun `sparse lines expose only real episodes and resume past a missing history entry`() = runBlocking {
+        val first = URI(rules.sources.first().api).host
+        val playback = service { url, _ ->
+            val number = if (URI(url).host == first) 3 else 103
+            found("1", "第${number}集\$https://cdn.example.com/$number.m3u8")
+        }
+        val prepared = playback.prepareItem(item, 1, resume = true)
+        assertEquals(listOf(3, 103), prepared.episodeNumbers)
+        assertEquals(3, Rules.episodeToPlay(prepared, 1))
+        assertEquals(103, Rules.nextEpisode(prepared, 3))
+        assertEquals(Copy.Extra.NO_EPISODE, errorOf { playback.prepareItem(item, 4) }.message)
+    }
+
+    @Test
+    fun `resume waits for the preferred episode in a late source before falling forward`() = runBlocking {
+        val slow = URI(rules.sources.last().api).host
+        val release = CompletableDeferred<Unit>()
+        val playback = service { url, _ ->
+            if (URI(url).host == slow) {
+                release.await()
+                found("2", "第2集\$https://cdn.example.com/2.m3u8")
+            } else found("1", "第1集\$https://cdn.example.com/1.m3u8#第3集\$https://cdn.example.com/3.m3u8")
+        }
+        assertEquals(listOf(1, 3), playback.availability(item).episodeNumbers)
+        val pending = async(start = CoroutineStart.UNDISPATCHED) { playback.prepareItem(item, 2, resume = true) }
+        release.complete(Unit)
+        val prepared = withTimeout(2000L) { pending.await() }
+        assertEquals(listOf(1, 2, 3), Rules.playableEpisodes(prepared))
+        assertEquals(2, Rules.episodeToPlay(prepared, 2))
     }
 
     @Test

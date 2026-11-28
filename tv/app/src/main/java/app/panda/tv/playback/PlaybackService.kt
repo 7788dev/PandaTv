@@ -9,6 +9,7 @@ import app.panda.tv.model.MediaType
 import app.panda.tv.model.PlaySources
 import app.panda.tv.model.Playback
 import app.panda.tv.model.Quality
+import app.panda.tv.model.Rules
 import app.panda.tv.model.SourceOption
 import app.panda.tv.data.Taxonomy
 import app.panda.tv.net.PublicNetwork
@@ -266,6 +267,13 @@ object PlaybackMatchers {
         return (searchTerms(title) + serials.flatMap { searchTerms(it) } + others.mapNotNull { searchTerms(it).firstOrNull() }).distinct()
     }
 
+    private val explicitEpisode = Regex("""(?i)^(?:(?:第)?\d+(?:集|话|回)(?:已?完结|大结局|完)?|(?:EP|E)\d+)$""")
+
+    private fun hasEpisodeNumber(episode: Episode, entries: Int): Boolean {
+        val n = episode.number ?: return false
+        return n in 1..10000 && (n <= entries * 3 + 10 || explicitEpisode.matches(episode.title))
+    }
+
     fun parseLines(from: String, value: String): List<Line> {
         val names = from.split("$$$")
         val blobs = value.split("$$$")
@@ -294,8 +302,7 @@ object PlaybackMatchers {
                 episodes.add(Episode(title, uri.toString(), format, number))
             }
             if (episodes.isEmpty()) continue
-            val numbered = episodes.all { it.number != null && it.number >= 1 } &&
-                episodes.maxOf { it.number!! } <= episodes.size * 3 + 10
+            val numbered = episodes.all { hasEpisodeNumber(it, episodes.size) }
             if (!numbered) {
                 out.add(Line(name, episodes))
                 continue
@@ -317,9 +324,8 @@ object PlaybackMatchers {
         val nonNull = numbers.filterNotNull()
         val numeric = numbers.isNotEmpty() &&
             nonNull.size == numbers.size &&
-            nonNull.all { it >= 1 } &&
-            nonNull.toHashSet().size == numbers.size &&
-            (nonNull.maxOrNull() ?: 0) <= numbers.size * 3 + 10
+            line.episodes.all { hasEpisodeNumber(it, numbers.size) } &&
+            nonNull.toHashSet().size == numbers.size
         val byNumber = LinkedHashMap<Int, Episode>(line.episodes.size)
         for (i in line.episodes.indices) {
             val ep = line.episodes[i]
@@ -499,7 +505,7 @@ class PlaybackService(
     private val selectionIntents = LinkedHashMap<String, SelectionIntent>(64, 0.75f, true)
     private var revisionClock = 0L
     private val winners = LinkedHashMap<String, String>(64, 0.75f, true)
-    private val episodeCounts = LinkedHashMap<String, Int>(128, 0.75f, true)
+    private val episodeCatalogues = LinkedHashMap<String, Availability>(128, 0.75f, true)
     private val behind = HashMap<String, Long>()
     // The bundled pool has nine enabled catalogues. Leave capacity above that so a hung
     // high-priority directory cannot keep the last fallback from starting its search.
@@ -507,7 +513,7 @@ class PlaybackService(
     private val probeScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val searchScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    fun knownEpisodes(itemId: String): Int? = synchronized(lock) { episodeCounts[itemId] }
+    fun knownAvailability(itemId: String): Availability? = synchronized(lock) { episodeCatalogues[itemId] }
 
     private fun workKey(item: MediaItem, hints: WorkHints): String = listOf(
         item.id, item.title, item.year?.toString().orEmpty(), item.type.wire, item.region.orEmpty(),
@@ -551,17 +557,13 @@ class PlaybackService(
         while (iterator.hasNext()) if (iterator.next().startsWith("$work:")) iterator.remove()
     }
 
-    suspend fun prepareItem(item: MediaItem, episode: Int, hints: WorkHints = WorkHints()): MediaItem {
+    suspend fun prepareItem(item: MediaItem, episode: Int, hints: WorkHints = WorkHints(), resume: Boolean = false): MediaItem {
         require(episode in 1..10000) { Copy.Extra.INVALID_INPUT }
-        var available = availability(item, hints)
-        if (episode > (available.episodes ?: 1)) available = availability(item, hints, complete = true)
-        val prepared = item.copy(
-            episodes = available.episodes ?: item.episodes,
-            episodeTitles = available.episodeTitles ?: item.episodeTitles,
-        )
+        var prepared = availability(item, hints).applyTo(item)
+        if (Rules.episodeToPlay(prepared, episode) != episode) prepared = availability(item, hints, complete = true).applyTo(item)
         // Catalogue presence for the work is insufficient when this episode is
         // missing, especially for series that are still being released.
-        attempts(prepared, episode, hints)
+        attempts(prepared, if (resume) Rules.episodeToPlay(prepared, episode) else episode, hints)
         return prepared
     }
 
@@ -571,23 +573,21 @@ class PlaybackService(
         val line = PlaybackMatchers.referenceLine(candidates.flatMap { it.lines })
             ?: throw IllegalStateException(Copy.Extra.SOURCE_UNAVAILABLE)
         val plan = PlaybackMatchers.numbering(line)
-        if (single || plan.count <= 1) return Availability()
-        val count = if (plan.numeric) {
-            candidates.flatMap { it.lines }
-                .map { PlaybackMatchers.numbering(it) }
-                .filter { it.numeric }
-                .maxOf { it.count }
+        val result = if (single || plan.count <= 1) Availability()
+        else if (plan.numeric) {
+            val numbers = candidates.flatMap { it.lines }.map(PlaybackMatchers::numbering)
+                .filter { it.numeric }.flatMap { it.byNumber.keys }.toSortedSet()
+            Availability(episodes = plan.count, episodeNumbers = numbers.takeIf { it.size < plan.count }?.toList())
         } else {
-            plan.count
+            Availability(episodes = plan.count, episodeTitles = if (plan.titled) line.episodes.map { it.title } else null)
         }
         synchronized(lock) {
-            if (episodeCounts.size >= 512 && !episodeCounts.containsKey(item.id)) {
-                episodeCounts.keys.firstOrNull()?.let { episodeCounts.remove(it) }
+            if (episodeCatalogues.size >= 512 && !episodeCatalogues.containsKey(item.id)) {
+                episodeCatalogues.keys.firstOrNull()?.let { episodeCatalogues.remove(it) }
             }
-            episodeCounts[item.id] = count
+            episodeCatalogues[item.id] = result
         }
-        val titles = if (plan.titled) line.episodes.map { it.title } else null
-        return Availability(episodes = count, episodeTitles = titles)
+        return result
     }
 
     suspend fun resolve(

@@ -165,8 +165,7 @@ class MeScreen(ctx: Context, nav: Navigator, initialTab: String? = null) : Scree
 
     private fun enrichEpisodes(item: MediaItem): MediaItem {
         if (item.episodes != null) return item
-        val known = nav.app.playback.knownEpisodes(item.id) ?: return item
-        return item.copy(episodes = known)
+        return nav.app.playback.knownAvailability(item.id)?.applyTo(item) ?: item
     }
 
     private fun refresh() {
@@ -321,7 +320,7 @@ class MeScreen(ctx: Context, nav: Navigator, initialTab: String? = null) : Scree
             val pct = h?.let { Rules.progressPercent(it) }
             holder.card.bind(nav.app, item, sub, pct)
             holder.card.setOnClickListener {
-                if (h != null) nav.openPlayer(item.id, h.episode) else nav.openDetail(item.id)
+                if (h != null) nav.openPlayer(item.id) else nav.openDetail(item.id)
             }
             if (h != null) {
                 holder.card.setOnLongClickListener {

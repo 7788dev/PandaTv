@@ -1,13 +1,9 @@
 import type { HistoryEntry, Quality } from '../contract/types'
-import { isFinished } from '../contract/rules'
+import { historyRecord } from '../contract/rules'
 
-export function playbackHistory(id: string, episode: number, position: number, duration: number, hasNext: boolean, at = Date.now()): HistoryEntry | null {
+export function playbackHistory(id: string, episode: number, position: number, duration: number, next: number | boolean | undefined, at = Date.now()): HistoryEntry | null {
   if (!Number.isFinite(duration) || duration <= 0 || !Number.isFinite(position) || position < 0) return null
-  const progress = { position: Math.min(position, duration), duration }
-  // The next episode's length is not known until its own media metadata arrives.
-  return hasNext && isFinished(progress)
-    ? { id, episode: episode + 1, position: 0, duration: 0, at }
-    : { id, episode, position: Math.floor(progress.position), duration, at }
+  return { ...historyRecord(id, episode, Math.min(position, duration), duration, next), at }
 }
 export function resolutionQuality(width: number, height: number): Quality | undefined {
   return width >= 3800 || height >= 2100 ? '4K' : width >= 1900 || height >= 1000 ? '1080P' : width >= 1200 || height >= 700 ? '720P' : width >= 600 || height >= 400 ? '480P' : undefined

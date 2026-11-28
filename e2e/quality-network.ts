@@ -19,7 +19,7 @@ export async function qualityNetwork() {
   const media = resolve('.tmp/quality-fixtures/media')
   if (!statSync(join(media, '720/playback.mp4')).isFile()) throw new Error('Run scripts/generate-fixture-hls.py before fixture E2E')
   const calls: NetworkCall[] = []
-  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false, shortPlaylist: '', segmentDelayMs: 0, extendedCatalogue: '', chapters: false }
+  const state = { metadataOffline: false, metadataDelayMs: 0, sources: { a: 'json', b: 'normal', c: 'normal' } as Record<Source, Behaviour>, holdPlayback: false, shortPlaylist: '', segmentDelayMs: 0, extendedCatalogue: '', chapters: false, episodeNumbers: undefined as number[] | undefined }
   const held = new Set<() => void>()
   const probeGates = new Map<string, Promise<void>>()
   const catalogueGates = new Map<Source, Promise<void>>()
@@ -45,7 +45,7 @@ export async function qualityNetwork() {
       const tv = title.includes('剧集')
       const format = tv ? 'm3u8' : 'mp4'
       const titled = title.includes('第二季')
-      const numbers = !tv ? [1] : state.extendedCatalogue === source ? [1, 2, 3, 4, 5] : [1, 2, 3]
+      const numbers = !tv ? [1] : state.extendedCatalogue === source ? [1, 2, 3, 4, 5] : state.episodeNumbers ?? [1, 2, 3]
       const episodes = numbers.map(n => `${titled ? ['序章', '转折', '回家'][n - 1] : `第${n}集`}$https://${source}.media.qa.example.org/episode-${n}.${format}`)
       if (tv && !titled) episodes.unshift(`彩蛋$https://${source}.media.qa.example.org/bonus.mp4`, episodes[0])
       const remake = { vod_id: 2, vod_name: title, vod_year: '2023', vod_area: '美国', type_name: '欧美剧', vod_play_from: format,

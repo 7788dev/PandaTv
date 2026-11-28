@@ -21,7 +21,7 @@ interface Navigator {
     fun openSettings()
     fun openDetail(id: String)
     fun openPerson(id: String, nameHint: String? = null, photoHint: String? = null)
-    fun openPlayer(id: String, episode: Int = 1)
+    fun openPlayer(id: String, episode: Int? = null)
     fun back()
     fun toast(text: String)
     fun confirm(title: String, confirmText: String, destructive: Boolean = false, onConfirm: () -> Unit)

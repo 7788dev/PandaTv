@@ -1,5 +1,6 @@
 import type { MediaItem, MediaType, Playback, Quality } from '../../contract/types'
 import type { Availability, PlaySources } from '../../shared/api'
+import { episodeToPlay } from '../../contract/rules'
 import { getText, openPublic, readLimited, unreachableHere, WorkLimiter } from './network'
 import { MediaProxy } from './proxy'
 import { clearHead, pictureOf } from './picture'
@@ -240,6 +241,14 @@ export function workTerms(title: string, aliases: string[] = []): string[] {
   return [...new Set([...searchTerms(title), ...serials.flatMap(searchTerms), ...others.map(alias => searchTerms(alias)[0]!).filter(Boolean)])]
 }
 
+// A short catalogue can contain just the latest explicitly numbered episodes.
+// Bare large numbers and dated variety labels still use the provider's ordering.
+function hasEpisodeNumber(episode: Episode, entries: number) {
+  const n = episode.number
+  return n != null && n >= 1 && n <= 10000 && (n <= entries * 3 + 10 ||
+    /^(?:(?:第)?\d+(?:集|话|回)(?:已?完结|大结局|完)?|(?:EP|E)\d+)$/i.test(episode.title))
+}
+
 export function parseLines(from: string, value: string): Line[] {
   const names = from.split('$$$')
   return value.split('$$$').flatMap((blob, index) => {
@@ -261,8 +270,7 @@ export function parseLines(from: string, value: string): Line[] {
       episodes.push({ title, url: url.href, format, ...(numberMatch ? { number: Number(numberMatch[1]) } : {}) })
     }
     if (!episodes.length) return []
-    const numbered = episodes.every(episode => episode.number != null && episode.number >= 1) &&
-      Math.max(...episodes.map(episode => episode.number!)) <= episodes.length * 3 + 10
+    const numbered = episodes.every(episode => hasEpisodeNumber(episode, episodes.length))
     if (!numbered) return [{ name, episodes }]
     // A catalogue can merge mirror addresses into one list. Each mirror remains a fallback for the same numbered episode.
     const mirrors: Array<Map<number, Episode>> = []
@@ -293,7 +301,7 @@ export function numbering(line: Line) {
   const cached = numberingCache.get(line)
   if (cached) return cached
   const numbers = line.episodes.map(e => e.number)
-  const numeric = numbers.every(n => n != null && n >= 1) && new Set(numbers).size === numbers.length && Math.max(...numbers as number[]) <= numbers.length * 3 + 10
+  const numeric = line.episodes.every(e => hasEpisodeNumber(e, numbers.length)) && new Set(numbers).size === numbers.length
   const byNumber = new Map(line.episodes.map((episode, index) => [numeric ? episode.number! : index + 1, episode]))
   const titles = line.episodes.map(e => e.title)
   const titled = !numeric && new Set(titles).size === titles.length && titles.every(title => title && !COUNTER.test(title))
@@ -431,18 +439,28 @@ export class PlaybackService {
     for (const key of this.selected.keys()) if (key.startsWith(work + ':')) this.selected.delete(key)
   }
 
-  async availability(item: MediaItem, hints: WorkHints = {}): Promise<Availability> {
+  async availability(item: MediaItem, hints: WorkHints = {}, preferredEpisode?: number): Promise<Availability> {
     const single = hints.single ?? item.type === 'movie'
-    const { items: candidates } = await this.candidates(item, hints)
+    const catalogue = await this.candidates(item, hints)
+    const early = this.catalogueAvailability(catalogue.items, single)
+    if (preferredEpisode !== undefined && episodeToPlay(early, preferredEpisode) !== preferredEpisode && catalogue.complete) {
+      return this.catalogueAvailability(await catalogue.complete, single)
+    }
+    return early
+  }
+
+  private catalogueAvailability(candidates: Candidate[], single: boolean): Availability {
     const line = this.primary(candidates)
     if (!line) throw new Error(extra.sourceUnavailable)
     const plan = numbering(line)
     if (single || plan.count <= 1) return {}
-    // Numbered lines from different sources describe the same episodes, so the newest
-    // episode any of them carries is playable. Positional lists are only comparable to themselves.
-    const count = plan.numeric ? Math.max(...candidates.flatMap(c => c.lines).map(numbering).filter(value => value.numeric).map(value => value.count)) : plan.count
-    // Real names only (dated issues, named parts); plain counters stay number cells.
-    return { episodes: count, ...(plan.titled ? { episodeTitles: line.episodes.map(e => e.title) } : {}) }
+    if (!plan.numeric) return { episodes: plan.count, ...(plan.titled ? { episodeTitles: line.episodes.map(e => e.title) } : {}) }
+    const numbers = new Set<number>()
+    for (const candidate of candidates) for (const line of candidate.lines) {
+      const other = numbering(line)
+      if (other.numeric) for (const number of other.byNumber.keys()) numbers.add(number)
+    }
+    return { episodes: plan.count, ...(numbers.size < plan.count ? { episodeNumbers: [...numbers].sort((a, b) => a - b) } : {}) }
   }
 
   /**

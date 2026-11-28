@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNo
 import { Switch } from '@base-ui/react/switch'
 import type { ChannelFilters, ChannelQuery, ChannelSort, HistoryEntry, HomeFeed, MediaItem, MediaType, Page, Settings } from '../contract/types'
 import { QUALITIES, SPEEDS } from '../contract/constants'
-import { avatarText, continuing, episodeRanges, groupHistory, playLabel, rangeOf, rankSub, speedLabel } from '../contract/rules'
+import { avatarText, continuing, episodeRanges, episodeToPlay, groupHistory, playLabel, rangeOf, rankSub, speedLabel } from '../contract/rules'
 import { fmt, t } from '../contract/copy'
 import logo from './brand/logo-mark.svg?url'
 import type { Detail } from '../shared/api'
@@ -187,7 +187,7 @@ function Synopsis({ text }: { text: string }) {
 }
 
 function EpisodeSection({ item, current }: { item: MediaItem; current?: number }) {
-  const ranges = episodeRanges(item.episodes ?? 0)
+  const ranges = episodeRanges(item.episodes ?? 0, item.episodeNumbers)
   const initial = rangeOf(ranges, current)
   const [selected, setSelected] = useState<number>()
   const range = ranges.find(value => value.from === selected) ?? initial
@@ -202,7 +202,8 @@ export function DetailPage({ id }: { id: string }) {
   const catalogueRevision = useCatalogueRevision(id)
   const availability = useRemote(() => window.panda.data.availability(id), [id, catalogueRevision], true)
   const { state } = useUser()
-  const historyEpisode = state.history.find(entry => entry.id === id)?.episode ?? 1
+  const preferredEpisode = state.history.find(entry => entry.id === id)?.episode ?? 1
+  const historyEpisode = availability.data ? episodeToPlay(availability.data, preferredEpisode) : preferredEpisode
   const historyQuality = state.settings.quality
   const hasAvailability = Boolean(availability.data)
   // Someone who stays on the page is likely to press play: the source for the episode they
@@ -214,13 +215,13 @@ export function DetailPage({ id }: { id: string }) {
   }, [id, hasAvailability, historyEpisode, historyQuality])
   if (result.error) return <main className="page"><ErrorState error={result.error} retry={result.reload} /></main>
   if (!result.data) return <main className="page"><SkeletonGrid count={7} /></main>
-  const item: Detail = { ...(enriched.data ?? result.data), episodes: availability.data?.episodes, episodeTitles: availability.data?.episodeTitles }
+  const item: Detail = { ...(enriched.data ?? result.data), ...availability.data }
   const history = state.history.find(entry => entry.id === id)
   return <main className="page page--bleed">
     <div className="detail__backdrop"><MediaImage src={item.backdrop ?? item.poster} className="detail__bg" eager ambient={!item.backdrop} /><div className="detail__shade" /></div>
     <div className="detail__head"><PosterBox item={item} className="detail__poster" /><div className="detail__info"><h1 className="detail__title">{item.title}</h1>
       {item.originalTitle && item.originalTitle !== item.title && <div className="detail__orig">{item.originalTitle}</div>}<MetaRow item={item} className="detail__meta" region max={3} />
-      <div className="detail__actions"><a className="btn btn--primary btn--lg" href={`#/play/${id}${history ? `/${history.episode}` : ''}`}><Icon name="play" />{playLabel(item, history)}</a><FavoriteButton id={id} /></div>
+      <div className="detail__actions"><a className="btn btn--primary btn--lg" href={`#/play/${id}`}><Icon name="play" />{playLabel(item, history)}</a><FavoriteButton id={id} /></div>
       {item.synopsis && <Synopsis text={item.synopsis} />}
       {(item.directors?.length || item.cast?.length) ? <dl className="credits">{item.directors?.length ? <div><dt>{t.detail.director}</dt><dd>{item.directors.join(' / ')}</dd></div> : null}{item.cast?.length ? <div><dt>{t.detail.starring}</dt><dd>{item.cast.map(person => person.name).join(' / ')}</dd></div> : null}</dl> : null}
     </div></div>
