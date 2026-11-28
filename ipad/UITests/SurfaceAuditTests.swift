@@ -74,6 +74,26 @@ final class SurfaceAuditTests: PandaScreenTest {
         _ = try String(contentsOf: release)
         XCTAssertTrue(app.buttons["title-26266893"].waitForExistence(timeout: 12))
     }
+    private func chooseFilter(_ name: String, value: String, in app: XCUIApplication) {
+        let identifier = "filter-\(name)"
+        let trigger = app.buttons[identifier]
+        let option = app.buttons.matching(NSPredicate(format: "label == %@ AND identifier != %@", value, identifier)).firstMatch
+        func tappable(_ element: XCUIElement) {
+            let ready = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in element.exists && element.isHittable }, object: nil)
+            XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 6), .completed)
+        }
+        tappable(trigger)
+        trigger.tap()
+        if !option.waitForExistence(timeout: 3) {
+            tappable(trigger)
+            trigger.tap()
+        }
+        tappable(option)
+        option.tap()
+        let closed = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in !option.exists && trigger.isHittable }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [closed], timeout: 6), .completed)
+    }
+
     func testChannelsFiltersPagingAndMovieDetail() {
         let app = fixture()
         let channels = [("剧集","26647087"), ("综艺","123401"), ("动漫","123402"), ("纪录片","123403"), ("电影","26266893")]
@@ -90,13 +110,12 @@ final class SurfaceAuditTests: PandaScreenTest {
         XCTAssertTrue(app.buttons["title-8826266893"].waitForExistence(timeout: 10))
         app.buttons["channel-filters"].tap()
         captureControls("频道-筛选表单", app)
-        app.buttons["filter-类型"].tap()
-        app.buttons["科幻"].tap()
-        app.buttons["filter-年份"].tap()
-        app.buttons[String(Calendar.current.component(.year, from: Date()))].firstMatch.tap()
-        app.buttons["filter-地区"].tap()
-        app.buttons["美国"].tap()
+        let year = String(Calendar.current.component(.year, from: Date()))
+        chooseFilter("类型", value: "科幻", in: app)
+        chooseFilter("年份", value: year, in: app)
+        chooseFilter("地区", value: "美国", in: app)
         app.buttons["apply-filters"].tap()
+        XCTAssertTrue(app.staticTexts["科幻 · 美国 · \(year)"].waitForExistence(timeout: 8))
         XCTAssertTrue(app.staticTexts["这个筛选条件下没有作品"].waitForExistence(timeout: 10))
         capture("频道-空结果")
         app.buttons["channel-filters"].tap()
