@@ -12,8 +12,13 @@ struct PlayerPage: View {
                          episodes: availability.episodes.isEmpty ? request.episodes : availability.episodes,
                          revision: availability.revision, close: { dismiss() })
             .ignoresSafeArea().preferredColorScheme(.dark)
-            .onAppear { session.start() }
-            .onReceive(availability.$episodes) { session.updateStreams($0) }
+            .onAppear {
+                session.updateStreams(availability.episodes, complete: !availability.reading)
+                session.start()
+            }
+            .onChange(of: availability.revision) { _ in
+                session.updateStreams(availability.episodes, complete: !availability.reading)
+            }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in session.save() }
     }
 }

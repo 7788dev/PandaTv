@@ -11,6 +11,7 @@ MEDIA = Path(sys.argv[1]).resolve()
 played = False
 alternative = False
 recovered = False
+third_episode = False
 release_loading = Event()
 release_loading.set()
 subject = {
@@ -34,13 +35,13 @@ channels = {"综艺": ("123401", "声入人心", "真人秀"), "动画": ("12340
 
 class Boundary(SimpleHTTPRequestHandler):
     def do_GET(self):
-        global played, alternative, recovered
+        global played, alternative, recovered, third_episode
         split = urlsplit(self.path)
         path, query = split.path, parse_qs(split.query)
         scenario = query.get("scenario", [""])[0]
         if scenario == "delayed" and ("/subject_collection/" in path or path.endswith("/recommend")):
             release_loading.wait(timeout=16)
-        if path in ("/test/played", "/test/alternative", "/test/recover", "/test/reset", "/test/hold", "/test/release"):
+        if path in ("/test/played", "/test/alternative", "/test/third", "/test/recover", "/test/reset", "/test/hold", "/test/release"):
             if path == "/test/hold":
                 release_loading.clear()
             if path == "/test/release":
@@ -48,8 +49,8 @@ class Boundary(SimpleHTTPRequestHandler):
             if path == "/test/recover":
                 recovered = True
             if path == "/test/reset":
-                recovered = alternative = played = False
-            value = {"/test/played": played, "/test/alternative": alternative}.get(path, True)
+                recovered = alternative = played = third_episode = False
+            value = {"/test/played": played, "/test/alternative": alternative, "/test/third": third_episode}.get(path, True)
             body, mime = (b"yes" if value else b"no"), "text/plain"
         elif scenario == "offline" and not recovered:
             self.send_error(503)
@@ -58,6 +59,8 @@ class Boundary(SimpleHTTPRequestHandler):
             body = b"#EXTM3U\n#EXT-X-TARGETDURATION:2\n#EXTINF:2,\nsegment-000.ts\n#EXT-X-ENDLIST\n"
             mime = "application/vnd.apple.mpegurl"
         elif path.startswith("/480/") or path == "/poster.png":
+            if scenario == "alias-series" and path == "/480/index.m3u8":
+                third_episode = True
             if path.endswith(".ts"):
                 played = True
             if query.get("mirror") == ["2"]:
@@ -78,7 +81,7 @@ class Boundary(SimpleHTTPRequestHandler):
                 if scenario == "search-fallback" and not recovered:
                     self.send_error(503)
                     return
-                value = {**subject, "aka": ["异名（台）"]} if scenario == "alias-series" else subject
+                value = {**subject, "aka": ["三体", "旧译一", "旧译二", "旧译三", "异名（台）"]} if scenario == "alias-series" else subject
             elif scenario == "search-fallback" and (path.endswith("/555555") or path.endswith("/movie/26647087")):
                 self.send_error(503)
                 return

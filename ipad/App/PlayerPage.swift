@@ -12,6 +12,7 @@ final class PlaybackSession: ObservableObject {
     private let request: PlaybackRequest
     private let library: Library
     private var catalogue: [PlayEpisode]
+    private var catalogueComplete = false
     private var position: Double
     private var recordable = false
     private var finished = false
@@ -44,9 +45,10 @@ final class PlaybackSession: ObservableObject {
         UserDefaults.standard.set(volume, forKey: "panda.ipad.playback.volume")
     }
     func toggleMute() { setVolume(volume > 0 ? 0 : previousVolume) }
-    func updateStreams(_ episodes: [PlayEpisode]) {
+    func updateStreams(_ episodes: [PlayEpisode], complete: Bool = false) {
         guard !episodes.isEmpty else { return }
         catalogue = episodes
+        catalogueComplete = complete
         guard var updated = episode.corresponding(in: episodes) else { return }
         let current = episode.streams[selected]
         if !updated.streams.contains(where: { $0.url == current.url }) { updated.streams.append(current) }
@@ -171,9 +173,13 @@ final class PlaybackSession: ObservableObject {
         let duration = item.duration.seconds
         if finished && duration.isFinite && time < duration - 1 && player.rate > 0 { finished = false }
         position = time
+        let hasNext = episode.corresponding(in: catalogue).flatMap { playing -> Bool? in
+            if catalogue.contains(where: { $0.number > playing.number }) { return true }
+            return catalogueComplete ? false : nil
+        }
         library.record(WatchEntry(subject: request.subject, episode: episode.number, label: episode.title,
             seconds: time, duration: duration.isFinite ? duration : 0, finished: finished, mediaKey: episode.mediaKey,
-            hasNextEpisode: catalogue.contains { $0.number > episode.number && $0.id != episode.id }))
+            hasNextEpisode: hasNext))
     }
     private func detachItem() {
         watchdog?.cancel(); watchdog = nil

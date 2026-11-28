@@ -163,7 +163,7 @@ enum Sources {
             guard !items.isEmpty else { return nil }
             let film = subject.kind == "movie"
             let numbers = items.compactMap { $0.0 }.filter { $0 > 0 }
-            let plausible = !numbers.isEmpty && numbers.max()! <= items.count * 3 + 10
+            let plausible = numbers.max().map { $0 <= items.count * 3 + 10 } ?? false
             let numbered = !film && plausible && numbers.count == items.count
             var occurrences: [Int: Int] = [:]
             if match.run != nil {
@@ -215,17 +215,9 @@ enum Sources {
         let primary = [title, trimmed] + subject.aliases.compactMap { rangeAlias($0)?.0 }
         let aliases = subject.aliases.filter { rangeAlias($0) == nil }.map { $0.replacing(#"\s*[（(][^（）()]{1,8}[)）]$"#) }
         var seen = Set<String>()
-        func distinct(_ names: [String], limit: Int) -> [String] {
-            var terms: [String] = []
-            for name in names {
-                let term = name.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !term.isEmpty && seen.insert(term.lowercased()).inserted { terms.append(term) }
-                if terms.count == limit { break }
-            }
-            return terms
-        }
-        let terms = distinct(primary, limit: 3) + distinct(aliases, limit: 3)
-        for term in terms {
+        for name in primary + aliases {
+            let term = name.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !term.isEmpty && seen.insert(term.lowercased()).inserted else { continue }
             for page in 1...2 {
                 try Task.checkCancellation()
                 let result = try await Network.json(source.api, ["ac":"videolist", "wd":term, "pg":String(page)], timeout: 7) as? JSONRow

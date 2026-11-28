@@ -12,6 +12,7 @@ struct PlaybackRequest: Identifiable {
 /// outer playback presentation ends the session; a view disappearance is not a stop command.
 @MainActor final class PlaybackPresentation: ObservableObject {
     @Published var request: PlaybackRequest?
+    @Published var visible = false
     private(set) var session: PlaybackSession?
     func open(_ request: PlaybackRequest, library: Library) {
         session?.stop()
@@ -64,6 +65,7 @@ private struct DetailHeaderGone: PreferenceKey {
 struct SubjectPage: View {
     let initial: Subject
     let autoplay: Bool
+    @ObservedObject var presentation: PlaybackPresentation
     let navigationTitleVisible: (Bool) -> Void
     @EnvironmentObject private var library: Library
     @Environment(\.sizeCategory) private var textSize
@@ -74,7 +76,6 @@ struct SubjectPage: View {
     @State private var autoOpened = false
     @State private var expanded = false
     @State private var group = 0
-    @StateObject private var presentation = PlaybackPresentation()
     private var subject: Subject { availability.detail ?? initial }
     private var episodes: [PlayEpisode] { availability.episodes }
     private var reading: Bool { availability.reading }
@@ -162,9 +163,10 @@ struct SubjectPage: View {
             availability.start(initial)
         }
         .onChange(of: availability.revision) { _ in
-            guard autoplay && !autoOpened, let ep = next else { return }
-            if last == nil || resuming || (last?.finished == true && !reading && watched != nil) { play(ep) }
+            library.refreshContinuation(for: initial.id, episodes: episodes, complete: !reading)
+            autoplayIfReady()
         }
+        .onChange(of: presentation.visible) { _ in autoplayIfReady() }
         .task { if initial.backdrop == nil { still = try? await Catalog.still(initial) } }
         .task { if credits.isEmpty { credits = (try? await Catalog.credits(initial)) ?? [] } }
         .fullScreenCover(item: $presentation.request, onDismiss: presentation.dismissed) { request in
@@ -243,6 +245,11 @@ struct SubjectPage: View {
         var value = subject
         value.backdrop = artwork
         return value
+    }
+    private func autoplayIfReady() {
+        // Cached catalogues can finish during the UIKit push. Both arrival orders must present once.
+        guard autoplay, !autoOpened, presentation.visible, let episode = next else { return }
+        if last == nil || resuming || (last?.finished == true && !reading && watched != nil) { play(episode) }
     }
     private func play(_ episode: PlayEpisode) {
         autoOpened = true

@@ -35,6 +35,10 @@ final class SurfaceAuditTests: PandaScreenTest {
         XCTAssertTrue(resume.label.contains("播放下一集"))
         resume.tap()
         XCTAssertTrue(app.navigationBars["三体 · 第 3 集"].waitForExistence(timeout: 16))
+        let third = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (try? String(contentsOf: URL(string: "http://127.0.0.1:18765/test/third")!)) == "yes"
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [third], timeout: 12), .completed)
     }
 
     func testSwipeFeaturedAndOpenTheSelectedWork() {

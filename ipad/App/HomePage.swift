@@ -54,13 +54,13 @@ struct HomePage: View {
                         VStack(alignment: .leading, spacing: 8) {
                             MediaHeading(title: "继续观看") { browse(.history) }.padding(.horizontal, margin)
                             if history.count == 1, let entry = history.first {
-                                ContinueCard(entry: entry) { resume(entry.subject) }
+                                ContinueCard(entry: entry) { openHistory(entry) }
                                     .padding(.horizontal, margin)
                             } else {
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     LazyHStack(spacing: 12) {
                                         ForEach(history) { entry in
-                                            ContinueCard(entry: entry) { resume(entry.subject) }.frame(width: min(width - 8, 390))
+                                            ContinueCard(entry: entry) { openHistory(entry) }.frame(width: min(width - 8, 390))
                                         }
                                     }.padding(.horizontal, margin)
                                 }
@@ -83,6 +83,10 @@ struct HomePage: View {
             }
             if !Task.isCancelled { loading = false }
         }
+    }
+
+    private func openHistory(_ entry: WatchEntry) {
+        if entry.needsContinuationCheck { select(entry.subject) } else { resume(entry.subject) }
     }
 
     @ViewBuilder private func shelf(_ title: String, _ key: String, _ channel: Channel, _ width: CGFloat, _ margin: CGFloat) -> some View {

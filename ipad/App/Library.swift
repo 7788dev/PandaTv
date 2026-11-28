@@ -12,12 +12,22 @@ struct WatchEntry: Codable, Identifiable {
     var id: String { subject.id }
     var fraction: Double { duration > 0 ? min(1, max(0, seconds / duration)) : 0 }
     var canContinue: Bool {
-        !finished || (subject.kind != "movie" && (hasNextEpisode ?? (episode < (subject.expectedEpisodes ?? 0))))
+        guard finished else { return true }
+        guard subject.kind != "movie" else { return false }
+        if let more = hasNextEpisode { return more }
+        return subject.expectedEpisodes.flatMap { $0 > 0 ? episode < $0 : nil } ?? true
     }
-    var continueDetail: String { finished ? "\(label) · 播放下一集" : detail }
+    var needsContinuationCheck: Bool { finished && hasNextEpisode == nil && (subject.expectedEpisodes ?? 0) <= 0 }
+    var continueDetail: String {
+        if needsContinuationCheck { return "\(label) · 查看后续集数" }
+        return finished ? "\(label) · 播放下一集" : detail
+    }
 
     func watched(in episodes: [PlayEpisode]) -> PlayEpisode? {
-        episodes.first { $0.id == (mediaKey ?? label) }
+        if let mediaKey = mediaKey { return episodes.first { $0.id == mediaKey } }
+        if let named = episodes.first(where: { $0.id == label }) { return named }
+        // Older snapshots gave unnamed streams a generated number as their only label.
+        return episodes.first { $0.mediaKey != nil && $0.number == episode && $0.title == label }
     }
 
     var detail: String {
@@ -67,6 +77,14 @@ final class Library: ObservableObject {
         save()
     }
     func clearQueries() { state.queries = []; save() }
+    func refreshContinuation(for id: String, episodes: [PlayEpisode], complete: Bool) {
+        guard let index = state.history.firstIndex(where: { $0.id == id && $0.finished }),
+              let watched = state.history[index].watched(in: episodes) else { return }
+        let more = episodes.contains { $0.number > watched.number }
+        guard (more || complete), state.history[index].hasNextEpisode != more else { return }
+        state.history[index].hasNextEpisode = more
+        save()
+    }
     func record(_ entry: WatchEntry) {
         guard entry.finished || (entry.seconds.isFinite && entry.seconds >= 1),
               entry.duration.isFinite else { return }

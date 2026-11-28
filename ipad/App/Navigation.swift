@@ -134,6 +134,18 @@ final class SearchInput: NSObject, ObservableObject, UISearchResultsUpdating {
     }
 }
 
+private final class SubjectHost<Content: View>: UIHostingController<Content> {
+    var appearanceChanged: ((Bool) -> Void)?
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        appearanceChanged?(true)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        appearanceChanged?(false)
+    }
+}
+
 final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate {
     private let sidebar = Sidebar()
     private let detailNavigation = UINavigationController()
@@ -216,10 +228,12 @@ final class PandaSplitView: UISplitViewController, UISplitViewControllerDelegate
 
     private func showSubject(_ subject: Subject, autoplay: Bool) {
         weak var detail: UIViewController?
-        let page = SubjectPage(initial: subject, autoplay: autoplay) { show in
+        let presentation = PlaybackPresentation()
+        let page = SubjectPage(initial: subject, autoplay: autoplay, presentation: presentation) { show in
             detail?.navigationItem.title = show ? subject.title : nil
         }.environmentObject(library)
-        let controller = UIHostingController(rootView: page)
+        let controller = SubjectHost(rootView: page)
+        controller.appearanceChanged = { visible in presentation.visible = visible }
         detail = controller
         controller.navigationItem.largeTitleDisplayMode = .never
         detailNavigation.pushViewController(controller, animated: true)

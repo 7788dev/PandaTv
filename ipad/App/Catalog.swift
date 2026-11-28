@@ -178,7 +178,7 @@ enum Catalog {
     private static func readSubject(id: String, kind: String) async throws -> Subject? {
         guard catalogID(id) != nil, ["movie", "tv"].contains(kind),
               let row = try await Network.json(base.appendingPathComponent("\(kind)/\(id)")) as? JSONRow,
-              catalogID(row["id"]) == id else { throw CatalogError.response }
+              catalogID(((row["target"] as? JSONRow) ?? row)["id"]) == id else { throw CatalogError.response }
         return Subject(row, kind: kind)
     }
 

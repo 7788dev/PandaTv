@@ -81,7 +81,7 @@ final class PandaTests: XCTestCase {
         XCTAssertEqual(Library(defaults: defaults).queries, ["st", "三体"])
     }
 
-    func testContinuationHonorsKnownAvailabilityAndReadsLegacyHistory() throws {
+    @MainActor func testContinuationHonorsKnownAvailabilityAndReadsLegacyHistory() throws {
         let subject = try XCTUnwrap(Subject(row.merging(["episodes_count":3]) { _, new in new }))
         var entry = WatchEntry(subject: subject, episode: 1, label: "第 1 集", seconds: 90, duration: 90, finished: true)
         let legacy = try JSONDecoder().decode(WatchEntry.self, from: JSONEncoder().encode(entry))
@@ -90,6 +90,18 @@ final class PandaTests: XCTestCase {
         XCTAssertFalse(entry.canContinue)
         entry.hasNextEpisode = true
         XCTAssertTrue(entry.canContinue)
+        let domain = "panda.tests.\(UUID().uuidString)"
+        let defaults = try XCTUnwrap(UserDefaults(suiteName: domain))
+        defer { defaults.removePersistentDomain(forName: domain) }
+        let library = Library(defaults: defaults)
+        library.record(legacy)
+        let current = PlayEpisode(number: 1, title: entry.label, streams: [])
+        library.refreshContinuation(for: subject.id, episodes: [current], complete: false)
+        XCTAssertNil(library.history[0].hasNextEpisode)
+        library.refreshContinuation(for: subject.id, episodes: [current], complete: true)
+        XCTAssertFalse(library.history[0].canContinue)
+        library.refreshContinuation(for: subject.id, episodes: [current, PlayEpisode(number: 3, title: "第 3 集", streams: [])], complete: true)
+        XCTAssertTrue(Library(defaults: defaults).history[0].canContinue)
     }
 
     @MainActor func testPlayerGainAndLateArrivingMirrors() throws {
