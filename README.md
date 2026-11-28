@@ -78,3 +78,7 @@ cd tv
 | 两端播放规则 | 修改[规则参数](resources/rule-calibration.json)或[共享规则](src/shared/rules/)后，从仓库根目录运行 `node scripts/export-tv-vectors.mjs`，检查生成差异并运行两端测试。 |
 
 构建安装包、签名与发布步骤见[发布说明](docs/ci-release.md)。历次版本的测试结果和设备记录见[交付报告](docs/delivery-report.md)。
+
+## 友情链接
+
+- [LINUX DO](https://linux.do/)
