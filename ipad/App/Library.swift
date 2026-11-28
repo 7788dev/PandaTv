@@ -7,8 +7,18 @@ struct WatchEntry: Codable, Identifiable {
     let label: String
     let seconds, duration: Double
     let finished: Bool
+    var mediaKey: String?
+    var hasNextEpisode: Bool?
     var id: String { subject.id }
     var fraction: Double { duration > 0 ? min(1, max(0, seconds / duration)) : 0 }
+    var canContinue: Bool {
+        !finished || (subject.kind != "movie" && (hasNextEpisode ?? (episode < (subject.expectedEpisodes ?? 0))))
+    }
+    var continueDetail: String { finished ? "\(label) · 播放下一集" : detail }
+
+    func watched(in episodes: [PlayEpisode]) -> PlayEpisode? {
+        episodes.first { $0.id == (mediaKey ?? label) }
+    }
 
     var detail: String {
         let time = String(format: "%d:%02d", Int(seconds) / 60, Int(seconds) % 60)

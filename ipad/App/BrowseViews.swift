@@ -184,7 +184,7 @@ struct SearchPage: View {
                 try Task.checkCancellation()
                 hints = terms
                 var titles = try await Catalog.search(query)
-                if titles.isEmpty && !terms.isEmpty { titles = await Catalog.initialsResults(terms) }
+                if titles.isEmpty && !terms.isEmpty { titles = try await Catalog.initialsResults(terms) }
                 try Task.checkCancellation()
                 results = titles
             } catch { if !Task.isCancelled { failed = true } }

@@ -11,6 +11,7 @@ final class PlaybackSession: ObservableObject {
     private var previousVolume: Double
     private let request: PlaybackRequest
     private let library: Library
+    private var catalogue: [PlayEpisode]
     private var position: Double
     private var recordable = false
     private var finished = false
@@ -27,6 +28,7 @@ final class PlaybackSession: ObservableObject {
         self.library = library
         position = request.resume
         episode = request.episode
+        catalogue = request.episodes
         let saved = UserDefaults.standard.object(forKey: "panda.ipad.playback.volume") as? Double ?? 1
         let gain = min(1, max(0, saved))
         volume = gain
@@ -43,15 +45,20 @@ final class PlaybackSession: ObservableObject {
     }
     func toggleMute() { setVolume(volume > 0 ? 0 : previousVolume) }
     func updateStreams(_ episodes: [PlayEpisode]) {
-        guard var updated = episodes.first(where: { $0.number == episode.number }), updated.streams != episode.streams else { return }
+        guard !episodes.isEmpty else { return }
+        catalogue = episodes
+        guard var updated = episode.corresponding(in: episodes) else { return }
         let current = episode.streams[selected]
         if !updated.streams.contains(where: { $0.url == current.url }) { updated.streams.append(current) }
-        episode = updated
-        selected = updated.streams.firstIndex { $0.url == current.url } ?? 0
+        if episode != updated {
+            episode = updated
+            selected = updated.streams.firstIndex { $0.url == current.url } ?? 0
+        }
+        if finished { save() }
         if failed, let index = updated.streams.firstIndex(where: { !tried.contains($0.url) }) { choose(index) }
     }
     func changeEpisode(_ next: PlayEpisode) {
-        guard next.number != episode.number, !next.streams.isEmpty else { return }
+        guard let next = next.corresponding(in: catalogue), next.id != episode.id, !next.streams.isEmpty else { return }
         save()
         recordable = false
         episode = next
@@ -165,7 +172,8 @@ final class PlaybackSession: ObservableObject {
         if finished && duration.isFinite && time < duration - 1 && player.rate > 0 { finished = false }
         position = time
         library.record(WatchEntry(subject: request.subject, episode: episode.number, label: episode.title,
-            seconds: time, duration: duration.isFinite ? duration : 0, finished: finished))
+            seconds: time, duration: duration.isFinite ? duration : 0, finished: finished, mediaKey: episode.mediaKey,
+            hasNextEpisode: catalogue.contains { $0.number > episode.number && $0.id != episode.id }))
     }
     private func detachItem() {
         watchdog?.cancel(); watchdog = nil

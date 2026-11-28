@@ -79,14 +79,15 @@ struct SubjectPage: View {
     private var episodes: [PlayEpisode] { availability.episodes }
     private var reading: Bool { availability.reading }
     private var last: WatchEntry? { library.history.first { $0.id == initial.id } }
+    private var watched: PlayEpisode? { last?.watched(in: episodes) }
     private var next: PlayEpisode? {
-        if let last = last, let previous = episodes.first(where: { $0.number == last.episode }) {
+        if let last = last, let previous = watched {
             if last.finished { return episodes.first { $0.number > previous.number } ?? previous }
             return previous
         }
         return episodes.first
     }
-    private var resuming: Bool { last?.finished == false && last?.episode == next?.number }
+    private var resuming: Bool { last?.finished == false && watched != nil }
     private var groups: [Int] { Array(Set(episodes.map { ($0.number - 1) / 20 })).sorted() }
     private var selectedGroup: Int { groups.contains(group) ? group : groups.first ?? 0 }
     private var artwork: URL? { initial.backdrop ?? still ?? subject.backdrop }
@@ -162,8 +163,7 @@ struct SubjectPage: View {
         }
         .onChange(of: availability.revision) { _ in
             guard autoplay && !autoOpened, let ep = next else { return }
-            if last == nil || (last?.finished == false && last?.episode == ep.number) ||
-                (last?.finished == true && !reading) { play(ep) }
+            if last == nil || resuming || (last?.finished == true && !reading && watched != nil) { play(ep) }
         }
         .task { if initial.backdrop == nil { still = try? await Catalog.still(initial) } }
         .task { if credits.isEmpty { credits = (try? await Catalog.credits(initial)) ?? [] } }
@@ -224,7 +224,7 @@ struct SubjectPage: View {
             }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: textSize.isAccessibilityCategory ? 156 : 94), spacing: 9)], spacing: 9) {
                 ForEach(episodes.filter { ($0.number - 1) / 20 == selectedGroup }) { ep in
-                    let watched = ep.number == last?.episode
+                    let watched = ep.id == self.watched?.id
                     Button { play(ep) } label: {
                         HStack(spacing: 5) {
                             if watched { Image(systemName: last?.finished == true ? "checkmark" : "play.fill").font(.caption2) }
@@ -246,7 +246,7 @@ struct SubjectPage: View {
     }
     private func play(_ episode: PlayEpisode) {
         autoOpened = true
-        let resume = last.flatMap { !$0.finished && $0.episode == episode.number ? $0.seconds : nil } ?? 0
+        let resume = last?.finished == false && watched?.id == episode.id ? last?.seconds ?? 0 : 0
         presentation.open(PlaybackRequest(subject: savedSubject, episode: episode, episodes: episodes, resume: resume), library: library)
     }
 

@@ -3,11 +3,12 @@ import Foundation
 typealias JSONRow = [String: Any]
 
 enum CatalogError: LocalizedError {
-    case response, unavailable
+    case response, unavailable, notFound
     var errorDescription: String? {
         switch self {
         case .response: return "片库暂时无法读取，请稍后重试。"
         case .unavailable: return "当前没有可用片源。"
+        case .notFound: return "没有找到相关作品。"
         }
     }
 }
@@ -133,7 +134,9 @@ enum Network {
         if let referer = referer { request.setValue(referer, forHTTPHeaderField: "Referer") }
         request.setValue("Mozilla/5.0 (iPad; CPU OS 15_3 like Mac OS X) AppleWebKit/605.1.15 Version/15.0 Mobile/15E148 Safari/604.1", forHTTPHeaderField: "User-Agent")
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode),
+        guard let http = response as? HTTPURLResponse else { throw CatalogError.response }
+        if http.statusCode == 404 || http.statusCode == 410 { throw CatalogError.notFound }
+        guard (200..<300).contains(http.statusCode),
               data.count <= 12 * 1024 * 1024 else { throw CatalogError.response }
         return data
     }
@@ -168,10 +171,15 @@ enum Catalog {
     }
 
     static func detail(id: String, kind: String) async throws -> Subject {
+        guard let subject = try await readSubject(id: id, kind: kind) else { throw CatalogError.notFound }
+        return subject
+    }
+
+    private static func readSubject(id: String, kind: String) async throws -> Subject? {
         guard catalogID(id) != nil, ["movie", "tv"].contains(kind),
               let row = try await Network.json(base.appendingPathComponent("\(kind)/\(id)")) as? JSONRow,
-              let subject = Subject(row, kind: kind), subject.id == id else { throw CatalogError.response }
-        return subject
+              catalogID(row["id"]) == id else { throw CatalogError.response }
+        return Subject(row, kind: kind)
     }
 
     static func still(_ subject: Subject) async throws -> URL? {
@@ -217,17 +225,16 @@ enum Catalog {
             let base = URL(string: "https://movie.douban.com/j/subject_suggest")!
             guard let suggestions = try await Network.json(base, ["q": term]) as? [JSONRow] else { throw CatalogError.response }
             let ids = suggestions.filter { ($0["type"] as? String) == "movie" }.compactMap { catalogID($0["id"]) }
-            return try await withThrowingTaskGroup(of: (Int, Subject?).self) { group in
-                for (rank, id) in ids.prefix(8).enumerated() {
-                    group.addTask {
-                        if let movie = try? await detail(id: id, kind: "movie") { return (rank, movie) }
-                        try Task.checkCancellation()
-                        return (rank, try? await detail(id: id, kind: "tv"))
-                    }
+            return try await searchBatches(Array(ids.prefix(8))) { id in
+                var failure: Error?
+                for kind in ["movie", "tv"] {
+                    try Task.checkCancellation()
+                    do { return try await readSubject(id: id, kind: kind).map { [$0] } ?? [] }
+                    catch CatalogError.notFound { continue }
+                    catch { failure = error }
                 }
-                var resolved: [(Int, Subject?)] = []
-                for try await item in group { resolved.append(item) }
-                return unique(resolved.sorted { $0.0 < $1.0 }.compactMap(\.1))
+                if let failure = failure { throw failure }
+                return []
             }
         }
     }
@@ -237,13 +244,28 @@ enum Catalog {
         return subjects.filter { seen.insert($0.id).inserted }
     }
 
-    static func initialsResults(_ suggestedTerms: [String]) async -> [Subject] {
-        await withTaskGroup(of: (Int, [Subject]).self) { group in
-            for (index, term) in suggestedTerms.prefix(3).enumerated() {
-                group.addTask { (index, (try? await search(term)) ?? []) }
+    static func initialsResults(_ suggestedTerms: [String]) async throws -> [Subject] {
+        try await searchBatches(Array(suggestedTerms.prefix(3)), lookup: search)
+    }
+
+    private static func searchBatches(_ inputs: [String], lookup: @escaping (String) async throws -> [Subject]) async throws -> [Subject] {
+        try await withThrowingTaskGroup(of: (Int, Result<[Subject], Error>).self) { group in
+            for (index, input) in inputs.enumerated() {
+                group.addTask {
+                    do { return (index, .success(try await lookup(input))) }
+                    catch { try Task.checkCancellation(); return (index, .failure(error)) }
+                }
             }
             var batches: [(Int, [Subject])] = []
-            for await batch in group { batches.append(batch) }
+            var failure: Error?
+            for try await (index, result) in group {
+                switch result {
+                case .success(let titles): batches.append((index, titles))
+                case .failure(let error): failure = error
+                }
+            }
+            try Task.checkCancellation()
+            if batches.allSatisfy({ $0.1.isEmpty }), let failure = failure { throw failure }
             return unique(batches.sorted { $0.0 < $1.0 }.flatMap(\.1))
         }
     }
@@ -254,8 +276,8 @@ actor TitleIndex {
     private var entries: [(String, String)]?
 
     func hints(_ query: String) -> [String] {
-        let key = query.lowercased()
-        guard key.range(of: #"^[a-z]{2,20}$"#, options: .regularExpression) != nil else { return [] }
+        let key = query.precomposedStringWithCompatibilityMapping.lowercased().filter { !$0.isWhitespace }
+        guard key.range(of: #"^[a-z][a-z0-9]{1,31}$"#, options: .regularExpression) != nil else { return [] }
         if entries == nil, let file = Bundle.main.url(forResource: "search-titles", withExtension: "tsv"),
            let data = try? String(contentsOf: file, encoding: .utf8) {
             entries = data.split(whereSeparator: \.isNewline).compactMap {

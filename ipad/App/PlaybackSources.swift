@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 struct PlaySource: Decodable {
     let key, name: String
@@ -16,11 +17,21 @@ struct Stream: Identifiable, Hashable {
     var id: URL { url }
 }
 
-struct PlayEpisode: Identifiable {
+struct PlayEpisode: Identifiable, Equatable {
     let number: Int
     let title: String
     var streams: [Stream]
-    var id: Int { number }
+    // Only unnamed positional entries need a media fingerprint. History never stores a signed URL.
+    var mediaKey: String?
+    var id: String { mediaKey ?? title }
+
+    func corresponding(in episodes: [PlayEpisode]) -> PlayEpisode? {
+        let named = episodes.filter { $0.id == id }
+        if named.count == 1 { return named.first }
+        let addresses = Set(streams.map(\.url))
+        let matches = episodes.filter { $0.streams.contains { addresses.contains($0.url) } }
+        return matches.count == 1 ? matches.first : nil
+    }
 }
 
 private extension String {
@@ -151,31 +162,41 @@ enum Sources {
             }
             guard !items.isEmpty else { return nil }
             let film = subject.kind == "movie"
-            let numbered = !film && items.allSatisfy { (1...(items.count * 3 + 10)).contains($0.0 ?? 0) }
-            if match.run != nil && !numbered { return nil }
+            let numbers = items.compactMap { $0.0 }.filter { $0 > 0 }
+            let plausible = !numbers.isEmpty && numbers.max()! <= items.count * 3 + 10
+            let numbered = !film && plausible && numbers.count == items.count
+            var occurrences: [Int: Int] = [:]
+            if match.run != nil {
+                guard plausible, numbers.count * 10 >= items.count * 9 else { return nil }
+                for number in numbers { occurrences[number, default: 0] += 1 }
+            }
             var episodes: [Int: PlayEpisode] = [:]
             for (offset, item) in items.enumerated() {
-                let original = numbered ? item.0! : offset + 1
-                if let run = match.run, !run.contains(original) { continue }
-                let number = film ? 1 : original - (match.run?.lowerBound ?? 1) + 1
-                let title = film ? "正片" : numbered || item.1.isEmpty ? "第 \(number) 集" : item.1
-                episodes[number, default: PlayEpisode(number: number, title: title, streams: [])].streams.append(item.2)
+                let number: Int
+                if let run = match.run {
+                    guard let original = item.0, run.contains(original), occurrences[original] == 1 else { continue }
+                    number = original - run.lowerBound + 1
+                } else { number = film ? 1 : numbered ? item.0! : offset + 1 }
+                let title = film ? "正片" : numbered || match.run != nil || item.1.isEmpty ? "第 \(number) 集" : item.1
+                let unnamed = !film && !numbered && match.run == nil && item.1.isEmpty
+                let key = unnamed ? "media:" + Data(SHA256.hash(data: Data(item.2.url.absoluteString.utf8))).base64EncodedString() : nil
+                episodes[number, default: PlayEpisode(number: number, title: title, streams: [], mediaKey: key)].streams.append(item.2)
             }
-            return episodes.isEmpty ? nil : Line(entries: episodes.values.sorted { $0.number < $1.number }, numbered: numbered || film)
+            return episodes.isEmpty ? nil : Line(entries: episodes.values.sorted { $0.number < $1.number }, numbered: numbered || film || match.run != nil)
         }
     }
 
     static func episodes(_ lines: [Line]) -> [PlayEpisode] {
         guard let reference = lines.max(by: { $0.entries.count < $1.entries.count }) else { return [] }
         var items: [Int: PlayEpisode] = [:]
-        let titles = Dictionary(grouping: reference.entries, by: \.title)
+        let titles = Dictionary(grouping: reference.entries, by: \.id)
         for line in lines {
             for entry in line.entries {
                 let number: Int
                 if reference.numbered && line.numbered { number = entry.number }
-                else if let matched = titles[entry.title], matched.count == 1 { number = matched[0].number }
+                else if let matched = titles[entry.id], matched.count == 1 { number = matched[0].number }
                 else { continue }
-                items[number, default: PlayEpisode(number: number, title: entry.title, streams: [])].streams += entry.streams
+                items[number, default: PlayEpisode(number: number, title: entry.title, streams: [], mediaKey: entry.mediaKey)].streams += entry.streams
             }
         }
         return items.values.sorted { $0.number < $1.number }.map { episode in
@@ -189,10 +210,22 @@ enum Sources {
     }
 
     static func find(_ subject: Subject, source: PlaySource) async throws -> [Line] {
-        let trimmed = subject.title.replacing(#"\s*(?:第[一二两三四五六七八九十0-9]{1,3}季|season\s*\d{1,2})$"#)
-        let names = [subject.title, trimmed] + subject.aliases.compactMap { rangeAlias($0)?.0 }
+        let title = subject.title.replacing(#"[\u200b-\u200f\u202a-\u202e\u2060\ufeff]"#)
+        let trimmed = title.replacing(#"(?i)\s*(?:第[一二两三四五六七八九十0-9]{1,3}季|season\s*\d{1,2})$"#)
+        let primary = [title, trimmed] + subject.aliases.compactMap { rangeAlias($0)?.0 }
+        let aliases = subject.aliases.filter { rangeAlias($0) == nil }.map { $0.replacing(#"\s*[（(][^（）()]{1,8}[)）]$"#) }
         var seen = Set<String>()
-        for term in names.filter({ !$0.isEmpty && seen.insert($0).inserted }).prefix(3) {
+        func distinct(_ names: [String], limit: Int) -> [String] {
+            var terms: [String] = []
+            for name in names {
+                let term = name.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !term.isEmpty && seen.insert(term.lowercased()).inserted { terms.append(term) }
+                if terms.count == limit { break }
+            }
+            return terms
+        }
+        let terms = distinct(primary, limit: 3) + distinct(aliases, limit: 3)
+        for term in terms {
             for page in 1...2 {
                 try Task.checkCancellation()
                 let result = try await Network.json(source.api, ["ac":"videolist", "wd":term, "pg":String(page)], timeout: 7) as? JSONRow

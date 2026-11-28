@@ -1,6 +1,42 @@
 import XCTest
 
 final class SurfaceAuditTests: PandaScreenTest {
+    func testSearchShowsRetryAfterEverySuggestedDetailFailsAndKeepsPartialRecovery() throws {
+        _ = try String(contentsOf: URL(string: "http://127.0.0.1:18765/test/reset")!)
+        let app = fixture("search-fallback")
+        app.cells["nav-搜索"].tap()
+        let field = app.searchFields.firstMatch
+        field.tap(); field.typeText("lookup")
+        let retry = app.buttons["retry"].firstMatch
+        XCTAssertTrue(retry.waitForExistence(timeout: 14))
+        XCTAssertTrue(app.staticTexts["搜索暂时不可用"].exists)
+        _ = try String(contentsOf: URL(string: "http://127.0.0.1:18765/test/recover")!)
+        retry.tap()
+        XCTAssertTrue(app.buttons["title-26647087"].waitForExistence(timeout: 14))
+    }
+
+    func testFinishedEpisodeOnAliasOnlySourceContinuesAtNextAvailableEpisode() throws {
+        _ = try String(contentsOf: URL(string: "http://127.0.0.1:18765/test/reset")!)
+        let app = fixture("alias-series")
+        let quickPlay = app.buttons["featured-play-0"].firstMatch
+        XCTAssertTrue(quickPlay.waitForExistence(timeout: 12))
+        quickPlay.tap()
+        XCTAssertTrue(app.navigationBars["三体 · 第 1 集"].waitForExistence(timeout: 16))
+        let segment = XCTNSPredicateExpectation(predicate: NSPredicate { _, _ in
+            (try? String(contentsOf: URL(string: "http://127.0.0.1:18765/test/played")!)) == "yes"
+        }, object: nil)
+        XCTAssertEqual(XCTWaiter.wait(for: [segment], timeout: 12), .completed)
+        // Allow the two-second generated VOD to run through AVPlayerItemDidPlayToEndTime.
+        RunLoop.current.run(until: Date().addingTimeInterval(4))
+        app.buttons["close-player"].tap()
+        app.terminate(); app.launch()
+        let resume = app.buttons["resume-26647087"]
+        XCTAssertTrue(resume.waitForExistence(timeout: 12))
+        XCTAssertTrue(resume.label.contains("播放下一集"))
+        resume.tap()
+        XCTAssertTrue(app.navigationBars["三体 · 第 3 集"].waitForExistence(timeout: 16))
+    }
+
     func testSwipeFeaturedAndOpenTheSelectedWork() {
         let app = fixture()
         let first = app.buttons["featured"].firstMatch

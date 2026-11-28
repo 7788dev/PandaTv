@@ -54,6 +54,9 @@ class Boundary(SimpleHTTPRequestHandler):
         elif scenario == "offline" and not recovered:
             self.send_error(503)
             return
+        elif path == "/480/short.m3u8":
+            body = b"#EXTM3U\n#EXT-X-TARGETDURATION:2\n#EXTINF:2,\nsegment-000.ts\n#EXT-X-ENDLIST\n"
+            mime = "application/vnd.apple.mpegurl"
         elif path.startswith("/480/") or path == "/poster.png":
             if path.endswith(".ts"):
                 played = True
@@ -65,9 +68,20 @@ class Boundary(SimpleHTTPRequestHandler):
                 value = {"subject_collection_items": [subject] if "tv_hot" in path else [movie]}
             elif path.endswith("/search/movie"):
                 term = query.get("q", [""])[0]
+                if scenario == "search-fallback":
+                    self.send_error(503)
+                    return
                 value = {"items": [{"target_type": "tv", "target": subject}] if term == "三体" else []}
+            elif path.endswith("/j/subject_suggest"):
+                value = [{"id": item, "type": "movie"} for item in ("26647087", "555555")]
             elif path.endswith("/tv/26647087"):
-                value = subject
+                if scenario == "search-fallback" and not recovered:
+                    self.send_error(503)
+                    return
+                value = {**subject, "aka": ["异名（台）"]} if scenario == "alias-series" else subject
+            elif scenario == "search-fallback" and (path.endswith("/555555") or path.endswith("/movie/26647087")):
+                self.send_error(503)
+                return
             elif path.endswith("/movie/26266893"):
                 value = movie
             elif path.endswith("/credits"):
@@ -97,6 +111,9 @@ class Boundary(SimpleHTTPRequestHandler):
                           "vod_year": "2019" if film else "2023", "type_name": "科幻片" if film else "国产剧",
                           "vod_play_from": "hls$$$hls", "vod_play_url": playlist(1) + "$$$" + playlist(2)}
                 value = {"list": [] if scenario == "no-source" else [record]}
+                if scenario == "alias-series":
+                    record.update(vod_name="异名", vod_play_url="第1集$https://media.example.org/480/short.m3u8#第3集$https://media.example.org/480/index.m3u8")
+                    value = {"list": [record] if query.get("wd") == ["异名"] else []}
             else:
                 self.send_error(404)
                 return

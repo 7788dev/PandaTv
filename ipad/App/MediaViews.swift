@@ -194,8 +194,8 @@ struct ContinueCard: View {
                 }
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.subject.title).font(.headline).lineLimit(textSize.isAccessibilityCategory ? nil : 1)
-                    Text(entry.detail).font(.caption).monospacedDigit().foregroundColor(.secondary).lineLimit(textSize.isAccessibilityCategory ? nil : 1)
-                    if entry.fraction > 0 {
+                    Text(entry.continueDetail).font(.caption).monospacedDigit().foregroundColor(.secondary).lineLimit(textSize.isAccessibilityCategory ? nil : 1)
+                    if !entry.finished && entry.fraction > 0 {
                         ProgressView(value: entry.fraction).progressViewStyle(.linear).frame(maxWidth: 200).padding(.top, 2)
                     }
                 }
@@ -206,7 +206,7 @@ struct ContinueCard: View {
             .padding(10).padding(.trailing, 5)
             .background(Color(UIColor.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 15, style: .continuous))
             .contentShape(Rectangle())
-        }.buttonStyle(MediaPress()).accessibilityLabel("继续播放\(entry.subject.title)，\(entry.detail)")
+        }.buttonStyle(MediaPress()).accessibilityLabel("继续播放\(entry.subject.title)，\(entry.continueDetail)")
         .accessibilityIdentifier("resume-\(entry.id)")
     }
 }

@@ -49,7 +49,7 @@ struct HomePage: View {
                     } else {
                         NoticeView(symbol: "wifi.exclamationmark", message: "暂时无法载入推荐") { attempt += 1 }
                     }
-                    let history = Array(library.history.filter { !$0.finished }.prefix(8))
+                    let history = Array(library.history.filter(\.canContinue).prefix(8))
                     if !history.isEmpty {
                         VStack(alignment: .leading, spacing: 8) {
                             MediaHeading(title: "继续观看") { browse(.history) }.padding(.horizontal, margin)

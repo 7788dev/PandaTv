@@ -107,7 +107,7 @@ private final class PlayerController: UIViewController, UIPopoverPresentationCon
     private func menu(_ episodes: [PlayEpisode]) -> UIMenu? {
         var sections: [UIMenuElement] = []
         let current = session.episode
-        if let next = episodes.first(where: { $0.number > current.number }) {
+        if let playing = current.corresponding(in: episodes), let next = episodes.first(where: { $0.number > playing.number }) {
             sections.append(UIAction(title: "下一集", image: UIImage(systemName: "forward.end.fill")) { [weak session] _ in session?.changeEpisode(next) })
         }
         if episodes.count > 1 {
@@ -116,7 +116,7 @@ private final class PlayerController: UIViewController, UIPopoverPresentationCon
             for key in groups.keys.sorted() {
                 guard let items = groups[key], let first = items.first, let last = items.last else { continue }
                 let actions = items.map { ep in
-                    UIAction(title: ep.title, state: ep.number == current.number ? .on : .off) { [weak session] _ in session?.changeEpisode(ep) }
+                    UIAction(title: ep.title, state: ep.id == current.id ? .on : .off) { [weak session] _ in session?.changeEpisode(ep) }
                 }
                 if groups.count == 1 { choices.append(contentsOf: actions) }
                 else { choices.append(UIMenu(title: "\(first.number)–\(last.number) 集", children: actions)) }
